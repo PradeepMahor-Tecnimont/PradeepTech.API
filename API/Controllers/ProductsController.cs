@@ -1,38 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Core.Entities;
-using Infrastructure.Data;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController(IProductRepository productRepository) : ControllerBase
     {
-        private readonly StoreContext _context;
-
-        public ProductsController(StoreContext context)
-        {
-            _context = context;
-        }
-
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            return Ok(await productRepository.GetProductsAsync());
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await productRepository.GetProductByIdAsync(id);
 
             if (product == null)
             {
@@ -49,14 +37,19 @@ namespace API.Controllers
         {
             if (id != product.Id)
             {
-                return BadRequest();
+                return BadRequest("Cannot update this product");
             }
 
-            _context.Entry(product).State = EntityState.Modified;
+            productRepository.UpdateProductAsync(product);
 
             try
             {
-                await _context.SaveChangesAsync();
+                if (await productRepository.SaveChangesAsync())
+                {
+                    return NoContent();
+                }
+
+                return BadRequest("Error : Problem Updating product");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -69,8 +62,6 @@ namespace API.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Products
@@ -78,31 +69,38 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            productRepository.AddProductAsync(product);
 
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            if (await productRepository.SaveChangesAsync())
+            {
+                return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            }
+
+            return BadRequest("Error : Problem Creating product");
         }
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await productRepository.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            productRepository.DeleteProductAsync(product);
+            if (await productRepository.SaveChangesAsync())
+            {
+                return NoContent();
+            }
 
-            return NoContent();
+            return BadRequest("Error : Problem Deleting product");
         }
 
         private bool ProductExists(int id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return productRepository.ProductExists(id);
         }
     }
 }
