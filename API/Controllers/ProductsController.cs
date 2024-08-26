@@ -13,7 +13,8 @@ namespace API.Controllers
     {
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand,
+                   string? type, string? sort)
         {
             return Ok(await repo.ListAllAsync());
         }
