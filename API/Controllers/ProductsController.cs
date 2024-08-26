@@ -7,20 +7,22 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController(IProductRepository productRepository) : ControllerBase
+    public class ProductsController
+            (IGenericRepository<Product> repo
+             ) : ControllerBase
     {
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
         {
-            return Ok(await productRepository.GetProductsAsync());
+            return Ok(await repo.ListAllAsync());
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await productRepository.GetProductByIdAsync(id);
+            var product = await repo.GetByIdAsync(id);
 
             if (product == null)
             {
@@ -40,11 +42,11 @@ namespace API.Controllers
                 return BadRequest("Cannot update this product");
             }
 
-            productRepository.UpdateProductAsync(product);
+            repo.Update(product);
 
             try
             {
-                if (await productRepository.SaveChangesAsync())
+                if (await repo.SaveAllAsync())
                 {
                     return NoContent();
                 }
@@ -69,9 +71,9 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            productRepository.AddProductAsync(product);
+            repo.Add(product);
 
-            if (await productRepository.SaveChangesAsync())
+            if (await repo.SaveAllAsync())
             {
                 return CreatedAtAction("GetProduct", new { id = product.Id }, product);
             }
@@ -83,14 +85,14 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await productRepository.GetProductByIdAsync(id);
+            var product = await repo.GetByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            productRepository.DeleteProductAsync(product);
-            if (await productRepository.SaveChangesAsync())
+            repo.Delete(product);
+            if (await repo.SaveAllAsync())
             {
                 return NoContent();
             }
@@ -98,9 +100,23 @@ namespace API.Controllers
             return BadRequest("Error : Problem Deleting product");
         }
 
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
+        {
+            // TODO: Implement method
+            return Ok();
+        }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
+        {
+            // TODO: Implement method
+            return Ok();
+        }
+
         private bool ProductExists(int id)
         {
-            return productRepository.ProductExists(id);
+            return repo.Exists(id);
         }
     }
 }
