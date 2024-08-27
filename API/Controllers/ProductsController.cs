@@ -5,16 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController
-            (IGenericRepository<Product> repo
-             ) : ControllerBase
+    public class ProductsController(IGenericRepository<Product> repo) : BaseApiController
     {
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand,
-                   string? type, string? sort)
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(
+            )
         {
             return Ok(await repo.ListAllAsync());
         }
