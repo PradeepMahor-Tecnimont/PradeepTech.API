@@ -7,7 +7,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BaseApiController : Controller
+    public class BaseApiController : ControllerBase
     {
         protected async Task<ActionResult> CreatePageResult<T>(
                 IGenericRepository<T> repo,
