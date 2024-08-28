@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿using API.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,8 +33,8 @@ namespace API.Controllers
             throw new Exception("This is a test Exception");
         }
 
-        [HttpGet("ValidationError")]
-        public IActionResult GetValidationError(Product Product)
+        [HttpPost("ValidationError")]
+        public IActionResult GetValidationError(CreateProductDto Product)
         {
             return Ok();
         }

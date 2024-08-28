@@ -1,3 +1,4 @@
+using API.Middleware;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repository;
@@ -23,8 +24,12 @@ internal class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
         builder.Services.AddControllers();
         var app = builder.Build();
+
+        //// Middleware
+        app.UseMiddleware<ExceptionMiddleWare>();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
