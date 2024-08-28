@@ -26,10 +26,17 @@ internal class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddControllers();
+        builder.Services.AddCors();
         var app = builder.Build();
 
-        //// Middleware
+        // Middleware
         app.UseMiddleware<ExceptionMiddleWare>();
+
+        app.UseCors(
+                x => x.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins("http://localhost:4200", "https://localhost:4200")
+                    );
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
