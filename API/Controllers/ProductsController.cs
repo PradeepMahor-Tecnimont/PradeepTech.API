@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -100,15 +101,15 @@ namespace API.Controllers
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
         {
-            // TODO: Implement method
-            return Ok();
+            var spec = new TypeListSpecification();
+            return Ok(await repo.ListAsync(spec));
         }
 
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
         {
-            // TODO: Implement method
-            return Ok();
+            var spec = new BrandListSpecification();
+            return Ok(await repo.ListAsync(spec));
         }
 
         private bool ProductExists(int id)
