@@ -11,9 +11,12 @@ namespace API.Controllers
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(
-            )
+            [FromQuery] ProductSpecParams SpecParams
+         )
         {
-            return Ok(await repo.ListAllAsync());
+            var spec = new ProductSpecification(SpecParams);
+            var product = await repo.ListAsync(spec);
+            return Ok(product);
         }
 
         // GET: api/Products/5
