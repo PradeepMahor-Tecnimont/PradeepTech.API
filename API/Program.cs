@@ -32,10 +32,19 @@ internal class Program
         // Middleware
         app.UseMiddleware<ExceptionMiddleWare>();
 
+        //app.UseCors(builder => builder
+        //       .AllowAnyHeader()
+        //       .AllowAnyMethod()
+        //       .SetIsOriginAllowed((host) => true)
+        //       .AllowCredentials()
+        //   );
+
         app.UseCors(
                 x => x.AllowAnyHeader()
                     .AllowAnyMethod()
+                    .SetIsOriginAllowed((host) => true)
                     .WithOrigins("http://localhost:4200/", "https://localhost:4200/")
+                    .AllowCredentials()
                     );
 
         // Configure the HTTP request pipeline.
