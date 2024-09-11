@@ -16,6 +16,7 @@ namespace API.Controllers
         {
             var spec = new ProductSpecification(SpecParams);
             var product = await repo.ListAsync(spec);
+
             return Ok(product);
         }
 
