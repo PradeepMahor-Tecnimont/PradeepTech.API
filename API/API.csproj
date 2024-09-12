@@ -7,6 +7,53 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="TCMPLApp-DB\**" />
+	  <Compile Remove="TCMPLAPP-RAP-Reporting-API\**" />
+	  <Compile Remove="TCMPLApp-TemplateFiles\**" />
+	  <Compile Remove="TCMPLApp.Library.Excel.Charts\**" />
+	  <Compile Remove="TCMPLApp.Library.Excel.Template\**" />
+	  <Compile Remove="TCMPLApp.Library.Excel.Writer\**" />
+	  <Compile Remove="TCMPLApp.RAPReporting.WinService\**" />
+	  <Compile Remove="TCMPLAPP.SendMail.WinService\**" />
+	  <Compile Remove="TCMPLApp.WebApi\**" />
+	  <Compile Remove="TCMPLAPP.WinService\**" />
+	  <Compile Remove="TCMPLApp\**" />
+	  <Content Remove="TCMPLApp-DB\**" />
+	  <Content Remove="TCMPLAPP-RAP-Reporting-API\**" />
+	  <Content Remove="TCMPLApp-TemplateFiles\**" />
+	  <Content Remove="TCMPLApp.Library.Excel.Charts\**" />
+	  <Content Remove="TCMPLApp.Library.Excel.Template\**" />
+	  <Content Remove="TCMPLApp.Library.Excel.Writer\**" />
+	  <Content Remove="TCMPLApp.RAPReporting.WinService\**" />
+	  <Content Remove="TCMPLAPP.SendMail.WinService\**" />
+	  <Content Remove="TCMPLApp.WebApi\**" />
+	  <Content Remove="TCMPLAPP.WinService\**" />
+	  <Content Remove="TCMPLApp\**" />
+	  <EmbeddedResource Remove="TCMPLApp-DB\**" />
+	  <EmbeddedResource Remove="TCMPLAPP-RAP-Reporting-API\**" />
+	  <EmbeddedResource Remove="TCMPLApp-TemplateFiles\**" />
+	  <EmbeddedResource Remove="TCMPLApp.Library.Excel.Charts\**" />
+	  <EmbeddedResource Remove="TCMPLApp.Library.Excel.Template\**" />
+	  <EmbeddedResource Remove="TCMPLApp.Library.Excel.Writer\**" />
+	  <EmbeddedResource Remove="TCMPLApp.RAPReporting.WinService\**" />
+	  <EmbeddedResource Remove="TCMPLAPP.SendMail.WinService\**" />
+	  <EmbeddedResource Remove="TCMPLApp.WebApi\**" />
+	  <EmbeddedResource Remove="TCMPLAPP.WinService\**" />
+	  <EmbeddedResource Remove="TCMPLApp\**" />
+	  <None Remove="TCMPLApp-DB\**" />
+	  <None Remove="TCMPLAPP-RAP-Reporting-API\**" />
+	  <None Remove="TCMPLApp-TemplateFiles\**" />
+	  <None Remove="TCMPLApp.Library.Excel.Charts\**" />
+	  <None Remove="TCMPLApp.Library.Excel.Template\**" />
+	  <None Remove="TCMPLApp.Library.Excel.Writer\**" />
+	  <None Remove="TCMPLApp.RAPReporting.WinService\**" />
+	  <None Remove="TCMPLAPP.SendMail.WinService\**" />
+	  <None Remove="TCMPLApp.WebApi\**" />
+	  <None Remove="TCMPLAPP.WinService\**" />
+	  <None Remove="TCMPLApp\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
 		  <PrivateAssets>all</PrivateAssets>
