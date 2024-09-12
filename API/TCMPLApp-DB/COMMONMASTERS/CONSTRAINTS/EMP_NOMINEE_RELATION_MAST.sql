@@ -1,0 +1,7 @@
+--------------------------------------------------------
+--  Constraints for Table EMP_NOMINEE_RELATION_MAST
+--------------------------------------------------------
+
+  ALTER TABLE "COMMONMASTERS"."EMP_NOMINEE_RELATION_MAST" ADD CONSTRAINT "EMP_NOMINEE_RELATION_MAST_PK" PRIMARY KEY ("CODE")
+  USING INDEX  ENABLE;
+  ALTER TABLE "COMMONMASTERS"."EMP_NOMINEE_RELATION_MAST" MODIFY ("CODE" NOT NULL ENABLE);

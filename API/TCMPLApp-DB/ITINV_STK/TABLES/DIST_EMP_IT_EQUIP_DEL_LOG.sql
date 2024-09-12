@@ -1,0 +1,19 @@
+--------------------------------------------------------
+--  DDL for Table DIST_EMP_IT_EQUIP_DEL_LOG
+--------------------------------------------------------
+
+  CREATE TABLE "ITINV_STK"."DIST_EMP_IT_EQUIP_DEL_LOG" 
+   (	"EMPNO" CHAR(5), 
+	"HEADSET" VARCHAR2(30), 
+	"DOCKING_STN" VARCHAR2(30), 
+	"LAPTOP_CHARGER" VARCHAR2(2), 
+	"TRAVEL_BAG" VARCHAR2(2), 
+	"DISPLAY_CONVERTER" VARCHAR2(2), 
+	"PROJECTOR_CONVERTER" VARCHAR2(2), 
+	"IS_ISSUED" VARCHAR2(2), 
+	"ISSUE_DATE" DATE, 
+	"DOCUMENT_NO" VARCHAR2(100), 
+	"LAPTOP_AMS_ID" VARCHAR2(30), 
+	"MODIFIED_ON" DATE, 
+	"DEL_ON" DATE
+   ) ;

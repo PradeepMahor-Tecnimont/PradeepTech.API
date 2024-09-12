@@ -1,0 +1,26 @@
+--------------------------------------------------------
+--  DDL for Table DM_INTERNET
+--------------------------------------------------------
+
+  CREATE TABLE "DM_INTERNET" 
+   (	"EMPNO" CHAR(5), 
+	"CURRDESK" VARCHAR2(7), 
+	"CURRPC" VARCHAR2(20), 
+	"OLDDESK" VARCHAR2(7), 
+	"OLDPC" VARCHAR2(20), 
+	"CURRIP" VARCHAR2(20), 
+	"INTERNETID" VARCHAR2(65), 
+	"GRANTSTATUS" NUMBER(1,0) DEFAULT 0, 
+	"GRANTDATE" DATE, 
+	"REVOKESTATUS" NUMBER(1,0) DEFAULT 0, 
+	"REVOKEDATE" DATE, 
+	"REMARKS" VARCHAR2(100), 
+	"RECDATE" DATE, 
+	"DSKMGMT" NUMBER(1,0) DEFAULT 1, 
+	"REVOKEFLAG" NUMBER(1,0) DEFAULT 0
+   ) ;
+
+   COMMENT ON COLUMN "DM_INTERNET"."GRANTSTATUS" IS '"0" Default, "1" Granted, "2" To Delete';
+   COMMENT ON COLUMN "DM_INTERNET"."REVOKESTATUS" IS '"0" No, "1" Yes';
+   COMMENT ON COLUMN "DM_INTERNET"."DSKMGMT" IS '"0" No, "1" Yes';
+   COMMENT ON COLUMN "DM_INTERNET"."REVOKEFLAG" IS '"0" Default, "1" To be Revoke';

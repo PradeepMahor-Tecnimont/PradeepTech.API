@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Constraints for Table DM_ADDITIONAL_ASSETS
+--------------------------------------------------------
+
+  ALTER TABLE "DM_ADDITIONAL_ASSETS" ADD CONSTRAINT "DM_ADDITIONAL_ASSETS_PK" PRIMARY KEY ("EMPNO", "ASSETID")
+  USING INDEX  ENABLE;
+  ALTER TABLE "DM_ADDITIONAL_ASSETS" MODIFY ("ASSETID" NOT NULL ENABLE);
+  ALTER TABLE "DM_ADDITIONAL_ASSETS" MODIFY ("EMPNO" NOT NULL ENABLE);

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="Cp1252" ?>
+<cart>
+<connections>
+<connection>
+<displayname><![CDATA[TPLOraDB - Selfservice]]></displayname>
+<connectionname><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></connectionname>
+<connectionuser><![CDATA[SELFSERVICE]]></connectionuser>
+</connection>
+</connections>
+<objects>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAD_APPROVER]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAVE_ADJ_MAST]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAVETYPE]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_ONDUTYMAST]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_DAYS]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_DAYS_DETAILS]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[d_date >= to_date('20200101','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_DELEGATE]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_DEPU]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[app_date >= to_date('20200901','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_DEPU_DELETED]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[app_date >= to_date('20200901','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_DEPU_REJECTED]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAVE_ADJ]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[entry_date >= to_date('20200901','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAVEAPP]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[app_date >= to_date('20200901','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAVEAPP_DELETED]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[app_date >= to_date('20200901','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAVEAPP_REJECTED]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAVEBAL]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_LEAVELEDG]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[app_date >= to_date('20200901','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_ONDUTY]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[app_date >= to_date('20200901','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_ONDUTYAPP]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[app_date >= to_date('20200901','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_ONDUTYAPP_DELETED]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_ONDUTYAPP_REJECTED]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[USERIDS]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+</objects>
+</cart>

@@ -1,0 +1,12 @@
+--------------------------------------------------------
+--  DDL for Table OFB_USER_ROLES
+--------------------------------------------------------
+
+  CREATE TABLE "TCMPL_HR"."OFB_USER_ROLES" 
+   (	"EMPNO" CHAR(5), 
+	"ROLE_ID" CHAR(5)
+   ) ;
+  GRANT UPDATE ON "TCMPL_HR"."OFB_USER_ROLES" TO "TCMPL_APP_CONFIG";
+  GRANT SELECT ON "TCMPL_HR"."OFB_USER_ROLES" TO "TCMPL_APP_CONFIG";
+  GRANT INSERT ON "TCMPL_HR"."OFB_USER_ROLES" TO "TCMPL_APP_CONFIG";
+  GRANT DELETE ON "TCMPL_HR"."OFB_USER_ROLES" TO "TCMPL_APP_CONFIG";

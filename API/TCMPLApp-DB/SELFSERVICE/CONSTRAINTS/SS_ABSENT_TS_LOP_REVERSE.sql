@@ -1,0 +1,7 @@
+--------------------------------------------------------
+--  Constraints for Table SS_ABSENT_TS_LOP_REVERSE
+--------------------------------------------------------
+
+  ALTER TABLE "SELFSERVICE"."SS_ABSENT_TS_LOP_REVERSE" MODIFY ("EMPNO" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."SS_ABSENT_TS_LOP_REVERSE" MODIFY ("LOP_4_DATE" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."SS_ABSENT_TS_LOP_REVERSE" MODIFY ("PAYSLIP_YYYYMM" NOT NULL ENABLE);

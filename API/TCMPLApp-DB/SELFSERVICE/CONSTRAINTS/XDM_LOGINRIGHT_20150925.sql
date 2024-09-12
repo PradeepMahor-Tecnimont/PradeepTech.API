@@ -1,0 +1,7 @@
+--------------------------------------------------------
+--  Constraints for Table XDM_LOGINRIGHT_20150925
+--------------------------------------------------------
+
+  ALTER TABLE "SELFSERVICE"."XDM_LOGINRIGHT_20150925" MODIFY ("TRANS_ID" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."XDM_LOGINRIGHT_20150925" MODIFY ("TO_DESK" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."XDM_LOGINRIGHT_20150925" MODIFY ("EMPNO" NOT NULL ENABLE);

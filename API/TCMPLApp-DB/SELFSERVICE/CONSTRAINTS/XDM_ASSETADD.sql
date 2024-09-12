@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Constraints for Table XDM_ASSETADD
+--------------------------------------------------------
+
+  ALTER TABLE "SELFSERVICE"."XDM_ASSETADD" MODIFY ("UNQID" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."XDM_ASSETADD" MODIFY ("DESKID" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."XDM_ASSETADD" MODIFY ("ASSETID" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."XDM_ASSETADD" MODIFY ("EMPNO" NOT NULL ENABLE);

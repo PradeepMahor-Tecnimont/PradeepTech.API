@@ -1,0 +1,169 @@
+<html>
+   <head>
+      <meta charset="utf-8" />
+      <style>
+         html {
+         -webkit-print-color-adjust: exact;
+         }
+         body {
+         margin: 0;
+         padding: 0;
+         background-color: rgb(204,204,204);
+         height: 100%;
+         }
+         .page:last-of-type {
+         margin-bottom: -2px;
+         }
+         page {
+         background: white;
+         display: block;
+         margin: 0 Auto;
+         margin-bottom: 0.5cm;
+         }
+         page[size="A4"] {
+         width: 21cm;
+         height: 29.7cm;
+         padding: 25px 50px 0px 100px;
+         }
+         #parentdiv, table {
+         font-size: 12px;
+         font-style: normal;
+         }
+         .title {
+         font-size: 16px;
+         }
+         .tabDetails {
+         border-collapse: collapse;
+         border: 1px solid #000;
+         }
+         .tabDetails td {
+         padding: 5px;
+         border: 1px solid #000;
+         }
+         @@media print {
+         table:last-of-type {
+         page-break-after: auto;
+         }
+         html, body {
+         height: 100%;
+         }
+         #buttonArea {
+         display: none;
+         }
+         page {
+         background: white;
+         display: block;
+         margin: 0;
+         margin-bottom: 0.5cm;
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <page size="A4">
+         <h2 style="text-align: center;"><strong>Performance Assessment of Trainee for Confirmation</strong></h2>
+         <p style="text-align: center;">(HOD s are required to assess the performance of a trainee in their department before end of training period.)</p>
+         <p style="text-align: center;"> </p>
+         <hr />
+         <ol>
+            <li>
+               <strong>
+               <u>General Information</u>:</strong>
+               <strong></strong>
+               <br>
+               <br>
+               <table border="0" style="width: 100%; border-collapse: collapse; margin-left: auto; margin-right: auto; height: 180px;">
+                  <tbody>
+                     <tr style="height: 20px;">
+                        <td style="width: 10%; ">Name: Mr./ Ms :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PName</span></td>
+                        <td style="width: 10%; ">Emp.No :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PEmpNo</span></td>
+                     </tr>
+                     <tr style="height: 20px;">
+                        <td style="width: 10%; ">Designation :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PDesignation</span></td>
+                        <td style="width: 10%; ">Department :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PDepartment</span></td>
+                     </tr>
+                     <tr style="height: 20px;">
+                        <td style="width: 10%; ">Date of Joining :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PDateOfJoining</span></td>
+                        <td style="width: 10%; ">Date of completion :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PDateOfCompletion</span></td>
+                     </tr>
+                     <tr style="height: 20px;">
+                        <td style="width: 10%; ">Location :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PLocation</span></td>
+                        <td style="width: 10%; ">Training period :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PTrainingPeriod</span></td>
+                     </tr>
+                     <tr style="height: 20px;">
+                        <td style="width: 10%; ">Attendance :&nbsp;</td>
+                        <td style="width: 40%;  text-align: left;"><span style="text-decoration: underline;">PAttendance</span></td>
+                        <td style="width: 10%; "></td>
+                        <td style="width: 10%; "></td>
+                     </tr>
+                  </tbody>
+               </table>
+               <p></p>
+            </li>
+            <br>
+            <li>
+               <strong>Training</strong>
+               <br><br>
+               <ol>
+                  <li><strong>Training Received in the areas of:&nbsp; <span style="text-decoration: underline;">PTraining1</span></strong></li>
+                  <br>
+                  <li><strong>Ability to grasp work procedure &amp; technical aspects in dept.:&nbsp; <span style="text-decoration: underline;">PTraining2</span></strong></li>
+                  <br>
+                  <li><strong>Approach towards learning: &nbsp; <span style="text-decoration: underline;">PTraining3</span></strong></li>
+                  <br>
+                  <li><strong>Skills Acquired: &nbsp; <span style="text-decoration: underline;">PTraining4</span></strong></li>
+                  <br>
+                  <li><b>Effectiveness of Training/On the Job Training: <strong>&nbsp; <span style="text-decoration: underline;">PTraining5</span></strong></b></li>
+                  <br>
+                  <li><b>Strengths: <strong>&nbsp; <span style="text-decoration: underline;">PFeedback1</span></strong></b></li>
+                  <br>
+                  <li><b>Specific achievement during the Training period: <strong> <span style="text-decoration: underline;">PFeedback2</span></strong></b></li>
+                  <br>
+                  <li><b>Areas of improvements &amp; Action plan for improvement: <strong> <span style="text-decoration: underline;">PFeedback3</span></strong></b></li>
+                  <br>
+                  <li><strong>Superior: <b><span style="text-decoration: underline;">PFeedback4</span></b></strong></li>
+                  <br>
+                  <li><strong>Colleagues: <b><span style="text-decoration: underline;">PFeedback5</span></b></strong></li>
+                  <li>
+                     <p style="text-align: left;"><strong>Recommendation for Confirmation/Extension of Training Period and Remark (If any)</strong><strong>: <b><span style="text-decoration: underline;">PFeedback6</span></b></strong><strong></strong></p>
+                  </li>
+                  <br>
+               </ol>
+            </li>
+         </ol>
+         <p><strong><b><span style="text-decoration: underline;"></span></b></strong></p>
+         <table border="0" style="border-collapse: collapse; width: 100%;">
+            <tbody>
+               <tr>
+                  <td style="width: 50%;"><strong>Date:&nbsp; PHodDate</strong></td>
+                  <td style="width: 50%; text-align: right;"><strong>Signature of H.O.D</strong></td>
+               </tr>
+            </tbody>
+         </table>
+         <hr>
+         <br>
+         <p p="" style="text-align: left;"><strong>Comments of HR: <b><span style="text-decoration: underline;">PCommentsOfHr</span></b></strong></p>
+         <br>
+         <p p="" style="text-align: left;"><strong><b><span style="text-decoration: underline;"></span></b></strong></p>
+         <br>
+         <table border="0" style="border-collapse: collapse; width: 100%;">
+            <tbody>
+               <tr style="">
+                  <td style="width: 50%;  "><strong>Date:&nbsp; PHrDate</strong></td>
+                  <td style="width: 50%; text-align: right; "><strong>HR Department.</strong></td>
+               </tr>
+            </tbody>
+         </table>
+         <hr>
+         <p p="" style="text-align: left;"></p>
+      </page>
+   </body>
+</html>

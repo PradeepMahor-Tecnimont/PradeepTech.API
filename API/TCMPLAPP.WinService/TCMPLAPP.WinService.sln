@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32516.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCMPLAPP.WinService", "TCMPLAPP.WinService\TCMPLAPP.WinService.csproj", "{2D4D5475-CE3C-441D-9FD3-CE8A57591319}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D4D5475-CE3C-441D-9FD3-CE8A57591319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D4D5475-CE3C-441D-9FD3-CE8A57591319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D4D5475-CE3C-441D-9FD3-CE8A57591319}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D4D5475-CE3C-441D-9FD3-CE8A57591319}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BAE01815-3DE5-4F82-95CC-6A062DF183A8}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 1
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tpltfs/defaultcollection
+		SccProjectUniqueName0 = TCMPLAPP.WinService\\TCMPLAPP.WinService.csproj
+		SccProjectName0 = TCMPLAPP.WinService
+		SccAuxPath0 = https://tpltfs/defaultcollection
+		SccLocalPath0 = TCMPLAPP.WinService
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+	EndGlobalSection
+EndGlobal

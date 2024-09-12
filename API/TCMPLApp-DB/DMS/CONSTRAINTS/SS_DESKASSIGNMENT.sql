@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Constraints for Table SS_DESKASSIGNMENT
+--------------------------------------------------------
+
+  ALTER TABLE "SS_DESKASSIGNMENT" ADD CONSTRAINT "SS_DESKASSIGNMENT_PK" PRIMARY KEY ("EMPNO", "TRANS_DATE")
+  USING INDEX  ENABLE;
+  ALTER TABLE "SS_DESKASSIGNMENT" MODIFY ("TRANS_DATE" NOT NULL ENABLE);
+  ALTER TABLE "SS_DESKASSIGNMENT" MODIFY ("EMPNO" NOT NULL ENABLE);

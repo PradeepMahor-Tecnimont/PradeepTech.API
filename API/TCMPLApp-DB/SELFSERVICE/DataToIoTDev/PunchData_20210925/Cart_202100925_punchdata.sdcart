@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="Cp1252" ?>
+<cart>
+<connections>
+<connection>
+<displayname><![CDATA[TPLOraDB - Selfservice]]></displayname>
+<connectionname><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></connectionname>
+<connectionuser><![CDATA[SELFSERVICE]]></connectionuser>
+</connection>
+</connections>
+<objects>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_PUNCH]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[pdate >= to_date('20210101','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_PUNCH_WFH]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[pdate >= to_date('20210101','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_PUNCH_MANUAL]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[pdate >= to_date('20210101','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_PUNCH_AUTO]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[pdate >= to_date('20210101','yyyymmdd')]]></filter>
+</dbobject>
+<dbobject>
+	<objectconnection><![CDATA[IdeConnections%23TPLOraDB+-+Selfservice]]></objectconnection>
+	<objecttype><![CDATA[TABLE]]></objecttype>
+	<objectschema><![CDATA[SELFSERVICE]]></objectschema>
+	<objectname><![CDATA[SS_PUNCH_AUTO_TYPE_MAST]]></objectname>
+	<include><![CDATA[true]]></include>
+	<meta><![CDATA[false]]></meta>
+	<data><![CDATA[true]]></data>
+	<filter><![CDATA[]]></filter>
+</dbobject>
+</objects>
+</cart>

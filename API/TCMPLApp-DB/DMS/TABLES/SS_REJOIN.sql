@@ -1,0 +1,32 @@
+--------------------------------------------------------
+--  DDL for Table SS_REJOIN
+--------------------------------------------------------
+
+  CREATE TABLE "SS_REJOIN" 
+   (	"REJOINREQNUM" VARCHAR2(20), 
+	"REJOINREQDATE" DATE, 
+	"EMPNO" CHAR(5), 
+	"COSTCODE" CHAR(6), 
+	"JOINDATE" DATE, 
+	"SCR_CODE" CHAR(5), 
+	"SCR_DATE" DATE, 
+	"HOD_CODE" CHAR(5), 
+	"HOD_APPRL" NUMBER(1,0) DEFAULT 0, 
+	"HOD_APPRL_DT" DATE, 
+	"HOD_TCPIP" VARCHAR2(30), 
+	"IT_CODE" CHAR(5), 
+	"IT_APPRL" NUMBER(1,0) DEFAULT NULL, 
+	"IT_APPRL_DT" DATE, 
+	"ITCORD_APPRL" NUMBER(1,0), 
+	"ITCORD_APPRL_DT" DATE, 
+	"TARGETDESK" VARCHAR2(7), 
+	"COMP" NUMBER(1,0), 
+	"MON1" NUMBER(1,0), 
+	"MON2" NUMBER(1,0), 
+	"TEL" NUMBER(1,0), 
+	"PRINT" NUMBER(1,0), 
+	"DESKREQ" NUMBER(1,0), 
+	"DESKLOC" VARCHAR2(20), 
+	"DESKSHARE" NUMBER(1,0) DEFAULT 0, 
+	"LONGDEPUT" NUMBER(1,0) DEFAULT 1
+   ) ;

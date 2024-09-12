@@ -1,0 +1,57 @@
+--------------------------------------------------------
+--  DDL for View EMPLMASTV
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "COMMONMASTERS"."EMPLMASTV" ("EMPNO", "NAME", "ABBR", "EMPTYPE", "EMAIL", "ASSIGN", "PARENT", "DESGCODE", "DOB", "DOJ", "DOL", "DOR", "COSTHEAD", "COSTDY", "PROJMNGR", "PROJDY", "DBA", "DIRECTOR", "STATUS", "SUBMIT", "OFFICE", "PROJNO", "DIROP", "AMFI_USER", "AMFI_AUTH", "SECRETARY", "DO", "INV_AUTH", "JOB_INCHARGE", "COSTOPR", "MNGR", "IPADD", "PWD_CHGD", "DOC", "GRADE", "PROC_OPR", "REPORTO", "COMPANY", "TRANS_OUT", "TRANS_IN", "HR_OPR", "SEX", "USER_DOMAIN", "WEB_ITDECL", "CATEGORY", "ESI_COVER", "DOMAIN_LOGIN") AS 
+  (SELECT A. EMPNO ,
+    A. NAME ,
+    A. ABBR ,
+    A. EMPTYPE ,
+    A. EMAIL ,
+    A. ASSIGN ,
+    A. PARENT ,
+    A. DESGCODE ,
+    A. DOB ,
+    A. DOJ ,
+    A. DOL ,
+    A. DOR ,
+    A. COSTHEAD ,
+    A. COSTDY ,
+    A. PROJMNGR ,
+    A. PROJDY ,
+    A. DBA ,
+    A. DIRECTOR ,
+    A. STATUS ,
+    A. SUBMIT ,
+    A. OFFICE ,
+    A. PROJNO ,
+    A. DIROP ,
+    A. AMFI_USER ,
+    A. AMFI_AUTH ,
+    A. SECRETARY ,
+    A. DO ,
+    A. INV_AUTH ,
+    A. JOB_INCHARGE ,
+    A. COSTOPR ,
+    A. MNGR ,
+    A. IPADD ,
+    A. PWD_CHGD ,
+    A. DOC ,
+    A. GRADE ,
+    A. PROC_OPR ,
+    A. REPORTO ,
+    A. COMPANY ,
+    A. TRANS_OUT ,
+    A. TRANS_IN ,
+    A. HR_OPR ,
+    A. SEX ,
+    A. USER_DOMAIN ,
+    A. WEB_ITDECL ,
+    A. CATEGORY ,
+    A.esi_cover,
+    B.domain_login
+  FROM timecurr.emplmast A,
+    EMP_DETAILS B
+  WHERE A.empno=B.empno(+)
+  )
+;

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCMPLAPP-RAP-Reporting-API", "TCMPLAPP-RAP-Reporting-API.csproj", "{C3AAC6E7-84B9-49D1-9ADC-9D9AD66C7179}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3AAC6E7-84B9-49D1-9ADC-9D9AD66C7179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3AAC6E7-84B9-49D1-9ADC-9D9AD66C7179}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3AAC6E7-84B9-49D1-9ADC-9D9AD66C7179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3AAC6E7-84B9-49D1-9ADC-9D9AD66C7179}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {951C7DEE-3273-41FC-84FF-BC33F0DE9D5F}
+	EndGlobalSection
+EndGlobal

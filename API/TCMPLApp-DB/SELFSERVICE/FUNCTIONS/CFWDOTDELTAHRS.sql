@@ -1,0 +1,72 @@
+--------------------------------------------------------
+--  DDL for Function CFWDOTDELTAHRS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SELFSERVICE"."CFWDOTDELTAHRS" (p_EmpNo IN Varchar2, p_PDate IN Date) RETURN Number IS
+
+		Cursor C1 (c_EmpNo IN Varchar2, c_Date IN Date) Is
+				Select c_EmpNo As EmpNo, Days, LateCome(c_EmpNo,To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy'))) AS LCome,
+						To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy')) AS PDate, 
+						GetShift1(c_EmpNo, To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy'))) AS SCode,
+						Get_Holiday(To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy'))) As isSunday,
+						EarlyGo1(c_EmpNo,To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy'))) AS EGo,
+						isLComeEGoApp(c_EmpNo,To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy'))) AS LC_App,
+						isSLeaveApp(c_EmpNo,To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy'))) AS SL_App,
+						--isLastDayOfMonth(To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy'))) AS isLDM,
+						isLastWorkDay1(c_EmpNo, To_Date(Days ||'-'||To_Char(c_Date,'mon-yyyy'))) AS isLWD
+				From SS_Days, SS_Muster 
+				Where EmpNo = c_EmpNo 
+				And MnTh = To_Char(c_Date,'yyyymm')
+				And Days <= To_Number(To_Char(Last_Day(c_Date),'dd'))
+				And To_Number(MnTh) >= 200201
+				Order by Days;
+
+		LC_AppCntr Number := 0;
+		SL_AppCntr Number := 0;
+		v_OpenLC_Cntr Number := 0;
+		v_OpenMM Number :=0;
+		v_SDate Date;
+		v_Count Number :=0;
+		v_DHrs Number :=0;
+		v_SumDHrs Number :=0;
+		v_SumOTDHrs Number :=0;
+		v_CFwdHrs Number :=0;
+		v_RetVal Number := 0;
+
+BEGIN
+		If To_Number(To_Char(p_PDate,'dd')) = 1 And p_PDate > To_Date('1-jan-2002') Then
+				Select Count(*) InTo v_Count From SS_DeltaHrsBal Where PDate < p_PDate And EmpNo = Trim(p_EmpNo) ;
+				If v_Count = 0 Then
+						v_SDate := To_Date('30-nov-2001');
+				Else
+						Select PDate, MM, LC_AppCntr, OT_MM InTo v_SDate, v_OpenMM, v_OpenLC_Cntr, v_SumOTDHrs From SS_DeltaHrsBal 
+							Where PDate < p_PDate 
+							And EmpNo = Trim(p_EmpNo)
+							And PDate = (Select Max(PDate) From SS_DeltaHrsBal Where PDate < p_PDate And EmpNo = Trim(p_EmpNo) Group By EmpNo);
+				End If;
+				v_SDate := v_SDate + 1;
+				If v_SDate <> p_PDate Then
+						For C2 IN C1(p_EmpNo,v_SDate) Loop
+								LC_AppCntr := LC_AppCntr + C2.LC_App;
+								SL_AppCntr := SL_AppCntr + C2.SL_App;
+								Select DeltaHrs1(C2.EmpNo,C2.PDate,C2.SCode,PenaltyLeave1(C2.LCome,C2.EGo,C2.isLWD,LC_AppCntr,SL_AppCntr,C2.LC_App,C2.SL_App)) InTo v_DHrs From Dual;
+								If v_DHrs >= 30 Then
+										v_SumOTDHrs := v_SumOTDHrs + v_DHrs;
+								End If;
+								If C2.isSunday = 2 Then
+										v_SumOTDHrs := 0;
+										LC_AppCntr := 0;
+								End If;
+						End Loop;
+						v_RetVal := v_SumOTDHrs;
+						LC_AppCntr := 0;
+				Else
+						v_RetVal := v_OpenMM;
+				End If;
+		End If;
+		Return nvl(v_RetVal,0);
+END
+;
+
+
+/

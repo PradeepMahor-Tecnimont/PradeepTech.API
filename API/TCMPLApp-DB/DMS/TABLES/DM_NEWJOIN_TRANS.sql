@@ -1,0 +1,31 @@
+--------------------------------------------------------
+--  DDL for Table DM_NEWJOIN_TRANS
+--------------------------------------------------------
+
+  CREATE TABLE "DM_NEWJOIN_TRANS" 
+   (	"NEWJOINREQNUM" VARCHAR2(18), 
+	"NEWJOINREQDATE" DATE, 
+	"EMPNO" CHAR(5), 
+	"TARGETDESK" VARCHAR2(7), 
+	"COSTCODE" CHAR(4), 
+	"HOD_APPRL" NUMBER(1,0), 
+	"HOD_DATE" DATE, 
+	"HOD_CODE" CHAR(5), 
+	"IT_APPRL" NUMBER(1,0), 
+	"IT_DATE" DATE, 
+	"IT_CODE" CHAR(5), 
+	"ITCORD_APPRL" NUMBER(1,0), 
+	"ITCORD_DATE" DATE, 
+	"UIDFLAG" NUMBER(1,0), 
+	"MAILFLAG" NUMBER(1,0), 
+	"COMP" NUMBER(1,0), 
+	"MON1" NUMBER(1,0), 
+	"MON2" NUMBER(1,0), 
+	"TEL" NUMBER(1,0), 
+	"PRINT" NUMBER(1,0), 
+	"DESKREQ" NUMBER(1,0), 
+	"DESKLOC" VARCHAR2(20), 
+	"USERID" VARCHAR2(20), 
+	"MAILID" VARCHAR2(50), 
+	"DESKSHARE" NUMBER(1,0) DEFAULT 0
+   ) ;

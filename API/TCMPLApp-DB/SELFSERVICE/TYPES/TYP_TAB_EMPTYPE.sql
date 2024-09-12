@@ -1,0 +1,1 @@
+Create Or Replace Type selfservice.typ_tab_emptype Is Table Of typ_emptype;

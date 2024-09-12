@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Ref Constraints for Table SS_REPORT_FIELDS
+--------------------------------------------------------
+
+  ALTER TABLE "SS_REPORT_FIELDS" ADD CONSTRAINT "FK_DATATYPE" FOREIGN KEY ("DATA_TYPE")
+	  REFERENCES "SS_DATATYPE" ("DATA_TYPE") ENABLE NOVALIDATE;
+  ALTER TABLE "SS_REPORT_FIELDS" ADD CONSTRAINT "FK_REP_FIELDS" FOREIGN KEY ("REP_ID")
+	  REFERENCES "SS_REPORT_MAST" ("REP_ID") ENABLE NOVALIDATE;

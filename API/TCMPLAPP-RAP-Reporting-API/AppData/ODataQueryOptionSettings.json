@@ -1,0 +1,68 @@
+{
+  "AppODataQueryAttributes": {
+    "Activity": {
+      "ColumnsAllowed4Filter": [ "Costcode", "Activity", "Name", "Tlpcode" ],
+      "ColumnsAllowed4Sort": [ "Costcode", "Activity", "Tlpcode" ]
+    },
+    "ProjMast": {
+      "ColumnsAllowed4Filter": [ "Projno", "Name" ],
+      "ColumnsAllowed4Sort": [ "Projno", "Name" ]
+    },
+    "Client": {
+      "ColumnsAllowed4Filter": [ "Client", "Name" ],
+      "ColumnsAllowed4Sort": [ "Client", "Name" ]
+    },
+    "Costmast": {
+      "ColumnsAllowed4Filter": [ "Costcode", "Name" ],
+      "ColumnsAllowed4Sort": [ "Costcode", "Name" ]
+    },
+    "Desg": {
+      "ColumnsAllowed4Filter": [ "Desgcode", "Desg", "Ord", "Subcode" ],
+      "ColumnsAllowed4Sort": [ "Desgcode", "Desg", "Ord", "Subcode" ]
+    },
+    "Employee": {
+      "ColumnsAllowed4Filter": [ "Empno", "Name", "Empcode", "EmpName", "EmpStatus" ],
+      "ColumnsAllowed4Sort": [ "Empno" ]
+    },
+    "Holiday": {
+      "ColumnsAllowed4Filter": [ "Holiday", "Yyyymm", "Weekday" ],
+      "ColumnsAllowed4Sort": [ "Holiday", "Yyyymm", "Weekday" ]
+    },
+    "Office": {
+      "ColumnsAllowed4Filter": [ "Office" ],
+      "ColumnsAllowed4Sort": [ "Office", "Name" ]
+    },
+    "Raphours": {
+      "ColumnsAllowed4Filter": [ "Yymm" ],
+      "ColumnsAllowed4Sort": [ "Yymm" ]
+    },
+    "Subcontract": {
+      "ColumnsAllowed4Filter": [ "Subcontract", "Description" ],
+      "ColumnsAllowed4Sort": [ "Subcontract" ]
+    },
+    "Tlp": {
+      "ColumnsAllowed4Filter": [ "Costcode", "Tlpcode", "Name" ],
+      "ColumnsAllowed4Sort": [ "Costcode", "Tlpcode" ]
+    },
+    "WrkhoursPut": {
+      "ColumnsAllowed4Filter": [ "Yymm", "Office" ],
+      "ColumnsAllowed4Sort": [ "Yymm", "Office" ]
+    },
+    "Countries": {
+      "ColumnsAllowed4Filter": [ "CountryId", "CountryName", "RegionId" ],
+      "ColumnsAllowed4Sort": [ "CountryId", "CountryName", "RegionId" ]
+    },
+    "UserDeptRole": {
+      "ColumnsAllowed4Filter": [ "CostCode", "Empno", "Roleid" ],
+      "ColumnsAllowed4Sort": [ "CostCode", "Empno", "Roleid" ]
+    },
+    "UserProjectRole": {
+      "ColumnsAllowed4Filter": [ "Project", "Empno", "Roleid" ],
+      "ColumnsAllowed4Sort": [ "Project", "Empno", "Roleid" ]
+    },
+    "UserRole": {
+      "ColumnsAllowed4Filter": [ "Empno", "Roleid" ],
+      "ColumnsAllowed4Sort": [ "Empno", "Roleid" ]
+    }
+  }
+}

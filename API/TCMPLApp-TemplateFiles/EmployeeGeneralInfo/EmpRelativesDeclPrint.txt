@@ -1,0 +1,133 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        html {
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: rgb(204,204,204);
+            height: 100%;
+        }
+
+        .page:last-of-type {
+            margin-bottom: -2px;
+        }
+
+        page {
+            background: white;
+            display: block;
+            margin: 0 Auto;
+            margin-bottom: 0.5cm;
+        }
+
+            page[size="A4"] {
+                width: 21cm;
+                height: 29.7cm;
+                padding: 25px 50px 0px 100px;
+            }
+
+        #parentdiv, table {
+            font-size: 12px;
+            font-style: normal;
+        }
+
+        .title {
+            font-size: 16px;
+        }
+
+        .tabDetails {
+            border-collapse: collapse;
+            border: 1px solid #000;
+        }
+
+            .tabDetails td {
+                padding: 5px;
+                border: 1px solid #000;
+            }
+
+        @@media print {
+            table:last-of-type {
+                page-break-after: auto;
+            }
+
+            html, body {
+                height: 100%;
+            }
+
+            #buttonArea {
+                display: none;
+            }
+
+            page {
+                background: white;
+                display: block;
+                margin: 0;
+                margin-bottom: 0.5cm;
+            }
+        }
+    </style>
+</head>
+<body>
+	<page size="A4">
+	<p style="text-align: center;"></p>
+	<p style="text-align: center;"><strong>Employee's relative(s) declaration</strong></p>
+	<p style="text-align: right;">Date: <strong>PDate</strong></p>
+	<p style="text-align: left;">To<br />Mr./Ms. : <strong><span style="text-decoration: underline;">PNameOfEmp PEmpNo</span></strong> <br /></p>
+	<p style="text-align: left;">We hereby request all employees of TCMPL to declare whether any of their relatives are employed in TCMPL offices and sites in India or employed with any Maire Group company.</p>
+	<p style="text-align: left;">This is in line with our Group Code of Ethics – Conflict of Interest guidelines where the Maire Group is committed to preventing any personal interests from having a negative impact on the general interests of the Maire Group and/or influence its decisions.</p>
+	<p></p>
+	<p style="text-align: left;">I, the undersigned, hereby declare that the following details of my relatives who are employed in TCMPL offices and sites in India or employed with any Maire Group company provided by me are correct.</p>
+	<table border="1" style="border-collapse: collapse; width: 100%; height: 43px;">
+		<tbody>
+			<tr style="height: 25px;">
+				<td style="width: 25%; height: 25px; text-align: center;"><strong>Name</strong></td>
+				<td style="width: 25%; height: 25px; text-align: center;"><strong>Department</strong></td>
+				<td style="width: 20%; height: 25px; text-align: center;"><strong>Relation</strong></td>
+				<td style="width: 20%; height: 25px; text-align: center;"><strong>Location</strong></td>
+				<td style="width: 10%; height: 25px; text-align: center;"><strong>Empno</strong></td>
+			</tr>
+			<tr style="height: 18px;">
+				<td style="width: 25%; height: 18px; text-align: left;">PName1</td>
+				<td style="width: 25%; height: 18px; text-align: left;">PDepartment1</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PRelation1</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PLocation1</td>
+				<td style="width: 10%; height: 18px; text-align: left;">PColEmpNo1</td>
+			</tr>
+			<tr style="height: 18px;">
+				<td style="width: 25%; height: 18px; text-align: left;">PName2</td>
+				<td style="width: 25%; height: 18px; text-align: left;">PDepartment2</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PRelation2</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PLocation2</td>
+				<td style="width: 10%; height: 18px; text-align: left;">PColEmpNo2</td>
+			</tr>
+			<tr style="height: 18px;">
+				<td style="width: 25%; height: 18px; text-align: left;">PName3</td>
+				<td style="width: 25%; height: 18px; text-align: left;">PDepartment3</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PRelation3</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PLocation3</td>
+				<td style="width: 10%; height: 18px; text-align: left;">PColEmpNo3</td>
+			</tr>
+			<tr style="height: 18px;">
+				<td style="width: 25%; height: 18px; text-align: left;">PName4</td>
+				<td style="width: 25%; height: 18px; text-align: left;">PDepartment4</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PRelation4</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PLocation4</td>
+				<td style="width: 10%; height: 18px; text-align: left;">PColEmpNo4</td>
+			</tr>
+			<tr style="height: 18px;">
+				<td style="width: 25%; height: 18px; text-align: left;">PName5</td>
+				<td style="width: 25%; height: 18px; text-align: left;">PDepartment5</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PRelation5</td>
+				<td style="width: 20%; height: 18px; text-align: left;">PLocation5</td>
+				<td style="width: 10%; height: 18px; text-align: left;">PColEmpNo5</td>
+			</tr>
+		</tbody>
+	</table>
+	<p></p>
+	</page>
+</body>
+</html>

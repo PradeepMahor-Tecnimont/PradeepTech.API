@@ -1,0 +1,12 @@
+--------------------------------------------------------
+--  DDL for View HOURS_DAILYOT_FINAL
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "TIMECURR"."HOURS_DAILYOT_FINAL" ("YYMM", "EMPNO", "NAME", "ASSIGN", "PROJNO", "ACTUAL", "OTHOURS", "TOT") AS 
+  ( SELECT a.yymm,A.EMPNO,B.NAME,A.ASSIGN,A.PROJNO,
+SUM(A.AHOURS) as Actual,SUM(A.OTHOURS) as othours,SUM(A.AHOURS)+SUM(A.OTHOURS) AS TOT
+ FROM HOURS_DailyOt A,EMPLMAST B,PROJMAST C
+WHERE A.EMPNO = B.EMPNO AND A.PROJNO = C.PROJNO AND C.TCM_JOBS = 1  and c.reimb_job = 1
+HAVING SUM(A.AHOURS)+SUM(A.OTHOURS) > 240 GROUP BY a.yymm,A.EMPNO,B.NAME,A.ASSIGN,A.PROJNO )
+
+;

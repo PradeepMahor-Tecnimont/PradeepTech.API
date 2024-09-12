@@ -1,0 +1,77 @@
+--------------------------------------------------------
+--  DDL for View EMP_DETAILS_TOTAL
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "COMMONMASTERS"."EMP_DETAILS_TOTAL" ("EMPNO", "NAME", "DOMAIN_LOGIN", "CO_BUS", "USER_UPDATE", "SURNAME", "EMPDETNAME", "FATHER_NAME", "P_ADD_1", "P_ADD_2", "P_ADD_3", "P_ADD_4", "P_PINCODE", "P_PHONE", "P_MOBILE", "F_ADD_1", "F_ADD_2", "F_ADD_3", "F_ADD_4", "F_PINCODE", "REF_PERSON_NAME", "REF_PERSON_PHONE", "LOCATION", "PUNCH_CARD_STATUS", "DOB", "FATHER_OCCUPATION", "INSR_DETAILS", "PICK_UP_POINT", "EMPDETEMPNO", "DESK_NO", "MAIL_ID", "PHONE_OFF", "FAX", "VOIP", "MOBILE_RES", "PHONE_RES", "MOBILE_OFF", "R_ADD_1", "R_ADD_2", "R_ADD_3", "R_ADD_4", "R_PINCODE", "R_PHONE", "R_MOBILE", "PAN", "PASSPORT_NO", "ISSUE_DATE", "EXPIRY_DATE", "PASSPORT_ISSUED_AT", "BLOOD_GROUP", "EOW", "EOW_DATE", "EOW_WEEK", "JOBTITLE", "EMPTYPE", "STATUS", "BUS_ROUTE_DESC", "BLOOD_GROUP_DESC", "PARENT", "ASSIGN") AS 
+  SELECT
+    /*+ NOPARALLEL(A, D, EMP_BUS_MASTER, EMP_BLOOD_GROUP_TYPE, ) */
+    D.EMPNO,
+    D.NAME ,
+    A.DOMAIN_LOGIN,
+    A.CO_BUS,
+    A.USER_UPDATE,
+    A.SURNAME,
+    A.NAME EmpDetName,
+    A.FATHER_NAME,
+    A.P_ADD_1,
+    A.P_ADD_2,
+    A.P_ADD_3,
+    A.P_ADD_4,
+    A.P_pincode,
+    a.p_phone,
+    a.p_mobile,
+    A.F_ADD_1,
+    A.F_ADD_2,
+    A.F_ADD_3,
+    A.F_ADD_4,
+    a.f_pincode,
+    A.REF_PERSON_NAME,
+    A.REF_PERSON_PHONE,
+    A.LOCATION,
+    A.PUNCH_CARD_STATUS,
+    A.DOB,
+    A.FATHER_OCCUPATION,
+    A.INSR_DETAILS,
+    A.PICK_UP_POINT,
+    A.EMPNO AS EmpDetEmpNo,
+    A.DESK_NO,
+    A.MAIL_ID,
+    A.PHONE_OFF,
+    A.FAX,
+    A.VOIP,
+    A.MOBILE_RES,
+    A.PHONE_RES,
+    A.MOBILE_OFF,
+    A.R_ADD_1,
+    A.R_ADD_2,
+    A.R_ADD_3,
+    A.R_ADD_4,
+    a.r_pincode,
+    a.phone_res r_phone,
+    a.mobile_res r_mobile,
+    A.PAN,
+    A.PASSPORT_NO,
+    A.ISSUE_DATE,
+    A.EXPIRY_DATE,
+    A.PASSPORT_ISSUED_AT,
+    A.BLOOD_GROUP,
+    D.EOW,
+    D.EOW_DATE,
+    D.EOW_WEEK,
+    D.JOBTITLE,
+    D.EMPTYPE,
+    D.STATUS,
+    EMP_BUS_MASTER.DESCRIPTION Bus_Route_Desc,
+    EMP_BLOOD_GROUP_TYPE.DESCRIPTION Blood_Group_Desc,
+    D.parent ,
+    d.assign
+  FROM EMP_DETAILS A,
+    EMPLMAST D,
+    EMP_BUS_MASTER ,
+    EMP_BLOOD_GROUP_TYPE
+  WHERE ( (A.EMPNO(+)         = D.EMPNO)
+  AND (EMP_BUS_MASTER.CODE(+) = A.CO_BUS)
+  AND (A.BLOOD_GROUP          = EMP_BLOOD_GROUP_TYPE.CODE(+))
+  AND (D.STATUS               = 1) )
+;
+  GRANT SELECT ON "COMMONMASTERS"."EMP_DETAILS_TOTAL" TO "SELFSERVICE";

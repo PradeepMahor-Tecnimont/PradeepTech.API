@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Constraints for Table DM_DESKLOCK_10SEP20
+--------------------------------------------------------
+
+  ALTER TABLE "DM_DESKLOCK_10SEP20" MODIFY ("TARGETDESK" NOT NULL ENABLE);
+  ALTER TABLE "DM_DESKLOCK_10SEP20" MODIFY ("DESKID" NOT NULL ENABLE);
+  ALTER TABLE "DM_DESKLOCK_10SEP20" MODIFY ("EMPNO" NOT NULL ENABLE);
+  ALTER TABLE "DM_DESKLOCK_10SEP20" MODIFY ("UNQID" NOT NULL ENABLE);

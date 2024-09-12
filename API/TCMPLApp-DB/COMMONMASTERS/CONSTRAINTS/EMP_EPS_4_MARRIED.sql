@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Constraints for Table EMP_EPS_4_MARRIED
+--------------------------------------------------------
+
+  ALTER TABLE "COMMONMASTERS"."EMP_EPS_4_MARRIED" ADD CONSTRAINT "EMP_EPS_4_MARRIED_PK" PRIMARY KEY ("EMPNO", "NOM_NAME")
+  USING INDEX  ENABLE;
+  ALTER TABLE "COMMONMASTERS"."EMP_EPS_4_MARRIED" MODIFY ("NOM_NAME" NOT NULL ENABLE);
+  ALTER TABLE "COMMONMASTERS"."EMP_EPS_4_MARRIED" MODIFY ("EMPNO" NOT NULL ENABLE);

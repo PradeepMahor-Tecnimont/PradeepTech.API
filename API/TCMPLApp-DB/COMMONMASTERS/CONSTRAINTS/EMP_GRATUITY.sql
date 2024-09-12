@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Constraints for Table EMP_GRATUITY
+--------------------------------------------------------
+
+  ALTER TABLE "COMMONMASTERS"."EMP_GRATUITY" ADD CONSTRAINT "EMP_GRATUITY_PK" PRIMARY KEY ("EMPNO", "NOM_NAME")
+  USING INDEX  ENABLE;
+  ALTER TABLE "COMMONMASTERS"."EMP_GRATUITY" MODIFY ("NOM_NAME" NOT NULL ENABLE);
+  ALTER TABLE "COMMONMASTERS"."EMP_GRATUITY" MODIFY ("EMPNO" NOT NULL ENABLE);

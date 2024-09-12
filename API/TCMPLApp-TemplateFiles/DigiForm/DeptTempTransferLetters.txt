@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        html {
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: rgb(204,204,204);
+            height: 100%;
+        }
+
+        .page:last-of-type {
+            margin-bottom: -2px;
+        }
+
+        page {
+            background: white;
+            display: block;
+            margin: 0 Auto;
+            margin-bottom: 0.5cm;
+        }
+
+            page[size="A4"] {
+                width: 21cm;
+                height: 29.7cm;
+                padding: 25px 50px 0px 100px;
+            }
+
+        #parentdiv, table {
+            font-size: 12px;
+            font-style: normal;
+        }
+
+        .title {
+            font-size: 16px;
+        }
+
+        .tabDetails {
+            border-collapse: collapse;
+            border: 1px solid #000;
+        }
+
+            .tabDetails td {
+                padding: 5px;
+                border: 1px solid #000;
+            }
+
+        @@media print {
+            table:last-of-type {
+                page-break-after: auto;
+            }
+
+            html, body {
+                height: 100%;
+            }
+
+            #buttonArea {
+                display: none;
+            }
+
+            page {
+                background: white;
+                display: block;
+                margin: 0;
+                margin-bottom: 0.5cm;
+            }
+        }
+    </style>
+
+    <style>
+        table.unstyledTable {
+            width: 100%;
+            height: 133px;
+            text-align: left;
+            border-collapse: collapse;
+        }
+
+            table.unstyledTable td, table.unstyledTable th {
+                padding: 5px 4px;
+            }
+
+            table.unstyledTable tbody td {
+                font-size: 14px;
+                color: #333333;
+            }
+    </style>
+    <style>
+        #page-container {
+            position: relative;
+            min-height: 95vh;
+        }
+
+        #content-wrap {
+            padding-bottom: 1.5rem; /* Footer height */
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px; /* Footer height */
+        }
+    </style>
+</head>
+
+<body style="font-size:14px; font-family: Verdana;">
+    <page size="A4">
+        <div id="page-container">
+            <div id="content-wrap">
+                <table style="border-collapse: collapse; width: 100%;" border="0">
+                    <tbody>
+                        <tr>
+                            <td style="width:70%">
+                                <img src="maire_logo_large.png" alt="Tecnimont Pvt Ltd" style="width:350" />
+                            </td>
+                            <td style="width:30%;text-align: right;vertical-align:top;">
+                                <span>0181-018-04</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="text-align:center; font-size:large; font-weight:bold">
+                    <br />  Inter Office Memo <br />
+                </p>
+                <br />
+                <br />
+                <div>
+
+                    <table border="1" class="unstyledTable"
+                           style="border-collapse: collapse;">
+                        <tbody>
+                            <tr>
+                                <td width="72">
+                                    <b>From :&nbsp; </b>
+                                </td>
+                                <td width="108">
+                                    <span>
+                                        Management
+                                    </span>
+                                </td>
+                                <td width="60">
+                                    <b>Ref. :</b>
+                                </td>
+                                <td width="156">
+                                    <span>
+                                        PRef
+                                    </span>
+                                </td>
+                                <td width="60">
+                                    <b>Date :</b>
+                                </td>
+                                <td width="120">
+                                    <span>
+                                        PDate
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="180">
+                                    <b>To :</b>
+                                </td>
+                                <td colspan="4" width="396">
+                                    <span> PEmpName </span>  <br />
+                                    <span> Emp.No. PEmpNo </span>  <br />
+                                    <br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="180">
+                                    <b>Copy for information :</b>
+                                </td>
+                                <td colspan="4" width="396">
+                                    <span>  HOD Names  </span> <br />
+                                    <span> 1) PHoD1 </span> <br />
+                                    <span> 2) PHoD2 </span> <br /> <br />
+                                    <span> HR Dept.</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="180">
+                                    <b>Sub :</b>
+                                </td>
+                                <td colspan="4" width="396"><b>Transfer</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br />
+                    <p>
+                        Effective <b><u>PEffectiveDate</u></b> you are transferred
+                        from <b><u>PCurrentDeptName</u></b>, Cost Centre Code <b><u>PCurrentCostCode</u></b>
+                        to
+                        <b><u>PTargetDeptName</u></b>, Cost Centre Code <b><u>PTargetCostCode</u></b>
+                    </p>
+                    <p style="display: PDisplay ">
+                        And re-designated as <b> "<u>PNewDesignation</u>".</b>
+                    </p>
+                    <br />
+                    <br />
+                    <p>You will report to <b> PTargetCostCodeHodName </b> (transferred dept. HOD)</p>
+                    <p>All other terms and conditions of your employment will remain unchanged.</p>
+                    <br />
+                    <br />
+                    <br />
+                </div>
+                <p>
+                    <b>
+                        <span> Balaji Kattumpuli Abathbandavan </span>  <br />
+                        <span>Sr. General Manager – HR & DevCo</span> <br />
+                    </b>
+                </p>
+            </div>
+            <footer id="footer">
+
+                <hr />
+                <table style="border-collapse: collapse; width: 100%;" border="0">
+                    <tbody>
+                        <tr>
+                            <td style="width:50%">
+                                <span>Att. 1 to PR-C20 IS07</span>
+                            </td>
+                            <td style="width:50%;text-align: right;vertical-align:top;">
+                                <span>This document is TECNIMONT’s property.</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+            </footer>
+        </div>
+    </page>
+</body>
+</html>

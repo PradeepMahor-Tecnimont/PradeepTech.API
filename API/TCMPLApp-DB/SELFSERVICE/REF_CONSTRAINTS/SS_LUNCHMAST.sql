@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Ref Constraints for Table SS_LUNCHMAST
+--------------------------------------------------------
+
+  ALTER TABLE "SS_LUNCHMAST" ADD CONSTRAINT "FK_SHIFTCODE" FOREIGN KEY ("SHIFTCODE")
+	  REFERENCES "SS_SHIFTMAST_20090401" ("SHIFTCODE") DISABLE;
+  ALTER TABLE "SS_LUNCHMAST" ADD CONSTRAINT "FK_SHIFTCODE_NU" FOREIGN KEY ("SHIFTCODE")
+	  REFERENCES "SS_SHIFTMAST" ("SHIFTCODE") ENABLE;

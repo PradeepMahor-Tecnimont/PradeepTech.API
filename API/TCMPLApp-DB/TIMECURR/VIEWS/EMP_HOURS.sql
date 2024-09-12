@@ -1,0 +1,9 @@
+--------------------------------------------------------
+--  DDL for View EMP_HOURS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "TIMECURR"."EMP_HOURS" ("YYMM", "COSTCODE", "EMPNO", "NAME", "HOURS", "OTHOURS") AS 
+  SELECT A.YYMM,A.COSTCODE,A.EMPNO,B.NAME, SUM(NVL(A.HOURS,0)) AS HOURS,SUM(NVL(A.OTHOURS,0)) AS OTHOURS FROM TIMETRAN A, EMPLMAST B  WHERE A.EMPNO = B.EMPNO AND A.YYMM > '201003'
+GROUP BY A.YYMM,A.COSTCODE,A.EMPNO,B.NAME
+
+;

@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Constraints for Table DB_MAP_EMP_OFFICE
+--------------------------------------------------------
+
+  ALTER TABLE "DESK_BOOK"."DB_MAP_EMP_OFFICE" MODIFY ("EMPNO" NOT NULL ENABLE);
+  ALTER TABLE "DESK_BOOK"."DB_MAP_EMP_OFFICE" MODIFY ("OFFICE_CODE" NOT NULL ENABLE);
+  ALTER TABLE "DESK_BOOK"."DB_MAP_EMP_OFFICE" ADD CONSTRAINT "DB_MAP_EMP_OFFICE_PK" PRIMARY KEY ("EMPNO", "OFFICE_CODE")
+  USING INDEX "DESK_BOOK"."DB_MAP_EMP_OFFICE_PK"  ENABLE;

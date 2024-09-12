@@ -1,0 +1,19 @@
+--------------------------------------------------------
+--  DDL for Table STK_REQUEST
+--------------------------------------------------------
+
+  CREATE TABLE "ITINV_STK"."STK_REQUEST" 
+   (	"TICKET_ID" VARCHAR2(10), 
+	"ITEM_TYPE" VARCHAR2(5), 
+	"SUB_ITEM_TYPE" VARCHAR2(5), 
+	"REMARK_TXT" VARCHAR2(250), 
+	"REQUESTED_BY" VARCHAR2(35), 
+	"REQUESTED_DATE" DATE, 
+	"ISSUED" VARCHAR2(20), 
+	"ISSUED_BY" VARCHAR2(35), 
+	"ISSUED_DATE" DATE, 
+	"ISSER_REMARK" VARCHAR2(150), 
+	"QUANTITY" NUMBER, 
+	"REFERENCETYPE" VARCHAR2(20), 
+	"PRINCONTER" NUMBER
+   ) ;

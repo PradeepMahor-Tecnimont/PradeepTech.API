@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN'>
+<html style='-webkit-print-color-adjust: exact;'
+    xmlns:0='urn:schemas-microsoft-com:office:office'
+    xmlns:w='urn:schemas-microsoft-com:office:word'
+    xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+    <meta charset="utf-8" />
+	<xml><w:WordDocument>
+        <w:View>Print</w:view>
+        <w:Zomm>100<w:Zoom>
+        <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+	<style>
+         html {
+            -webkit-print-color-adjust: exact;
+         }
+         body {
+            margin: 0;
+            padding: 0;
+            background-color: rgb(204,204,204);
+            height: 100%;
+		   font-size: 12px!important;
+         }
+         
+         
+         @@media print {           
+           html, body {
+             height: 100%;
+           } 
+        }
+    </style>      
+</head>
+<body>
+<div style='margin: 0; padding: 0;'>
+<p style="text-align: center;"></p>
+<p style="text-align: center;"><strong>"Change of Cost Centre Code for Temporary Assignment"</strong></p>
+<p style="text-align: right;">Date: <span style="text-decoration: underline;"><strong>PDate</strong></span></p>
+<p style="text-align: left;">From :<br />Mr./Ms. : <strong><span style="text-decoration: underline;">PFromNameOfEmp</span></strong> <br />Dept.&nbsp; &nbsp; : <span style="text-decoration: underline;"><strong>PFromDept</strong></span></p>
+<p style="text-align: left;"><br />To,&nbsp;<br />General Manager - HR</p>
+<p style="text-align: left;"><br />Kindly implement the following change(s):</p>
+<table border="1" style="border-collapse: collapse; width: 0%; height: 123px;">
+<tbody>
+<tr style="height: 25px;">
+<td style="width: 4.28%; height: 25px; text-align: center;">Sr.<br />No.</td>
+<td style="width: 24.28%; height: 25px; text-align: center;">Name of the<br />Employee(s)</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">
+<p>Emp. No.</p>
+</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">Parent Cost Centre Code</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">Assigned Cost Centre Code</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">
+<p>Duration date</p>
+</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">Reason of Assignment</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 4.28%; height: 18px; text-align: center;"><strong>1</strong></td>
+<td style="width: 24.28%; height: 18px; text-align: center;">&nbsp;<strong>PNameOfEmp</strong>&nbsp;&nbsp;</td>
+<td style="width: 14.28%; height: 18px; text-align: center;">&nbsp;&nbsp; <strong>PEmpNo</strong> &nbsp;&nbsp;</td>
+<td style="width: 14.28%; height: 18px; text-align: center;">&nbsp;&nbsp; <strong>PParentCode</strong> &nbsp;&nbsp;</td>
+<td style="width: 14.28%; height: 18px; text-align: center;">&nbsp;&nbsp; <strong>PAssignCode</strong> &nbsp;&nbsp;</td>
+<td style="width: 14.28%; height: 18px; text-align: center;">&nbsp;&nbsp; <strong>PTransferDate</strong> &nbsp;&nbsp;</td>
+<td style="width: 14.28%; height: 18px; text-align: center;">&nbsp;&nbsp; <strong>PRemarks</strong> &nbsp;&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p>In case, if there is any change in the above programme, I take the responsibility to inform you accordingly for your further actions.</p>
+<p>Regards,</p>
+<p></p>
+<p><strong>PHodOfParentCostCode</strong><br />------------------------------------------------------------------------------------------------------------------<br />I agree for the temporary assignment of above employee(s) in my cost code centre.</p>
+<p></p>
+<p>Regards,</p>
+<p><br /><strong>PHodOfAssignCostCode</strong><br />Date: <strong>PAssignedHodDate</strong></p>
+<hr />
+<p style="text-align: center;">( To be filled by Human Resources)</p>
+<p style="text-align: right;">Date : <strong>PHrDate</strong></p>
+<p>To,<br />1. <strong>PHodOfParentCostCode</strong><br />( Name of HOD of Present Cost Centre Code)</p>
+<p><br />2. <strong>PHodOfTransferCostCode</strong><br />( Name of HOD of transferred Cost Centre Code)</p>
+<p><br />Your above request to change the Parent Cost Code Centre number to Assigned Cost Code Centre number has/has been implemented. However, in absence of further communication from HOD of Parent Cost Centre Code on or before expiry of assignment period, Mr./Ms <strong><span style="text-decoration: underline;">PNameOfEmp</span> </strong>will be reverted back to Parent Cost Centre Code.</p>
+<p><br />Regards,</p>
+<p><br /><strong>Sr.General Manager - HR</strong></p>
+<p></p>
+<p></p>
+</div>
+</body>
+</html>

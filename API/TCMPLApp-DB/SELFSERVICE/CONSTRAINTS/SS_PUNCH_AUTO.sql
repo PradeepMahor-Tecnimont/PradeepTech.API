@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Constraints for Table SS_PUNCH_AUTO
+--------------------------------------------------------
+
+  ALTER TABLE "SELFSERVICE"."SS_PUNCH_AUTO" MODIFY ("EMPNO" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."SS_PUNCH_AUTO" MODIFY ("HH" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."SS_PUNCH_AUTO" MODIFY ("MM" NOT NULL ENABLE);
+  ALTER TABLE "SELFSERVICE"."SS_PUNCH_AUTO" MODIFY ("PDATE" NOT NULL ENABLE);

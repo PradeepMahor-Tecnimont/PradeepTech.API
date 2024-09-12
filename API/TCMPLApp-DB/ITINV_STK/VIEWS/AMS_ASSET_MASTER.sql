@@ -1,0 +1,68 @@
+--------------------------------------------------------
+--  DDL for View AMS_ASSET_MASTER
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "ITINV_STK"."AMS_ASSET_MASTER" ("SAP_ASSET_CODE", "SAP_ASSET_CODE_SR_NO", "ASSET_DESCRIPTION", "COUNTRY_DESC", "ASSET_CLASS", "ASSET_CLASS_DESC", "SUB_ASSET_TYPE", "SUB_ASSET_DESC", "LOCATION", "LOCATION_DESC", "TECH_GROUP_ID", "TECH_GROUP_DESC", "TECH_SPEC", "ASSET_MAKE", "ASSET_MODEL", "SAP_PR_NUM", "SAP_PR_DATE", "SAP_PO_NO", "SAP_PO_DATE", "SAP_VENDOR", "VAL_4_ESTIMATE", "MFG_SR_NO", "MR_NUM", "MR_DATE", "VEND_INV_NUM", "VEND_INV_DATE", "LR_NUM", "LR_DATE", "TRANSPORT_DETAILS", "ASSET_AQUI_DATE", "ASSET_INSTALL_DATE", "SITE_GRR_NUM", "SITE_GRR_DATE", "SITE_INWARD_REF", "SITE_INWARD_DATE", "REMARKS", "ASSET_RANGE", "AMS_ASSET_ID", "TICB_BAR_CODE", "REQUESTER_DEPT", "REQUESTED_BY", "ASSET_STATUS", "WARRANTY_END_DATE", "ASSET_NAME", "ASSET_DESK_ID", "LABEL_PRINTED", "IS_LABEL_PRINTED", "UPLOAD_ORDER", "DEPT_GROUP", "ASSET_CLASS_GROUP") AS 
+  SELECT
+    sap_asset_code,
+    sap_asset_code_sr_no,
+    asset_description,
+    country_desc,
+    asset_class,
+    asset_class_desc,
+    sub_asset_type,
+    sub_asset_desc,
+    location,
+    location_desc,
+    tech_group_id,
+    tech_group_desc,
+    tech_spec,
+    asset_make,
+    asset_model,
+    sap_pr_num,
+    sap_pr_date,
+    sap_po_no,
+    sap_po_date,
+    sap_vendor,
+    val_4_estimate,
+    mfg_sr_no,
+    mr_num,
+    mr_date,
+    vend_inv_num,
+    vend_inv_date,
+    lr_num,
+    lr_date,
+    transport_details,
+    asset_aqui_date,
+    asset_install_date,
+    site_grr_num,
+    site_grr_date,
+    site_inward_ref,
+    site_inward_date,
+    remarks,
+    asset_range,
+    ams_asset_id,
+    ticb_bar_code,
+    requester_dept,
+    requested_by,
+    asset_status,
+    warranty_end_date,
+    asset_name,
+    asset_desk_id,
+    label_printed,
+        CASE
+            label_printed
+        WHEN
+            'OK'
+        THEN
+            1
+        ELSE
+            0
+        END
+    AS is_label_printed,
+    upload_order,
+    dept_group,
+    ASSET_CLASS_GROUP
+FROM
+    ams.as_vu_asset_master
+;

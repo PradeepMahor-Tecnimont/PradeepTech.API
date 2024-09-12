@@ -1,0 +1,11 @@
+--------------------------------------------------------
+--  DDL for View SS_VU_PHONE_CALL_LOG
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "ITINV_STK"."SS_VU_PHONE_CALL_LOG" ("GLOBAL_CALL_ID", "CALL_ID", "CALL_START", "CALL_FROM", "USER_ID", "CALL_TO", "CALL_TO_FINAL", "CALL_CONNECT", "CALL_DIS_CONNECT", "LAST_REDIRECT_DN", "CALL_DURATION", "COMMENT_TEXT", "IP_ADD", "MAC_ID") AS 
+  SELECT "GLOBAL_CALL_ID","CALL_ID","CALL_START","CALL_FROM","USER_ID","CALL_TO","CALL_TO_FINAL","CALL_CONNECT","CALL_DIS_CONNECT","LAST_REDIRECT_DN","CALL_DURATION","COMMENT_TEXT","IP_ADD","MAC_ID"
+    
+FROM 
+    
+selfservice.ss_phone_call_log
+;

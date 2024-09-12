@@ -1,0 +1,3 @@
+CREATE OR REPLACE PACKAGE BODY SELFSERVICE.pkg_deskbook_common As
+
+end;

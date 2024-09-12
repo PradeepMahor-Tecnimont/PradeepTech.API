@@ -1,0 +1,8 @@
+<subject>Addendum to the Appointment Letter</subject>
+<p>Dear PNameOfEmp (PEmpno),</p>
+<p>&nbsp;</p>
+<p>In reference to our email communication regarding Addendum to the Appointment Letter dated PCommunicationDate , please find attached a copy of deemed acceptance of &ldquo;addendum to appointment letter dated PDate&rdquo; for your records.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>&nbsp;</p>
+<p>TCMPL HR</p>

@@ -1,0 +1,6773 @@
+Test by Devendra Bhavsar
+
+New Test  from vs2019
+
+Test By DM_ASSETMOVE_TRAN_HIS_IND1
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\SEQUENCES\NETWORK_PRINTER_DATA_SEQ.sql
+In command -
+   CREATE SEQUENCE  "NETWORK_PRINTER_DATA_SEQ"  MINVALUE 1 MAXVALUE 9999999999 INCREMENT BY 1 START WITH 16 NOCACHE  NOORDER  NOCYCLE
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+-- Tried by Upen 10-DeC-2021
+-- Tried by Upen from sqldevloper 10-DeC-2021
+-- Tried by Upen from VS 10-DeC-2021
+
+Table "AD_DETAILS" created.
+<<<<<<< HEAD
+
+-- New Test By Pradeep  --
+=======
+-- Test by pradeep from vs2019
+
+>>>>>>> master
+Table "AD_DETAILS_20151211" created.
+
+
+Table "AD_MOBILE" created.
+-- New Test By Pradeep  --
+
+
+Table "AD_SYNC" created.
+
+
+Table "AD_SYNC_20151211" created.
+
+
+Table "AD_TEMP" created.
+
+
+Table "AD_TEMP_1" created.
+
+
+Table "ASSETADMIN" created.
+
+
+Table "ASSETADMIN1" created.
+
+
+Table "DATA001" created.
+
+
+Table "EMP_AC_9794" created.
+
+
+Table "EMP_PAYROLL" created.
+
+
+Table "EMP_PDATE_9794" created.
+
+
+Table "EMP_PUNCH_4_9794" created.
+
+
+Table "EMP_TASKFORCE_9794" created.
+
+
+Table "EMP_WEEK_SELECTED" created.
+
+
+Table "FTP_ADMIN_USER" created.
+
+
+Comment created.
+
+
+Table "HOLIDAYS" created.
+
+
+Table "LL_APPROVER" created.
+
+
+Table "LL_ASSIGNMENT" created.
+
+
+Table "LL_CATEGORY" created.
+
+
+Table "LL_COUNTRY" created.
+
+
+Table "LL_DOCUMENTS" created.
+
+
+Table "LL_DRAFT_DOCUMENT" created.
+
+
+Table "LL_FINALDOCUMENTS" created.
+
+
+Table "LL_FUNCTIONCODE" created.
+
+
+Table "LL_HODUSERS" created.
+
+
+Table "LL_KEYWORDS" created.
+
+
+Table "LL_KEYWORDS_20150130" created.
+
+
+Table "LL_LICENSOR" created.
+
+
+Table "LL_MEMBERS" created.
+
+
+Table "LL_ORIGINATOR" created.
+
+
+Comment created.
+
+
+Table "LL_PHASES" created.
+
+
+Table "LL_RECORDED" created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Table "LL_RECORDED_20141122" created.
+
+
+Comment created.
+
+
+Table "LL_RECORDED_20150123" created.
+
+
+Table "LL_REVIEWER_DOC" created.
+
+
+Table "LL_REVIEWREMARKS" created.
+
+
+Table "LL_REVIEWREMARKS_20141122" created.
+
+
+Table "LL_REVIEWREMARKS_20150123" created.
+
+
+Table "LL_TCMPROJECT" created.
+
+
+Table "PF_CONSENT_2011" created.
+
+
+Table "PRINT_LOG" created.
+
+
+Table "QUIZ_MASTER" created.
+
+
+Table "QUIZ_PRQ02" created.
+
+
+Comment created.
+
+
+Table "QUIZ_PRQ03" created.
+
+
+Comment created.
+
+
+Table "QUIZ_TP_XLS" created.
+
+
+Table "SS_9794_AUTOPUNCH_DEL_BETWEEN" created.
+
+
+Table "SS_9794_DAILY_TS" created.
+
+
+Table "SS_9794_DAILY_TS_MAST" created.
+
+
+Table "SS_9794_EMP_LIST" created.
+
+
+Table "SS_9794_EMP_LIST_20180625" created.
+
+
+Table "SS_9794_EMP_LIST_DEL" created.
+
+
+Table "SS_9794_EMP_ROLES" created.
+
+
+Table "SS_9794_PUNCH" created.
+
+
+Table "SS_9794_PUNCH_2_DEL" created.
+
+
+Table "SS_9794_PUNCH_DEL_BETWEEN" created.
+
+
+Table "SS_9794_PUNCH_FIRST_LAST" created.
+
+
+Table "SS_9794_PUNCH_GENERATE" created.
+
+
+Table "SS_9794_PUNCH_GENERATE_4_BT" created.
+
+
+Table "SS_9794_PUNCH_GENRAT_NOFOUND1" created.
+
+
+Table "SS_9794_PUNCH_GENRAT_NO_FOUND" created.
+
+
+Table "SS_9794_PUNCH_GEN_NO_FOUND_FIN" created.
+
+
+Table "SS_9794_PUNCH_REQUIRED" created.
+
+
+Table "SS_9794_PUNCH_REQUIRED_1" created.
+
+
+Table "SS_9794_PUNCH_REQUIRED_2" created.
+
+
+Table "SS_9794_PUNCH_REQUIRED_3" created.
+
+
+Table "SS_9794_PUNCH_TEMP" created.
+
+
+Table "SS_9794_ROLE_MASTER" created.
+
+
+Table "SS_9794_TS_PERIOD" created.
+
+
+Table "SS_9794_TS_SS_MAY" created.
+
+
+Table "SS_9794_TS_SS_MAY_JUN" created.
+
+
+Table "SS_ABSENT_AS_LOP" created.
+
+
+Table "SS_ABSENT_DETAIL" created.
+
+
+Table "SS_ABSENT_LOP" created.
+
+
+Comment created.
+
+
+Table "SS_ABSENT_LOP_REVERSE" created.
+
+
+Comment created.
+
+
+Table "SS_ABSENT_MASTER" created.
+
+
+Table "SS_ABSENT_PAYSLIP_PERIOD" created.
+
+
+Table "SS_ABSENT_TS_DETAIL" created.
+
+
+Table "SS_ABSENT_TS_LEAVE" created.
+
+
+Table "SS_ABSENT_TS_LOP" created.
+
+
+Comment created.
+
+
+Table "SS_ABSENT_TS_LOP_REVERSE" created.
+
+
+Table "SS_ABSENT_TS_MASTER" created.
+
+
+Table "SS_ACCENTURE_EMP" created.
+
+
+Table "SS_BATCH_ERROR_MAST" created.
+
+
+Table "SS_BATCH_LOG_DETAILS" created.
+
+
+Table "SS_BATCH_LOG_MAST" created.
+
+
+Table "SS_BATCH_STATUS_MAST" created.
+
+
+Table "SS_BATCH_TYPE_MAST" created.
+
+
+Table "SS_BL_LO_MAST" created.
+
+
+Table "SS_BUSLATE_LAYOFF_DETAIL" created.
+
+
+Table "SS_BUSLATE_LAYOFF_MAST" created.
+
+
+Table "SS_CLINIC" created.
+
+
+Table "SS_CLINIC_DETAIL" created.
+
+
+Table "SS_CLINIC_DETAIL_20101129" created.
+
+
+Table "SS_CLINIC_DETAIL_20141210" created.
+
+
+Table "SS_CLINIC_DETAIL_20161114" created.
+
+
+Table "SS_CLINIC_LIMIT" created.
+
+
+Table "SS_CONSCENT" created.
+
+
+Table "SS_CONTMAST" created.
+
+
+Table "SS_DATATYPE" created.
+
+
+Table "SS_DAYS" created.
+
+
+Table "SS_DAYS_DETAILS" created.
+
+
+Table "SS_DAYS_DETAILS_1" created.
+
+
+Table "SS_DEBIT_TS_LEAVE" created.
+
+
+Table "SS_DELEGATE" created.
+
+
+Table "SS_DELTAHRSBAL" created.
+
+
+Table "SS_DELTAHRSBAL_OT" created.
+
+
+Table "SS_DEPT_GROUPING" created.
+
+
+Table "SS_DEPT_NOT_4_ABSENT" created.
+
+
+Table "SS_DEPU" created.
+
+
+Table "SS_DEPU_DELETED" created.
+
+
+Table "SS_DEPU_HIST" created.
+
+
+Table "SS_DEPU_REJECTED" created.
+
+
+Table "SS_DESKASSIGNMENT" created.
+
+
+Table "SS_DESKASSIGNMENT_20091126" created.
+
+
+Table "SS_DESKASSIGNMENT_20091127" created.
+
+
+Table "SS_DESKASSIGNMENT_25NOV_BACUP" created.
+
+
+Table "SS_DESKASSINMENT_20091118" created.
+
+
+Table "SS_DESKMONITOR" created.
+
+
+Table "SS_DESKPC" created.
+
+
+Table "SS_DESKREFILL" created.
+
+
+Table "SS_DESKTASK" created.
+
+
+Table "SS_DESKTEL" created.
+
+
+Table "SS_DMS_STATUS2020" created.
+
+
+Table "SS_DMS_STATUS2021" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\TABLES\SS_EMPLMAST_SUPPLEMENT.sql
+In command -
+  CREATE TABLE "SS_EMPLMAST_SUPPLEMENT" 
+   (	"EMPNO" VARCHAR2(5), 
+	"CARD_RFID" VARCHAR2(20)
+   )
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Table "SS_EMPLPHOTOS" created.
+
+
+Table "SS_EMP_CARD_RFID_TEMP" created.
+
+
+Table "SS_EMP_COMP_LASTDATE_4_MUSTER" created.
+
+
+Table "SS_EMP_TRANSFER" created.
+
+
+Table "SS_ENGG_COSTCODES" created.
+
+
+Table "SS_EXTRAHOLIDAY" created.
+
+
+Table "SS_FEEDBACK" created.
+
+
+Table "SS_FIESTA_2011" created.
+
+
+Table "SS_FILE_UPLOAD_LOG" created.
+
+
+Table "SS_FILE_UPLOAD_PARAM" created.
+
+
+Table "SS_FILTERON" created.
+
+
+Table "SS_FIM_DATA" created.
+
+
+Table "SS_FORPWD" created.
+
+
+Table "SS_GENERAL_CODES" created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\TABLES\SS_GUEST_REGISTER.sql
+In command -
+  CREATE TABLE "SS_GUEST_REGISTER" 
+   (	"APP_NO" CHAR(16), 
+	"HOST_NAME" VARCHAR2(60), 
+	"GUEST_NAME" VARCHAR2(250), 
+	"GUEST_CO" VARCHAR2(60), 
+	"MEET_DATE" DATE, 
+	"MEET_OFF" VARCHAR2(4), 
+	"REMARKS" VARCHAR2(60), 
+	"MODIFIED_BY" VARCHAR2(5), 
+	"MODIFIED_ON" DATE
+   )
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Table "SS_HALFDAYMAST" created.
+
+
+Table "SS_HEALTH_BILL" created.
+
+
+Table "SS_HEALTH_BILLMAST" created.
+
+
+Table "SS_HEALTH_BLD" created.
+
+
+Table "SS_HEALTH_EMP" created.
+
+
+Comment created.
+
+
+Table "SS_HEALTH_EMP_24FEB15" created.
+
+
+Table "SS_HEALTH_HRD" created.
+
+
+Table "SS_HEALTH_HRDUSER" created.
+
+
+Table "SS_HEALTH_HRD_24FEB15" created.
+
+
+Table "SS_HEALTH_RPT" created.
+
+
+Table "SS_HOLIDAY_15NOV2012" created.
+
+
+Table "SS_HOLIDAY_ATTENDANCE" created.
+
+
+Table "SS_HR_FRM_MENU" created.
+
+
+Table "SS_HR_PEND_OD" created.
+
+
+Table "SS_HSESUGG" created.
+
+
+Table "SS_HSE_INCIDENTREPORT" created.
+
+
+Table "SS_HSE_QUIZ" created.
+
+
+Table "SS_HSE_QUIZ_2" created.
+
+
+Table "SS_HSE_QUIZ_3" created.
+
+
+Table "SS_IMPORTPUNCH" created.
+
+
+Table "SS_IMPORTPUNCH1" created.
+
+
+Table "SS_IMPORTPUNCH2" created.
+
+
+Table "SS_IP_ADD" created.
+
+
+Table "SS_ISD_CODE_MAST" created.
+
+
+Table "SS_LDAP_LIST" created.
+
+
+Table "SS_LDAP_LIST_200911251026" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\TABLES\SS_LEAD_APPROVER.sql
+In command -
+  CREATE TABLE "SS_LEAD_APPROVER" 
+   (	"PARENT" CHAR(4), 
+	"EMPNO" CHAR(5)
+   )
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Table "SS_LEAVEAPP" created.
+
+
+Table "SS_LEAVEAPP_DELETED" created.
+
+
+Table "SS_LEAVEAPP_REJECTED" created.
+
+
+Table "SS_LEAVEBAL" created.
+
+
+Table "SS_LEAVELEDG" created.
+
+
+Table "SS_LEAVETYPE" created.
+
+
+Table "SS_LEAVE_ADJ" created.
+
+
+Table "SS_LEAVE_ADJ_MAST" created.
+
+
+Table "SS_LEAVE_BAL_MAX_LIMIT" created.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Table "SS_LOCK_OT_HRS_DOWNLOAD_PERIOD" created.
+
+
+Table "SS_LUNCHMAST" created.
+
+
+Table "SS_MOBILEVOTE" created.
+
+
+Table "SS_MONTHLY_CREDIT_EXCEPTION" created.
+
+
+Table "SS_MONTHLY_CREDIT_MAST" created.
+
+
+Table "SS_MUSTER" created.
+
+
+Table "SS_MUSTER_20120310" created.
+
+
+Table "SS_MUSTER_4ALLOWANCE" created.
+
+
+Table "SS_MUSTER_4ALLOWANCE_20090407" created.
+
+
+Table "SS_MUSTER_4ALLOWANCE_20101006" created.
+
+
+Table "SS_MUSTER_4ALLOWANCE_20101220" created.
+
+
+Table "SS_MUSTER_BACKUP" created.
+
+
+Table "SS_MUSTER_BACKUP_20080303" created.
+
+
+Table "SS_NAVRATRI" created.
+
+
+Table "SS_NAVRATRI_2011" created.
+
+
+Table "SS_NAVRATRI_2017" created.
+
+
+Table "SS_NAVRATRI_2018" created.
+
+
+Table "SS_NAVRATRI_2019" created.
+
+
+Table "SS_OD2RW_LIST" created.
+
+
+Table "SS_OFFICE_MAST" created.
+
+
+Table "SS_ONDUTY" created.
+
+
+Table "SS_ONDUTYAPP" created.
+
+
+Table "SS_ONDUTYAPP_DELETED" created.
+
+
+Table "SS_ONDUTYAPP_REJECTED" created.
+
+
+Table "SS_ONDUTYMAST" created.
+
+
+Table "SS_OPERATOR" created.
+
+
+Table "SS_OT" created.
+
+
+Table "SS_OT1" created.
+
+
+Table "SS_OTAPPRL" created.
+
+
+Table "SS_OTDETAIL" created.
+
+
+Table "SS_OTMASTER" created.
+
+
+Table "SS_OTWEEKLY" created.
+
+
+Table "SS_OT_DETAILS_4_YEAR" created.
+
+
+Table "SS_OT_DETAILS_4_YEAR_ALL" created.
+
+
+Table "SS_OT_DETAILS_4_YEAR_ALL_0225" created.
+
+
+Table "SS_OT_DETAILS_4_YEAR_ALL_REST" created.
+
+
+Table "SS_OT_DOWNLOAD_DBF_LOCK" created.
+
+
+Table "SS_PAGECOUNT_CANON" created.
+
+
+Table "SS_PAGECOUNT_CANON_ERRORS" created.
+
+
+Table "SS_PAGECOUNT_CANON_MANUAL" created.
+
+
+Table "SS_PAGECOUNT_CANON_TEMP" created.
+
+
+Table "SS_PAGECOUNT_DATES" created.
+
+
+Table "SS_PAGECOUNT_KYOCER" created.
+
+
+Table "SS_PAGECOUNT_KYOCER_ERRORS" created.
+
+
+Table "SS_PAGECOUNT_KYOCER_MANUAL" created.
+
+
+Table "SS_PAGECOUNT_KYOCER_TEMP" created.
+
+
+Table "SS_PAPER_SIZE_MAP" created.
+
+
+Table "SS_PAYROLLTYPEMAST" created.
+
+
+Table "SS_PHONE_CALL_LOG_20171120" created.
+
+
+Table "SS_PHONE_CALL_LOG_CURR" created.
+
+
+Table "SS_PHONE_EXT_LOG" created.
+
+
+Table "SS_PHOTOCONSENT" created.
+
+
+Table "SS_PLACE" created.
+
+
+Table "SS_PLOTTER" created.
+
+
+Table "SS_PL_REVISION_APP" created.
+
+
+Table "SS_PL_REVISION_MAST" created.
+
+
+Table "SS_PORTAL_NEWS" created.
+
+
+Table "SS_PRINTLOG_TEST" created.
+
+
+Table "SS_PRINT_LOG" created.
+
+
+Table "SS_PRINT_RATE_MAST" created.
+
+
+Table "SS_PUNCH" created.
+
+
+Table "SS_PUNCHBACKUPON01042003" created.
+
+
+Table "SS_PUNCHBACKUP_20070711" created.
+
+
+Table "SS_PUNCHDATABACKUP" created.
+
+
+Table "SS_PUNCH_200604_17_18_19" created.
+
+
+Table "SS_PUNCH_20100329" created.
+
+
+Table "SS_PUNCH_20110426" created.
+
+
+Table "SS_PUNCH_ALL" created.
+
+
+Table "SS_PUNCH_AUTO" created.
+
+
+Table "SS_PUNCH_AUTO_TYPE_MAST" created.
+
+
+Table "SS_PUNCH_BACKUP_20061031" created.
+
+
+Table "SS_PUNCH_BACKUP_20100226" created.
+
+
+Table "SS_PUNCH_BAL" created.
+
+
+Table "SS_PUNCH_MANUAL" created.
+
+
+Table "SS_PUNCH_UPLOAD_BLOB" created.
+
+
+Comment created.
+
+
+Table "SS_PUNCH_UP_TO_20071231" created.
+
+
+Table "SS_PUNCH_WFH" created.
+
+
+Table "SS_REJOIN" created.
+
+
+Table "SS_REPORT_FIELDS" created.
+
+
+Table "SS_REPORT_MAST" created.
+
+
+Table "SS_SECRETARY_20081011" created.
+
+
+Table "SS_SECRETARY_DESK" created.
+
+
+Table "SS_SECRETARY_REP" created.
+
+
+Table "SS_SHIFTMAST" created.
+
+
+Table "SS_SHIFTMAST_20090401" created.
+
+
+Table "SS_SHIFT_AUTO_ASSIGN_LOG" created.
+
+
+Table "SS_SITE_ALLOWANCE_PERIOD_ADJ" created.
+
+
+Comment created.
+
+
+Table "SS_SITE_ALLOWANCE_PROCESSED" created.
+
+
+Table "SS_SITE_ALLOWANCE_ROLLOVER" created.
+
+
+Table "SS_SITE_ALLOWANCE_TRANS" created.
+
+
+Table "SS_SITE_ALLWNC_PERIOD_ADJ_DEL" created.
+
+
+Table "SS_SITE_EMPLOYEE" created.
+
+
+Table "SS_SITE_GRADE_ALLOWANCE" created.
+
+
+Table "SS_SITE_LOC_MAST" created.
+
+
+Table "SS_SITE_MAST" created.
+
+
+Table "SS_SITE_MUSTER" created.
+
+
+Table "SS_SITE_MUSTER_TEMP" created.
+
+
+Table "SS_SUGGESTION" created.
+
+
+Table "SS_SWIPE_MACH_MAST" created.
+
+
+Table "SS_TABLETAG" created.
+
+
+Table "SS_TCMPL_IP_4_WFH_RDP" created.
+
+
+Table "SS_TCMPL_IP_MAST" created.
+
+
+Table "SS_TCMPL_IP_SKIP" created.
+
+
+Table "SS_TEMP_DESK_ASSIGN" created.
+
+
+Table "SS_TRAVELREQ" created.
+
+
+Table "SS_TRAVELREQ_200100218" created.
+
+
+Table "SS_UN_APPRD_APP" created.
+
+
+Table "SS_USB_REQUEST" created.
+
+
+Table "SS_USB_REQUEST_CHG_LOG" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\TABLES\SS_USERMAST.sql
+In command -
+  CREATE TABLE "SS_USERMAST" 
+   (	"EMPNO" CHAR(5), 
+	"TYPE" NUMBER(2,0), 
+	"DESCRIPTION" VARCHAR2(30), 
+	"ACTIVE" NUMBER(1,0), 
+	"TCP_IP" VARCHAR2(30)
+   )
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\TABLES\SS_USER_DEPT_RIGHTS.sql
+In command -
+  CREATE TABLE "SS_USER_DEPT_RIGHTS" 
+   (	"EMPNO" CHAR(5), 
+	"PARENT" CHAR(4)
+   )
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Comment created.
+
+
+Table "SS_USER_DEPT_RIGHTS_20150825" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\TABLES\SS_USER_TYPE_MAST.sql
+In command -
+  CREATE TABLE "SS_USER_TYPE_MAST" 
+   (	"USER_TYPE" NUMBER(2,0), 
+	"DESCRIPTION" VARCHAR2(60)
+   )
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Table "SS_WORKED_HRS_DETAIL" created.
+
+
+Table "SS_WORKED_HRS_MAST" created.
+
+
+Comment created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\TABLES\SS_XL_BLOB.sql
+In command -
+  CREATE TABLE "SS_XL_BLOB" 
+   (	"BLOB_FIELD" BLOB, 
+	"KEY_ID" VARCHAR2(8), 
+	"MODIFIED_ON" DATE
+   )
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\TABLES\SS_XL_BLOB_DATA.sql
+In command -
+  CREATE TABLE "SS_XL_BLOB_DATA" 
+   (	"KEY_ID" VARCHAR2(8), 
+	"SHEET_NR" NUMBER(2,0), 
+	"SHEET_NAME" VARCHAR2(4000), 
+	"ROW_NR" NUMBER(10,0), 
+	"COL_NR" NUMBER(10,0), 
+	"CELL" VARCHAR2(100), 
+	"CELL_TYPE" VARCHAR2(1), 
+	"STRING_VAL" VARCHAR2(4000), 
+	"NUMBER_VAL" NUMBER, 
+	"DATE_VAL" DATE, 
+	"FORMULA" VARCHAR2(4000), 
+	"ERR_CODE" VARCHAR2(5)
+   )
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Table "TEMP" created.
+
+
+Table "TEMPASSET" created.
+
+
+Table "TEST_1" created.
+
+
+Table "USERIDS_20210510" created.
+
+
+Table "USERID_LOG" created.
+
+
+Table "XDM_ACTION_TRANS" created.
+
+
+Table "XDM_ACTION_TRANS_07DEC16" created.
+
+
+Table "XDM_ACTION_TYPE" created.
+
+
+Comment created.
+
+
+Table "XDM_ALLOCATION_OLD" created.
+
+
+Table "XDM_AMS_TRANSCODE" created.
+
+
+Table "XDM_ASSETADD" created.
+
+
+Table "XDM_ASSETADD_16APR10" created.
+
+
+Table "XDM_ASSETADD_BACKUP" created.
+
+
+Table "XDM_ASSETADD_ERR" created.
+
+
+Table "XDM_ASSETCODE" created.
+
+
+Table "XDM_ASSETCODE_05DEC16" created.
+
+
+Comment created.
+
+
+Table "XDM_ASSETCODE_20DEC" created.
+
+
+Table "XDM_ASSETCODE_BACK14DEC" created.
+
+
+Table "XDM_ASSETCODE_MACHINE" created.
+
+
+Table "XDM_ASSETCODE_TOSITE" created.
+
+
+Table "XDM_ASSETMODIFICATION" created.
+
+
+Table "XDM_ASSETMOVE_TRAN" created.
+
+
+Table "XDM_ASSETMOVE_TRAN_16APR10" created.
+
+
+Table "XDM_ASSETMOVE_TRAN_HISTORY" created.
+
+
+Table "XDM_ASSETMOVE_TRAN_HIST_051216" created.
+
+
+Table "XDM_ASSETTYPE" created.
+
+
+Table "XDM_ASSET_MODIFY" created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Table "XDM_ASSET_OFFICE" created.
+
+
+Table "XDM_ASSET_OUT_OF_USE_LOG" created.
+
+
+Table "XDM_ASSET_REMOVED" created.
+
+
+Table "XDM_DEPUTATION_26NOV" created.
+
+
+Table "XDM_DEPUTATION_TEMP" created.
+
+
+Table "XDM_DESKALLOCATION" created.
+
+
+Table "XDM_DESKALLOCATION_05DEC16" created.
+
+
+Table "XDM_DESKALLOCATION_16APR10" created.
+
+
+Table "XDM_DESKALLOCATION_20DEC" created.
+
+
+Table "XDM_DESKALLOCATION_31DEC" created.
+
+
+Table "XDM_DESKALLOCATION_3SEP10" created.
+
+
+Table "XDM_DESKALLOCATION_4SEP10" created.
+
+
+Table "XDM_DESKALLOCATION_ERR" created.
+
+
+Table "XDM_DESKALLOCATION_LOG" created.
+
+
+Comment created.
+
+
+Table "XDM_DESKALLOCATION_TEMP" created.
+
+
+Table "XDM_DESKLOCK" created.
+
+
+Table "XDM_DESKLOCK_16APR10" created.
+
+
+Table "XDM_DESKLOCK_BACKUP" created.
+
+
+Table "XDM_DESKLOCK_ERR" created.
+
+
+Table "XDM_DESKLOCK_REASON" created.
+
+
+Table "XDM_DESKMASTER" created.
+
+
+Table "XDM_DESKMASTER_OLD" created.
+
+
+Table "XDM_DESKMASTER_TEMP" created.
+
+
+Table "XDM_DESKMASTER_VISIO_BACKUP" created.
+
+
+Table "XDM_DESKMASTER_VISIO_ID" created.
+
+
+Table "XDM_EMAILID" created.
+
+
+Table "XDM_EMPADD" created.
+
+
+Table "XDM_EMP_LEFT" created.
+
+
+Comment created.
+
+
+Table "XDM_EMP_LEFT_DEL" created.
+
+
+Table "XDM_FIXEDPC" created.
+
+
+Table "XDM_GUESTMASTER" created.
+
+
+Table "XDM_INTERNET" created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Comment created.
+
+
+Table "XDM_INTERNETMASTER" created.
+
+
+Comment created.
+
+
+Table "XDM_ITUSER" created.
+
+
+Table "XDM_LAPTOP" created.
+
+
+Table "XDM_LAPTOP_PERMT" created.
+
+
+Table "XDM_LOGINRIGHT" created.
+
+
+Table "XDM_LOGINRIGHT_20150925" created.
+
+
+Table "XDM_NEWJOIN_EMP" created.
+
+
+Table "XDM_NEWJOIN_TRANS" created.
+
+
+Table "XDM_NEWJOIN_TRANS_20150401" created.
+
+
+Table "XDM_ONDEPUTATION" created.
+
+
+Table "XDM_ONDEPUTATION_31JAN2010" created.
+
+
+Table "XDM_PCNAME" created.
+
+
+Table "XDM_PCNAME_20091119" created.
+
+
+Table "XDM_PENDING_PC_LOCK" created.
+
+
+Comment created.
+
+
+Table "XDM_PENDING_PC_LOCK_20150925" created.
+
+
+Table "XDM_SECRETARY" created.
+
+
+Table "XDM_SOURCEDESK" created.
+
+
+Table "XDM_SPECIAL_SHIFTING" created.
+
+
+Table "XDM_TARGETDESK" created.
+
+
+Table "XDM_TASKFORCETRAN" created.
+
+
+Table "XDM_TRAN_HIST_20100416" created.
+
+
+Table "XDM_USERMASTER" created.
+
+
+Table "XDM_USERMASTER_16APR10" created.
+
+
+Table "XDM_USERMASTER_20DEC" created.
+
+
+Table "XDM_USERMASTER_31DEC" created.
+
+
+Table "XDM_USERMASTER_4SEP10" created.
+
+
+Table "XDM_USERMASTER_ERR" created.
+
+
+Table "XDM_USERMASTER_LOG" created.
+
+
+Comment created.
+
+
+View "CV_EMPLDETAILS" created.
+
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+
+View "DISPLEDG" created.
+
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+
+View "EMP_DETAILS_FAMILY" created.
+
+Warning: View created with compilation errors.
+
+View "EMP_DETAILS_PASSPORT" created.
+
+
+View "EMP_DETAILS_TOTAL" created.
+
+
+View "EMP_DETAILS_USING_BUS" created.
+
+
+View "EMP_OUTSIDE" created.
+
+
+View "JOBMASTER" created.
+
+
+View "LL_DECLINED" created.
+
+
+View "LL_REJECTED" created.
+
+
+View "ODAPPRL" created.
+
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+
+View "PS_COSTMAST" created.
+
+
+View "PS_PROJMAST" created.
+
+
+View "SS_9794_VU_BT_PUNCH_COUNT" created.
+
+Warning: View created with compilation errors.
+
+View "SS_9794_VU_TS" created.
+
+Warning: View created with compilation errors.
+
+View "SS_CONSCENT_REP" created.
+
+
+View "SS_CONSTRAINT" created.
+
+
+View "SS_COSTMASTAS" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\VIEWS\SS_DEPU_EDTICB.sql
+In command -
+  CREATE OR REPLACE FORCE VIEW "SS_DEPU_EDTICB" () AS 
+  SELECT *
+  FROM SelfService_EDTicb.SS_Depu
+WITH READ ONLY
+Error report -
+ORA-00904: : invalid identifier
+00904. 00000 -  "%s: invalid identifier"
+*Cause:    
+*Action:
+
+View "SS_DESG_NAME" created.
+
+
+View "SS_DISPLEDG" created.
+
+
+View "SS_DISPLEDG_HIST" created.
+
+
+View "SS_EMPLMAST_ALL" created.
+
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+
+View "SS_EMPLMAST_WIN_ID" created.
+
+
+View "SS_EMP_PRINT_LOG" created.
+
+
+View "SS_HA_APP_STAT" created.
+
+
+View "SS_HEALTH_STATUS" created.
+
+
+View "SS_HOLIDAYS" created.
+
+Warning: View created with compilation errors.
+
+View "SS_HSE_QUIZ_VIEW" created.
+
+
+View "SS_INTEGRATEDPUNCH" created.
+
+
+View "SS_INTEGRATEDPUNCHTEST" created.
+
+
+View "SS_INTEGRATEDPUNCH_DEV" created.
+
+
+View "SS_INTEGRATEDPUNCH_MACH" created.
+
+
+View "SS_IPFORMAT" created.
+
+
+View "SS_JOB_INDUSTRY" created.
+
+Warning: View created with compilation errors.
+
+View "SS_LEAVE_APP_LEDG" created.
+
+Warning: View created with compilation errors.
+
+View "SS_ODAPPRL" created.
+
+Warning: View created with compilation errors.
+
+View "SS_ODAPPSTAT" created.
+
+Warning: View created with compilation errors.
+
+View "SS_OPBAL2002" created.
+
+
+View "SS_OTDET_4_ANITA" created.
+
+Warning: View created with compilation errors.
+
+View "SS_OT_4_ANITA" created.
+
+
+View "SS_PHONE_CALL_LOG" created.
+
+
+View "SS_PROJMAST" created.
+
+
+View "SS_TAB" created.
+
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+Warning: View created with compilation errors.
+
+View "SS_VU_ABSENT_LOP" created.
+
+
+View "SS_VU_ABSENT_LOP_NU" created.
+
+
+View "SS_VU_ABSENT_LOP_REVERSE" created.
+
+
+View "SS_VU_ABSENT_TS_LOP" created.
+
+
+View "SS_VU_ABSENT_TS_LOP_REVERSE" created.
+
+
+View "SS_VU_CONTMAST" created.
+
+
+View "SS_VU_MANUAL_PUNCH" created.
+
+Warning: View created with compilation errors.
+
+View "SS_VU_OT_ALL" created.
+
+
+View "SS_VU_PHONE_LOG" created.
+
+
+View "SS_VU_PRINT_LOG_PIVOT" created.
+
+
+View "TEMPTEST" created.
+
+
+View "TEMP_DISPLEDG" created.
+
+
+View "TR_EMPLMAST_WIN_ID" created.
+
+
+View "VIEW1" created.
+
+
+View "VU_TO_DELETE" created.
+
+Warning: View created with compilation errors.
+
+INDEX "DM_EMAILID_PK" created.
+
+
+Index "SS_ONDUTYAPP_IDX$$_00410000" created.
+
+
+INDEX "PK_EMPNO_BDATE_DEPU_HIST" created.
+
+
+Index "DM_ASSETCODE_INDEX2" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\EWP_IPHONE_USERS_PK.sql
+In command -
+  CREATE UNIQUE INDEX "EWP_IPHONE_USERS_PK" ON "SWP_EMP_WITH_COMP_MOB" ("EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_LEAVE_ADJ_IDX_011" created.
+
+
+INDEX "U_APPNO_DEPU" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_EMP_TRAINING_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_EMP_TRAINING_PK" ON "SWP_EMP_TRAINING" ("EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "SS_SITE_ALLOWANCE_PROCESS_PK" created.
+
+
+INDEX "PK_SS_UP_FILE" created.
+
+
+INDEX "DM_NEWJOIN_EMP_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\TABLE1_PK.sql
+In command -
+  CREATE UNIQUE INDEX "TABLE1_PK" ON "SS_HSESUGG" ("SUGGNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_IND_ENTRY_DATE_CANON_MANUAL" created.
+
+
+Index "SS_DAYS_IDX_002" created.
+
+
+Index "SS_PUNCH_WFH_INDEX1" created.
+
+
+Index "SS_DELTAHRSBAL_OT_IDX_001" created.
+
+
+INDEX "SS_LEAVE_ADJ__PK41080795457153" created.
+
+
+Index "SS_LEAVEAPP_IDX_008" created.
+
+
+Index "SS_IMPORTPUNCH" created.
+
+
+Index "SS_ONDUTYAPP_IDX_001" created.
+
+
+Index "SS_DEPU_IDX$$_00410001" created.
+
+
+INDEX "PK_REP_MAST" created.
+
+
+INDEX "PK_SEC_EMPNO_HOD_REP" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_VACCINE_COVID_EMP_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_VACCINE_COVID_EMP_PK" ON "SWP_VACCINE_COVID_EMP" ("EMPNO", "COVID_START_DATE")
+Error report -
+ORA-00942: table or view does not exist
+00942. 00000 -  "table or view does not exist"
+*Cause:    
+*Action:
+
+Index "SS_PUNCH_IDX_008" created.
+
+
+INDEX "DM_ASSETTYPE_PK" created.
+
+
+Index "SS_LEAVELEDG_IDX_014" created.
+
+
+INDEX "SS_SITE_ALLOWANCE_PERIOD__PK" created.
+
+
+INDEX "PK_SS_UPLOAD_FILE" created.
+
+
+Index "IDX_GEN_CODES" created.
+
+
+INDEX "SS_HEALTH_RPT_PK" created.
+
+
+INDEX "PK_EMPNO_PDATE_DELTABAL" created.
+
+
+Index "SS_LEAVEAPP_IDX_030" created.
+
+
+Index "SS_LEAVEAPP_IDX_006" created.
+
+
+INDEX "SS_SITE_MOBI_PK" created.
+
+
+INDEX "SS_PUNCH_MANUAL_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_TPL_VACINE_BATCH_UK1.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_TPL_VACINE_BATCH_UK1" ON "SWP_TPL_VACCINE_BATCH" ("VACCINE_DATE")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_ONDUTYAPP_IDX_006" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_VACCINE_DATES_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_VACCINE_DATES_PK" ON "SWP_VACCINE_DATES" ("EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_IND_MANUAL_ID_CANON_MANUAL" created.
+
+
+Index "SS_DAYS_DETAILS_INDEX1" created.
+
+
+INDEX "PK_EMPHHMMDATETYPEHHSMMS" created.
+
+
+INDEX "SS_SITE_ALLOWANCE_TRANS_PK" created.
+
+
+INDEX "DM_EMP_LEFT_PK" created.
+
+
+INDEX "SS_CLINIC_DETAIL_PK" created.
+
+
+Index "SS_LEAVELEDG_IDX_020" created.
+
+
+INDEX "PK_EMPNO_HH_MM_PDATE_TYPE" created.
+
+
+INDEX "DM_ASSETADD_PK" created.
+
+
+INDEX "SS_MONTHLY_CREDIT_MAST_PK" created.
+
+
+Index "SS_LEAVELEDG_IDX_003" created.
+
+
+Index "SS_LEAVELEDG_IDX_005" created.
+
+
+INDEX "SS_SITE_ALLOWANCE_ROLLOVE_PK" created.
+
+
+INDEX "U_ADJNO_LEAVEADJ" created.
+
+
+INDEX "SS_BATCH_TYPE_MAST_PK" created.
+
+
+INDEX "U_EMPNO_MON_YYYY" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_RELATION_MAST_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_RELATION_MAST_PK" ON "SWP_RELATION_MAST" ("RELATION_CODE")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_IND_ETY_DT_PRN_Q_KYOCER_M" created.
+
+
+INDEX "SS_HEALTH_HRD_PK" created.
+
+
+Index "INDEX2" created.
+
+
+INDEX "LL_RECORDED_PK" created.
+
+
+Index "IDX$$_024C0002" created.
+
+
+INDEX "DM_GUESTMASTER_PK" created.
+
+
+INDEX "SS_LEAVE_BAL_MAX_LIMIT_PK" created.
+
+
+INDEX "SS_SUGGESTION_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_TPL_VACCINE_BATCH_EMP_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_TPL_VACCINE_BATCH_EMP_PK" ON "SWP_TPL_VACCINE_BATCH_EMP" ("EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_LEAVELEDG_IDX_007" created.
+
+
+INDEX "PK_EMPNO_CODE_PDATE" created.
+
+
+INDEX "U_EMPNOHH1MM1TYPEPDATE" created.
+
+
+Index "SS_DEPU_IDX_003" created.
+
+
+INDEX "PK_EMPNO_BALDATE_LEAVEBAL" created.
+
+
+INDEX "PK_PAYROLLTYPE_TYPE" created.
+
+
+INDEX "LL_APPROVER_PK" created.
+
+
+Index "SS_IND_MANUAL_ID_KYOCER_MANUAL" created.
+
+
+Index "SS_LEAVEAPP_IDX_009" created.
+
+
+INDEX "SS_MONTHLY_CREDIT_MAST_UK1" created.
+
+
+INDEX "DM_LOGINRIGHT_PK" created.
+
+
+INDEX "PK_LEAVE_UP_TEMP" created.
+
+
+INDEX "SS_LEAVELEDG_IDX_004" created.
+
+
+Index "SS_LEAVE_ADJ_IDX_004" created.
+
+
+INDEX "DM_TARGETDESK_PK" created.
+
+
+INDEX "SS_REJOIN_PK" created.
+
+
+INDEX "SS_HEALTH_BILL_PK" created.
+
+
+INDEX "LL_REVIEWREMARKS_PK" created.
+
+
+INDEX "U_APPNO_PDATE_ONDUTYAPP" created.
+
+
+INDEX "SS_BATCH_ERRORS_PK" created.
+
+
+Index "SS_DEPU_IDX_008" created.
+
+
+INDEX "SS_SWIPE_MACH_PK" created.
+
+
+Index "IDX_GEN_CODES_1" created.
+
+
+Index "SS_LEAVELEDG_IDX_002" created.
+
+
+INDEX "DM_DESKMASTER_VISIO_ID_PK" created.
+
+
+INDEX "SS_PUNCH_WFH_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_VACCINATION_OFFICE_FAM_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_VACCINATION_OFFICE_FAM_PK" ON "SWP_VACCINATION_OFFICE_FAMILY" ("EMPNO", "FAMILY_MEMBER_NAME")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "SS_CONTMAST_PK51086329176495" created.
+
+
+INDEX "PK_EMPNO" created.
+
+
+Index "SS_LEAVEAPP_1" created.
+
+
+Index "SS_LEAVELEDG_IDX_063" created.
+
+
+INDEX "PK_LEAVETYPE" created.
+
+
+Index "SS_LEAVELEDG_IDX_001" created.
+
+
+Index "IDX$$_024C0001" created.
+
+
+Index "IDX$$_024C0004" created.
+
+
+INDEX "SS_9794_EMP_LIST_PK" created.
+
+
+INDEX "SS_EMP_TRANSF_PK11112264442918" created.
+
+
+Index "DM_ASSETCODE_INDEX1" created.
+
+
+INDEX "U_APPNO_DEPU_HIST" created.
+
+
+INDEX "PK_MUSTER_4ALOWNC" created.
+
+
+INDEX "PK_EMPNO_BDATE" created.
+
+
+INDEX "SS_CLINIC_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\USERIDS_INDEX2.sql
+In command -
+  CREATE INDEX "USERIDS_INDEX2" ON "USERIDS" ("DOMAIN")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_EMP_RESPONSE_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_EMP_RESPONSE_PK" ON "SWP_EMP_RESPONSE" ("EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "PK_REP_FIELDS" created.
+
+
+INDEX "SS_DMS_STATUS2020_PK" created.
+
+
+INDEX "SS_ABSENT_TS_LEAVE_PK1" created.
+
+
+INDEX "SS_OTDETAIL_PK31028090953295" created.
+
+
+Index "SS_IND_ENTRY_DT_KYOCER_MANUAL" created.
+
+
+Index "SS_PRINT_LOG_INDEX1" created.
+
+
+Index "SS_LEAVEAPP_IDX_029" created.
+
+
+Index "DM_DESKMASTER_INDEX1" created.
+
+
+INDEX "SS_9794_EMP_LIST_UK1" created.
+
+
+INDEX "PK_EMPNO_PDATE" created.
+
+
+INDEX "PK_SEC" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SS_SECRETARY_RIGHTS_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SS_SECRETARY_RIGHTS_PK" ON "SS_USER_DEPT_RIGHTS" ("EMPNO", "PARENT")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "PK_SITEMAST" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\USERIDS_INDEX1.sql
+In command -
+  CREATE INDEX "USERIDS_INDEX1" ON "USERIDS" ("DOMAIN", "USERID")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "AD_SYNC_PK" created.
+
+
+INDEX "SS_FEEDBACK_PK" created.
+
+
+INDEX "PK_LUNCHMAST_SHIFT_PAR" created.
+
+
+Index "SS_LEAVELEDG_IDX$$_01210000" created.
+
+
+INDEX "SS_OFFICE_MAST_PK" created.
+
+
+Index "SS_DAYS_DETAILS_IDX_125" created.
+
+
+INDEX "PK_EMPNO_MON_YYYY" created.
+
+
+INDEX "SS_CONSCENT_PK" created.
+
+
+Index "SS_DEPU_IDX_012" created.
+
+
+INDEX "PK_TYPE_ONDUTYMAST" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_VACCINE_MASTER_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_VACCINE_MASTER_PK" ON "SWP_VACCINE_MASTER" ("VACCINE_TYPE")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "LL_ASSIGNMENT_PK" created.
+
+
+INDEX "SS_SITELOC" created.
+
+
+Index "SS_PRINT_LOG_INDEX2" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_IT_PREREQUISITES_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_IT_PREREQUISITES_PK" ON "SWP_IT_PREREQUISITES" ("EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "SS_PL_REVISION_MAST_PK" created.
+
+
+INDEX "DM_LAPTOP_PERMT_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_VACCINATION_OFFICE_BAT_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_VACCINATION_OFFICE_BAT_PK" ON "SWP_VACCINATION_OFFICE_BATCH_2" ("EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_LEAVEAPP_IDX_004" created.
+
+
+INDEX "SS_HEALTH_EMP_PK" created.
+
+
+INDEX "SS_9794_ROLE_MASTER_UK1" created.
+
+
+INDEX "SS_OTMASTER_UK21028183671263" created.
+
+
+INDEX "DM_TASKFORCETRAN_PK" created.
+
+
+Index "SS_IND_ETY_DT_PRN_Q_CANON" created.
+
+
+Index "SS_DELTAHRSBAL_OT_IDX_002" created.
+
+
+INDEX "SS_PUNCH_PK" created.
+
+
+INDEX "SS_BATCH_LOG_MAST_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SS_LEAD_APPROVER_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SS_LEAD_APPROVER_PK" ON "SS_LEAD_APPROVER" ("PARENT", "EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_IND_ETY_DT_1_8_PRN_Q_KYOCER" created.
+
+
+INDEX "LL_CATEGORY_PK" created.
+
+
+INDEX "SS_9794_ROLE_MASTER_PK" created.
+
+
+INDEX "SS_DELEGATE_PK" created.
+
+
+INDEX "LL_MEMBERS_PK" created.
+
+
+INDEX "SS_BATCH_STATUS_MAST_PK" created.
+
+
+INDEX "DM_SOURCEDESK_PK" created.
+
+
+INDEX "U_FILE_UP_KEY" created.
+
+
+Index "SS_ONDUTY_IDX_006" created.
+
+
+Index "SS_LEAVEAPP_IDX_010" created.
+
+
+INDEX "SS_9794_EMP_ROLES_PK" created.
+
+
+INDEX "U_EMPNO_HH_MM_PDATE_APPNO" created.
+
+
+INDEX "SS_PUNCH_ALL_PK" created.
+
+
+INDEX "PK_HR_MENU" created.
+
+
+Index "SS_IDX_PUNCH_EMPNOHHMMDATE" created.
+
+
+INDEX "DM_EMPADD_PK" created.
+
+
+Index "IDX$$_01230001" created.
+
+
+INDEX "U_LEAVE_UP_KEY" created.
+
+
+INDEX "SS_USB_REQUEST_PK" created.
+
+
+INDEX "SS_PHOTOCONSENT_PK" created.
+
+
+INDEX "PK_CODE" created.
+
+
+INDEX "PK_SITEMUSTER" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_TPL_VACINE_BATCH_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_TPL_VACINE_BATCH_PK" ON "SWP_TPL_VACCINE_BATCH" ("BATCH_KEY_ID")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_ISP_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_ISP_PK" ON "SWP_ISP" ("ISP_NAME")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_DELTAHRSBAL_IDX_138" created.
+
+
+Index "SS_LEAVELEDG_IDX_064" created.
+
+
+INDEX "SS_DESKASSIGNMENT_PK" created.
+
+
+Index "DM_ASSETMOVE_TRAN_HIS_IND1" created.
+
+
+Index "SS_PUNCH_MANUAL_INDEX1" created.
+
+
+INDEX "PK_SYS0804141204" created.
+
+
+INDEX "SS_HEALTH_BILLMAST_PK" created.
+
+
+INDEX "SS_LEAVEAPP_IDX_019" created.
+
+
+Index "SS_MUSTER_INDEX1" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_VACCINATION_OFFICE_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_VACCINATION_OFFICE_PK" ON "SWP_VACCINATION_OFFICE" ("EMPNO")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_LEAVEAPP_IDX$$_00410002" created.
+
+
+Index "SS_DAYS_DETAILS_IDX_007" created.
+
+
+INDEX "AD_DETAILS_PK" created.
+
+
+Index "SS_LEAVEAPP_IDX_007" created.
+
+
+INDEX "SS_LEAVE_ADJ_IDX_002" created.
+
+
+Index "SS_LEAVELEDG_IDX_015" created.
+
+
+INDEX "SS_HOLIDAY_ATTENDANCE_UK1" created.
+
+
+INDEX "SS_HSE_QUIZ_PK" created.
+
+
+INDEX "SS_ABSENT_LOP_REVERSE_PK" created.
+
+
+INDEX "SS_LOCK_EXTRA_HRS_PERIOD_PK" created.
+
+
+INDEX "DM_ASSETMOVE_TRAN_PK" created.
+
+
+Index "IDX$$_024C0003" created.
+
+
+INDEX "SS_CLINIC_LIMIT_PK" created.
+
+
+Index "SS_OTDETAIL_IDX_001" created.
+
+
+INDEX "SS_PORTAL_NEWS_PK" created.
+
+
+INDEX "DM_NEWJOIN_TRANS_PK" created.
+
+
+INDEX "SS_OT_DOWNLOAD_DBF_LOCK_PK" created.
+
+
+INDEX "SS_ACN_EMP" created.
+
+
+INDEX "ASSETADMIN_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SWP_BUS_ROUTES_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SWP_BUS_ROUTES_PK" ON "SWP_BUS_ROUTES" ("ROUTE_ID")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+Index "SS_IND_ETY_DT_PRN_Q_CANON_M" created.
+
+
+INDEX "SS_HOLIDAY_ATTENDANCE_PK" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\SS_USER_TYPE_MAST_PK.sql
+In command -
+  CREATE UNIQUE INDEX "SS_USER_TYPE_MAST_PK" ON "SS_USER_TYPE_MAST" ("USER_TYPE")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "U_APPNO_LEAVEAPP" created.
+
+
+INDEX "SS_HSE_INCIDENTREPORT_PK" created.
+
+
+INDEX "FTP_ADMIN_USER_PK" created.
+
+
+INDEX "U_APP_NO" created.
+
+
+Index "INDEX1" created.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\INDEXES\PK_EMPNO_TYPE_USERMAST.sql
+In command -
+  CREATE UNIQUE INDEX "PK_EMPNO_TYPE_USERMAST" ON "SS_USERMAST" ("EMPNO", "TYPE")
+Error report -
+ORA-00955: name is already used by an existing object
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
+
+INDEX "SS_NAVRATRI_PK" created.
+
+
+INDEX "DM_PENDING_PC_LOCK_PK" created.
+
+
+Index "SS_IND_ETY_DT_1_8_PRN_Q_CANON" created.
+
+
+INDEX "LL_REVIEWER_DOC_PK" created.
+
+
+INDEX "UNQ_FILENAME" created.
+
+
+INDEX "SS_EMP_COMP_LASTDATE" created.
+
+
+Index "SS_DEPU_IDX_009" created.
+
+
+INDEX "PK_DATATYPE" created.
+
+
+INDEX "U_APPNO" created.
+
+
+Index "SS_HEALTH_HRD_IDX$$_1B5D0004" created.
+
+
+Index "SS_PRINT_LOG_INDEX3" created.
+
+
+INDEX "SS_PUNCH_AUTO_TYP_MAST_PK" created.
+
+
+INDEX "EMP_WEEK_MAST_PK" created.
+
+
+INDEX "SS_PL_REVISION_MAST_UK1" created.
+
+
+Index "SS_LEAVE_ADJ_IDX_005" created.
+
+
+INDEX "DM_ASSET_OFFICE_PK" created.
+
+
+Index "SS_IND_ETY_DT_PRN_Q_KYOCER" created.
+
+
+Trigger DM_ASSETCODE_NO_USE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+3/15      PL/SQL: Item ignored
+3/27      PLS-00201: identifier 'DESK.GETDMUID' must be declared
+27/11     PL/SQL: SQL Statement ignored
+27/23     PL/SQL: ORA-00942: table or view does not exist
+32/11     PL/SQL: SQL Statement ignored
+32/23     PL/SQL: ORA-00942: table or view does not exist
+38/9      PL/SQL: SQL Statement ignored
+38/21     PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Trigger "DM_ASSETCODE_NO_USE" altered.
+
+
+Trigger SS_9794_ROLE_MAST compiled
+
+
+Trigger "SS_9794_ROLE_MAST" altered.
+
+
+Trigger SS_TRIG_ABSENT_DETAIL_01 compiled
+
+
+Trigger "SS_TRIG_ABSENT_DETAIL_01" altered.
+
+
+Trigger SS_TRIG_DEPU_DELETED compiled
+
+
+Trigger "SS_TRIG_DEPU_DELETED" altered.
+
+
+Trigger SS_TRIG_DEPU_UPDATE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+1/7       PL/SQL: Statement ignored
+1/29      PLS-00201: identifier 'SS.PENDING' must be declared
+Errors: check compiler log
+
+Trigger "SS_TRIG_DEPU_UPDATE" altered.
+
+
+Trigger SS_TRIG_LEAVE_APP_DEL compiled
+
+
+Trigger "SS_TRIG_LEAVE_APP_DEL" altered.
+
+
+Trigger SS_TRIG_LEAVE_APP_REJECT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+2/5       PL/SQL: Statement ignored
+2/27      PLS-00201: identifier 'SS.PENDING' must be declared
+Errors: check compiler log
+
+Trigger "SS_TRIG_LEAVE_APP_REJECT" altered.
+
+
+Trigger SS_TRIG_ONDUTYAPP_DELETE compiled
+
+
+Trigger "SS_TRIG_ONDUTYAPP_DELETE" altered.
+
+
+Trigger SS_TRIG_ONDUTYAPP_UPDATE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+2/5       PL/SQL: Statement ignored
+2/27      PLS-00201: identifier 'SS.PENDING' must be declared
+Errors: check compiler log
+
+Trigger "SS_TRIG_ONDUTYAPP_UPDATE" altered.
+
+
+Trigger TRIGGER1 compiled
+
+
+Trigger "TRIGGER1" altered.
+
+
+Trigger TRIGGER2 compiled
+
+
+Trigger "TRIGGER2" altered.
+
+
+Trigger TRIGGER3 compiled
+
+
+Trigger "TRIGGER3" altered.
+
+
+Trigger TRIGGER4 compiled
+
+
+Trigger "TRIGGER4" altered.
+
+
+Trigger TRIGGER6 compiled
+
+
+Trigger "TRIGGER6" altered.
+
+
+Trigger TRIGGER7 compiled
+
+
+Trigger "TRIGGER7" altered.
+
+
+Trigger TRIG_DESKALLOCATION_LOG compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+5/15      PL/SQL: Item ignored
+5/27      PLS-00201: identifier 'DESK.GETDMUID' must be declared
+9/9       PL/SQL: SQL Statement ignored
+9/49      PL/SQL: ORA-00942: table or view does not exist
+11/9      PL/SQL: SQL Statement ignored
+11/49     PL/SQL: ORA-00942: table or view does not exist
+17/9      PL/SQL: SQL Statement ignored
+17/21     PL/SQL: ORA-00942: table or view does not exist
+20/9      PL/SQL: SQL Statement ignored
+20/21     PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Trigger "TRIG_DESKALLOCATION_LOG" altered.
+
+
+Trigger TRIG_USB_REQ_LOG compiled
+
+
+Trigger "TRIG_USB_REQ_LOG" altered.
+
+
+Trigger TRIG_USERIDS_01 compiled
+
+
+Trigger "TRIG_USERIDS_01" altered.
+
+
+Trigger TRIG_USERIDS_02 compiled
+
+
+Trigger "TRIG_USERIDS_02" altered.
+
+
+Trigger TRIG_USERMASTER_LOG compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+3/5       PL/SQL: SQL Statement ignored
+3/17      PL/SQL: ORA-00942: table or view does not exist
+5/1       PL/SQL: SQL Statement ignored
+5/13      PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Trigger "TRIG_USERMASTER_LOG" altered.
+
+
+Trigger TRIG_VACCINATION_OFFICE_01 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+2/5       PLS-00049: bad bind variable 'NEW.MODIFIED_ON'
+Errors: check compiler log
+
+Trigger "TRIG_VACCINATION_OFFICE_01" altered.
+
+
+Procedure CALCALL compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+26/3      PL/SQL: Statement ignored
+26/16     PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+38/5      PL/SQL: Statement ignored
+38/19     PLS-00201: identifier 'FIRSTLASTPUNCH' must be declared
+39/5      PL/SQL: Statement ignored
+39/18     PLS-00201: identifier 'FIRSTLASTPUNCH' must be declared
+57/6      PL/SQL: Statement ignored
+57/15     PLS-00201: identifier 'OTPERIOD' must be declared
+Errors: check compiler log
+
+Procedure CALCALL1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+27/3      PL/SQL: Statement ignored
+27/16     PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+32/4      PL/SQL: Statement ignored
+32/26     PLS-00201: identifier 'AVAILEDLUNCHTIME' must be declared
+33/4      PL/SQL: Statement ignored
+33/28     PLS-00201: identifier 'ESTIMATEDLUNCHTIME' must be declared
+43/5      PL/SQL: Statement ignored
+43/19     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+44/5      PL/SQL: Statement ignored
+44/18     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+Errors: check compiler log
+
+Procedure CALCALL2 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+27/3      PL/SQL: Statement ignored
+27/16     PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+32/4      PL/SQL: Statement ignored
+32/26     PLS-00201: identifier 'AVAILEDLUNCHTIME' must be declared
+33/4      PL/SQL: Statement ignored
+33/28     PLS-00201: identifier 'ESTIMATEDLUNCHTIME' must be declared
+42/5      PL/SQL: Statement ignored
+42/19     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+43/5      PL/SQL: Statement ignored
+43/18     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+Errors: check compiler log
+
+Procedure CALCOT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+27/3      PL/SQL: Statement ignored
+27/16     PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+39/5      PL/SQL: Statement ignored
+39/19     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+40/5      PL/SQL: Statement ignored
+40/18     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+58/6      PL/SQL: Statement ignored
+58/15     PLS-00201: identifier 'OTPERIOD' must be declared
+70/7      PL/SQL: Statement ignored
+70/16     PLS-00201: identifier 'WORKEDHRS1' must be declared
+Errors: check compiler log
+
+Procedure CHANGE_PASSWORD compiled
+
+
+Procedure CHANGE_SHIFT compiled
+
+
+Procedure DELETEINBETWEENPUNCHLOOP compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+5/5       PL/SQL: Statement ignored
+5/5       PLS-00201: identifier 'DELETE_IN_BETWEEN_PUNCH' must be declared
+Errors: check compiler log
+
+Procedure DELETELEAVE compiled
+
+
+Procedure DELETEOT compiled
+
+
+Procedure DELETE_IN_BETWEEN_PUNCH compiled
+
+
+Procedure DEL_HA_APP compiled
+
+
+Procedure DEL_OD_APP compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+16/5      PL/SQL: Statement ignored
+16/5      PLS-00201: identifier 'GENERATE_AUTO_PUNCH' must be declared
+Errors: check compiler log
+
+Procedure DEL_SITE_ALLOWANCE_4MONTH compiled
+
+
+Procedure EXECUTE_IMMEDIATE compiled
+
+
+Procedure FILL_HALFDAYMAST_4_SHIFT compiled
+
+
+Procedure FILL_HALFDAY_LUNCH_4_SHIFT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/7       PL/SQL: Statement ignored
+9/7       PLS-00201: identifier 'FILL_LUNCHMAST_4_SHIFT' must be declared
+Errors: check compiler log
+
+Procedure FILL_LUNCHMAST_4_SHIFT compiled
+
+
+Procedure GENERATEPUNCH4ALL compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+10/5      PL/SQL: Statement ignored
+10/5      PLS-00201: identifier 'GENERATE_AUTO_PUNCH' must be declared
+Errors: check compiler log
+
+Procedure GENERATE_AUTO_PUNCH compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+78/17     PL/SQL: Statement ignored
+78/17     PLS-00201: identifier 'INSERT_AUTO_PUNCH' must be declared
+Errors: check compiler log
+
+Procedure GENERATE_AUTO_PUNCH_4OD compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+40/13     PL/SQL: Statement ignored
+40/13     PLS-00905: object SELFSERVICE.GENERATE_AUTO_PUNCH is invalid
+Errors: check compiler log
+
+Procedure GETSHIFT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/4       PL/SQL: SQL Statement ignored
+9/55      PL/SQL: ORA-00904: "ISLEAVEDEPUTOUR": invalid identifier
+Errors: check compiler log
+
+Procedure GET_LEAVE_BALANCE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+39/4      PL/SQL: Statement ignored
+39/26     PLS-00201: identifier 'SS.CLOSING_BAL' must be declared
+Errors: check compiler log
+
+Procedure GET_OT_DATA compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+24/13     PL/SQL: SQL Statement ignored
+37/17     PL/SQL: ORA-00904: "GET_HOLIDAY": invalid identifier
+Errors: check compiler log
+
+Procedure INSERTPUNCH compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+3/2       PL/SQL: SQL Statement ignored
+3/49      PL/SQL: ORA-00932: inconsistent datatypes: expected DATE got NUMBER
+Errors: check compiler log
+
+Procedure INSERTPUNCHUNIQUE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+42/9      PL/SQL: Statement ignored
+42/9      PLS-00905: object SELFSERVICE.GENERATE_AUTO_PUNCH is invalid
+Errors: check compiler log
+
+Procedure INSERT_AUTO_PUNCH compiled
+
+
+Procedure INSERT_DATES compiled
+
+
+Procedure MONTHLYPUNCHBAL compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+4/4       PL/SQL: SQL Statement ignored
+14/6      PL/SQL: ORA-00904: "OTPERIOD": invalid identifier
+Errors: check compiler log
+
+Procedure N_CFWDDELTAHRS1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/5       PL/SQL: Statement ignored
+9/5       PLS-00201: identifier 'PN.N_CFWD_LWD_DELTAHRS' must be declared
+Errors: check compiler log
+
+Procedure N_CFWDDELTAHRS1_20060428 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/5       PL/SQL: SQL Statement ignored
+17/7      PL/SQL: ORA-00904: "ISLASTWORKDAY1": invalid identifier
+67/9      PL/SQL: Statement ignored
+67/22     PLS-00364: loop index variable 'C2' use is invalid
+88/9      PL/SQL: Statement ignored
+88/36     PLS-00364: loop index variable 'C2' use is invalid
+89/9      PL/SQL: Statement ignored
+89/36     PLS-00364: loop index variable 'C2' use is invalid
+91/9      PL/SQL: SQL Statement ignored
+91/16     PL/SQL: ORA-00904: "N_DELTAHRS": invalid identifier
+94/9      PL/SQL: Statement ignored
+94/12     PLS-00364: loop index variable 'C2' use is invalid
+148/9     PL/SQL: Statement ignored
+148/12    PLS-00364: loop index variable 'C2' use is invalid
+Errors: check compiler log
+
+Procedure N_CFWD_LWD_DELTAHRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/5       PL/SQL: SQL Statement ignored
+17/7      PL/SQL: ORA-00904: "ISLASTWORKDAY1": invalid identifier
+67/9      PL/SQL: Statement ignored
+67/22     PLS-00364: loop index variable 'C2' use is invalid
+91/9      PL/SQL: Statement ignored
+91/36     PLS-00364: loop index variable 'C2' use is invalid
+92/9      PL/SQL: Statement ignored
+92/36     PLS-00364: loop index variable 'C2' use is invalid
+94/9      PL/SQL: SQL Statement ignored
+94/16     PL/SQL: ORA-00904: "N_DELTAHRS": invalid identifier
+97/9      PL/SQL: Statement ignored
+97/12     PLS-00364: loop index variable 'C2' use is invalid
+Errors: check compiler log
+
+Procedure OPENBAL compiled
+
+
+Procedure OPENBALPL compiled
+
+
+Procedure OPENBALSPECIFIC compiled
+
+
+Procedure OTPERIODS compiled
+
+
+Procedure PROCEDURE1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+8/9       PL/SQL: Statement ignored
+8/9       PLS-00201: identifier 'PKG_ABSENT.REGENERATE_LIST_4_ONE_EMP' must be declared
+Errors: check compiler log
+
+Procedure PROC_DEL_MIDD_PUNCHA compiled
+
+
+Procedure PROC_DM_ACTION compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+16/24     PL/SQL: SQL Statement ignored
+16/42     PL/SQL: ORA-00942: table or view does not exist
+22/3      PL/SQL: Statement ignored
+22/14     PLS-00201: identifier 'DM_GETPCNAME' must be declared
+23/3      PL/SQL: Statement ignored
+23/16     PLS-00201: identifier 'DESK.GETDMUID' must be declared
+26/9      PL/SQL: SQL Statement ignored
+26/63     PL/SQL: ORA-00942: table or view does not exist
+29/9      PL/SQL: SQL Statement ignored
+29/60     PL/SQL: ORA-00942: table or view does not exist
+36/7      PL/SQL: Statement ignored
+36/21     PLS-00201: identifier 'DESK.GETEMPLOYEES' must be declared
+40/5      PL/SQL: SQL Statement ignored
+40/17     PL/SQL: ORA-00942: table or view does not exist
+47/9      PL/SQL: SQL Statement ignored
+47/21     PL/SQL: ORA-00942: table or view does not exist
+53/13     PL/SQL: Statement ignored
+53/26     PLS-00201: identifier 'DM_GETUSER' must be declared
+55/17     PL/SQL: SQL Statement ignored
+55/29     PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Procedure PROC_DM_EMPLEFT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/21      PL/SQL: SQL Statement ignored
+9/85      PL/SQL: ORA-00942: table or view does not exist
+11/24     PL/SQL: SQL Statement ignored
+11/42     PL/SQL: ORA-00942: table or view does not exist
+24/3      PL/SQL: Statement ignored
+24/16     PLS-00201: identifier 'DESK.GETDMUID' must be declared
+36/7      PL/SQL: Statement ignored
+36/10     PLS-00364: loop index variable 'C1' use is invalid
+47/7      PL/SQL: Statement ignored
+47/10     PLS-00364: loop index variable 'C2' use is invalid
+84/3      PL/SQL: SQL Statement ignored
+84/15     PL/SQL: ORA-00942: table or view does not exist
+89/3      PLS-00201: identifier 'DESK_MAIL.SEND_MAIL' must be declared
+89/3      PL/SQL: Statement ignored
+Errors: check compiler log
+
+Procedure RAJCALCALL1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+27/3      PL/SQL: Statement ignored
+27/16     PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+39/5      PL/SQL: Statement ignored
+39/19     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+40/5      PL/SQL: Statement ignored
+40/18     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+58/6      PL/SQL: Statement ignored
+58/15     PLS-00201: identifier 'OTPERIOD' must be declared
+70/7      PL/SQL: Statement ignored
+70/16     PLS-00201: identifier 'WORKEDHRS1' must be declared
+74/7      PL/SQL: Statement ignored
+74/16     PLS-00201: identifier 'WORKEDHRS1' must be declared
+Errors: check compiler log
+
+Procedure RESET_PUNCH compiled
+
+
+Procedure SEND_MAIL_OT_NOT_APPROVED compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+3/9       PL/SQL: SQL Statement ignored
+5/102     PL/SQL: ORA-00904: "SS"."OT_PENDING": invalid identifier
+23/9      PL/SQL: Statement ignored
+23/27     PLS-00364: loop index variable 'C1' use is invalid
+Errors: check compiler log
+
+Procedure SEND_TEST_EMAIL_2_USER compiled
+
+
+Procedure SET_OD_ORDER compiled
+
+
+Procedure TO_BE_DELETED_OD2RW compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+22/9      PL/SQL: Statement ignored
+22/9      PLS-00201: identifier 'OD.ADD_ONDUTY_TYPE_2' must be declared
+Errors: check compiler log
+
+Procedure VACCINE_BATCH_SEND_MAIL compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+5/12      PLS-00341: declaration of cursor 'CUR_EMP_LIST' is incomplete or malformed
+6/5       PL/SQL: SQL Statement ignored
+19/23     PL/SQL: ORA-01031: insufficient privileges
+37/5      PL/SQL: Item ignored
+90/9      PL/SQL: SQL Statement ignored
+90/46     PLS-00597: expression 'TAB_EMP_LIST' in the INTO list is of wrong type
+93/13     PL/SQL: Statement ignored
+93/32     PLS-00487: Invalid reference to variable 'CUR_EMP_LIST%ROWTYPE'
+Errors: check compiler log
+
+Procedure WORKEDHRS compiled
+
+
+Package DESK compiled
+
+
+Package DESK_MAIL compiled
+
+
+Package EMP_CARD_RFID compiled
+
+
+Package GENERATE_CSHARP_CODE compiled
+
+
+Package HEALTH compiled
+
+
+Package IMPORT_PUNCH compiled
+
+
+Package LEAVE compiled
+
+
+Package LEAVE_ADJ compiled
+
+
+Package LEAVE_BAL compiled
+
+
+Package LEAVE_MONTHLY_CREDIT compiled
+
+
+Package LESSON compiled
+
+
+Package MEET compiled
+
+
+Package MGMT_REQUEST compiled
+
+
+Package MGMT_USERS compiled
+
+
+Package MISC compiled
+
+
+Package MIS_PUNCH compiled
+
+
+Package NETWORK_DATA_PRINTER compiled
+
+
+Package NU_EMP compiled
+
+
+Package OD compiled
+
+
+Package PENDING_APPROVALS compiled
+
+
+Package PKG_09794 compiled
+
+
+Package PKG_9794_NU compiled
+
+
+Package PKG_9794_TS compiled
+
+
+Package PKG_9794_USER_MGMT compiled
+
+
+Package PKG_ABSENT compiled
+
+
+Package PKG_ABSENT_TS compiled
+
+
+Package PKG_BATCH_LOG compiled
+
+
+Package PKG_LEAVE_REP compiled
+
+
+Package PKG_SHIFT compiled
+
+
+Package PN compiled
+
+
+Package PRINT_LOG_MIS compiled
+
+
+Package SA compiled
+
+
+Package SELF_ATTENDANCE compiled
+
+
+Package SS compiled
+
+
+Package SS_MAIL compiled
+
+
+Package SS_PHONE compiled
+
+
+Package SS_TS_LEAVE_COMPARE compiled
+
+
+Package SUM_WRK_HRS compiled
+
+
+Package TT1 compiled
+
+
+Package USB compiled
+
+
+Package USER_PROFILE compiled
+
+
+Package WFH_ATTENDANCE compiled
+
+
+Package Body DESK compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+81/7      PL/SQL: SQL Statement ignored
+81/45     PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Package Body DESK_MAIL compiled
+
+
+Package Body EMP_CARD_RFID compiled
+
+
+Package Body GENERATE_CSHARP_CODE compiled
+
+
+Package Body HEALTH compiled
+
+
+Package Body IMPORT_PUNCH compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+280/17    PL/SQL: Statement ignored
+280/17    PLS-00201: identifier 'ITINV_STK.ATTEND_PLAN' must be declared
+Errors: check compiler log
+
+Package Body LEAVE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+113/9     PL/SQL: Statement ignored
+113/12    PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+238/9     PL/SQL: Statement ignored
+238/31    PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+242/9     PL/SQL: Statement ignored
+242/31    PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+333/9     PL/SQL: Statement ignored
+333/12    PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+491/9     PL/SQL: Statement ignored
+491/12    PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+542/9     PL/SQL: Statement ignored
+542/12    PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+677/9     PL/SQL: Statement ignored
+677/12    PLS-00201: identifier 'CHECKHOLIDAY' must be declared
+765/17    PL/SQL: Statement ignored
+765/37    PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+774/21    PL/SQL: Statement ignored
+774/41    PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+805/17    PL/SQL: Statement ignored
+805/37    PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+Errors: check compiler log
+
+Package Body LEAVE_ADJ compiled
+
+
+Package Body LEAVE_BAL compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+10/9      PL/SQL: SQL Statement ignored
+35/29     PL/SQL: ORA-00904: "HOLIDAYSBETWEEN": invalid identifier
+84/9      PL/SQL: Statement ignored
+84/38     PLS-00201: identifier 'CLOSINGCLBAL' must be declared
+109/9     PL/SQL: Statement ignored
+109/38    PLS-00201: identifier 'CLOSINGSLBAL' must be declared
+134/9     PL/SQL: Statement ignored
+134/38    PLS-00201: identifier 'CLOSINGPLBAL' must be declared
+159/9     PL/SQL: Statement ignored
+159/38    PLS-00201: identifier 'CLOSINGEXBAL' must be declared
+184/9     PL/SQL: Statement ignored
+184/38    PLS-00201: identifier 'CLOSINGCOBAL' must be declared
+209/9     PL/SQL: Statement ignored
+209/38    PLS-00201: identifier 'CLOSINGOHBAL' must be declared
+249/17    PL/SQL: Statement ignored
+249/36    PLS-00201: identifier 'HOLIDAYSBETWEEN' must be declared
+261/17    PL/SQL: Statement ignored
+261/36    PLS-00201: identifier 'HOLIDAYSBETWEEN' must be declared
+Errors: check compiler log
+
+Package Body LEAVE_MONTHLY_CREDIT compiled
+
+
+Package Body LESSON compiled
+
+
+Package Body MEET compiled
+
+
+Package Body MGMT_REQUEST compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+19/9      PL/SQL: SQL Statement ignored
+19/21     PL/SQL: ORA-00942: table or view does not exist
+64/9      PL/SQL: SQL Statement ignored
+68/13     PL/SQL: ORA-00942: table or view does not exist
+107/9     PL/SQL: SQL Statement ignored
+107/16    PL/SQL: ORA-00942: table or view does not exist
+165/9     PL/SQL: SQL Statement ignored
+169/13    PL/SQL: ORA-00942: table or view does not exist
+195/9     PL/SQL: SQL Statement ignored
+199/13    PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Package Body MGMT_USERS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+36/9      PL/SQL: SQL Statement ignored
+51/21     PL/SQL: ORA-00942: table or view does not exist
+60/9      PL/SQL: SQL Statement ignored
+64/13     PL/SQL: ORA-00942: table or view does not exist
+69/13     PL/SQL: SQL Statement ignored
+77/17     PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Package Body MISC compiled
+
+
+Package Body MIS_PUNCH compiled
+
+
+Package Body NETWORK_DATA_PRINTER compiled
+
+
+Package Body NU_EMP compiled
+
+
+Package Body OD compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+268/17    PL/SQL: SQL Statement ignored
+285/25    PL/SQL: ORA-00904: "GETODMM": invalid identifier
+299/17    PL/SQL: SQL Statement ignored
+316/25    PL/SQL: ORA-00904: "GETODMM": invalid identifier
+894/9     PL/SQL: SQL Statement ignored
+911/17    PL/SQL: ORA-00904: "GETODMM": invalid identifier
+931/9     PL/SQL: SQL Statement ignored
+948/17    PL/SQL: ORA-00904: "GETODMM": invalid identifier
+Errors: check compiler log
+
+Package Body PENDING_APPROVALS compiled
+
+
+Package Body PKG_09794 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+1012/21   PL/SQL: Statement ignored
+1012/67   PLS-00201: identifier 'TO_HRS' must be declared
+1015/21   PL/SQL: Statement ignored
+1015/67   PLS-00201: identifier 'TO_HRS' must be declared
+1065/21   PL/SQL: Statement ignored
+1065/67   PLS-00201: identifier 'TO_HRS' must be declared
+1068/21   PL/SQL: Statement ignored
+1068/67   PLS-00201: identifier 'TO_HRS' must be declared
+1118/21   PL/SQL: Statement ignored
+1118/67   PLS-00201: identifier 'TO_HRS' must be declared
+1121/21   PL/SQL: Statement ignored
+1121/67   PLS-00201: identifier 'TO_HRS' must be declared
+1171/21   PL/SQL: Statement ignored
+1171/67   PLS-00201: identifier 'TO_HRS' must be declared
+1174/21   PL/SQL: Statement ignored
+1174/67   PLS-00201: identifier 'TO_HRS' must be declared
+1224/21   PL/SQL: Statement ignored
+1224/67   PLS-00201: identifier 'TO_HRS' must be declared
+1227/21   PL/SQL: Statement ignored
+1227/67   PLS-00201: identifier 'TO_HRS' must be declared
+Errors: check compiler log
+
+Package Body PKG_9794_NU compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+224/13    PL/SQL: Statement ignored
+224/39    PLS-00201: identifier 'GETSHIFT1' must be declared
+256/17    PL/SQL: Statement ignored
+256/43    PLS-00201: identifier 'SEC_TO_CHAR' must be declared
+386/13    PL/SQL: SQL Statement ignored
+395/17    PL/SQL: ORA-00904: "SEC_TO_CHAR": invalid identifier
+398/13    PL/SQL: SQL Statement ignored
+407/17    PL/SQL: ORA-00904: "SEC_TO_CHAR": invalid identifier
+446/13    PL/SQL: SQL Statement ignored
+455/17    PL/SQL: ORA-00904: "SEC_TO_CHAR": invalid identifier
+458/13    PL/SQL: SQL Statement ignored
+467/17    PL/SQL: ORA-00904: "SEC_TO_CHAR": invalid identifier
+470/13    PL/SQL: SQL Statement ignored
+479/17    PL/SQL: ORA-00904: "SEC_TO_CHAR": invalid identifier
+482/13    PL/SQL: SQL Statement ignored
+491/17    PL/SQL: ORA-00904: "SEC_TO_CHAR": invalid identifier
+627/9     PL/SQL: SQL Statement ignored
+640/13    PL/SQL: ORA-00904: "SEC_TO_CHAR": invalid identifier
+645/9     PL/SQL: SQL Statement ignored
+658/13    PL/SQL: ORA-00904: "SEC_TO_CHAR": invalid identifier
+Errors: check compiler log
+
+Package Body PKG_9794_TS compiled
+
+
+Package Body PKG_9794_USER_MGMT compiled
+
+
+Package Body PKG_ABSENT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+124/9     PL/SQL: SQL Statement ignored
+156/17    PL/SQL: ORA-00904: "CLOSINGCOBAL": invalid identifier
+333/9     PL/SQL: Statement ignored
+333/25    PLS-00201: identifier 'GET_HOLIDAY' must be declared
+348/9     PL/SQL: Statement ignored
+348/25    PLS-00201: identifier 'ISLEAVEDEPUTOUR' must be declared
+370/9     PL/SQL: Statement ignored
+370/25    PLS-00201: identifier 'ISLDT_APPL' must be declared
+Errors: check compiler log
+
+Package Body PKG_ABSENT_TS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+110/9     PL/SQL: SQL Statement ignored
+142/17    PL/SQL: ORA-00904: "CLOSINGCOBAL": invalid identifier
+248/9     PL/SQL: SQL Statement ignored
+322/46    PL/SQL: ORA-00942: table or view does not exist
+930/9     PL/SQL: Statement ignored
+930/25    PLS-00201: identifier 'ISLEAVEDEPUTOUR' must be declared
+937/9     PL/SQL: Statement ignored
+937/25    PLS-00201: identifier 'ISLDT_APPL' must be declared
+Errors: check compiler log
+
+Package Body PKG_BATCH_LOG compiled
+
+
+Package Body PKG_LEAVE_REP compiled
+
+
+Package Body PKG_SHIFT compiled
+
+
+Package Body PN compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+18/17     PL/SQL: Statement ignored
+18/24     PLS-00201: identifier 'N_GETSTARTDATE' must be declared
+26/13     PL/SQL: Statement ignored
+26/20     PLS-00201: identifier 'N_GETENDDATE' must be declared
+38/17     PL/SQL: SQL Statement ignored
+46/21     PL/SQL: ORA-00904: "ISLASTWORKDAY1": invalid identifier
+99/25     PL/SQL: Statement ignored
+99/38     PLS-00364: loop index variable 'C2' use is invalid
+109/25    PL/SQL: Statement ignored
+109/52    PLS-00364: loop index variable 'C2' use is invalid
+110/25    PL/SQL: Statement ignored
+110/52    PLS-00364: loop index variable 'C2' use is invalid
+112/25    PL/SQL: SQL Statement ignored
+112/32    PL/SQL: ORA-00904: "N_DELTAHRS": invalid identifier
+115/25    PL/SQL: Statement ignored
+115/28    PLS-00364: loop index variable 'C2' use is invalid
+Errors: check compiler log
+
+Package Body PRINT_LOG_MIS compiled
+
+
+Package Body SA compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+70/7      PL/SQL: Statement ignored
+70/18     PLS-00201: identifier 'AVAILEDLUNCHTIME1' must be declared
+Errors: check compiler log
+
+Package Body SELF_ATTENDANCE compiled
+
+
+Package Body SS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+178/17    PL/SQL: SQL Statement ignored
+186/25    PL/SQL: ORA-00918: column ambiguously defined
+Errors: check compiler log
+
+Package Body SS_MAIL compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+283/13    PL/SQL: Statement ignored
+283/13    PLS-00201: identifier 'UTL_MAIL' must be declared
+Errors: check compiler log
+
+Package Body SS_PHONE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+17/5      PL/SQL: SQL Statement ignored
+18/51     PL/SQL: ORA-00942: table or view does not exist
+25/5      PL/SQL: SQL Statement ignored
+26/46     PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Package Body SS_TS_LEAVE_COMPARE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+127/13    PL/SQL: SQL Statement ignored
+131/17    PL/SQL: ORA-04063: view "SELFSERVICE.SS_TIME_DAILY" has errors
+149/13    PL/SQL: SQL Statement ignored
+153/17    PL/SQL: ORA-04063: view "SELFSERVICE.SS_TIME_DAILY" has errors
+Errors: check compiler log
+
+Package Body SUM_WRK_HRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+20/9      PL/SQL: SQL Statement ignored
+105/37    PL/SQL: ORA-00904: "GET_HOLIDAY": invalid identifier
+Errors: check compiler log
+
+Package Body SWP compiled
+
+
+Package Body SWP_OFFICE_VACCINE compiled
+
+
+Package Body SWP_OFFICE_VACCINE_BATCH_2 compiled
+
+
+Package Body SWP_TRAINING compiled
+
+
+Package Body SWP_USERS compiled
+
+
+Package Body SWP_VACCINEDATE compiled
+
+
+Package Body SWP_VACCINE_REMINDER compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+0/0       PL/SQL: Compilation unit analysis terminated
+1/15      PLS-00201: identifier 'SWP_VACCINE_REMINDER' must be declared
+1/15      PLS-00304: cannot compile body of 'SWP_VACCINE_REMINDER' without its specification
+Errors: check compiler log
+
+Package Body TT1 compiled
+
+
+Package Body USB compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+395/9     PL/SQL: SQL Statement ignored
+398/13    PL/SQL: ORA-04063: view "SELFSERVICE.DM_VU_USER_DESK_PC" has errors
+Errors: check compiler log
+
+Package Body USER_PROFILE compiled
+
+
+Package Body WFH_ATTENDANCE compiled
+
+
+Package Body XLSX_READ compiled
+
+
+Package Body XL_BLOB compiled
+
+
+Function AUTOAPPROVAL compiled
+
+
+Function AVAILEDLUNCHTIME compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+12/3      PL/SQL: Statement ignored
+12/15     PLS-00201: identifier 'AVAILEDLUNCHTIME1' must be declared
+Errors: check compiler log
+
+Function AVAILEDLUNCHTIME1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+23/3      PL/SQL: Statement ignored
+23/6      PLS-00201: identifier 'ISLEAVEDEPUTOUR' must be declared
+Errors: check compiler log
+
+Function AVAILEDLUNCHTIME1_COPY compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+48/5      PL/SQL: Statement ignored
+48/8      PLS-00201: identifier 'ISLEAVEDEPUTOUR' must be declared
+Errors: check compiler log
+
+Function CASUALLEAVECHECK compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+21/4      PL/SQL: Statement ignored
+21/17     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+22/4      PL/SQL: Statement ignored
+22/17     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+Errors: check compiler log
+
+Function CFWDDELTAHRSTEST compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+4/5       PL/SQL: SQL Statement ignored
+12/7      PL/SQL: ORA-00904: "ISLASTWORKDAY": invalid identifier
+43/9      PL/SQL: Statement ignored
+43/36     PLS-00364: loop index variable 'C2' use is invalid
+44/9      PL/SQL: Statement ignored
+44/36     PLS-00364: loop index variable 'C2' use is invalid
+45/9      PL/SQL: SQL Statement ignored
+45/16     PL/SQL: ORA-00904: "DELTAHRS1": invalid identifier
+47/9      PL/SQL: Statement ignored
+47/12     PLS-00364: loop index variable 'C2' use is invalid
+54/9      PL/SQL: Statement ignored
+54/12     PLS-00364: loop index variable 'C2' use is invalid
+Errors: check compiler log
+
+Function CFWDDELTAHRSTEST1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+4/5       PL/SQL: SQL Statement ignored
+12/7      PL/SQL: ORA-00904: "ISLASTWORKDAY1": invalid identifier
+44/9      PL/SQL: Statement ignored
+44/36     PLS-00364: loop index variable 'C2' use is invalid
+45/9      PL/SQL: Statement ignored
+45/36     PLS-00364: loop index variable 'C2' use is invalid
+46/9      PL/SQL: SQL Statement ignored
+46/16     PL/SQL: ORA-00904: "DELTAHRS1": invalid identifier
+48/9      PL/SQL: Statement ignored
+48/12     PLS-00364: loop index variable 'C2' use is invalid
+55/9      PL/SQL: Statement ignored
+55/12     PLS-00364: loop index variable 'C2' use is invalid
+Errors: check compiler log
+
+Function CFWDOTDELTAHRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+4/5       PL/SQL: SQL Statement ignored
+12/7      PL/SQL: ORA-00904: "ISLASTWORKDAY1": invalid identifier
+46/9      PL/SQL: Statement ignored
+46/36     PLS-00364: loop index variable 'C2' use is invalid
+47/9      PL/SQL: Statement ignored
+47/36     PLS-00364: loop index variable 'C2' use is invalid
+48/9      PL/SQL: SQL Statement ignored
+48/16     PL/SQL: ORA-00904: "DELTAHRS1": invalid identifier
+52/9      PL/SQL: Statement ignored
+52/12     PLS-00364: loop index variable 'C2' use is invalid
+Errors: check compiler log
+
+Function CFWD_DHRS_WEEK compiled
+
+
+Function CHECKAPP compiled
+
+
+Function CHECKHOLIDAY compiled
+
+
+Function CHECKPLCLDIFF compiled
+
+
+Function CLOSINGCLBAL compiled
+
+
+Function CLOSINGCOBAL compiled
+
+
+Function CLOSINGEXBAL compiled
+
+
+Function CLOSINGOHBAL compiled
+
+
+Function CLOSINGPLBAL compiled
+
+
+Function CLOSINGSLBAL compiled
+
+
+Function CLPLDIFF compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+12/2      PL/SQL: Statement ignored
+12/15     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+13/2      PL/SQL: Statement ignored
+13/15     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+29/5      PL/SQL: Statement ignored
+29/17     PLS-00201: identifier 'GET_HOLIDAY' must be declared
+30/5      PL/SQL: Statement ignored
+30/17     PLS-00201: identifier 'GET_HOLIDAY' must be declared
+Errors: check compiler log
+
+Function DELTAHRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+15/3      PL/SQL: Statement ignored
+15/6      PLS-00201: identifier 'GET_HOLIDAY' must be declared
+Errors: check compiler log
+
+Function DELTAHRS1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+31/5      PL/SQL: SQL Statement ignored
+33/7      PL/SQL: ORA-00904: "GETSHIFTOUTTIME": invalid identifier
+40/5      PL/SQL: SQL Statement ignored
+41/9      PL/SQL: ORA-00904: "WORKEDHRS3": invalid identifier
+Errors: check compiler log
+
+Function DM_GETPCNAME compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+4/3       PL/SQL: SQL Statement ignored
+5/8       PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Function DM_GETUSER compiled
+
+
+Function DM_GET_EMP_OFFICE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+6/5       PL/SQL: SQL Statement ignored
+14/17     PL/SQL: ORA-04063: view "SELFSERVICE.DESMAS_ALLOCATION_ALL" has errors
+Errors: check compiler log
+
+Function DM_IS_DESK_OCCUPIED compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+7/3       PL/SQL: SQL Statement ignored
+7/42      PL/SQL: ORA-00942: table or view does not exist
+9/5       PL/SQL: SQL Statement ignored
+9/49      PL/SQL: ORA-00942: table or view does not exist
+13/5      PL/SQL: SQL Statement ignored
+13/44     PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Function DM_IS_NU_USER compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+12/7      PL/SQL: SQL Statement ignored
+12/41     PL/SQL: ORA-04063: view "SELFSERVICE.DM_VU_EMP_MOVE_LOG" has errors
+Errors: check compiler log
+
+Function DM_IS_USER_DEPU compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+12/3      PL/SQL: SQL Statement ignored
+12/37     PL/SQL: ORA-04063: view "SELFSERVICE.DM_VU_EMP_MOVE_LOG" has errors
+Errors: check compiler log
+
+Function DM_IS_USER_REJOIN compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+15/5      PL/SQL: SQL Statement ignored
+19/77     PL/SQL: ORA-04063: view "SELFSERVICE.DM_VU_EMP_MOVE_LOG" has errors
+Errors: check compiler log
+
+Function DM_IS_USER_RESIGN compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+12/3      PL/SQL: SQL Statement ignored
+12/37     PL/SQL: ORA-04063: view "SELFSERVICE.DM_VU_EMP_MOVE_LOG" has errors
+Errors: check compiler log
+
+Function DM_LASTDESK compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+8/1       PL/SQL: SQL Statement ignored
+10/33     PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Function DM_OFFICE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+5/3       PL/SQL: SQL Statement ignored
+6/8       PL/SQL: ORA-00942: table or view does not exist
+Errors: check compiler log
+
+Function DM_PREV_DESK_DEL_DATE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+8/1       PL/SQL: SQL Statement ignored
+10/78     PL/SQL: ORA-04063: view "SELFSERVICE.DM_VU_EMP_MOVE_LOG" has errors
+Errors: check compiler log
+
+Function EARLYGO compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+33/5      PL/SQL: Statement ignored
+33/18     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+35/6      PL/SQL: Statement ignored
+35/28     PLS-00905: object SELFSERVICE.AVAILEDLUNCHTIME is invalid
+36/6      PL/SQL: Statement ignored
+36/30     PLS-00201: identifier 'ESTIMATEDLUNCHTIME' must be declared
+Errors: check compiler log
+
+Function EARLYGO1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+40/6      PL/SQL: SQL Statement ignored
+41/8      PL/SQL: ORA-00904: "GETSHIFTOUTTIME": invalid identifier
+51/8      PL/SQL: Statement ignored
+51/21     PLS-00201: identifier 'FIRSTLASTPUNCH1' must be declared
+53/29     PL/SQL: Statement ignored
+53/42     PLS-00201: identifier 'GET_PUNCH_NUM' must be declared
+Errors: check compiler log
+
+Function ESTIMATEDLUNCHTIME compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+15/5      PL/SQL: Statement ignored
+15/8      PLS-00201: identifier 'GET_HOLIDAY' must be declared
+Errors: check compiler log
+
+Function ESTIMATEDLUNCHTIME1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+15/5      PL/SQL: SQL Statement ignored
+17/7      PL/SQL: ORA-00904: "GETSHIFTOUTTIME": invalid identifier
+Errors: check compiler log
+
+Function ESTIMATEDWRKHRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+10/3      PL/SQL: Statement ignored
+10/18     PLS-00201: identifier 'GETSHIFT1' must be declared
+11/3      PL/SQL: Statement ignored
+11/15     PLS-00201: identifier 'GETSHIFTINTIME' must be declared
+12/3      PL/SQL: Statement ignored
+12/16     PLS-00201: identifier 'GETSHIFTOUTTIME' must be declared
+13/3      PL/SQL: Statement ignored
+13/18     PLS-00905: object SELFSERVICE.AVAILEDLUNCHTIME1 is invalid
+Errors: check compiler log
+
+Function EXCHECK compiled
+
+
+Function FIRSTLASTPUNCH compiled
+
+
+Function FIRSTLASTPUNCH1 compiled
+
+
+Function FIRSTLASTPUNCHDATA compiled
+
+
+Function GEN_NUMBERS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+0/0       PL/SQL: Compilation unit analysis terminated
+6/1       PLS-00201: identifier 'ARRAY' must be declared
+Errors: check compiler log
+
+Function GETABSENT compiled
+
+
+Function GETABSENTDATE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/3       PL/SQL: Statement ignored
+9/16      PLS-00201: identifier 'GET_HOLIDAY' must be declared
+15/10     PL/SQL: Statement ignored
+15/23     PLS-00201: identifier 'ISLEAVEDEPUTOUR' must be declared
+Errors: check compiler log
+
+Function GETABSENTDATE_SHIFT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+13/5      PL/SQL: Statement ignored
+13/20     PLS-00201: identifier 'GET_HOLIDAY' must be declared
+29/13     PL/SQL: Statement ignored
+29/28     PLS-00201: identifier 'ISLEAVEDEPUTOUR' must be declared
+Errors: check compiler log
+
+Function GETCONSECUTIVECL compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/2       PL/SQL: Statement ignored
+9/14      PLS-00201: identifier 'GET_HOLIDAY' must be declared
+11/3      PL/SQL: Statement ignored
+11/15     PLS-00201: identifier 'GET_HOLIDAY' must be declared
+Errors: check compiler log
+
+Function GETCONSECUTIVECL1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+13/2      PL/SQL: Statement ignored
+13/15     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+14/2      PL/SQL: Statement ignored
+14/15     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+Errors: check compiler log
+
+Function GETDIFFPLSLCL compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+21/7      PL/SQL: Statement ignored
+21/20     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+22/7      PL/SQL: Statement ignored
+22/20     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+61/7      PL/SQL: Statement ignored
+61/20     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+62/7      PL/SQL: Statement ignored
+62/20     PLS-00201: identifier 'GETLASTWORKINGDAY' must be declared
+Errors: check compiler log
+
+Function GETDIFFSICK compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+18/3      PL/SQL: Statement ignored
+18/15     PLS-00201: identifier 'GET_HOLIDAY' must be declared
+19/3      PL/SQL: Statement ignored
+19/15     PLS-00201: identifier 'GET_HOLIDAY' must be declared
+Errors: check compiler log
+
+Function GETDISCREPANCYCNT compiled
+
+
+Function GETEMPNAME compiled
+
+
+Function GETLASTDAYOFWEEK compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+15/6      PL/SQL: SQL Statement ignored
+15/13     PL/SQL: ORA-00904: "GETLASTWORKINGDAY": invalid identifier
+23/10     PL/SQL: SQL Statement ignored
+23/17     PL/SQL: ORA-00904: "GETLASTWORKINGDAY": invalid identifier
+25/12     PL/SQL: SQL Statement ignored
+25/19     PL/SQL: ORA-00904: "GETLASTWORKINGDAY": invalid identifier
+Errors: check compiler log
+
+Function GETLASTDAYOFWEEK1 compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/6       PL/SQL: SQL Statement ignored
+9/13      PL/SQL: ORA-00904: "ISLASTWORKDAY1": invalid identifier
+Errors: check compiler log
+
+Function GETLASTWORKINGDAY compiled
+
+
+Function GETLCOMEAPPCNTR compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+10/8      PL/SQL: Statement ignored
+10/31     PLS-00201: identifier 'LC_APPCOUNT' must be declared
+Errors: check compiler log
+
+Function GETLEAVEPERIOD compiled
+
+
+Function GETODHH compiled
+
+
+Function GETODMM compiled
+
+
+Function GETPLLEAVECOUNT compiled
+
+
+Function GETSHIFT1 compiled
+
+
+Function GETSHIFTINTIME compiled
+
+
+Function GETSHIFTINTIME1 compiled
+
+
+Function GETSHIFTOUTTIME compiled
+
+
+Function GETSLEAVEAPPCNTR compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/5       PL/SQL: Statement ignored
+9/28      PLS-00201: identifier 'SL_APPCOUNT' must be declared
+Errors: check compiler log
+
+Function GET_EMP_COMPANY compiled
+
+
+Function GET_EMP_DEPT compiled
+
+
+Function GET_EMP_PEN_LVE_4_MONTH compiled
+
+
+Function GET_HOLIDAY compiled
+
+
+Function GET_MGR_USERID compiled
+
+
+Function GET_MUSTER_STATUS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+69/5      PL/SQL: Statement ignored
+69/8      PLS-00201: identifier 'ISABSENT' must be declared
+Errors: check compiler log
+
+Function GET_PARENT_NAME compiled
+
+
+Function GET_PL_LEAVE_COUNT_IN_YEAR compiled
+
+
+Function GET_PROJECT_DESC compiled
+
+
+Function GET_PUNCH compiled
+
+
+Function GET_PUNCH_MONTH compiled
+
+
+Function GET_PUNCH_NUM compiled
+
+
+Function GET_PUNCH_SEC compiled
+
+
+Function GET_SITE_ALLOWANCE_DUE_DATE compiled
+
+
+Function GET_TEL_PHONE_COUNTRY_CODE compiled
+
+
+Function GET_TIME_SHEET_EXTRA_HRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+10/1      PL/SQL: SQL Statement ignored
+44/8      PL/SQL: ORA-04063: view "SELFSERVICE.SS_TIME_OT" has errors
+Errors: check compiler log
+
+Function GET_TIME_SHEET_EXTRA_HRS_TOT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/1       PL/SQL: SQL Statement ignored
+12/19     PL/SQL: ORA-00904: "N_GETENDDATE": invalid identifier
+Errors: check compiler log
+
+Function GET_TIME_SHEET_WORK_HRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+10/1      PL/SQL: SQL Statement ignored
+44/8      PL/SQL: ORA-04063: view "SELFSERVICE.SS_TIME_DAILY" has errors
+Errors: check compiler log
+
+Function GET_TIME_SHEET_WORK_HRS_TOT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+5/1       PL/SQL: SQL Statement ignored
+8/19      PL/SQL: ORA-00904: "N_GETENDDATE": invalid identifier
+Errors: check compiler log
+
+Function GET_TIME_SHET_EXTRA_HRS_TOT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+9/1       PL/SQL: SQL Statement ignored
+12/19     PL/SQL: ORA-00904: "N_GETENDDATE": invalid identifier
+Errors: check compiler log
+
+Function HOLIDAYSBETWEEN compiled
+
+
+Function ISABSENT compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+36/13     PL/SQL: SQL Statement ignored
+36/20     PL/SQL: ORA-00904: "ISLEAVEDEPUTOUR": invalid identifier
+Errors: check compiler log
+
+Function ISEXTRAHOURS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+4/4       PL/SQL: SQL Statement ignored
+6/67      PL/SQL: ORA-00904: "N_GETENDDATE": invalid identifier
+Errors: check compiler log
+
+Function ISLASTDAYOFMONTH compiled
+
+
+Function ISLASTWORKDAY compiled
+
+
+Function ISLASTWORKDAY1 compiled
+
+
+Function ISLCOMEEGOAPP compiled
+
+
+Function ISLDT compiled
+
+
+Function ISLDT_APPL compiled
+
+
+Function ISLEAVEDEPUTOUR compiled
+
+
+Function ISLEAVENEGATIVE compiled
+
+
+Function ISSHIFT_INMONTH compiled
+
+
+Function ISSLEAVEAPP compiled
+
+
+Function IS_GRADE_X compiled
+
+
+Function IS_LEAVE compiled
+
+
+Function IS_ODD_PUNCH compiled
+
+
+Function LASTDAY_CFWD_DHRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+11/3      PL/SQL: SQL Statement ignored
+14/7      PL/SQL: ORA-06575: Package or function DELTAHRS is in an invalid state
+Errors: check compiler log
+
+Function LASTDAY_CFWD_DHRS1 compiled
+
+
+Function LATECOME compiled
+
+
+Function LATECOME1 compiled
+
+
+Function LC_APPCOUNT compiled
+
+
+Function MAXPUNCH compiled
+
+
+Function MAXPUNCH1 compiled
+
+
+Function MISSEDPUNCH compiled
+
+
+Function N_CFWDDELTAHRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+57/9      PL/SQL: SQL Statement ignored
+57/16     PL/SQL: ORA-00904: "N_DELTAHRS": invalid identifier
+Errors: check compiler log
+
+Function N_DELTAHRS compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+46/5      PL/SQL: SQL Statement ignored
+47/13     PL/SQL: ORA-00904: "N_WORKEDHRS": invalid identifier
+56/5      PL/SQL: SQL Statement ignored
+57/13     PL/SQL: ORA-00904: "N_WORKEDHRS": invalid identifier
+72/7      PL/SQL: Statement ignored
+72/19     PLS-00201: identifier 'SHIFT_WORK_HRS' must be declared
+Errors: check compiler log
+
+Function N_GETENDDATE compiled
+
+
+Function N_GETSTARTDATE compiled
+
+
+Function N_IS_EMP_ABSENT compiled
+
+
+Function N_LEAVE_SUM compiled
+
+
+Function N_LUNCH_TIME compiled
+
+
+Function N_MAXPUNCH compiled
+
+
+Function N_MEAL_VR_LEAVE_BAL compiled
+
+
+Function N_OTPERIOD compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+68/5      PL/SQL: Statement ignored
+68/24     PLS-00201: identifier 'N_OT_4_TRAINING' must be declared
+Errors: check compiler log
+
+Function N_OT_4_TRAINING compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+14/5      PL/SQL: SQL Statement ignored
+14/85     PL/SQL: ORA-04063: view "SELFSERVICE.SS_TRAINING_LIST_4_OT" has errors
+20/8      PL/SQL: SQL Statement ignored
+20/44     PL/SQL: ORA-04063: view "SELFSERVICE.SS_TRAINING_MAST_4_OT" has errors
+Errors: check compiler log
+
+Function N_SUM_SLAPP_COUNT compiled
+
+
+Function N_TIMESHEETALLOWED compiled
+
+
+Function N_WORKEDHRS compiled
+
+
+Function OPENBALPLFUNC compiled
+
+
+Function OTPERIOD compiled
+
+
+Function OTPERIOD1 compiled
+
+
+Function OTPERIOD2 compiled
+
+
+Function OTPERIODNEW compiled
+
+
+Function PENALTYLEAVE compiled
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+19/3      PL/SQL: Statement ignored
+19/18     PLS-00905: object SELFSERVICE.GETSLEAVEAPPCNTR is invalid
+Errors: check compiler log
+
+Function PENALTYLEAVE1 compiled
+
+
+Function PLCLCOMBINECHECK compiled
+
+
+Function PUNCHCOUNT compiled
+
+
+Function SANJAYX compiled
+
+
+Function SEC_TO_CHAR compiled
+
+
+Function SHIFT_WORK_HRS compiled
+
+
+Function SLCHECK compiled
+
+
+Function SL_APPCOUNT compiled
+
+
+Function SS_MONTH_WRK_HRS compiled
+
+
+Function SUMSL_APPCOUNT compiled
+
+
+Function TOTWRKHRS compiled
+
+
+Function TO_HRS compiled
+
+
+Function WORKEDHRS1 compiled
+
+
+Function WORKEDHRS11 compiled
+
+
+Function WORKEDHRS2 compiled
+
+
+Function WORKEDHRS3 compiled
+
+
+Table "SS_PUNCH_UP_TO_20071231" altered.
+
+
+Table "SS_PUNCH_UP_TO_20071231" altered.
+
+
+Table "SS_PUNCH_UP_TO_20071231" altered.
+
+
+Table "SS_PUNCH_UP_TO_20071231" altered.
+
+
+Table "SS_DESKREFILL" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINE_COVID_EMP.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_COVID_EMP" MODIFY ("COVID_START_DATE" NOT NULL ENABLE)
+Error report -
+ORA-00942: table or view does not exist
+00942. 00000 -  "table or view does not exist"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINE_COVID_EMP.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_COVID_EMP" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-00942: table or view does not exist
+00942. 00000 -  "table or view does not exist"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINE_COVID_EMP.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_COVID_EMP" ADD CONSTRAINT "SWP_VACCINE_COVID_EMP_PK" PRIMARY KEY ("EMPNO", "COVID_START_DATE")
+  USING INDEX  ENABLE
+Error report -
+ORA-00942: table or view does not exist
+00942. 00000 -  "table or view does not exist"
+*Cause:    
+*Action:
+
+Table "ASSETADMIN1" altered.
+
+
+Table "ASSETADMIN1" altered.
+
+
+Table "PF_CONSENT_2011" altered.
+
+
+Table "SS_HOLIDAY_ATTENDANCE" altered.
+
+
+Table "SS_HOLIDAY_ATTENDANCE" altered.
+
+
+Table "SS_HOLIDAY_ATTENDANCE" altered.
+
+
+Table "SS_HOLIDAY_ATTENDANCE" altered.
+
+
+Table "SS_DELTAHRSBAL_OT" altered.
+
+
+Table "XDM_PENDING_PC_LOCK_20150925" altered.
+
+
+Table "XDM_PENDING_PC_LOCK_20150925" altered.
+
+
+Table "XDM_PENDING_PC_LOCK_20150925" altered.
+
+
+Table "SS_9794_ROLE_MASTER" altered.
+
+
+Table "SS_9794_ROLE_MASTER" altered.
+
+
+Table "SS_9794_ROLE_MASTER" altered.
+
+
+Table "SS_9794_ROLE_MASTER" altered.
+
+
+Table "SS_REPORT_FIELDS" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_FAMILY.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_FAMILY" MODIFY ("FAMILY_MEMBER_NAME" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_FAMILY.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_FAMILY" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_FAMILY.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_FAMILY" ADD CONSTRAINT "SWP_VACCINATION_OFFICE_FAM_PK" PRIMARY KEY ("EMPNO", "FAMILY_MEMBER_NAME")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_DESKASSIGNMENT_20091126" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_BUS_ROUTES.sql
+In command -
+  ALTER TABLE "SWP_BUS_ROUTES" MODIFY ("ROUTE_ID" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_BUS_ROUTES.sql
+In command -
+  ALTER TABLE "SWP_BUS_ROUTES" ADD CONSTRAINT "SWP_BUS_ROUTES_PK" PRIMARY KEY ("ROUTE_ID")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_PHOTOCONSENT" altered.
+
+
+Table "SS_PHOTOCONSENT" altered.
+
+
+Table "SS_ONDUTYAPP" altered.
+
+
+Table "SS_ONDUTYAPP" altered.
+
+
+Table "SS_ONDUTYAPP" altered.
+
+
+Table "SS_ONDUTYAPP" altered.
+
+
+Table "SS_LUNCHMAST" altered.
+
+
+Table "SS_PUNCH_20110426" altered.
+
+
+Table "SS_PUNCH_20110426" altered.
+
+
+Table "SS_PUNCH_20110426" altered.
+
+
+Table "SS_PUNCH_20110426" altered.
+
+
+Table "SS_PUNCH_20110426" altered.
+
+
+Table "SS_PUNCH_20110426" altered.
+
+
+Table "SS_LEAVELEDG" altered.
+
+
+Table "SS_DELEGATE" altered.
+
+
+Table "SS_DELEGATE" altered.
+
+
+Table "SS_PORTAL_NEWS" altered.
+
+
+Table "SS_PORTAL_NEWS" altered.
+
+
+Table "SS_EXTRAHOLIDAY" altered.
+
+
+Table "SS_9794_PUNCH_GENERATE_4_BT" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_16APR10" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_16APR10" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_16APR10" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_16APR10" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_16APR10" altered.
+
+
+Table "SS_SITE_ALLOWANCE_TRANS" altered.
+
+
+Table "SS_SITE_ALLOWANCE_TRANS" altered.
+
+
+Table "SS_SITE_ALLOWANCE_TRANS" altered.
+
+
+Table "SS_SITE_ALLOWANCE_TRANS" altered.
+
+
+Table "SS_EMPLPHOTOS" altered.
+
+
+Table "SS_EMPLPHOTOS" altered.
+
+
+Table "SS_EMPLPHOTOS" altered.
+
+
+Table "SS_EMPLPHOTOS" altered.
+
+
+Table "SS_NAVRATRI_2011" altered.
+
+
+Table "SS_DAYS_DETAILS_1" altered.
+
+
+Table "AD_TEMP" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_EMP_RESPONSE.sql
+In command -
+  ALTER TABLE "SWP_EMP_RESPONSE" MODIFY ("IS_ACCEPTED" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_EMP_RESPONSE.sql
+In command -
+  ALTER TABLE "SWP_EMP_RESPONSE" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_EMP_RESPONSE.sql
+In command -
+  ALTER TABLE "SWP_EMP_RESPONSE" ADD CONSTRAINT "SWP_EMP_RESPONSE_PK" PRIMARY KEY ("EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_DESKASSINMENT_20091118" altered.
+
+
+Table "SS_CLINIC" altered.
+
+
+Table "SS_CLINIC" altered.
+
+
+Table "SS_OTMASTER" altered.
+
+
+Table "SS_OTMASTER" altered.
+
+
+Table "SS_OTMASTER" altered.
+
+
+Table "XDM_LAPTOP" altered.
+
+
+Table "XDM_LAPTOP" altered.
+
+
+Table "SS_LEAVEAPP_DELETED" altered.
+
+
+Table "SS_LEAVEAPP_DELETED" altered.
+
+
+Table "AD_MOBILE" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE" MODIFY ("ATTENDING_VACCINATION" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE" MODIFY ("OFFICE_BUS" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE" MODIFY ("COWIN_REGTRD" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 8 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 9 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE" ADD CONSTRAINT "SWP_VACCINATION_OFFICE_PK" PRIMARY KEY ("EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_MONTHLY_CREDIT_MAST" altered.
+
+
+Table "SS_MONTHLY_CREDIT_MAST" altered.
+
+
+Table "SS_MONTHLY_CREDIT_MAST" altered.
+
+
+Table "SS_SITE_ALLOWANCE_ROLLOVER" altered.
+
+
+Table "SS_SITE_ALLOWANCE_ROLLOVER" altered.
+
+
+Table "SS_HSE_QUIZ_2" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_DETAIL" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_DETAIL" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_DETAIL" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_DETAIL" altered.
+
+
+Table "SS_LEAVE_BAL_MAX_LIMIT" altered.
+
+
+Table "SS_LEAVE_BAL_MAX_LIMIT" altered.
+
+
+Table "AD_SYNC_20151211" altered.
+
+
+Table "SS_USER_DEPT_RIGHTS_20150825" altered.
+
+
+Table "SS_USER_DEPT_RIGHTS_20150825" altered.
+
+
+Table "SS_DMS_STATUS2020" altered.
+
+
+Table "SS_DMS_STATUS2020" altered.
+
+
+Table "XDM_PENDING_PC_LOCK" altered.
+
+
+Table "XDM_PENDING_PC_LOCK" altered.
+
+
+Table "XDM_PENDING_PC_LOCK" altered.
+
+
+Table "XDM_PENDING_PC_LOCK" altered.
+
+
+Table "XDM_ASSETADD" altered.
+
+
+Table "XDM_ASSETADD" altered.
+
+
+Table "XDM_ASSETADD" altered.
+
+
+Table "XDM_ASSETADD" altered.
+
+
+Table "XDM_LOGINRIGHT_20150925" altered.
+
+
+Table "XDM_LOGINRIGHT_20150925" altered.
+
+
+Table "XDM_LOGINRIGHT_20150925" altered.
+
+
+Table "SS_CONTMAST" altered.
+
+
+Table "SS_CONTMAST" altered.
+
+
+Table "SS_SECRETARY_20081011" altered.
+
+
+Table "SS_OTDETAIL" altered.
+
+
+Table "SS_OTDETAIL" altered.
+
+
+Table "SS_OTDETAIL" altered.
+
+
+Table "XDM_NEWJOIN_TRANS" altered.
+
+
+Table "XDM_NEWJOIN_TRANS" altered.
+
+
+Table "XDM_NEWJOIN_TRANS" altered.
+
+
+Table "XDM_NEWJOIN_TRANS" altered.
+
+
+Table "SS_PUNCH_ALL" altered.
+
+
+Table "SS_PUNCH_ALL" altered.
+
+
+Table "SS_PUNCH_ALL" altered.
+
+
+Table "SS_PUNCH_ALL" altered.
+
+
+Table "SS_PUNCH_ALL" altered.
+
+
+Table "SS_PUNCH_ALL" altered.
+
+
+Table "SS_PUNCH_ALL" altered.
+
+
+Table "LL_REVIEWREMARKS_20141122" altered.
+
+
+Table "LL_REVIEWREMARKS_20141122" altered.
+
+
+Table "LL_REVIEWREMARKS_20141122" altered.
+
+
+Table "SS_CLINIC_DETAIL_20101129" altered.
+
+
+Table "SS_CLINIC_DETAIL_20101129" altered.
+
+
+Table "SS_CLINIC_DETAIL_20101129" altered.
+
+
+Table "SS_CLINIC_DETAIL_20101129" altered.
+
+
+Table "SS_LEAVETYPE" altered.
+
+
+Table "LL_ASSIGNMENT" altered.
+
+
+Table "LL_ASSIGNMENT" altered.
+
+
+Table "LL_ASSIGNMENT" altered.
+
+
+Table "QUIZ_MASTER" altered.
+
+
+Table "XDM_DESKLOCK" altered.
+
+
+Table "XDM_DESKLOCK" altered.
+
+
+Table "XDM_DESKLOCK" altered.
+
+
+Table "XDM_DESKLOCK" altered.
+
+
+Table "LL_CATEGORY" altered.
+
+
+Table "LL_CATEGORY" altered.
+
+
+Table "LL_CATEGORY" altered.
+
+
+Table "LL_CATEGORY" altered.
+
+
+Table "SS_9794_AUTOPUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_9794_AUTOPUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_9794_AUTOPUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_9794_AUTOPUNCH_DEL_BETWEEN" altered.
+
+
+Table "XDM_ASSETMODIFICATION" altered.
+
+
+Table "XDM_ASSETMODIFICATION" altered.
+
+
+Table "SS_DESKASSIGNMENT_20091127" altered.
+
+
+Table "SS_HSE_QUIZ" altered.
+
+
+Table "SS_HSE_QUIZ" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_LEAVE_UPLOAD_LOG" altered.
+
+
+Table "SS_PUNCH_BACKUP_20100226" altered.
+
+
+Table "SS_PUNCH_BACKUP_20100226" altered.
+
+
+Table "SS_PUNCH_BACKUP_20100226" altered.
+
+
+Table "SS_PUNCH_BACKUP_20100226" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_ISP.sql
+In command -
+  ALTER TABLE "SWP_ISP" MODIFY ("ISP_NAME" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_ISP.sql
+In command -
+  ALTER TABLE "SWP_ISP" ADD CONSTRAINT "SWP_ISP_PK" PRIMARY KEY ("ISP_NAME")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_HSESUGG.sql
+In command -
+  ALTER TABLE "SS_HSESUGG" ADD CONSTRAINT "TABLE1_PK" PRIMARY KEY ("SUGGNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02264: name already used by an existing constraint
+02264. 00000 -  "name already used by an existing constraint"
+*Cause:    The specified constraint name has to be unique.
+*Action:   Specify a unique constraint name for the constraint.
+
+Table "SS_HSESUGG" altered.
+
+
+Table "LL_MEMBERS" altered.
+
+
+Table "LL_MEMBERS" altered.
+
+
+Table "LL_MEMBERS" altered.
+
+
+Table "SS_PUNCH_AUTO" altered.
+
+
+Table "SS_PUNCH_AUTO" altered.
+
+
+Table "SS_PUNCH_AUTO" altered.
+
+
+Table "SS_PUNCH_AUTO" altered.
+
+
+Table "SS_BATCH_ERROR_MAST" altered.
+
+
+Table "SS_BATCH_ERROR_MAST" altered.
+
+
+Table "XDM_TASKFORCETRAN" altered.
+
+
+Table "XDM_TASKFORCETRAN" altered.
+
+
+Table "XDM_TASKFORCETRAN" altered.
+
+
+Table "XDM_TASKFORCETRAN" altered.
+
+
+Table "XDM_SECRETARY" altered.
+
+
+Table "XDM_SECRETARY" altered.
+
+
+Table "SS_PAYROLLTYPEMAST" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_USER_DEPT_RIGHTS.sql
+In command -
+  ALTER TABLE "SS_USER_DEPT_RIGHTS" MODIFY ("PARENT" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_USER_DEPT_RIGHTS.sql
+In command -
+  ALTER TABLE "SS_USER_DEPT_RIGHTS" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_USER_DEPT_RIGHTS.sql
+In command -
+  ALTER TABLE "SS_USER_DEPT_RIGHTS" ADD CONSTRAINT "SS_SECRETARY_RIGHTS_PK" PRIMARY KEY ("EMPNO", "PARENT")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_SITE_ALLOWANCE_PROCESSED" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PROCESSED" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PROCESSED" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PROCESSED" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PROCESSED" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PROCESSED" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PROCESSED" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_USER_TYPE_MAST.sql
+In command -
+  ALTER TABLE "SS_USER_TYPE_MAST" MODIFY ("USER_TYPE" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_USER_TYPE_MAST.sql
+In command -
+  ALTER TABLE "SS_USER_TYPE_MAST" ADD CONSTRAINT "SS_USER_TYPE_MAST_PK" PRIMARY KEY ("USER_TYPE")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "SS_TRAVELREQ" altered.
+
+
+Table "LL_COUNTRY" altered.
+
+
+Table "LL_COUNTRY" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_210612.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_210612" MODIFY ("ATTENDING_VACCINATION" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_210612.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_210612" MODIFY ("OFFICE_BUS" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_210612.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_210612" MODIFY ("COWIN_REGTRD" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 8 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_210612.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_210612" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Table "SS_HEALTH_EMP" altered.
+
+
+Table "SS_HEALTH_EMP" altered.
+
+
+Table "SS_NAVRATRI_2018" altered.
+
+
+Table "SS_HEALTH_HRD_24FEB15" altered.
+
+
+Table "XDM_ASSETADD_BACKUP" altered.
+
+
+Table "XDM_ASSETADD_BACKUP" altered.
+
+
+Table "XDM_ASSETADD_BACKUP" altered.
+
+
+Table "XDM_ASSETADD_BACKUP" altered.
+
+
+Table "SS_PUNCH_AUTO_TYPE_MAST" altered.
+
+
+Table "SS_PUNCH_AUTO_TYPE_MAST" altered.
+
+
+Table "SS_SHIFTMAST" altered.
+
+
+Table "SS_SHIFTMAST" altered.
+
+
+Table "QUIZ_PRQ03" altered.
+
+
+Table "SS_LEAVEAPP_REJECTED" altered.
+
+
+Table "SS_LEAVEAPP_REJECTED" altered.
+
+
+Table "SS_SITE_MAST" altered.
+
+
+Table "SS_ABSENT_LOP_REVERSE" altered.
+
+
+Table "SS_ABSENT_LOP_REVERSE" altered.
+
+
+Table "SS_ABSENT_LOP_REVERSE" altered.
+
+
+Table "SS_ABSENT_LOP_REVERSE" altered.
+
+
+Table "XDM_SOURCEDESK" altered.
+
+
+Table "XDM_SOURCEDESK" altered.
+
+
+Table "XDM_SOURCEDESK" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PERIOD_ADJ" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PERIOD_ADJ" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PERIOD_ADJ" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PERIOD_ADJ" altered.
+
+
+Table "SS_SITE_ALLOWANCE_PERIOD_ADJ" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HIST_051216" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HIST_051216" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HIST_051216" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HIST_051216" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HIST_051216" altered.
+
+
+Table "USERIDS_20210510" altered.
+
+
+Table "AD_DETAILS_20151211" altered.
+
+
+Table "SS_PL_REVISION_MAST" altered.
+
+
+Table "SS_PL_REVISION_MAST" altered.
+
+
+Table "SS_PL_REVISION_MAST" altered.
+
+
+Table "SS_PL_REVISION_MAST" altered.
+
+
+Table "SS_BATCH_LOG_MAST" altered.
+
+
+Table "SS_BATCH_LOG_MAST" altered.
+
+
+Table "SS_REJOIN" altered.
+
+
+Table "SS_REJOIN" altered.
+
+
+Table "SS_REJOIN" altered.
+
+
+Table "SS_REJOIN" altered.
+
+
+Table "SS_REJOIN" altered.
+
+
+Table "SS_LEAVEBAL" altered.
+
+
+Table "SS_BATCH_TYPE_MAST" altered.
+
+
+Table "SS_BATCH_TYPE_MAST" altered.
+
+
+Table "XDM_NEWJOIN_EMP" altered.
+
+
+Table "XDM_NEWJOIN_EMP" altered.
+
+
+Table "XDM_NEWJOIN_EMP" altered.
+
+
+Table "AD_SYNC" altered.
+
+
+Table "AD_SYNC" altered.
+
+
+Table "LL_RECORDED_20150123" altered.
+
+
+Table "LL_FUNCTIONCODE" altered.
+
+
+Table "LL_FUNCTIONCODE" altered.
+
+
+Table "LL_FUNCTIONCODE" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINE_DATES.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_DATES" MODIFY ("JAB1_DATE" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINE_DATES.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_DATES" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINE_DATES.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_DATES" ADD CONSTRAINT "SWP_VACCINE_DATES_PK" PRIMARY KEY ("EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "LL_REVIEWER_DOC" altered.
+
+
+Table "LL_REVIEWER_DOC" altered.
+
+
+Table "LL_REVIEWER_DOC" altered.
+
+
+Table "LL_REVIEWER_DOC" altered.
+
+
+Table "SS_CLINIC_DETAIL_20141210" altered.
+
+
+Table "SS_CLINIC_DETAIL_20141210" altered.
+
+
+Table "SS_CLINIC_DETAIL_20141210" altered.
+
+
+Table "SS_HALFDAYMAST" altered.
+
+
+Table "SS_DEPU_HIST" altered.
+
+
+Table "SS_DEPU_HIST" altered.
+
+
+Table "SS_DEPU_HIST" altered.
+
+
+Table "XDM_NEWJOIN_TRANS_20150401" altered.
+
+
+Table "XDM_NEWJOIN_TRANS_20150401" altered.
+
+
+Table "XDM_NEWJOIN_TRANS_20150401" altered.
+
+
+Table "SS_ONDUTY" altered.
+
+
+Table "SS_ONDUTY" altered.
+
+
+Table "SS_ONDUTY" altered.
+
+
+Table "SS_ONDUTY" altered.
+
+
+Table "SS_ACCENTURE_EMP" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_RELATION_MAST.sql
+In command -
+  ALTER TABLE "SWP_RELATION_MAST" MODIFY ("RELATION_CODE" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_RELATION_MAST.sql
+In command -
+  ALTER TABLE "SWP_RELATION_MAST" ADD CONSTRAINT "SWP_RELATION_MAST_PK" PRIMARY KEY ("RELATION_CODE")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Error starting at line : 8 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_RELATION_MAST.sql
+In command -
+  ALTER TABLE "SWP_RELATION_MAST" ADD CONSTRAINT "SWP_RELATION_MAST_CHK1" CHECK (relation_code = upper(relation_code)) ENABLE
+Error report -
+ORA-02264: name already used by an existing constraint
+02264. 00000 -  "name already used by an existing constraint"
+*Cause:    The specified constraint name has to be unique.
+*Action:   Specify a unique constraint name for the constraint.
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "SS_PUNCH_BAL" altered.
+
+
+Table "XDM_TRAN_HIST_20100416" altered.
+
+
+Table "XDM_TRAN_HIST_20100416" altered.
+
+
+Table "XDM_TRAN_HIST_20100416" altered.
+
+
+Table "XDM_TRAN_HIST_20100416" altered.
+
+
+Table "XDM_TRAN_HIST_20100416" altered.
+
+
+Table "XDM_ACTION_TYPE" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_MAST" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_MAST" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_MAST" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_MAST" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_MAST" altered.
+
+
+Table "SS_CLINIC_LIMIT" altered.
+
+
+Table "SS_CLINIC_LIMIT" altered.
+
+
+Table "SS_CLINIC_LIMIT" altered.
+
+
+Table "SS_CLINIC_LIMIT" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_TPL_VACCINE_BATCH_EMP.sql
+In command -
+  ALTER TABLE "SWP_TPL_VACCINE_BATCH_EMP" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_TPL_VACCINE_BATCH_EMP.sql
+In command -
+  ALTER TABLE "SWP_TPL_VACCINE_BATCH_EMP" ADD CONSTRAINT "SWP_TPL_VACCINE_BATCH_EMP_PK" PRIMARY KEY ("EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_HSE_INCIDENTREPORT" altered.
+
+
+Table "SS_HSE_INCIDENTREPORT" altered.
+
+
+Table "SS_SWIPE_MACH_MAST" altered.
+
+
+Table "SS_SWIPE_MACH_MAST" altered.
+
+
+Table "SS_HEALTH_EMP_24FEB15" altered.
+
+
+Table "XDM_EMP_LEFT" altered.
+
+
+Table "XDM_EMP_LEFT" altered.
+
+
+Table "XDM_EMP_LEFT" altered.
+
+
+Table "SS_9794_EMP_ROLES" altered.
+
+
+Table "SS_9794_EMP_ROLES" altered.
+
+
+Table "SS_9794_EMP_ROLES" altered.
+
+
+Table "XDM_ASSETADD_16APR10" altered.
+
+
+Table "XDM_ASSETADD_16APR10" altered.
+
+
+Table "XDM_ASSETADD_16APR10" altered.
+
+
+Table "XDM_ASSETADD_16APR10" altered.
+
+
+Table "SS_BL_LO_MAST" altered.
+
+
+Table "SS_BL_LO_MAST" altered.
+
+
+Table "SS_BL_LO_MAST" altered.
+
+
+Table "SS_9794_PUNCH_REQUIRED_1" altered.
+
+
+Table "SS_9794_PUNCH_REQUIRED_1" altered.
+
+
+Table "SS_LEAVE_ADJ_MAST" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN" altered.
+
+
+Table "SS_OT_DETAILS_4_YEAR" altered.
+
+
+Table "SS_OT_DETAILS_4_YEAR" altered.
+
+
+Table "XDM_LOGINRIGHT" altered.
+
+
+Table "XDM_LOGINRIGHT" altered.
+
+
+Table "XDM_LOGINRIGHT" altered.
+
+
+Table "XDM_LOGINRIGHT" altered.
+
+
+Table "SS_DELTAHRSBAL" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HISTORY" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HISTORY" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HISTORY" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HISTORY" altered.
+
+
+Table "XDM_ASSETMOVE_TRAN_HISTORY" altered.
+
+
+Table "SS_EMP_TRANSFER" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\USERIDS.sql
+In command -
+  ALTER TABLE "USERIDS" ADD PRIMARY KEY ("EMPNO", "DOMAIN")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "USERIDS" altered.
+
+
+Table "SS_REPORT_MAST" altered.
+
+
+Table "SS_CONSCENT" altered.
+
+
+Table "SS_CONSCENT" altered.
+
+
+Table "LL_APPROVER" altered.
+
+
+Table "LL_APPROVER" altered.
+
+
+Table "SS_TEMP_DESK_ASSIGN" altered.
+
+
+Table "AD_TEMP_1" altered.
+
+
+Table "SS_9794_EMP_LIST" altered.
+
+
+Table "SS_9794_EMP_LIST" altered.
+
+
+Table "SS_9794_EMP_LIST" altered.
+
+
+Table "EMP_PAYROLL" altered.
+
+
+Table "SS_SECRETARY_REP" altered.
+
+
+Table "DATA001" altered.
+
+
+Table "SS_MUSTER_20120310" altered.
+
+
+Table "SS_MUSTER_20120310" altered.
+
+
+Table "XDM_DESKMASTER_VISIO_ID" altered.
+
+
+Table "XDM_DESKMASTER_VISIO_ID" altered.
+
+
+Table "SS_SITE_LOC_MAST" altered.
+
+
+Table "SS_SECRETARY_DESK" altered.
+
+
+Table "SS_SECRETARY_DESK" altered.
+
+
+Table "XDM_PCNAME" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "AD_DETAILS" altered.
+
+
+Table "AD_DETAILS" altered.
+
+
+Table "SS_ABSENT_TS_LEAVE" altered.
+
+
+Table "SS_ABSENT_TS_LEAVE" altered.
+
+
+Table "SS_ABSENT_TS_LEAVE" altered.
+
+
+Table "SS_ABSENT_TS_LEAVE" altered.
+
+
+Table "SS_ABSENT_TS_LEAVE" altered.
+
+
+Table "SS_ABSENT_TS_LEAVE" altered.
+
+
+Table "SS_ABSENT_TS_LEAVE" altered.
+
+
+Table "SS_CLINIC_DETAIL_20161114" altered.
+
+
+Table "SS_CLINIC_DETAIL_20161114" altered.
+
+
+Table "SS_CLINIC_DETAIL_20161114" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_TPL_VACCINE_BATCH.sql
+In command -
+  ALTER TABLE "SWP_TPL_VACCINE_BATCH" MODIFY ("BATCH_KEY_ID" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_TPL_VACCINE_BATCH.sql
+In command -
+  ALTER TABLE "SWP_TPL_VACCINE_BATCH" ADD CONSTRAINT "SWP_TPL_VACINE_BATCH_UK1" UNIQUE ("VACCINE_DATE")
+  USING INDEX  ENABLE
+Error report -
+ORA-02261: such unique or primary key already exists in the table
+02261. 00000 -  "such unique or primary key already exists in the table"
+*Cause:    Self-evident.
+*Action:   Remove the extra key.
+
+Error starting at line : 8 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_TPL_VACCINE_BATCH.sql
+In command -
+  ALTER TABLE "SWP_TPL_VACCINE_BATCH" ADD CONSTRAINT "SWP_TPL_VACINE_BATCH_PK" PRIMARY KEY ("BATCH_KEY_ID")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_CLINIC_DETAIL" altered.
+
+
+Table "SS_CLINIC_DETAIL" altered.
+
+
+Table "SS_CLINIC_DETAIL" altered.
+
+
+Table "SS_SITE_MUSTER" altered.
+
+
+Table "SS_SITE_MUSTER" altered.
+
+
+Table "SS_PUNCH_WFH" altered.
+
+
+Table "SS_PUNCH_WFH" altered.
+
+
+Table "SS_PUNCH_WFH" altered.
+
+
+Table "SS_PUNCH_WFH" altered.
+
+
+Table "SS_PUNCH_WFH" altered.
+
+
+Table "SS_PUNCH_WFH" altered.
+
+
+Table "SS_NAVRATRI_2017" altered.
+
+
+Table "SS_PUNCH_20100329" altered.
+
+
+Table "SS_PUNCH_20100329" altered.
+
+
+Table "SS_PUNCH_20100329" altered.
+
+
+Table "SS_PUNCH_20100329" altered.
+
+
+Table "SS_HEALTH_RPT" altered.
+
+
+Table "SS_HEALTH_RPT" altered.
+
+
+Table "SS_SUGGESTION" altered.
+
+
+Table "SS_SUGGESTION" altered.
+
+
+Table "SS_SUGGESTION" altered.
+
+
+Table "SS_SUGGESTION" altered.
+
+
+Table "SS_MUSTER" altered.
+
+
+Table "SS_MUSTER" altered.
+
+
+Table "SS_TABLETAG" altered.
+
+
+Table "LL_REVIEWREMARKS_20150123" altered.
+
+
+Table "LL_REVIEWREMARKS_20150123" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINE_MASTER.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_MASTER" MODIFY ("VACCINE_TYPE" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINE_MASTER.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_MASTER" ADD CONSTRAINT "SWP_VACCINE_MASTER_PK" PRIMARY KEY ("VACCINE_TYPE")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_DESKASSIGNMENT_25NOV_BACUP" altered.
+
+
+Table "XDM_DESKLOCK_BACKUP" altered.
+
+
+Table "XDM_DESKLOCK_BACKUP" altered.
+
+
+Table "XDM_DESKLOCK_BACKUP" altered.
+
+
+Table "XDM_DESKLOCK_BACKUP" altered.
+
+
+Table "SS_FILE_UPLOAD_LOG" altered.
+
+
+Table "SS_FILE_UPLOAD_LOG" altered.
+
+
+Table "SS_FILE_UPLOAD_LOG" altered.
+
+
+Table "SS_FILE_UPLOAD_LOG" altered.
+
+
+Table "SS_FILE_UPLOAD_LOG" altered.
+
+
+Table "SS_FILE_UPLOAD_LOG" altered.
+
+
+Table "SS_FILE_UPLOAD_LOG" altered.
+
+
+Table "SS_FILE_UPLOAD_LOG" altered.
+
+
+Table "SS_BATCH_STATUS_MAST" altered.
+
+
+Table "SS_BATCH_STATUS_MAST" altered.
+
+
+Table "SS_FIESTA_2011" altered.
+
+
+Table "SS_PUNCH_MANUAL" altered.
+
+
+Table "SS_PUNCH_MANUAL" altered.
+
+
+Table "SS_PUNCH_MANUAL" altered.
+
+
+Table "SS_PUNCH_MANUAL" altered.
+
+
+Table "SS_PUNCH_MANUAL" altered.
+
+
+Table "SS_PUNCH_MANUAL" altered.
+
+
+Table "SS_PUNCH_200604_17_18_19" altered.
+
+
+Table "SS_PUNCH_200604_17_18_19" altered.
+
+
+Table "SS_PUNCH_200604_17_18_19" altered.
+
+
+Table "SS_PUNCH_200604_17_18_19" altered.
+
+
+Table "SS_ABSENT_TS_LOP_REVERSE" altered.
+
+
+Table "SS_ABSENT_TS_LOP_REVERSE" altered.
+
+
+Table "SS_ABSENT_TS_LOP_REVERSE" altered.
+
+
+Table "ASSETADMIN" altered.
+
+
+Table "SS_MUSTER_4ALLOWANCE" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("MS_AUTH_ON_OWN_MOB" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("MODIFIED_ON" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("ROUTER_MODEL" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 8 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("ROUTER_BRAND" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 9 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("ISP_NAME" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 10 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("MONTHLY_QUOTA" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 11 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("UPLOAD_SPEED" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 12 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("DOWNLOAD_SPEED" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 13 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 14 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_IT_PREREQUISITES.sql
+In command -
+  ALTER TABLE "SWP_IT_PREREQUISITES" ADD CONSTRAINT "SWP_IT_PREREQUISITES_PK" PRIMARY KEY ("EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_HSE_QUIZ_3" altered.
+
+
+Table "SS_PL_REVISION_APP" altered.
+
+
+Table "SS_PL_REVISION_APP" altered.
+
+
+Table "XDM_DESKLOCK_16APR10" altered.
+
+
+Table "XDM_DESKLOCK_16APR10" altered.
+
+
+Table "XDM_DESKLOCK_16APR10" altered.
+
+
+Table "XDM_DESKLOCK_16APR10" altered.
+
+
+Table "SS_DATATYPE" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_LEAD_APPROVER.sql
+In command -
+  ALTER TABLE "SS_LEAD_APPROVER" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_LEAD_APPROVER.sql
+In command -
+  ALTER TABLE "SS_LEAD_APPROVER" MODIFY ("PARENT" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_LEAD_APPROVER.sql
+In command -
+  ALTER TABLE "SS_LEAD_APPROVER" ADD CONSTRAINT "SS_LEAD_APPROVER_PK" PRIMARY KEY ("PARENT", "EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "XDM_ASSET_OFFICE" altered.
+
+
+Table "XDM_ASSET_OFFICE" altered.
+
+
+Table "XDM_ASSET_OFFICE" altered.
+
+
+Table "QUIZ_TP_XLS" altered.
+
+
+Table "XDM_TARGETDESK" altered.
+
+
+Table "XDM_TARGETDESK" altered.
+
+
+Table "XDM_TARGETDESK" altered.
+
+
+Table "SS_FEEDBACK" altered.
+
+
+Table "SS_FEEDBACK" altered.
+
+
+Table "SS_FEEDBACK" altered.
+
+
+Table "XDM_DESKLOCK_ERR" altered.
+
+
+Table "XDM_DESKLOCK_ERR" altered.
+
+
+Table "XDM_DESKLOCK_ERR" altered.
+
+
+Table "XDM_DESKLOCK_ERR" altered.
+
+
+Table "SS_HR_FRM_MENU" altered.
+
+
+Table "SS_PUNCH" altered.
+
+
+Table "SS_PUNCH" altered.
+
+
+Table "SS_PUNCH" altered.
+
+
+Table "SS_PUNCH" altered.
+
+
+Table "SS_PUNCH" altered.
+
+
+Table "SS_PUNCH" altered.
+
+
+Table "SS_PUNCH" altered.
+
+
+Table "LL_RECORDED" altered.
+
+
+Table "SS_SITE_MUSTER_TEMP" altered.
+
+
+Table "SS_LEAVEAPP" altered.
+
+
+Table "SS_LEAVEAPP" altered.
+
+
+Table "SS_LEAVEAPP" altered.
+
+
+Table "SS_NAVRATRI_2019" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_USERMAST.sql
+In command -
+  ALTER TABLE "SS_USERMAST" MODIFY ("ACTIVE" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SS_USERMAST.sql
+In command -
+  ALTER TABLE "SS_USERMAST" ADD CONSTRAINT "PK_EMPNO_TYPE_USERMAST" PRIMARY KEY ("EMPNO", "TYPE")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_USB_REQUEST" altered.
+
+
+Table "SS_USB_REQUEST" altered.
+
+
+Table "LL_ORIGINATOR" altered.
+
+
+Table "XDM_DESKMASTER_VISIO_BACKUP" altered.
+
+
+Table "SS_DESKASSIGNMENT" altered.
+
+
+Table "SS_DESKASSIGNMENT" altered.
+
+
+Table "SS_DESKASSIGNMENT" altered.
+
+
+Table "XDM_ASSETADD_ERR" altered.
+
+
+Table "XDM_ASSETADD_ERR" altered.
+
+
+Table "XDM_ASSETADD_ERR" altered.
+
+
+Table "XDM_ASSETADD_ERR" altered.
+
+
+Table "XDM_ASSETADD_ERR" altered.
+
+
+Table "SS_SITE_EMPLOYEE" altered.
+
+
+Table "SS_SITE_EMPLOYEE" altered.
+
+
+Table "SS_SITE_EMPLOYEE" altered.
+
+
+Table "SS_SITE_EMPLOYEE" altered.
+
+
+Table "SS_HEALTH_BILLMAST" altered.
+
+
+Table "SS_HEALTH_BILLMAST" altered.
+
+
+Table "SS_HEALTH_BILLMAST" altered.
+
+
+Table "LL_RECORDED_20141122" altered.
+
+
+Table "LL_RECORDED_20141122" altered.
+
+
+Table "SS_ONDUTYMAST" altered.
+
+
+Table "SS_HEALTH_BILL" altered.
+
+
+Table "SS_HEALTH_BILL" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_EMP_TRAINING_TEMP.sql
+In command -
+  ALTER TABLE "SWP_EMP_TRAINING_TEMP" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Table "SS_LOCK_OT_HRS_DOWNLOAD_PERIOD" altered.
+
+
+Table "SS_LOCK_OT_HRS_DOWNLOAD_PERIOD" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_EMP_WITH_COMP_MOB.sql
+In command -
+  ALTER TABLE "SWP_EMP_WITH_COMP_MOB" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_EMP_WITH_COMP_MOB.sql
+In command -
+  ALTER TABLE "SWP_EMP_WITH_COMP_MOB" ADD CONSTRAINT "SWP_EMP_WITH_COMP_MOB_PK" PRIMARY KEY ("EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_SHIFTMAST_20090401" altered.
+
+
+Table "SS_SHIFTMAST_20090401" altered.
+
+
+Table "SS_LDAP_LIST" altered.
+
+
+Table "SS_EMP_COMP_LASTDATE_4_MUSTER" altered.
+
+
+Table "SS_DEPU" altered.
+
+
+Table "SS_DEPU" altered.
+
+
+Table "QUIZ_PRQ02" altered.
+
+
+Table "XDM_GUESTMASTER" altered.
+
+
+Table "XDM_GUESTMASTER" altered.
+
+
+Table "XDM_GUESTMASTER" altered.
+
+
+Table "XDM_GUESTMASTER" altered.
+
+
+Table "XDM_GUESTMASTER" altered.
+
+
+Table "SS_HEALTH_HRD" altered.
+
+
+Table "SS_HEALTH_HRD" altered.
+
+
+Table "SS_DAYS_DETAILS" altered.
+
+
+Table "SS_9794_PUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_9794_PUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_9794_PUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_9794_PUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_9794_PUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_9794_PUNCH_DEL_BETWEEN" altered.
+
+
+Table "SS_OFFICE_MAST" altered.
+
+
+Table "SS_OFFICE_MAST" altered.
+
+
+Table "SS_OT_DOWNLOAD_DBF_LOCK" altered.
+
+
+Table "SS_OT_DOWNLOAD_DBF_LOCK" altered.
+
+
+Table "SS_OT_DOWNLOAD_DBF_LOCK" altered.
+
+
+Table "SS_NAVRATRI" altered.
+
+
+Table "SS_NAVRATRI" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_EMP_TRAINING.sql
+In command -
+  ALTER TABLE "SWP_EMP_TRAINING" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_EMP_TRAINING.sql
+In command -
+  ALTER TABLE "SWP_EMP_TRAINING" ADD CONSTRAINT "SWP_EMP_TRAINING_PK" PRIMARY KEY ("EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "SS_HOLIDAY_15NOV2012" altered.
+
+
+Table "XDM_EMAILID" altered.
+
+
+Table "XDM_EMAILID" altered.
+
+
+Table "XDM_EMAILID" altered.
+
+
+Table "PRINT_LOG" altered.
+
+
+Table "PRINT_LOG" altered.
+
+
+Table "LL_REVIEWREMARKS" altered.
+
+
+Table "LL_REVIEWREMARKS" altered.
+
+
+Table "EMP_WEEK_SELECTED" altered.
+
+
+Table "EMP_WEEK_SELECTED" altered.
+
+
+Table "FTP_ADMIN_USER" altered.
+
+
+Table "FTP_ADMIN_USER" altered.
+
+
+Table "XDM_LAPTOP_PERMT" altered.
+
+
+Table "XDM_LAPTOP_PERMT" altered.
+
+
+Table "XDM_LAPTOP_PERMT" altered.
+
+
+Table "XDM_LAPTOP_PERMT" altered.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" altered.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" altered.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" altered.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" altered.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" altered.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" altered.
+
+
+Table "SS_PUNCHBACKUP_20070711" altered.
+
+
+Table "SS_PUNCHBACKUP_20070711" altered.
+
+
+Table "SS_PUNCHBACKUP_20070711" altered.
+
+
+Table "SS_PUNCHBACKUP_20070711" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_BATCH_2.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_BATCH_2" MODIFY ("JAB_NUMBER" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 6 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_BATCH_2.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_BATCH_2" MODIFY ("PREFERRED_DATE" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 7 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_BATCH_2.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_BATCH_2" MODIFY ("VACCINATION_FOR" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 8 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_BATCH_2.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_BATCH_2" MODIFY ("EMPNO" NOT NULL ENABLE)
+Error report -
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+01442. 00000 -  "column to be modified to NOT NULL is already NOT NULL"
+*Cause:    
+*Action:
+
+Error starting at line : 9 File @ D:\OracleProjects\SelfService\CONSTRAINTS\SWP_VACCINATION_OFFICE_BATCH_2.sql
+In command -
+  ALTER TABLE "SWP_VACCINATION_OFFICE_BATCH_2" ADD CONSTRAINT "SWP_VACCINATION_OFFICE_BAT_PK" PRIMARY KEY ("EMPNO")
+  USING INDEX  ENABLE
+Error report -
+ORA-02260: table can have only one primary key
+02260. 00000 -  "table can have only one primary key"
+*Cause:    Self-evident.
+*Action:   Remove the extra primary key.
+
+Table "XDM_EMPADD" altered.
+
+
+Table "XDM_EMPADD" altered.
+
+
+Table "XDM_EMPADD" altered.
+
+
+Table "SS_FILE_UPLOAD_PARAM" altered.
+
+
+Table "SS_PUNCH_BACKUP_20061031" altered.
+
+
+Table "SS_PUNCH_BACKUP_20061031" altered.
+
+
+Table "SS_PUNCH_BACKUP_20061031" altered.
+
+
+Table "SS_PUNCH_BACKUP_20061031" altered.
+
+
+Table "XDM_ASSET_MODIFY" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "SS_TRAVELREQ_200100218" altered.
+
+
+Table "XDM_ASSETTYPE" altered.
+
+
+Table "XDM_ASSETTYPE" altered.
+
+
+Table "SS_9794_EMP_ROLES" altered.
+
+
+Table "SS_BATCH_LOG_DETAILS" altered.
+
+
+Table "SS_BATCH_LOG_MAST" altered.
+
+
+Table "SS_BATCH_LOG_MAST" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_DETAIL" altered.
+
+
+Table "SS_BUSLATE_LAYOFF_MAST" altered.
+
+
+Table "SS_HALFDAYMAST" altered.
+
+
+Table "SS_HALFDAYMAST" altered.
+
+
+Table "SS_LEAVEAPP" altered.
+
+
+Table "SS_LEAVELEDG" altered.
+
+
+Table "SS_LEAVE_ADJ" altered.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" altered.
+
+
+Table "SS_LEAVE_UPLOAD_TEMP" altered.
+
+
+Table "SS_LUNCHMAST" altered.
+
+
+Table "SS_LUNCHMAST" altered.
+
+
+Table "SS_ONDUTY" altered.
+
+
+Table "SS_ONDUTYAPP" altered.
+
+
+Table "SS_ONDUTYMAST" altered.
+
+
+Table "SS_OTDETAIL" altered.
+
+
+Table "SS_PUNCH_AUTO" altered.
+
+
+Table "SS_REPORT_FIELDS" altered.
+
+
+Table "SS_REPORT_FIELDS" altered.
+
+
+Table "SS_SITE_EMPLOYEE" altered.
+
+
+Table "SS_SITE_MAST" altered.
+
+
+Table "SS_SITE_MUSTER" altered.
+
+
+Table "SS_SITE_MUSTER_TEMP" altered.
+
+
+Table "SS_SWIPE_MACH_MAST" altered.
+
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\REF_CONSTRAINTS\SS_USERMAST.sql
+In command -
+  ALTER TABLE "SS_USERMAST" ADD CONSTRAINT "SS_USERMAST_FK1" FOREIGN KEY ("TYPE")
+	  REFERENCES "SS_USER_TYPE_MAST" ("USER_TYPE") ENABLE
+Error report -
+ORA-02275: such a referential constraint already exists in the table
+02275. 00000 -  "such a referential constraint already exists in the table"
+*Cause:    Self-evident.
+*Action:   Remove the extra constraint.
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\REF_CONSTRAINTS\SWP_TPL_VACCINE_BATCH_EMP.sql
+In command -
+  ALTER TABLE "SWP_TPL_VACCINE_BATCH_EMP" ADD CONSTRAINT "SWP_TPL_VACCINE_BATCH_EMP_FK1" FOREIGN KEY ("BATCH_KEY_ID")
+	  REFERENCES "SWP_TPL_VACCINE_BATCH" ("BATCH_KEY_ID") ENABLE
+Error report -
+ORA-02275: such a referential constraint already exists in the table
+02275. 00000 -  "such a referential constraint already exists in the table"
+*Cause:    Self-evident.
+*Action:   Remove the extra constraint.
+
+Error starting at line : 5 File @ D:\OracleProjects\SelfService\REF_CONSTRAINTS\SWP_VACCINE_DATES.sql
+In command -
+  ALTER TABLE "SWP_VACCINE_DATES" ADD CONSTRAINT "SWP_VACCINE_DATES_FK1" FOREIGN KEY ("VACCINE_TYPE")
+	  REFERENCES "SWP_VACCINE_MASTER" ("VACCINE_TYPE") ENABLE
+Error report -
+ORA-02275: such a referential constraint already exists in the table
+02275. 00000 -  "such a referential constraint already exists in the table"
+*Cause:    Self-evident.
+*Action:   Remove the extra constraint.

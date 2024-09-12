@@ -1,0 +1,27 @@
+--------------------------------------------------------
+--  DDL for Function FINAL_TMA_ORDER
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "TIMECURR"."FINAL_TMA_ORDER" (inPROJNO PROJMAST.PROJNO%TYPE,inACTIVE PROJMAST.ACTIVE%TYPE,inPROJTYPE PROJMAST.PROJTYPE%TYPE,inCDATE PROJMAST.CDATE%TYPE,inYYMM VARCHAR2,inDATE VARCHAR2,inECDATE PROJMAST.CDATE%TYPE) RETURN CHAR IS
+   RETURN_VALUE CHAR(1);
+   DUMMY PROJMAST.PROJNO%TYPE;
+BEGIN
+   IF inACTIVE > 0 THEN
+       RETURN_VALUE := 'A';
+       if to_CHAR(inECDATE,'YYYYMM') < inYYMM then
+           RETURN_VALUE := 'B';
+         end if;
+   ELSE
+      IF inCDATE > inDATE THEN
+         RETURN_VALUE := 'C';
+      END IF;
+   END IF;
+   RETURN RETURN_VALUE;
+   EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+        RETURN 'D';
+  WHEN OTHERS THEN
+       RETURN 'D';
+END;
+
+/

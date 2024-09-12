@@ -1,0 +1,9 @@
+--------------------------------------------------------
+--  Constraints for Table AFC_CURRENCIES
+--------------------------------------------------------
+
+  ALTER TABLE "AFC_CURRENCIES" MODIFY ("IS_ACTIVE" NOT NULL ENABLE);
+  ALTER TABLE "AFC_CURRENCIES" ADD PRIMARY KEY ("CURRENCY_KEY_ID")
+  USING INDEX  ENABLE;
+  ALTER TABLE "AFC_CURRENCIES" MODIFY ("CURRENCY_DESC" NOT NULL ENABLE);
+  ALTER TABLE "AFC_CURRENCIES" MODIFY ("CURRENCY_CODE" NOT NULL ENABLE);

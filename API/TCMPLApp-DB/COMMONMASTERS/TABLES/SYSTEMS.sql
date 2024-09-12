@@ -1,0 +1,13 @@
+--------------------------------------------------------
+--  DDL for Table SYSTEMS
+--------------------------------------------------------
+
+  CREATE TABLE "COMMONMASTERS"."SYSTEMS" 
+   (	"APPL_ID" VARCHAR2(3), 
+	"APPL_DESC" VARCHAR2(50), 
+	"SCHEMANAME" VARCHAR2(25), 
+	"SP_NAME" VARCHAR2(100)
+   ) ;
+  GRANT INSERT ON "COMMONMASTERS"."SYSTEMS" TO "STATIONERY";
+  GRANT DELETE ON "COMMONMASTERS"."SYSTEMS" TO "STATIONERY";
+  GRANT SELECT ON "COMMONMASTERS"."SYSTEMS" TO "STATIONERY";

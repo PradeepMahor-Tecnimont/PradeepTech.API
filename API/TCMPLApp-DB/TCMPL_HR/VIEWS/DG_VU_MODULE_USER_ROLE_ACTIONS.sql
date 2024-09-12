@@ -1,0 +1,7 @@
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "TCMPL_HR"."DG_VU_MODULE_USER_ROLE_ACTIONS" ("MODULE_ID", "ACTION_ID", "ACTION_NAME", "ACTION_DESC", "ROLE_ID", "EMPNO", "COSTCODE") AS 
+  Select
+        "MODULE_ID", "ACTION_ID", "ACTION_NAME", "ACTION_DESC", "ROLE_ID", "EMPNO", "COSTCODE"
+    From
+        tcmpl_app_config.vu_module_user_role_actions_4_dg;
+

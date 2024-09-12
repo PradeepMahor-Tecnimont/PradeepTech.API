@@ -1,0 +1,1 @@
+Create Or Replace Type selfservice.typ_tab_dept_code Is Table Of typ_dept_code;

@@ -1,0 +1,1 @@
+Create Or Replace Type selfservice.typ_tab_empno Is Table Of typ_empno;

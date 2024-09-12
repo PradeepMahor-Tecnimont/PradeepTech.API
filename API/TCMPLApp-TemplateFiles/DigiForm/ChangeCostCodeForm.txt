@@ -1,0 +1,122 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        html {
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: rgb(204,204,204);
+            height: 100%;
+        }
+
+        .page:last-of-type {
+            margin-bottom: -2px;
+        }
+
+        page {
+            background: white;
+            display: block;
+            margin: 0 Auto;
+            margin-bottom: 0.5cm;
+        }
+
+            page[size="A4"] {
+                width: 21cm;
+                height: 29.7cm;
+                padding: 25px 50px 0px 100px;
+            }
+
+        #parentdiv, table {
+            font-size: 12px;
+            font-style: normal;
+        }
+
+        .title {
+            font-size: 16px;
+        }
+
+        .tabDetails {
+            border-collapse: collapse;
+            border: 1px solid #000;
+        }
+
+            .tabDetails td {
+                padding: 5px;
+                border: 1px solid #000;
+            }
+
+        @@media print {
+            table:last-of-type {
+                page-break-after: auto;
+            }
+
+            html, body {
+                height: 100%;
+            }
+
+            #buttonArea {
+                display: none;
+            }
+
+            page {
+                background: white;
+                display: block;
+                margin: 0;
+                margin-bottom: 0.5cm;
+            }
+        }
+    </style>
+</head>
+<body>
+<page size="A4">
+<p style="text-align: center;"></p>
+<p style="text-align: center;"><strong>"Change of Cost Centre Code Form"</strong></p>
+<p style="text-align: right;">Date: <strong>PDate</strong></p>
+<p style="text-align: left;">From :<br />Mr./Ms. : <strong><span style="text-decoration: underline;">PFromNameOfEmp</span></strong> <br />Dept.&nbsp; &nbsp; : <strong>PFromDept</strong></p>
+<p style="text-align: left;"><br />To,&nbsp;<br />General Manager - HR</p>
+<p style="text-align: left;"><br />Kindly implement the following change(s):</p>
+<table border="1" style="border-collapse: collapse; width: 0%; height: 43px;">
+<tbody>
+<tr style="height: 25px;">
+<td style="width: 4.28%; height: 25px; text-align: center;">Sr.No.</td>
+<td style="width: 24.28%; height: 25px; text-align: center;">Name of the Employee(s)</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">Emp.No.</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">Present Parent Cost Centre Code</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">Cost Centre Code on Permanent Transfer</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">Date of Transfer</td>
+<td style="width: 14.28%; height: 25px; text-align: center;">Remark</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 4.28%; height: 18px; text-align: center;"><strong>1</strong></td>
+<td style="width: 24.28%; height: 18px; text-align: center;"><strong>PNameOfEmp</strong></td>
+<td style="width: 14.28%; height: 18px; text-align: center;"><strong>PEmpNo</strong></td>
+<td style="width: 14.28%; height: 18px; text-align: center;"><strong>PParentCode</strong></td>
+<td style="width: 14.28%; height: 18px; text-align: center;"><strong>PAssignCode</strong></td>
+<td style="width: 14.28%; height: 18px; text-align: center;"><strong>PTransferDate</strong></td>
+<td style="width: 14.28%; height: 18px; text-align: center;"><strong>PRemarks</strong></td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p>Regards,</p>
+<p></p>
+<p><strong>PHodOfParentCostCode</strong> <br />------------------------------------------------------------------------------------------------------------------<br />I agree for the permanent transfer of above employee(s) in my cost code centre effective&nbsp; <strong>PEffectiveDate</strong></p>
+<p>Regards,</p>
+<p><br /><strong>PHodOfTransferredCostCentre</strong><br />Date: <strong>PHodDate</strong></p>
+<hr />
+<p style="text-align: center;">( To be filled by Human Resources)</p>
+<p style="text-align: right;">Date : <strong>PHrDate</strong></p>
+<p>To,<br />1. <strong>PHodOfParentCostCode</strong><br />( Name of HOD of Present Cost Centre Code)</p>
+<p><br />2. <strong>PHodOfTransferCostCode</strong><br />( Name of HOD of transferred Cost Centre Code)</p>
+<p><br />Your request for permanent transfer has been implemented and Mr./Ms. <strong><span style="text-decoration: underline;">PNameOfEmp</span> </strong>has been<br />redesigned as "<span style="text-decoration: underline;"><strong> PRedesigned</strong> </span>".</p>
+<p><br />Regards,</p>
+<p><br /><strong>Sr.General Manager - HR</strong></p>
+<p></p>
+
+</page>
+</body>
+</html>

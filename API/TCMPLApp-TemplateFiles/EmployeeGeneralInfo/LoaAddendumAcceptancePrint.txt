@@ -1,0 +1,112 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        html {
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: rgb(204,204,204);
+            height: 100%;
+        }
+
+        .page:last-of-type {
+            margin-bottom: -2px;
+        }
+
+        page {
+            background: white;
+            display: block;
+            margin: 0 Auto;
+            margin-bottom: 0.5cm;
+        }
+
+            page[size="A4"] {
+                width: 21cm;
+                padding: 10px 20px 0px 20px;
+            }
+
+        #parentdiv, table {
+            font-size: 12px;
+            font-style: normal;
+        }
+
+        .title {
+            font-size: 16px;
+        }
+
+        .tabDetails {
+            border-collapse: collapse;
+            border: 1px solid #000;
+        }
+
+            .tabDetails td {
+                padding: 5px;
+                border: 1px solid #000;
+            }
+
+        @@media print {
+            table:last-of-type {
+                page-break-after: auto;
+            }
+
+            html, body {
+                height: 100%;
+            }
+
+            #buttonArea {
+                display: none;
+            }
+
+            page {
+                background: white;
+                display: block;
+                margin: 0;
+                margin-bottom: 0.5cm;
+            }
+        }
+    </style>
+</head>
+
+<body style="font-size:13px;font-family: sans-serif;">
+<page size="A4" >
+<table style="border-collapse: collapse; width: 100%;" border="0">
+	<tbody>
+		<tr>
+			<td style="width:70%">
+				<img src="maire_logo_large.png" alt="Tecnimont Pvt Ltd" style="width:350"/>
+			</td>                
+			<td style="width:30%;text-align: right;vertical-align:top;">
+				<span>&nbsp;</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div>
+<p>Dated : - <b>PCommunicationDate</b></p>
+<p>To,</p>
+<p><span>PNameOfEmp</span>&nbsp;&nbsp;<span>(PEmpNo)</span></strong></p>
+<p>Tecnimont Private Limited</p>
+<p style="text-decoration:underline"><b>Sub: - Addendum to the Appointment Letter</b></p>
+<p>Dear PNameOfEmp,</p>
+<p style="text-align: justify;">On behalf of Tecnimont Private Limited, a company incorporated under the laws of India with its registered office at Tecnimont House, Chincholi Bunder, 504, Link Road, Malad (West), Mumbai - 400064, India (<b>"Company"</b>), we would like to inform you that pursuant to the review of the internal human resources policy and processes by the Company&apos;s management, the Company would like to carry out certain amendment to your appointment letter (<b>"Letter"</b>) whereby the Company had offered and you had accepted a position in the Company as an employee as well as the terms and conditions of your employment as set out in the Letter.</p>
+<p style="text-align: justify;">This addendum to the Letter (<b>"Addendum"</b>), will be a legally binding agreement read with the Letter. The Company and you shall hereinafter collectively be referred to as the <b>"Parties"</b>.</p>
+<p>A.	The additional terms and conditions set out herein below shall form an integral part of the Letter.</p>
+<p style="padding-left:15px;text-decoration:underline;">1.	Adherence to the Policies of the Company / Maire Group</p>
+<p style="padding-left:35px;text-align: justify;">You will, in addition to the terms and conditions of employment specifically stated herein, also be governed by the rules, regulations and such other practices, systems, procedures and policies framed, amended, modified or omitted by the Company from time to time including but not limited to the Code of Ethics, Business Integrity Policy, the Activation Matrices, Guidelines of the Maire Group on Privacy as well as all the policies, guidelines and rules defined in the Maire Group document management system to the extent applicable shall be binding on you and are an integral part of your contractual obligations with the Company and you declare to have carefully read and take due note of these documents and fully accept their contents.</p>
+<p style="padding-left:15px;text-decoration:underline;">2.	Market Abuse Regulations </p>
+<p style="padding-left:35px;text-align: justify;">You are also hereby made aware that the Company is controlled by Maire Tecnimont S.p.A. that is a joint stock company whose financial instruments are traded on the "EuroNext Milan" regulated market organized and managed by Borsa Italiana S.p.A. Therefore, the Company is subject - among the others - to the mandatory provisions of European Union Regulation no. 596/2014 of the European Parliament and of the Council of 16 April 2014 (so-called "Market Abuse Regulation"). The Company therefore invites you to read the "Procedure for managing Inside Information and Potential Inside Information" available on the website of Maire Tecnimont S.p.A. <a href="#">www.mairetecnimont.com</a> (Section "Governance" - "Corporate Repository") adopted, pursuant to law and regulations in force, in order to ensure the correct management of corporate information and, in particular, of "Inside Information" regarding Maire Tecnimont S.p.A. and its subsidiaries. In particular, we invite you to read and become aware of the "Rules of Conduct" indicated therein, that all the employees of Maire Tecnimont S.p.A. and its subsidiaries, as well as collaborators, are required to comply with in relation to the duly execution of the tasks or assignments entrusted (see, in particular, Article 7 of the aforementioned Procedure).</p>
+<p style="text-align: justify;">B.	On and from the date of your acknowledgement of this Addendum in the manner as notified to you by the Company in writing, the additional terms and conditions as set out herein above shall form an integral part of the Letter. To the extent the said terms and conditions are already provided in the Letter, the Letter shall stand modified and be subject to the provisions set out herein above.</p>
+<p style="text-align: justify;">C.	In the event of any inconsistency with the provisions of above referred clauses and the Letter, the provisions of above referred clauses shall prevail.</p>
+<p style="text-align: justify;">D.	This Addendum constitutes and contains the entire agreement and understanding of the Parties with respect to the subject matter hereof and supersedes all previous communications, negotiations, commitments, agreements either oral or written between the Parties. </p>
+<p>I acknowledge that I have read the above terms and conditions, I accept and confirm the above. </p>
+<p>Employee No&nbsp;:&nbsp;&nbsp;<strong><span style="text-decoration: underline;">PEmpNo</span></strong></p>
+<p>Employee Name&nbsp;:&nbsp;&nbsp;<strong><span style="text-decoration: underline;">PNameOfEmp</span></strong></p>
+<p>Signature&nbsp;:&nbsp;&nbsp;<strong>PAcceptanceStatus</strong></p>
+</div>
+</page>
+</body>
+</html>

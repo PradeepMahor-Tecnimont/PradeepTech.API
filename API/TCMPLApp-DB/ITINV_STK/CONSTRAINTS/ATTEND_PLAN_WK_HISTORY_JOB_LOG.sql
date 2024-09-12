@@ -1,0 +1,7 @@
+--------------------------------------------------------
+--  Constraints for Table ATTEND_PLAN_WK_HISTORY_JOB_LOG
+--------------------------------------------------------
+
+  ALTER TABLE "ITINV_STK"."ATTEND_PLAN_WK_HISTORY_JOB_LOG" MODIFY ("JOB_DATE" NOT NULL ENABLE);
+  ALTER TABLE "ITINV_STK"."ATTEND_PLAN_WK_HISTORY_JOB_LOG" MODIFY ("REMARKS" NOT NULL ENABLE);
+  ALTER TABLE "ITINV_STK"."ATTEND_PLAN_WK_HISTORY_JOB_LOG" MODIFY ("WK_DATE" NOT NULL ENABLE);

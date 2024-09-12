@@ -1,0 +1,13 @@
+--------------------------------------------------------
+--  DDL for Table XL_BLOB
+--------------------------------------------------------
+
+  CREATE TABLE "COMMONMASTERS"."XL_BLOB" 
+   (	"BLOB_FIELD" BLOB, 
+	"KEY_ID" NUMBER, 
+	"MODIFIED_ON" DATE
+   ) ;
+  GRANT DELETE ON "COMMONMASTERS"."XL_BLOB" TO PUBLIC;
+  GRANT INSERT ON "COMMONMASTERS"."XL_BLOB" TO PUBLIC;
+  GRANT SELECT ON "COMMONMASTERS"."XL_BLOB" TO PUBLIC;
+  GRANT UPDATE ON "COMMONMASTERS"."XL_BLOB" TO PUBLIC;

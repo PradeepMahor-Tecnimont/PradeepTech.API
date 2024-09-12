@@ -1,0 +1,25 @@
+--------------------------------------------------------
+--  File created - Friday-September-03-2021   
+--------------------------------------------------------
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAD_APPROVER_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAVE_ADJ_MAST_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAVETYPE_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_ONDUTYMAST_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_TABLETAG_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_DAYS_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_DAYS_DETAILS_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_DELEGATE_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_DEPU_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_DEPU_DELETED_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_DEPU_REJECTED_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAVE_ADJ_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAVEAPP_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAVEAPP_DELETED_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAVEAPP_REJECTED_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAVEBAL_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_LEAVELEDG_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_ONDUTY_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_ONDUTYAPP_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_ONDUTYAPP_DELETED_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\SS_ONDUTYAPP_REJECTED_DATA_TABLE.sql
+@D:\OracleProjects\SelfService\DataToIoTDev\USERIDS_DATA_TABLE.sql

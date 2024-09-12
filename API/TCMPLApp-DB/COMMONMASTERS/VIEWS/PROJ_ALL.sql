@@ -1,0 +1,83 @@
+--------------------------------------------------------
+--  DDL for View PROJ_ALL
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "COMMONMASTERS"."PROJ_ALL" ("PROJNO", "NAME", "CLIENT", "SDATE", "EXPTCDATE", "CDATE", "COSTCODE", "PRJMNGR", "PRJDYMNGR", "ORIGINAL", "REVISED", "PROJTYPE", "TYPE", "TMAGRP", "ABBR", "ACTIVE", "TCM_JOBS", "TCM_GRP", "PRJOPER", "TCMNO", "REIMB_JOB", "EOU_JOB", "EXCL_BILLING", "EXCL_DELTA_BILLING", "BU", "PROJ_NO", "BLOCK_BOOKING", "CO", "PHASE_RULE", "NEWCOSTCODE", "REVCDATE", "BLOCK_OT", "CCAPPRL", "SAP_WBS", "PREVCO") AS 
+  SELECT "PROJNO",
+    "NAME",
+    "CLIENT",
+    "SDATE",
+    "EXPTCDATE",
+    "CDATE",
+    "COSTCODE",
+    "PRJMNGR",
+    "PRJDYMNGR",
+    "ORIGINAL",
+    "REVISED",
+    "PROJTYPE",
+    "TYPE",
+    "TMAGRP",
+    "ABBR",
+    "ACTIVE",
+    "TCM_JOBS",
+    "TCM_GRP",
+    "PRJOPER",
+    "TCMNO",
+    "REIMB_JOB",
+    "EOU_JOB",
+    "EXCL_BILLING",
+    "EXCL_DELTA_BILLING",
+    "BU",
+    "PROJ_NO",
+    "BLOCK_BOOKING",
+    "CO",
+    "PHASE_RULE",
+    "NEWCOSTCODE",
+    "REVCDATE",
+    "BLOCK_OT",
+    "CCAPPRL",
+    "SAP_WBS",
+    "PREVCO"
+  FROM time2010.projmast
+  WHERE projno NOT IN
+    ( SELECT projno FROM timeCURR.projmast
+    )
+  UNION
+  SELECT "PROJNO",
+    "NAME",
+    "CLIENT",
+    "SDATE",
+    "EXPTCDATE",
+    "CDATE",
+    "COSTCODE",
+    "PRJMNGR",
+    "PRJDYMNGR",
+    "ORIGINAL",
+    "REVISED",
+    "PROJTYPE",
+    "TYPE",
+    "TMAGRP",
+    "ABBR",
+    "ACTIVE",
+    "TCM_JOBS",
+    "TCM_GRP",
+    "PRJOPER",
+    "TCMNO",
+    "REIMB_JOB",
+    "EOU_JOB",
+    "EXCL_BILLING",
+    "EXCL_DELTA_BILLING",
+    "BU",
+    "PROJ_NO",
+    "BLOCK_BOOKING",
+    "CO",
+    "PHASE_RULE",
+    "NEWCOSTCODE",
+    "REVCDATE",
+    "BLOCK_OT",
+    "CCAPPRL",
+    "SAP_WBS",
+    "PREVCO"
+  FROM timeCURR.projmast
+;
+  GRANT SELECT ON "COMMONMASTERS"."PROJ_ALL" TO "TIMECURR";

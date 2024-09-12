@@ -1,0 +1,22 @@
+REM INSERTING into SELFSERVICE.SS_LEAVE_ADJ_MAST
+SET DEFINE OFF;
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('TS','Timesheet Leave Debit','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('MA','Month End-Adj Lapse (Dr)','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('MA','Month Adj Entry (Cr)','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('MC','Monthly Leave Credit','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('YA','Year End Adj Entry (Cr)','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('YC','Yearly Credit Entry','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('YA','Year End-Leave Lapse (Dr)','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('DA','Deputation Leave Adj (Dr)','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('DA','Deputation Leave Adj (Cr)','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('OH','Optional Holiday (Dr)','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('OH','Optional Holiday (Cr)','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('LE','Leave Encashment','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('LP','Loss of Pay','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('LC','Leave Claim','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('DR','Debit','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('CR','Credit','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('LA','Leave Application','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('PN','Penalty Leave (Dr)','D');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('CO','Compensatory Off','C');
+Insert into SELFSERVICE.SS_LEAVE_ADJ_MAST (ADJ_TYPE,DESCRIPTION,DC) values ('PN','Penalty Leave (Cr)','C');
