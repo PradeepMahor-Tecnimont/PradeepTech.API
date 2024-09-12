@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup Label="Globals">
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Tecnimont Private Limited</Authors>
+		<Product>TCMPLApp</Product>
+		<Description>Excel template library</Description>
+		<Version>$(VersionPrefix)1.0.93</Version>
+		<UserSecretsId>02164da2-103b-4169-8eea-441200e14bcc</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Repository\**" />
+		<EmbeddedResource Remove="Repository\**" />
+		<None Remove="Repository\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="EPPlus" Version="4.5.3.3" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Template\ImportDeskAreaDeskList v01.xlsx" />
+		<None Remove="Template\ImportDeskAreaUserList v01.xlsx" />
+		<None Remove="Template\ImportEmpComingToOffice v01.xlsx" />
+		<None Remove="Template\ImportHRMastersCustom v01.xlsx" />
+		<None Remove="Template\ImportOvertimeUpdate v01.xlsx" />
+		<None Remove="Template\ImportLeaveClaims v01.xlsx" />
+		<None Remove="Template\ImportEmployeeMaster v01.xlsx" />
+		<None Remove="Template\ImportProjectionsCurrentJobs v01.xlsx" />
+		<None Remove="Template\ImportJobmasterBudget v01.xlsx" />
+		<None Remove="Template\ImportDMSConsumables v01.xlsx" />
+		<None Remove="Template\ImportDMSGroupItems v01.xlsx" />
+		<None Remove="Template\ImportDMSMovementPlan v01.xlsx" />
+		<None Remove="Template\ImportMovemast v01.xlsx" />
+		<None Remove="Template\ImportLoPForExcessLeave v01.xlsx" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Template\ImportDeskAreaDeskList v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportDeskAreaUserList v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportEmpComingToOffice v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportHRMastersCustom v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportOvertimeUpdate v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportEmployeeMaster v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportLeaveClaims v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportProjectionsCurrentJobs v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportJobmasterBudget v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportDMSConsumables v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportDMSGroupItems v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportDMSMovementPlan v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportMovemast v01.xlsx" />
+		<EmbeddedResource Include="Template\ImportLoPForExcessLeave v01.xlsx" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TCMPLApp.Library.Excel.Template": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}

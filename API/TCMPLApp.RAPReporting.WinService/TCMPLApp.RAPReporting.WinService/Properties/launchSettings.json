@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "TCMPLApp.RAPReporting.WinService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true
+    }
+  }
+}

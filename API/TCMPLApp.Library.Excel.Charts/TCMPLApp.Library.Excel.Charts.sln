@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCMPLApp.Library.Excel.Charts", "TCMPLApp.Library.Excel.Charts\TCMPLApp.Library.Excel.Charts.csproj", "{74BEB82E-B0E6-4D6B-9699-BB1EEA78ECEC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCMPLApp.Library.Excel.Charts.Test", "TCMPLApp.Library.Excel.Charts.Test\TCMPLApp.Library.Excel.Charts.Test.csproj", "{A1BE3126-33CD-461B-900D-43B61BBB7C4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9E90E64C-BECC-439C-86B5-E3C295B87C77}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74BEB82E-B0E6-4D6B-9699-BB1EEA78ECEC}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{74BEB82E-B0E6-4D6B-9699-BB1EEA78ECEC}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{74BEB82E-B0E6-4D6B-9699-BB1EEA78ECEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74BEB82E-B0E6-4D6B-9699-BB1EEA78ECEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1BE3126-33CD-461B-900D-43B61BBB7C4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1BE3126-33CD-461B-900D-43B61BBB7C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1BE3126-33CD-461B-900D-43B61BBB7C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1BE3126-33CD-461B-900D-43B61BBB7C4C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D31700F0-F2B8-46EF-9F94-987174C2CD42}
+	EndGlobalSection
+EndGlobal
