@@ -1,0 +1,384 @@
+﻿@model TCMPLApp.WebApp.Models.CostcodeChangeRequestDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="HRDigiForm"
+      asp-action="CostcodeChangeRequestHRApproval"
+      id="formCostcodeChangeRequestHRApproval"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.KeyId" />
+    <input type="hidden" asp-for="@Model.ActionId" />
+    <input type="hidden" asp-for="@Model.TransferVal" />
+    <input type="hidden" asp-for="@Model.TargetCostCode" />
+    <input type="hidden" asp-for="@Model.TargetCostCodeVal" />
+    <input type="hidden" asp-for="@Model.CurrentCostCodeVal" />
+    <input type="hidden" asp-for="@Model.BtnName" id="BtnName" />
+    <input type="hidden" asp-for="@Model.EffectiveTransferDate" />
+    <input type="hidden" asp-for="@Model.DesgcodeNew">
+    <input type="hidden" asp-for="@Model.JobGroupCodeNew" />
+    <input type="hidden" asp-for="@Model.JobdisciplineCodeNew" />
+    <input type="hidden" asp-for="@Model.JobtitleCodeNew" />
+    
+    @Html.TextBoxFor(model => model.TransferDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    @Html.TextBoxFor(model => model.TransferEndDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Costcode HR Approval"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5><b> @Html.Raw(Model.TransferType) </b></h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Employee)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Employee)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Grade)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Grade)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentDesignation)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentDesignation)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentJobTitle)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentJobTitle)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.JobGroup)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.JobGroup)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Jobdiscipline)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Jobdiscipline)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TransferType)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TransferType)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentCostCode)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentCostCode)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                @if (Model.TransferVal == 2 || Model.ActionId == "A226")
+                                {
+                                    <div class="dt-met">
+                                        @Html.DisplayNameFor(model => model.TargetCostCode)
+                                    </div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.TargetCostCode)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <label asp-for="TargetCostCodeVal" class="control-label"></label>
+                                    <select asp-for="TargetCostCodeVal" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.CostCodeList" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="TargetCostCodeVal" class="text-danger"></span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TransferDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TransferDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Remarks)
+                                </div>
+                                <div class="dd-met">
+                                    @if (Model.Remarks != null)
+                                        @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.Remarks).Replace("\n", "<br/>"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.TransferVal != 2)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        @Html.DisplayNameFor(model => model.TargetHodRemarks)
+                                    </div>
+                                    <div class="dd-met">
+                                        @if (Model.TargetHodRemarks != null)
+                                            @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.TargetHodRemarks).Replace("\n", "<br/>"))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.ActionId == "A226")
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        @Html.DisplayNameFor(model => model.HrRemarks)
+                                    </div>
+                                    <div class="dd-met">
+                                        @if (Model.HrRemarks != null)
+                                            @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.HrRemarks).Replace("\n", "<br/>"))
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @if (Model.ActionId == "A213")
+                                {
+                                    <label asp-for="EffectiveTransferDate" class="control-label"></label>
+                                    <input id="effectiveTransferDate" class="form-control datepicker" placeholder="@localizer["dd-Mon-yyyy"]" value="@Model.EffectiveTransferDate?.ToString("dd-MMM-yyyy")" required />
+                                    <span asp-validation-for="EffectiveTransferDate" class="text-danger"></span>
+                                }
+                                else
+                                {
+                                    <div class="dt-met">
+                                        @Html.DisplayNameFor(model => model.EffectiveTransferDate)
+                                    </div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.EffectiveTransferDate?.ToString("dd-MMM-yyyy"))
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        @if (Model.TransferVal == 1)
+                        {
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="TransferEndDate" class="control-label"></label>
+                                    <input id="transferEndDate" class="form-control datepicker" placeholder="@localizer["dd-Mon-yyyy"]" required />
+                                    <span asp-validation-for="TransferEndDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    @if (Model.TransferVal == 0)
+                    {
+                        @if (Model.ActionId == "A213")
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="DesgCode" class="control-label"></label>
+                                        <select asp-for="DesgCode" class="form-control Select2" asp-items="ViewBag.DesgList" required>
+                                            <option value="" selected>Please select...</option>
+                                        </select>
+                                        <span asp-validation-for="DesgCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>                         
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label asp-for="JobGroupCode" class="control-label"></label>
+                                        <select asp-for="JobGroupCode" class="form-control Select2" asp-items="ViewBag.JobGroupList" required>
+                                            <option value="" selected>Please select...</option>
+                                        </select>
+                                        <span asp-validation-for="JobGroupCode" class="text-danger"></span>
+                                    </div>
+                                </div>                                              
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label asp-for="JobdisciplineCode" class="control-label"></label>
+                                        <select asp-for="JobdisciplineCode" class="form-control Select2" asp-items="ViewBag.JobDisciplineList" required>
+                                            <option value="" selected>Please select...</option>
+                                        </select>
+                                        <span asp-validation-for="JobdisciplineCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>                           
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="JobtitleCode" class="control-label"></label>
+                                        <select asp-for="JobtitleCode" class="form-control Select2" asp-items="ViewBag.JobTitleList" required>
+                                            <option value="" selected>Please select...</option>
+                                        </select>
+                                        <span asp-validation-for="JobtitleCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">                                
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            @Html.DisplayNameFor(model => model.DesgNew)
+                                        </div>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.DesgNew)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            @Html.DisplayNameFor(model => model.JobtitleNew)
+                                        </div>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.JobtitleNew)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            @Html.DisplayNameFor(model => model.JobGroupNew)
+                                        </div>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.JobGroupNew)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            @Html.DisplayNameFor(model => model.JobdisciplineNew)
+                                        </div>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.JobdisciplineNew)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>          
+                        }
+                    }
+                    @if (Model.TransferVal == 1)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label asp-for="SiteCode" class="control-label"></label>
+                                    <select asp-for="SiteCode" class="form-control Select2" asp-items="ViewBag.SiteList" required>
+                                        <option value="" selected>Please select...</option>
+                                    </select>
+                                    <span asp-validation-for="SiteCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ApprovalRemarks" class="control-label"></label>
+                                <textarea asp-for="ApprovalRemarks" class="form-control" placeholder="@localizer["Remarks"]" rows="2" ></textarea>
+                                <span asp-validation-for="ApprovalRemarks" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Approve"]">
+            @localizer["Approve"]
+        </button>
+        <button class="btn btn-warning"
+                type="button"
+                id="RejectApproval"
+                onclick="RejectForApproval('formCostcodeChangeRequestHRApproval')"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Reject"]">
+            @localizer["Reject"]
+        </button>
+
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

@@ -1,0 +1,111 @@
+﻿@model TCMPLApp.WebApp.Models.PassportDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlPassportDetailsEdit = isOnBehalf == IsOk ? ("OnBehalfPassportDetailsEdit") : ("EmpPassportDetailsEdit");
+    string urlFileUpload = isOnBehalf == IsOk ? Url.Action("OnBehalfFileUploadEdit", "EmpGenInfoDetails") : Url.Action("FileUploadEdit", "EmpGenInfoDetails");
+
+
+}
+@Html.AntiForgeryToken()
+
+
+<form asp-controller="EmpGenInfoDetails"
+      asp-action=@urlPassportDetailsEdit
+      id="formPassport"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript();initToastrMessage();"
+      data-ajax-success="reloadPassportTab"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.KeyId" />
+    <input type="hidden" asp-for="@Model.IssueDate" />
+    <input type="hidden" asp-for="@Model.ExpiryDate" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Update passport details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Update passport details</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-4 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="HasPassport" class="control-label"></label>
+                            <select asp-for="HasPassport" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.HasPassport" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="HasPassport" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-2" id="PassportData" style="display: none">
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Surname" class="control-label"></label>
+                            <input asp-for="Surname" class="form-control text-uppercase" placeholder="Surname" />
+                            <span asp-validation-for="Surname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="GivenName" class="control-label"></label>
+                            <input asp-for="GivenName" class="form-control text-uppercase" placeholder="Name"  />
+                            <span asp-validation-for="GivenName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="PassportNo" class="control-label"></label>
+                            <input asp-for="PassportNo" class="form-control text-uppercase" placeholder="Passport No"  />
+                            <span asp-validation-for="PassportNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="IssuedAt" class="control-label"></label>
+                            <input asp-for="IssuedAt" class="form-control text-uppercase" placeholder="Issued At"  />
+                            <span asp-validation-for="IssuedAt" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="IssueDate" class="control-label"></label>
+                            <input id="issueDate" class="form-control datepicker" placeholder="@localizer["Issue Date"]" value="@Model.IssueDate?.ToString("dd/MMM/yyyy")"  />
+                            <span asp-validation-for="IssueDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="ExpiryDate" class="control-label"></label>
+                            <input id="expiryDate" class="form-control datepicker" placeholder="@localizer["Expiry Date"]" value="@Model.ExpiryDate?.ToString("dd/MMM/yyyy")"  />
+                            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+        <div id="results" style="display:none">@TempData["Message"]</div>
+    </div>
+</form>
+

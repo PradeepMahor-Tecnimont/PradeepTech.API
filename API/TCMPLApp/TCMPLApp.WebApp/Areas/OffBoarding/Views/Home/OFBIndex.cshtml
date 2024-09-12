@@ -1,0 +1,158 @@
+﻿@{
+    ViewData["Title"] = "Off-Boarding";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Off-Boarding</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-r-5">
+        <a href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/Off%20Boarding%20Manual.pdf" target="_blank">
+            <i class="fas fa-info-circle fa-2x"></i>
+        </a>
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <div class="row">
+        <environment include="Staging,Development,Production" >
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionInitializeOffBoarding) ||
+                 CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionCreateRollbackRequest))
+            {
+                <div class="col-sm-6 col-md-4 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Init Off-Boarding</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="@Url.Action("OFBInitIndex", "OFB", new { Area = "OffBoarding" })">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">Initialize off-boarding process and send mail to the concerned</h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-door-open"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionActionForApprovalTile))
+            {
+            <div class="col-sm-6 col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Approval</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("OFBApprovalsIndex", "OFB", new { Area = "OffBoarding" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Approve off-boarding - First Approver</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fab fa-buysellads"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionApproveRollbackRequest))
+            {
+                <div class="col-sm-6 col-md-4 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Rollback Off-Boarding</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="@Url.Action("OFBRollbackPendingIndex", "OFB", new { Area = "OffBoarding" })">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">Request/Approve Rollback Off-Boarding </h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-undo f-20 text-white theme-red"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionViewHistory))
+            {
+                <div class="col-sm-6 col-md-4 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>History</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="@Url.Action("OFBHistoryIndex", "OFB", new { Area = "OffBoarding" })">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">Off-boarding Histroy</h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fab fa-buysellads"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            @*<div class="col-sm-6 col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Reset Approval</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("OFBResetApprovalsIndex", "OFB", new { Area = "OffBoarding" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Reset Off-Boarding Approvals</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fab fa-buysellads"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>   *@         
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionViewSelfOFB))
+            {
+                <div class="col-sm-6 col-md-4 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Off-Boarding Details</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="@Url.Action("OFBEmployeeInfoIndex", "OFB", new { Area = "OffBoarding" })">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">Employee Off-Boarding Information </h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fab fa-buysellads"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </environment>
+    </div>
+</div>

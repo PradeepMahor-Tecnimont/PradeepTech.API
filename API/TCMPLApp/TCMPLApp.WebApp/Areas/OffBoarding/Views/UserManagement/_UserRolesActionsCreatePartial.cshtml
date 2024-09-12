@@ -1,0 +1,77 @@
+﻿@model TCMPLApp.WebApp.Models.OffBoardingUserAccessCreateViewModel
+
+@Html.AntiForgeryToken()
+<form asp-action="CreateUserAccess"
+      asp-controller="UserManagement"
+      asp-area="OffBoarding"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-failure="failedAddNew"
+      data-ajax-success="localScript(null);"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">Off-Boarding</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+
+
+    <div class="modal-body">
+        <div class="load-bar load-bar-modal d-none">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="card bg-light border-0">
+            <div class="card-header app-h4 app-card-header">
+                <p id="modalheader">Create Exit</p>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(m => m.Empno)
+                            <select asp-for="Empno" class="form-control Select2 " placeholder="Please select" asp-items="ViewBag.EmployeeList">
+                                <option></option>
+                            </select>
+                            <span asp-validation-for="Empno" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(m => m.RoleActionId)
+                            <select asp-for="RoleActionId" class="form-control Select2 " placeholder="Please select" asp-items="ViewBag.RolesActionsList">
+                                <option></option>
+                            </select>
+                            <span asp-validation-for="RoleActionId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary" type="submit">
+                        Create User Access
+                    </button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                </div>
+                <div id="results" style="display:none">@TempData["Message"]</div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--
+<div class="modal-footer">
+    <button class="btn btn-primary" type="submit" id="btnconfirm"
+            data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+            data-text="Confirm">
+        Create Off-Boarding exits
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+</div>
+-->

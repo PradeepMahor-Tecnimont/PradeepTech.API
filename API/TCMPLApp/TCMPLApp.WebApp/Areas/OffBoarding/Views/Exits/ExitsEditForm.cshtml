@@ -1,0 +1,329 @@
+﻿@model TCMPLApp.WebApp.Models.OffBoardingExitsCreateViewModel
+
+@{
+    ViewData["Title"] = "Off-Boarding - Edit exit form";
+
+    Html.AntiForgeryToken();
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a asp-action="Index" asp-controller="Exits" asp-area="OffBoarding">Exits</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+}
+@section Styles
+{
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+
+
+@Html.AntiForgeryToken()
+<form asp-action="EditForm"
+      asp-controller="Exits"
+      asp-area="OffBoarding"
+      id="idEditFormEmpOffBoarding"
+      method="post"
+      accept-charset="UTF-8">
+
+    <div class="container-fluid bg-gray-active border rounded shadow m-auto py-2 col-xl-9">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Off-Boarding - Initiate Off-Boarding(Exit)</p>
+        </div>
+        @Html.HiddenFor(m => m.Empno)
+
+        <div class="childcontent-div" id="div-empdetails">
+            <div id="pv-empdetails">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6">
+@*                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.HRNote)
+                    <textarea rows="2" class="form-control" asp-for="HRNote"></textarea>
+                    <span asp-validation-for="HRNote" class="text-danger"></span>
+
+                </div>
+*@            </div>
+            <div class="col-xl-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.Remarks)
+                    <textarea rows="2" class="form-control" asp-for="Remarks"></textarea>
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.EndByDate)
+                    <input class="form-control" type="date" asp-for="EndByDate" />
+                    <span asp-validation-for="EndByDate" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.RelievingDate)
+                    <input class="form-control" type="date" asp-for="RelievingDate" />
+                    <span asp-validation-for="RelievingDate" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.Address)
+                    <textarea rows="2" class="form-control" asp-for="Address"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.ResignationDate)
+                    <input class="form-control" type="date" asp-for="ResignationDate" />
+                    <span asp-validation-for="ResignationDate" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.EmailId)
+                    <input class="form-control" asp-for="EmailId" />
+                    <span asp-validation-for="EmailId" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.MobilePrimary)
+                    <input class="form-control" asp-for="MobilePrimary" />
+                    <span asp-validation-for="MobilePrimary" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.AlternateNumber)
+                    <input class="form-control" asp-for="AlternateNumber" />
+                    <span asp-validation-for="AlternateNumber" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 ">
+                <div class="childcontent-div" id="div-filesuploaded">
+                    <div id="pv-filesuploaded">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <button type="button" name="ShowFileUpload" id="idShowFileUpload" title="Show file upload dialog" class="btn btn-outline-primary mx-3"
+                        data-jqueryselector="openmodal"
+                        data-modalcontainer="modalcontainer"
+                        data-modalpopupwidth="rightw35"
+                        data-url='@Url.Action("FileUploadInitiator", "Exits", new { Area = "OffBoarding" })'
+                        data-empno="@Model.Empno"
+                        data-statichtmlsourcedivid=""
+                        data-modaltitle="Off-Boarding"
+                        data-modalheader="Upload file">
+                    <i class="fas fa-plus "></i>
+                    File upload
+                </button>
+                <button type="submit" class="btn btn-primary mx-3">
+                    <i class="fas fa-save fa-1x"></i>
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script>
+    $(document).ready(function () {
+        employeeSelected();
+        loadFilesUploaded();
+    });
+    function localScript() {
+        initDropZone();
+        loadFilesUploaded();
+    }
+
+
+
+    function employeeSelected() {
+        var divid = $("#pv-empdetails");
+
+        var empno = $("#Empno").val();
+
+         if (empno == '') {
+            divid.empty();
+            $("#div-empdetails").removeClass("active");
+            return;
+        }
+        else
+            $("#div-empdetails").addClass("active");
+
+        $.ajax({
+            url: '@Url.Action("GetEmpDetails", "Exits", new { Area = "OffBoarding" })',
+            data: {
+                'empno': empno
+            },
+            type: 'GET',
+            beforeSend: function () {
+                showModalLoader();
+            },
+            success: function (data) {
+                divid.html(data);
+                hideModalLoader();
+            },
+            error: function (result) {
+                hideModalLoader();
+                errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                notify("error", errorText, 'Error');
+            }
+        });
+    }
+
+    function loadFilesUploaded() {
+
+        var divid = $("#pv-filesuploaded");
+
+        var empno = $("#Empno").val();
+
+
+        if (empno == '') {
+            divid.empty();
+            $("#div-filesuploaded").removeClass("active");
+            return;
+        }
+        else
+            $("#div-filesuploaded").addClass("active");
+
+        $.ajax({
+            url: '@Url.Action("GetFilesUploadedList", "Exits",new {Area = "OffBoarding"})',
+            data: {
+                'empno': empno,
+                'groupname':"INITIATOR"
+            },
+            type: 'GET',
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (data) {
+                divid.html(data);
+                hideLoader();
+            },
+            error: function (result) {
+                hideLoader();
+                errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                notify("error", errorText, 'Error');
+            }
+        });
+    }
+
+        Dropzone.autoDiscover = false;
+
+        function initDropZone() {
+
+            $("div#iddropzone2").each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("FileUpload", "Exits",new {Area = "OffBoarding"})',
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 1,
+                maxFiles: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles:"application/pdf",
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+
+                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    // of the sending event because uploadMultiple is set to true.
+                    this.on("sending", function (files, xhr, formData) {
+
+                        formData.append("OfbEmpno", $("#OfbEmpno").val());
+                        formData.append("UploadByEmpno", $("#UploadByEmpno").val());
+                        formData.append("UploadByGroup", $("#UploadByGroup").val());
+
+                        formData.append("UploadByActionId", $("#UploadByActionId").val());
+                        formData.append("Files", files);
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, response) {
+                        if (response.success)
+                            notify("success", "Files uploaded successfully", "File upload");
+                        else
+                            notify("error", response.message , "File upload failed.");
+
+                        this.removeAllFiles(true);
+                        loadFilesUploaded();
+                        // Gets triggered when the files have successfully been sent.
+                        // Redirect user or notify of success.
+                    });
+                    this.on("errormultiple", function (files, response) {
+                        notify("error", "File not uploaded", "Error uploading");
+                        this.removeAllFiles(true);
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+        }
+
+        function UploadFiles() {
+             oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length == 0) {
+                notify("error", "No files selected.", "Error")
+                return;
+            }
+            oDropZone2.processQueue();
+        }
+    </script>
+}

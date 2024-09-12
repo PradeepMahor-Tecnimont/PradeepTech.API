@@ -1,0 +1,535 @@
+﻿@model TCMPLApp.WebApp.Models.LoPForExcessLeaveViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item"><a asp-action="ActionsHRIndex" asp-controller="Home" asp-area="SelfService">HR actions</a></li>
+        <li class="breadcrumb-item active">LoP For Excess Leave</li>
+    </ol>
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+    <style>
+        tr.group,
+        tr.group:hover {
+            background-color: #ddd !important;
+            font-weight: 500;
+            color: #007bff !important
+        }
+    </style>
+}
+
+@{
+    ViewData["Title"] = "LoP For Excess Leave";
+
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.SalaryMonthStatus" />
+
+@{
+    string status = null;
+    if(Model.FilterDataModel.SalaryMonthStatus=="OK")
+    {
+        status = "Open";
+    }
+    else
+    {
+        status = "Closed";
+    }
+
+}
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>LoP For Excess Leave </p>
+    </div>
+    <div class="d-flex flex-row p-1">
+        <span id="filterGet ">
+            <i class="fas fa-filter"></i>&nbsp;Filter applied  ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw("Salary Month : <b>" + (@Model.FilterDataModel.Yyyymm) + "</b>")
+                ;
+            }
+            @if (!string.IsNullOrEmpty(status))
+            {
+                @Html.Raw(", Status : ") <b>@status</b>
+                ;
+            }
+
+        </span>
+
+    </div>
+    <hr />
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("LoPForExcessLeaveFilterGet", "Attendance", new { Area = "SelfService" })'
+               data-modaltitle="Filters - Leave"
+               data-modalheader="Filters - Leave">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="LoPForExcessLeaveIndex"
+               data-url='@Url.Action("ResetFilter", "Attendance", new { Area = "SelfService" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+            @if (@Model.FilterDataModel.SalaryMonthStatus == "OK")
+            {
+                <a class="btn btn-outline-primary btn-sm border-white"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw35"
+                   data-url='@Url.Action("LoPForExcessLeaveXLUpload", "Attendance", new { Area = "SelfService" })'
+                   data-modaltitle="Upload LoP For Excess Leave"
+                   data-modalheader="Upload LoP For Excess Leave">
+                    <i class="fa fa-upload"></i>&nbsp;Upload LoP For Excess Leave
+                </a>            
+                <a class="btn btn-outline-primary btn-sm border-white"
+                   onclick="showDeleteConfirmationPopup(event,this)"
+                   data-url="@Url.Action("RollBackLoPForExcessLeave", "Attendance", new { Area = "SelfService" })"
+                   data-jqueryselector="showconfirmationmodal"
+                   data-PostDeleteReLoadDataTables="OK"
+                   data-id=@Model.FilterDataModel.Yyyymm
+                   data-modaltitle="Please Confirm!"
+                   data-confirmationtext="Rollback LoP For Excess Leave?"
+                   data-confirmationtype="warning"
+                   data-confirmbuttontext="Rollback LoP For Excess Leave">
+                    <i class="fas fa-undo" aria-hidden="true"></i>&nbsp;Rollback
+                </a>
+            }
+            
+        </div>
+    </div>
+
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbLoPForExcessLeave" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.LopYyyymm)</th>
+                    <th>@Html.DisplayNameFor(model => model.PayslipYyyymm)</th>
+                    <th>@Html.DisplayNameFor(model => model.Leavetype)</th>
+                    <th>@Html.DisplayNameFor(model => model.DbCr)</th>
+                    <th>@Html.DisplayNameFor(model => model.AdjType)</th>
+                    <th>@Html.DisplayNameFor(model => model.Lop)</th>
+                    <th>@Html.DisplayNameFor(model => model.ModifiedBy)</th>
+                    <th>@Html.DisplayNameFor(model => model.ModifiedOn)</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+        function localScript() {
+
+            initUploadLeaveClaimsControls();
+            initSelect2();
+            initDateTimeFilter();
+
+            $('#btnLoPForExcessLeaveXLTemplate').click(function () {
+                    $.ajax({
+                        headers: { "RequestVerificationToken": $('#formLoPForExcessLeaveXLUpload input[name="__RequestVerificationToken"]').val() },
+                        url: "@Url.Action("LoPForExcessLeaveXLTemplate", "Attendance", new { Area = "SelfService" })",
+                        type: "GET",
+                        cache: false,
+                        xhr: function () {
+                            var xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState == 2) {
+                                    if (xhr.status == 200) {
+                                        xhr.responseType = "blob";
+                                    }
+                                }
+                            };
+                            return xhr;
+                        },
+                        beforeSend: function () {
+                            showLoader();
+                        },
+
+                        success: function (blob, status, xhr) {
+
+                            var filename = "";
+                            var disposition = xhr.getResponseHeader('Content-Disposition');
+                            if (disposition && disposition.indexOf('attachment') !== -1) {
+                                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                                var matches = filenameRegex.exec(disposition);
+                                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                            }
+                            var link = document.createElement('a');
+                            var url = window.URL.createObjectURL(blob);
+
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = filename;
+                            link.click();
+                            link.remove();
+                            window.URL.revokeObjectURL(url);
+                            hideLoader();
+                            toastr.success("File downloaded successfully.");
+                        },
+                        error: function (xhr) {
+                            showError(xhr);
+                            hideLoader();
+                        }
+                    });
+
+            });
+        }
+        $(document).ready(function () {
+            loadLoPForExcessLeaveDataTable();
+        });
+
+        let vVUloadLoPForExcessLeaveList = "@Url.Action("GetListsLoPForExcessLeave", "Attendance")";
+
+        function loadLoPForExcessLeaveDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbLoPForExcessLeave",
+                pColumns: datatableColumns,
+                pUrl: vVUloadLoPForExcessLeaveList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    yyyymm: $('#FilterDataModel_Yyyymm').val() ? $('#FilterDataModel_Yyyymm').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                    let datatableColumns = [
+                        {
+                            data: null,
+                            render: function (data, type, row) {
+                                return data.empno + " - " + data.empName
+                            },
+                        },
+
+                        { data: "lopYyyymm" },
+                        { data: "payslipYyyymm" },
+                        { data: "leavetype" },
+                        { data: "dbCr" },
+                        { data: "adjType" },
+                        { data: "lop" },
+                        { data: "modifiedBy" },
+                        {
+                            data: "modifiedOn",
+                            width: '10.0rem',
+                            render: function (data, type, row) {
+                                if (data)
+                                    return moment(data).format("DD-MMM-YYYY");
+                                else
+                                    return '';
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function (data, type, row) 
+                            {
+                                var status="@Model.FilterDataModel.SalaryMonthStatus";
+                                if(status=="OK")
+                                {
+                                    return ' <button class="btn btn-outline-primary btn-sm border-none"  ' +
+                                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                    ' data-url="@Url.Action("LoPForExcessLeaveRollBack", "Attendance", new { Area = "SelfService" })" ' +
+                                        ' data-jqueryselector = "showconfirmationmodal" ' +
+                                        ' data-PostDeleteReLoadDataTables="OK" ' +
+                                        ' data-id="' + data.appNo + '" ' +
+                                        ' data-modaltitle="Please Confirm!" ' +
+                                        ' data-confirmationtext="Rollback LoP For Excess Leave ' + data.empno + ' - ' + data.empName + ' ?" ' +
+                                        ' data-confirmationtype="warning" data-confirmbuttontext="Rollback LoP For Excess Leave"> ' +
+                                        ' <i class="fas fa-undo" aria-hidden="true"></i> ' +
+                                        ' </button> ';
+                                }
+                                else
+                                {
+                                    return " ";
+                                }
+                            },
+                            'className': "td-icon",
+                        }
+                    ];
+
+
+            </text>
+        }
+        function initUploadLeaveClaimsControls() {
+            if ($("#formLoPForExcessLeaveXLUpload").length != 0) {
+                initDropZone(".xlsx");
+            }
+
+            $('#btnUploadLoPForExcessLeave').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitLoPForExcessLeaveXL();
+            });
+
+        }
+
+        Dropzone.autoDiscover = false;
+
+        function initDropZone(fileTypeExtension) {
+            $("#dropZoneWrapper").show();
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            $('div#iddropzone2').each(function () {
+
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    return;
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("TrainingFileUpload", "EmployeeTraining", new { Area = "SWPVaccine" })',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    this.on("processing", function (file) {
+                        console.log($(formId).attr("action"));
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        console.log(data);
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        console.log(data);
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                            if (data.fileContent != null) {
+                                var blob = b64toBlob(data.fileContent.fileContents, data.fileContent.contentType);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = data.fileContent.fileDownloadName;
+                                link.click();
+                            }
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+
+            const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, { type: contentType });
+                return blob;
+            };
+
+        }
+
+        function detachDropZone() {
+
+            $("#dropZoneWrapper").hide();
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+        }
+
+        function submitLoPForExcessLeaveXL() {
+
+            var formLoPForExcessLeaveXLUpload = "#formLoPForExcessLeaveXLUpload";
+            if ($(formLoPForExcessLeaveXLUpload).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length != 0) {
+                oDropZone2.processQueue();
+            }
+            else {
+                $(formLoPForExcessLeaveXLUpload).submit();
+
+            }
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+            console.log(data.yyyymm)
+            $("#FilterDataModel_Yyyymm").val(data.yyyymm);
+            //loadLoPForExcessLeaveDataTable();
+            location.reload();
+            hideLoader();
+        }
+
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                loadLoPForExcessLeaveDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadLoPForExcessLeaveDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadLoPForExcessLeaveDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadLoPForExcessLeaveDataTable();
+            }
+        });
+        function initDateTimeFilter() {
+
+            var curdate = new Date();
+
+            var minDate = "01/" + (curdate.getFullYear() - 1);
+            var maxDate = "12/" + (curdate.getFullYear());
+
+            $('.datepicker').datepicker({
+                format: "MM-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                changeMonth: true,
+                changeYear: true,
+                startDate: minDate,
+                endDate: maxDate
+            });
+
+            $('#payslipYyyymm').datepicker({
+                format: 'MM-yyyy',
+                changeYear: true
+            }).on('change', function (e, date) {
+                var fvDate = $(this).val();
+                
+                $("#PayslipYyyymm").val(moment(fvDate, 'MMMM-YYYY').format("DD-MMM-YYYY"));
+                $(this).datepicker('hide');
+
+                var selectedDate = new Date(fvDate);
+                var year = selectedDate.getFullYear();
+                var month = selectedDate.getMonth() +01;
+                if (month < 10)
+                    month = '0' + month;
+                var yearMonth = year.toString() + month.toString();
+
+                console.log(yearMonth)
+                $("#PaySlipMonth").val(yearMonth);
+                $("#Yyyymm").val(yearMonth);
+
+            });
+            if ($("#PayslipYyyymm").val()) {
+                $('#payslipYyyymm').val(moment($("#PayslipYyyymm").val(),"DD-MMM-YYYY").format('MMMM-YYYY'));
+            }
+            
+        }
+    </script>
+}  

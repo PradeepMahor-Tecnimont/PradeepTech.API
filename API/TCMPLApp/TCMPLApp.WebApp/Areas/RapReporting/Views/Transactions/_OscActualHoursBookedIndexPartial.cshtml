@@ -1,0 +1,56 @@
+﻿@model TCMPLApp.WebApp.Models.OscActualHoursBookedViewModel
+
+@{
+    ViewData["Title"] = "Actual hours booked"; 
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+    <li class="breadcrumb-item "><a asp-action="TransactionsIndex" asp-controller="Transactions" asp-area="RapReporting">Transactions</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Actual hours booked</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-12 p-2 ">    
+    <div class="d-flex flex-row">
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href='@Url.Action("OscActualHoursBookedExcelDownload", "Transactions", new { Area = "RapReporting", id = Model.OscmId })'>
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearchActualHoursBooked" name="GenericSearchActualHoursBooked" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearchActualHoursBooked"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbActualHoursBookedGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th >@Html.DisplayNameFor(model => model.Yymm)</th>
+                    <th >@Html.DisplayNameFor(model => model.Costcode)</th>                    
+                    <th >@Html.DisplayNameFor(model => model.Hours)</th>
+                    <th >@Html.DisplayNameFor(model => model.Othours)</th>
+                    <th >@Html.DisplayNameFor(model => model.TotalHours)</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+}

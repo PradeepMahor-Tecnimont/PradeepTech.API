@@ -1,0 +1,100 @@
+﻿@model TCMPLApp.WebApp.Models.ShiftCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="Attendance"
+      asp-action="ShiftCreate"
+      id="formShiftCreate"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+    <input type="hidden" asp-for="TimeIn" />
+    <input type="hidden" asp-for="TimeOut" />
+    
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Add Shift"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add Shift</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Shiftcode" class="control-label"></label>
+                            <input asp-for="Shiftcode" class="form-control" maxlength="2" required />
+                            <span asp-validation-for="Shiftcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Shiftdesc" class="control-label"></label>
+                            <input asp-for="Shiftdesc" class="form-control" required />
+                            <span asp-validation-for="Shiftdesc" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="TimeIn" class="control-label"></label>
+                            <input id="timeIn" class="form-control datetimepicker" placeholder="@localizer["HH:mm"]" required />
+                            <span asp-validation-for="TimeIn" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="TimeOut" class="control-label"></label>
+                            <input id="timeOut" class="form-control datetimepicker" placeholder="@localizer["HH:mm"]" required />
+                            <span asp-validation-for="TimeOut" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="LunchMn" class="control-label"></label>
+                            <input asp-for="LunchMn" class="form-control" />
+                            <span asp-validation-for="LunchMn" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Shift4allowance" class="control-label"></label>
+                            <select asp-for="Shift4allowance" class="form-control chosen-select" data-placeholder="Optional">
+                                <option></option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="OtApplicable" class="control-label"></label>
+                            <select asp-for="OtApplicable" class="form-control chosen-select" data-placeholder="Optional">
+                                <option></option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

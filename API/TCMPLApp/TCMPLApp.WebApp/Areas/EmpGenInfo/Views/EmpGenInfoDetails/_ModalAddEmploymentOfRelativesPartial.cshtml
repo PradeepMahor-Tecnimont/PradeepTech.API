@@ -1,0 +1,109 @@
+﻿@model TCMPLApp.WebApp.Models.EmploymentOfRelativesAddViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    Html.AntiForgeryToken();
+}
+<form asp-controller="EmpGenInfoDetails"
+      asp-action="EmploymentOfRelativesAdd"
+      id="formEmploymentOfRelatives"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Add Employment Offfice Relatives"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add Employment Offfice Relatives</h5>
+            </div>
+            <div class="card-block">
+                <div class="YesRelative">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ColleagueName" class="control-label"></label>
+                                <select asp-for="ColleagueName" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmployeeList" required>
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="ColleagueName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ColleagueRelation" class="control-label"></label>
+                                <select asp-for="ColleagueRelation" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.RelationList" required>
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="ColleagueRelation" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <a title="Relative not found in EmployeeList" id="RelativeNotFound" class="btn btn-outline-primary btn-sm border border-white mx-2 ">
+                        <i class="fas fa-user"></i> &nbsp;Relative not found in EmployeeList
+                    </a>
+                </div>
+                
+               
+               
+                <div class="NoRelative" style="display:none">
+                    <a title="Relative In EmployeeList" id="RelativeFound" class="btn btn-outline-primary btn-sm border border-white mx-2 ">
+                        <i class="fas fa-user"></i> &nbsp;Relative In EmployeeList
+                    </a>
+                    <div class="row" >
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="RelativeName" class="control-label"></label>
+                                <input asp-for="RelativeName" class="form-control text-uppercase" />
+                                <span asp-validation-for="RelativeName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ColleagueDept" class="control-label"></label>
+                                <input asp-for="ColleagueDept" class="form-control"  />
+                                <span asp-validation-for="ColleagueDept" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="RelativeRelation" class="control-label"></label>
+                                <select asp-for="RelativeRelation" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.RelationList">
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="RelativeRelation" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ColleagueLocation" class="control-label"></label>
+                                <input asp-for="ColleagueLocation" class="form-control"  />
+                                <span asp-validation-for="ColleagueLocation" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

@@ -1,0 +1,151 @@
+﻿@model TCMPLApp.WebApp.Models.IncidentDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="modal-header">
+        <h5 class="modal-title">Incident preliminary report detail</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.ReportId</h5>
+            </div>
+            <div class="card-deck">
+                <div class="card shadow">
+                    <div class="card-block">
+                        <div style="display:none">
+                            @Html.HiddenFor(m => m.Reportid)
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Office)</div>
+                                    <div class="dd-met">@( Model.Office )</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Loc)</div>
+                                    <div class="dd-met">@( Model.Loc)</div>
+                                </div>
+                            </div>
+                            </div>            
+                            <div class="row p-1">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Inctypename)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Inctypename)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Naturename)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Naturename)</div>
+                                </div>
+                            </div>
+                        </div>            
+                        <div class="row p-1">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Incdate)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Incdate)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Inctime)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Inctime)</div>
+                                </div>
+                            </div>
+                        </div>            
+                        <div class="row p-1">
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Injuredparts)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Injuredparts)</div>
+                                </div>
+                            </div>                
+                        </div>           
+                        <div class="row p-1">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Empno)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Empno)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Empname)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Empname)</div>
+                                </div>
+                            </div>
+                        </div>           
+                        <div class="row p-1">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Desg)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Desg)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Age)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Age)</div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Sex)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Sex)</div>
+                                </div>
+                            </div>            
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Subcontractname)</div>                                    
+                                    <div class="dd-met">@(Model.Subcontractname == null ? "-NA-" : Model.Subcontractname)</div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Aid)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Aid)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Description)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Description)</div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Causes)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Causes)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Action)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Action)</div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>       
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">        
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>

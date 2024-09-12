@@ -1,0 +1,199 @@
+﻿@{
+UserIdentity currentUserIdentity = CurrentUserIdentity;
+ViewData["Title"] = "Employee Vaccine Date";
+Html.AntiForgeryToken();
+}
+
+@section styles
+{
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWPVaccine">SWPVaccine</a></li>
+    <li class="breadcrumb-item active">Employee Vaccine Date</li>
+</ol>
+}
+
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee Vaccine Dates</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <div class="row p-2">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-6 text-left">
+                            <a class="btn btn-outline-primary btn-sm border-white"
+                            data-jqueryselector="openmodal"
+                            data-modalcontainer="modalcontainer"
+                            data-modalpopupwidth="rightw35"
+                            data-url="@Url.Action("CreateEmpVaccineDetails","HREmpVaccineDateManage",new { Area="SWPVaccine"})"
+                            data-modaltitle="Employee vaccine details"
+                            data-modalheader="Employee vaccine details">
+                                <i class="fas fa-plus"></i>&nbsp;Add employee vaccine details
+                            </a>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button name="ExcelDownload" id="idExcelDownload" title="Excel Download"
+                                class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto">
+                                <i class="fas fa-file-excel green-color"></i>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="childcontent-div" id="div-registrationlist">
+            <div id="pv-vaccinedatelist">
+            </div>
+        </div>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts
+{
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+
+
+<script>
+    $(document).ready(function() {
+        $(document).ready(function() {
+            loadVaccineDateList();
+        });
+    });
+    function localScript() {
+        initSelect2();
+
+    }
+    function loadVaccineDateList() {
+        var divid = $("#pv-vaccinedatelist");
+        $.ajax({
+            url: '@Url.Action("GetEmpVaccineDateList", "HREmpVaccineDateManage")',
+            data: {
+            },
+            type: 'GET',
+            beforeSend: function() {
+                showLoader();
+            },
+            success: function(data) {
+                hideLoader();
+                divid.html(data);
+                $("#empVaccineDateTab").DataTable({
+                    "drawCallback": function(settings) {
+                        loadGridEvents();
+                    },
+                    'aaSorting': [[1, 'asc']], // start to sort data in second column
+                    'aaSorting': [[1, 'asc']], // start to sort data in second column
+                    'pagingType': 'full'
+                });
+            },
+            error: function(xhr) {
+                showError(xhr);
+                hideLoader();
+            }
+        });
+    }
+    function loadGridEvents() {
+        $('#empVaccineDateTab tbody').off('click', 'td #idRemoveEntry').on('click', 'td #idRemoveEntry', function() {
+            deleteRegistration(this);
+        });
+        loadScript();
+    }
+
+    function deleteRegistration(object) {
+
+        var confirmationtext = $(object).data('confirmationtext');
+        var jsUrl = $(object).data('url');
+
+        var dataParams = $(object).data();
+
+        delete dataParams["url"];
+        delete dataParams["confirmationtext"];
+
+        swal({
+            title: "Are you sure you want to delete?",
+            text: confirmationtext,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnconfirm: true
+        }, function() {
+            $.ajax({
+                type: "POST",
+                url: jsUrl,
+                data: dataParams,
+                beforeSend: function() {
+                    showLoader();
+                },
+                success: function(data) {
+                    if (data.success) {
+                        loadVaccineDateList();
+                        hideLoader();
+                        toastr.success(data.message);
+                    } else {
+                        hideLoader();
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+    $('#idExcelDownload').click(function() {
+        $.ajax({
+
+            url: '@Url.Action("ExcelDownload", "HREmpVaccineDateManage")',
+            type: "GET",
+            cache: false,
+            xhrFields: {
+                responseType: 'blob'
+            },
+            beforeSend: function() {
+                showLoader();
+            },
+            success: function(data) {
+                var link = document.createElement('a');
+                var url = window.URL.createObjectURL(data);
+
+                link.href = window.URL.createObjectURL(data);
+                link.download = "EmployeeVaccineDates.xlsx";
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(url);
+                hideLoader();
+                toastr.success("File downloaded successfully.");
+            },
+            error: function(xhr) {
+                showError("error", xhr, 'danger');
+            }
+        });
+    });
+
+    function PostSaveReLoadDataTable(data) {
+        console.log(data);
+        if (data.success) {
+            $("#modalcontainer").modal('hide');
+            loadVaccineDateList();
+            hideLoader();
+            notify('success', data.message, 'Success');
+        } else {
+            initToastrMessage();
+        }
+    }
+
+
+</script>
+}

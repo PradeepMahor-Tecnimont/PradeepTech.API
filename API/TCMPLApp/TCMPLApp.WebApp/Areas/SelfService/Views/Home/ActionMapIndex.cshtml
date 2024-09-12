@@ -1,0 +1,267 @@
+﻿@model TCMPLApp.WebApp.Models.ActionMapDataViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@Html.AntiForgeryToken()
+@{
+    ViewData["Title"] = "Execute Action";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item"><a asp-action="ActionsHRIndex" asp-controller="Home" asp-area="SelfService">HR actions</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Execute Action</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-8 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Execute Action (Site Map)</p>
+    </div>
+
+
+    <div class="bg-gray-active rounded ">
+
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="input" name="input" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <div class="m-2"></div>
+
+        <button class="btn btn-outline-primary btn-sm border-none" id="show_all" type="button" data-dismiss="modal">
+            <i class="fas fa-plus"></i>&nbsp;&nbsp;@localizer["Expand all"]
+        </button>
+        <button class="btn btn-outline-primary btn-sm border-none" id="hide_all" type="button" data-dismiss="modal">
+            <i class="fas fa-minus"></i>&nbsp;&nbsp;@localizer["Collapse all"]
+        </button>
+
+        <div class="m-2"></div>
+
+        <table id="mytable" class="table-responsive-lg table-hover" style="border-collapse: collapse;font-size:16px;padding-left:10px;width:100%;">
+            <!-- JSON data rows will be display here -->
+            <tbody>
+            </tbody>
+
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/site-reportSiteMap.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            GetActionSiteMapData();
+
+            localScript();
+            loadScript();
+
+        });
+
+        function localScript() {
+
+            initSelect2();
+            initDatePicker();
+
+            $('#btnExecuteAction').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                executeModalAction();
+            });
+            
+        }
+        
+        var ReportSiteMapData = "";
+
+        function GetActionSiteMapData() {
+            $.ajax({
+                url: 'GetActionSiteMapData',
+                method: 'GET',
+                success: function (data) {
+
+                    ReportSiteMapData = data;
+
+                    loadReportSiteMapData(ReportSiteMapData);
+                    actionExecuteListener();
+                },
+                error: function (error) {
+                    console.error('Error fetching data: ' + error);
+                }
+            });
+        }
+
+        function loadReportSiteMapData(data) {
+
+            //console.log(data);
+
+            var $tableBody = $('#mytable > tbody:last-child');
+            let row = "";
+            let isleaf = "";
+            let navTd = "";
+
+            let ModelUrl = "@Url.Action("ReportDownload", "Home", new { Area = "SelfService" })";
+
+            $.each(JSON.parse(data), function (index, ReportMap) {
+
+                if (ReportMap.IsLeaf == 1)
+                    isleaf = "leaf";
+                else
+                    isleaf = "branch";
+
+                if (isleaf == "branch") {
+                    navTd = '<tr data-depth="' + ReportMap.IsLeaf + '" class="Collapse level' + ReportMap.IsLeaf + " " + isleaf + ' open">' +
+                        '<td><a class="hover" style="color:black">' + ReportMap.ActionName + '</a></td><td>&nbsp;</td> ';
+                }
+                else {
+                    navTd = '<tr data-depth="' + ReportMap.IsLeaf + '" class="level' + ReportMap.IsLeaf + '">' +
+                        '<td class=' + isleaf + '>' + ReportMap.ActionName + '</td>';
+
+                    if (ReportMap.ActionType == "A01") {
+                        navTd = navTd + '<td><button id="exportButton" class="btn btn-outline-light btn-sm border-none" ' +
+                            'data-jqueryselector = "actionExecutor" ' +
+                            'data-modalpopupwidth = "rightw35" ' +
+                            'data-filterpopupurl = "' + ReportMap.FilterPopupUrl + '" ' +
+                            'data-actionurl = "' + ReportMap.ActionUrl + '" ' +
+                            'data-modelurl = "' + ModelUrl + '" ' +
+                            'data-actionid = "' + ReportMap.ActionId + '" ' +
+                            'data-controllermethodparams="' + ReportMap.ControllerMethodParamNames + '"' +
+                            'data-requestmethodtype="' + ReportMap.RequestMethodType + '"' +
+                            'data-indexformfields="' + ReportMap.IndexFormFields + '"' +
+                            'data-sitemappath="' + ReportMap.SiteMapPath + '"' +
+                            ' href = "#" ' +
+                            'title = "Download File" >' +
+                            '<i class="fas fa-file-excel leafIcon"></i></button></td>';
+                    }
+                    else if (ReportMap.ActionType == "A02") {
+                        navTd = navTd + '<td><button id="exportButton" class="btn btn-outline-light btn-sm border-none" ' +
+                            'data-jqueryselector = "actionExecutor" ' +
+                            'data-modalpopupwidth = "rightw35" ' +
+                            'data-filterpopupurl = "' + ReportMap.FilterPopupUrl + '" ' +
+                            'data-actionurl = "' + ReportMap.ActionUrl + '" ' +
+                            'data-modelurl = "' + ModelUrl + '" ' +
+                            'data-actionid = "' + ReportMap.ActionId + '" ' +
+                            'data-controllermethodparams="' + ReportMap.ControllerMethodParamNames + '"' +
+                            'data-requestmethodtype="' + ReportMap.RequestMethodType + '"' +
+                            'data-indexformfields="' + ReportMap.IndexFormFields + '"' +
+                            'data-sitemappath="' + ReportMap.SiteMapPath + '"' +
+                            ' href = "#" ' +
+                            'title = "Execute Procedure" >' +
+                            '<i class="fas fa-cogs exeproc"></i></button></td>';
+                    }
+                    else { navTd = navTd + '<td></td>'; }
+                }
+
+                row = row + navTd + '</tr> \n';
+
+            });
+            //console.log(row);
+            $tableBody.append(row);
+
+            $('.Collapse').on('click', function () {
+                var findChildren = function (tr) {
+                    var depth = tr.data('depth');
+                    return tr.nextUntil($('tr').filter(function () {
+                        return $(this).data('depth') <= depth;
+                    }));
+                };
+
+                var children = findChildren($(this));
+                if ($(children).is(':visible')) {
+                    $(this).removeClass("open");
+                    $(this).addClass("closed");
+                    $(children).hide();
+
+                } else {
+                    $(this).removeClass("closed");
+                    $(children).show();
+                    var children = findChildren($(".closed"));
+                    $(this).addClass("open");
+                    $(children).hide();
+
+                }
+            });
+
+            $('#show_all').on('click', function () {
+                $("#mytable tr.Collapse").removeClass("closed").show();
+                $("#mytable tr").removeClass("closed").show();
+            });
+
+            $("#hide_all").on("click", function () {
+                $("#mytable tr.Collapse:not([data-depth='0'])").hide();
+                $("#mytable tr:not([data-depth='0'])").hide();
+                let a = document.querySelectorAll("#mytable tr.Collapse.level0");
+                for (const iterator of a) {
+                    if (iterator.nextSibling.nextSibling.className.includes("level1")) {
+                        $("#mytable tr.Collapse").removeClass("open");
+                        $(iterator).addClass("closed");
+                    }
+                }
+            });
+        }
+
+
+        function initDatePicker() {
+
+            $('.datepicker').datepicker({
+                autoclose: true,
+                format: 'dd-M-yyyy',
+                weekStart: 0,
+                time: false,
+                nowButton: true
+            });
+
+            $('.selectMonthYearFilter').datepicker({
+                autoclose: true,
+                format: "yyyy-mm",
+                startView: "months",
+                minViewMode: "months"
+            });
+
+            $('.selectYearFilter').datepicker({
+                autoclose: true,
+                format: "yyyy",
+                startView: "years",
+                minViewMode: "years",
+                maxViewMode: "years",
+                changeYear: true,
+                clearBtn: true,
+                endDate: new Date()
+
+            });
+
+            // $('#date1').bootstrapMaterialDatePicker({
+            //     format: 'DD-MMM-YYYY',
+            //     weekStart: 0,
+            //     time: false
+            // }).on('change', function (e, date) {
+            //     $("#Date1").val(date.format('DD-MMM-YYYY'));
+            // });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+            });
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+        }
+
+    </script>
+}

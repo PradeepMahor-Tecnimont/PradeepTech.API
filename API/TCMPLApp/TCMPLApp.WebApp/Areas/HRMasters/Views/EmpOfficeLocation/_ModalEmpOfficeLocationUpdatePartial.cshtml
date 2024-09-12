@@ -1,0 +1,142 @@
+﻿@model TCMPLApp.WebApp.Models.EmpOfficeLocationEditViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="EmpOfficeLocation"
+      asp-action="EmpOfficeLocationList"
+      id="formEmpOfficeLocationDetailIndex"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+@*    <input type="hidden" asp-for="@Model.StartDate" />*@
+    <div class="modal-header">
+        <h5 class="modal-title">Employee Office Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Employee Office Details"]</h5>
+            </div>
+            <div class="card-toolbar">
+                <div role="toolbar">
+                    <a title="Create" class="btn btn-outline-primary btn-sm border-none" href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("EmpOfficeLocationCreate", "EmpOfficeLocation", new { Area = "HRMasters", empno = @Model.Empno.ToString()})'
+                       data-modaltitle="Create"
+                       data-modalheader="Create"
+                       data-empno="@Model.Empno.ToString()">
+                        &nbsp;&nbsp;<i class="fas fa-plus"></i> Create
+                    </a>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Empno + " - " + Model.Name)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Assign)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Assign)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Parent)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Parent)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Emptype)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Emptype)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Grade)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Grade)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmpOfficeLocation)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmpOfficeLocation)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div style="overflow:auto">
+                    <table id="tblEmpOfficeDetails" class="table table-bordered  table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr class="font-weight-bold">
+                                <th> @localizer["Start Date"] </th>
+                                <th> @localizer["Office Location"] </th>
+                                <th> @localizer["Modified by"] </th>
+                                <th> @localizer["Modified on"] </th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

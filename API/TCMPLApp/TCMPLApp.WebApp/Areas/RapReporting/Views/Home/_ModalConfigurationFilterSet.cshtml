@@ -1,0 +1,113 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    const string actionNameAnalyticalCostCenterIndex = "AnalyticalCostCenterIndex";
+    const string actionNameGeneralCostCenterIndex = "GeneralCostCenterIndex";
+    const string actionNameAnalyticalProjectIndex = "AnalyticalProjectIndex";
+    const string actionNameGeneralProjectIndex = "GeneralProjectIndex";
+    const string actionNameManhoursProjectionsCurrentJobsIndex = "ManhoursProjectionsCurrentJobsIndex";
+    const string actionNameManhoursProjectionsExpectedJobsIndex = "ManhoursProjectionsExpectedJobsIndex";
+    const string actionNameProjectActivityIndex = "ProjectActivityIndex";
+    const string actionNameAnalyticalEnggIndex = "AnalyticalEnggIndex";
+    const string actionNameAnalyticalNonEnggIndex = "AnalyticalNonEnggIndex";
+    const string actionNameManagementIndex = "ManagementIndex";
+    const string actionNameOvertimeUpdateIndex = "OvertimeUpdateIndex";
+}
+
+
+<form id="filterSetRapReporting"
+      asp-area="RapReporting"
+      asp-controller="Home"
+      asp-action="FilterSet"
+      data-ajax-method="post">
+
+    <input type="hidden" asp-for="ActionName" />
+    <input type="hidden" asp-for="ControllerName" />
+    <input type="hidden" asp-for="Dummy_CostCode" value="@Model.CostCode" />
+    <input type="hidden" asp-for="Dummy_Projno" value="@Model.Projno" />    
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Filter"]</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Filter setup"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+
+            </div>
+            <div class="card-block">
+                
+                <div class="form-group">
+                    <label asp-for="Yyyy" class="control-label"></label>
+                    <select id="filterSetRapReporting_yyyy" asp-for="Yyyy" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Years" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="Yyyy" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="YearMode" class="control-label"></label>
+                    <select id="filterSetRapReporting_yearmode" asp-for="YearMode" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.YearModes" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="YearMode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Yyyymm" class="control-label"></label>
+                    <select id="filterSetRapReporting_yyyymm" asp-for="Yyyymm" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Yyyymms" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="Yyyymm" class="text-danger"></span>
+                </div>
+                
+                @if (Model.ActionName == actionNameAnalyticalCostCenterIndex || 
+                     Model.ActionName == actionNameGeneralCostCenterIndex || 
+                     Model.ActionName == actionNameManhoursProjectionsCurrentJobsIndex || 
+                     Model.ActionName == actionNameManhoursProjectionsExpectedJobsIndex || 
+                     Model.ActionName == actionNameProjectActivityIndex ||
+                     Model.ActionName == actionNameOvertimeUpdateIndex)
+                {
+                    <div class="form-group">
+                        <label asp-for="CostCode" class="control-label"></label>
+                        <select asp-for="CostCode" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.CostCodes" required>
+                            <option selected></option>
+                        </select>
+                        <span asp-validation-for="CostCode" class="text-danger"></span>
+                    </div>
+                }
+                @if (Model.ActionName == actionNameAnalyticalProjectIndex || Model.ActionName == actionNameGeneralProjectIndex || Model.ActionName == actionNameProjectActivityIndex)
+                {
+                    <div class="form-group">
+                        <label asp-for="Projno" class="control-label"></label>
+                        <select asp-for="Projno" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Projnos" required>
+                            <option selected></option>
+                        </select>
+                        <span asp-validation-for="Projno" class="text-danger"></span>
+                    </div>
+                }
+                @if (Model.ActionName == actionNameAnalyticalEnggIndex  || Model.ActionName == actionNameAnalyticalNonEnggIndex || Model.ActionName == actionNameManagementIndex)
+                {
+                    <div class="form-group">
+                       <label asp-for="Simul" class="control-label"></label>
+                       <select asp-for="Simul" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Simulations" required>
+                            <option selected></option>
+                       </select>
+                       <span asp-validation-for="Simul" class="text-danger"></span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button id="btnRapReportingCancel" type="button" class="btn btn-secondary">
+            @localizer["Cancel"]
+        </button>
+    </div>
+</form>

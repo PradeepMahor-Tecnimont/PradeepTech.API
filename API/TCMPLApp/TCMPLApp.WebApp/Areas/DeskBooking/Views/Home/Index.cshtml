@@ -1,0 +1,875 @@
+﻿@model TCMPLApp.WebApp.Models.DeskBookingIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Flexi Desk Booking</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+@{
+    ViewData["Title"] = "Desk Booking";
+}
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-r-5">
+        <a href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/Flexi%20Desk%20Booking%20Manual.pdf?csf=1&e=HAnQs7" target="_blank">
+            <i class="fas fa-info-circle fa-2x"></i>
+        </a>
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <div class="row ">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DeskBooking.DeskBookingHelper.ActionDeskBookingCreate))
+        {
+
+            <div class="col-xl-3 col-md-4 col-sm-12 ">
+                <div class=" mt-1">
+                    <div class="card-deck" style="min-height:280px;">
+                        <div class="card shadow col-md-12 col-xl-12 ">
+                            <div class="card-block pl-0 pr-0">
+                                <div class="card-header" style="height: 40px!important;padding-left: 15px;padding-top: 5px;">
+                                    <h5 class="card-title">
+                                        <b>
+                                            Desk booking
+                                        </b>
+                                    </h5>
+                                    <br />
+                                </div>
+                                <div class="row m-0 p-0 w-100">
+                                    <div id="deskBoookingDetailPartial" class="w-100" style="max-height:210px!important;position: relative;">
+                                        <a title="GoTo History" class="btn btn-outline-primary btn-sm border border-white mx-2 "
+                                           asp-area="DeskBooking" asp-action="DBHistoryIndex" asp-controller="Bookings">
+                                            <i class="fas fa-walking"></i> &nbsp;GoTo History
+                                        </a>
+                                        <div style="overflow-y: scroll; max-height:180px!important;">
+                                            <table class="table  table-bordered w-100 table-responsive-lg" style="width:100%!important">
+                                                <thead class="bg-info text-white">
+                                                    <tr role="row">
+                                                        <th>Attendance Date</th>
+                                                        <th>Office</th>
+                                                        <th>Desk id</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var bookDesk in Model.deskBookingDataTableLists)
+                                                    {
+                                                        <tr>
+                                                            <td>@bookDesk.AttendanceDate.ToString("ddd dd-MMM") </td>
+                                                            <td>@bookDesk.Office</td>
+                                                            <td><b>@bookDesk.Deskid</b></td>
+                                                            <td style="text-align:center">
+                                                                @if (CurrentUserIdentity.ProfileActions
+.Any(p => p.ActionId == TCMPLApp.Domain.Models.DeskBooking.DeskBookingHelper.ActionDeskBookingCreate))
+                                                                {
+                                                                    @if (bookDesk.ActionType == "DL")
+                                                                    {
+
+                                                                        <a class="btn btn-outline-danger btn-sm border-none  " id="btnReleaseDesk"
+                                                                           onclick="showDeleteConfirmationPopup(event,this);"
+                                                                           data-jqueryselector="showconfirmationmodal"
+                                                                           data-url="@Url.Action("ReleaseDesk", "Home", new { Area = "DeskBooking" })"
+                                                                           data-id="@bookDesk.KeyId"
+                                                                           data-redirecturl="@Url.Action("Index", "Home", new { Area = "DeskBooking" })"
+                                                                           data-PostDeleteReLoadDataTables="OK"
+                                                                           data-modaltitle="Please Confirm!"
+                                                                           data-confirmationtext="Do you want to release desk (@bookDesk.Deskid - @bookDesk.AttendanceDate) ?"
+                                                                           data-confirmationtype="warning"
+                                                                           title="Release desk"
+                                                                           data-confirmbuttontext="Release">
+                                                                            <i class="fas fa-trash" aria-hidden="true"></i>Del
+                                                                        </a>
+                                                                    }
+                                                                    @if (bookDesk.ActionType == "QB")
+                                                                    {
+
+                                                                        <a class="btn btn-outline-primary btn-sm border border-white"
+                                                                           style="float:right" id="btnDesk" data-jqueryselector="openmodal"
+                                                                           data-modalcontainer="modalcontainer"
+                                                                           data-url="@Url.Action("CreateDeskBooking", "Bookings", new { Area = "DeskBooking" })"
+                                                                           data-quickbookdate="@bookDesk.AttendanceDate.ToString("dd-MMM-yyyy")"
+                                                                           data-modalpopupwidth="rightw35"
+                                                                           data-modaltitle="Book"
+                                                                           data-modalheader="Book">
+                                                                            Book
+                                                                        </a>
+                                                                    }
+                                                                    @if (bookDesk.ActionType == "CH")
+                                                                    {
+                                                                        <a class="btn btn-outline-primary btn-sm border border-white"
+                                                                           style="float:right" id="btnDesk" data-jqueryselector="openmodal"
+                                                                           data-modalcontainer="modalcontainer"
+                                                                           data-url="@Url.Action("ChangeDeskBooking", "Bookings", new { Area = "DeskBooking" })"
+                                                                           data-quickbookdate="@bookDesk.AttendanceDate.ToString("dd-MMM-yyyy")"
+                                                                           data-modalpopupwidth="rightw35"
+                                                                           data-modaltitle="Change desk"
+                                                                           data-modalheader="Change desk">
+                                                                            Change
+                                                                        </a>
+                                                                    }
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+        @* <div class="col-md-4 col-xl-3 pt-1" style="display:none">
+            <div class="card card-tpl">
+            <div class="card-header">
+            <h5>Employee project mapping</h5>
+            </div>
+            <div class="card-block card-tile">
+            <a href="@Url.Action("EmployeeProjectMappingIndex", "Bookings", new { Area = "DeskBooking" })">
+            <div class="row align-items-center justify-content-center stretched-link">
+            <div class="col">
+            <h3 class="mb-2 f-w-300"> </h3>
+            </div>
+            <div class="col-auto">
+            <i class="fas fa-file-invoice f-20 text-white theme-red"></i>
+            </div>
+            </div>
+            </a>
+            </div>
+            </div>
+            <div class="card card-tpl">
+            <div class="card-header">
+            <h5>Employee preferences</h5>
+            </div>
+            <div class="card-block card-tile">
+            <a href="@Url.Action("EmployeePreference", "Bookings", new { Area = "DeskBooking" })">
+            <div class="row align-items-center justify-content-center stretched-link">
+            <div class="col">
+            <h3 class="mb-2 f-w-300"> </h3>
+            </div>
+            <div class="col-auto">
+            <i class="fas fa-file-invoice f-20 text-white theme-red"></i>
+            </div>
+            </div>
+            </a>
+            </div>
+            </div>
+            </div> *@
+        <div class="col-xl-9 col-md-8 col-sm-12 pt-1 ">
+            <div class="row">
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DeskBooking.DeskBookingHelper.ActionDeskBookingCreate))
+                {
+                    <environment include="Development,Staging">
+                        <div class="col-md-4 col-xl-4" hidden>
+                            <div class="card card-tpl">
+                                <div class="card-header">
+                                    <h5>My Preferences</h5>
+                                </div>
+                                <div class="card-block card-tile">
+                                    <a href="@Url.Action("EmployeePreference", "Bookings", new { Area = "DeskBooking" })">
+                                        <div class="row align-items-center justify-content-center stretched-link">
+                                            <div class="col">
+                                                <h7 class="mb-2 f-w-300">My Preferences</h7>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-user-tag f-20 text-white theme-capri"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </environment>
+                }
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.DeskBooking.DeskBookingHelper.RoleCabinBookAdmin) ||
+CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.DeskBooking.DeskBookingHelper.RoleCabinBookingEmployee))
+                {
+                    <div class="col-md-4 col-xl-4">
+                        <div class="card card-tpl">
+                            <div class="card-header">
+                                <h5>Cabin Booking </h5>
+                            </div>
+                            <div class="card-block card-tile">
+                                <a href="@Url.Action("DeskBookCabinBookingIndex",  "Bookings", new { Area = "DeskBooking" })">
+                                    <div class="row align-items-center justify-content-center stretched-link">
+                                        <div class="col">
+                                            <h7 class="mb-2 f-w-300"></h7>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users f-20 text-white theme-capri"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DeskBooking.DeskBookingHelper.ActionDeskBookDept))
+                {
+
+                    <div class="col-md-4 col-xl-4">
+                        <div class="card card-tpl">
+                            <div class="card-header">
+                                <h5>Employee - Area mapping</h5>
+                            </div>
+                            <div class="card-block card-tile">
+                                <a href="@Url.Action("DeskAreaUserMapHodIndex", "Bookings", new { Area = "DeskBooking" })">
+                                    <div class="row align-items-center justify-content-center stretched-link">
+                                        <div class="col">
+                                            <h7 class="mb-2 f-w-300">Add / modify Desk Area User Map details</h7>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user-tag f-20 text-white theme-capri"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-4" style="display:none">
+                        <div class="card card-tpl">
+                            <div class="card-header">
+                                <h5>Summary</h5>
+                            </div>
+                            <div class="card-block card-tile">
+                                <a href="@Url.Action("SummaryIndex", "Bookings", new { Area = "DeskBooking" })">
+                                    <div class="row align-items-center justify-content-center stretched-link">
+                                        <div class="col">
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user-tag f-20 text-white theme-capri"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-4" style="display:none">
+                        <div class="card card-tpl">
+                            <div class="card-header">
+                                <h5>Hod : Area Wise Desk Booking</h5>
+                            </div>
+                            <div class="card-block card-tile">
+                                <a href="@Url.Action("AreaWiseDeskBookingIndex", "Bookings", new { Area = "DeskBooking" })">
+                                    <div class="row align-items-center justify-content-center stretched-link">
+                                        <div class="col">
+                                            <h7 class="mb-2 f-w-300"></h7>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user-tag f-20 text-white theme-capri"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-4">
+                        <div class="card card-tpl">
+                            <div class="card-header">
+                                <h5>Booking Summary</h5>
+                            </div>
+                            <div class="card-block card-tile">
+                                <a href="@Url.Action("BookingSummaryIndex", "Bookings", new { Area = "DeskBooking" })">
+                                    <div class="row align-items-center justify-content-center stretched-link">
+                                        <div class="col">
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-file-invoice f-20 text-white theme-red"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-4">
+                        <div class="card card-tpl">
+                            <div class="card-header">
+                                <h5>Employee - DeskBook</h5>
+                            </div>
+                            <div class="card-block card-tile">
+                                <a href="@Url.Action("DeskBookAttendanceHodIndex", "Bookings", new { Area = "DeskBooking" })">
+                                    <div class="row align-items-center justify-content-center stretched-link">
+                                        <div class="col">
+                                            <h7 class="mb-2 f-w-300"></h7>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users f-20 text-white theme-green"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row ">
+
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DeskBooking.DeskBookingHelper.ActionDeskBookAdmin))
+        {
+            <div class="col-md-4 col-xl-3 pt-1">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Admin : Employee - DeskBook </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskBookAttendanceDmsIndex",  "Bookings", new { Area = "DeskBooking" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Desk Area User Map details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Admin : Employee - Cross Desk Booked</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                           data-jqueryselector="binarydownload"
+                           data-url="@(Url.Action("CrossBookingSummaryDmsExcelDownload", "Bookings",
+                        new { Area = "DeskBooking" }))">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                    <div class="text-center tileLoader hidden ">
+                                        <div class="spinner-border text-info text-center  "
+                                             style="width: 2.5rem; height: 2.5rem;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users	f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Admin : Booking Summary</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AdminBookingSummaryIndex", "Bookings", new { Area = "DeskBooking" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-invoice f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee - Location Mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("EmpLocationMappingIndex", "Bookings", new { Area = "DeskBooking" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        }
+
+        @* <div class="col-md-4 col-xl-3">
+            </div> *@
+
+        @* <div class="col-md-4 col-xl-3 pt-1">
+            </div> *@
+        @* <div class="col-md-4 col-xl-3 pt-1">
+            <div class="card card-tpl">
+            <div class="card-header">
+            <h5>Summary</h5>
+            </div>
+            <div class="card-block card-tile">
+            <a href="@Url.Action("SummaryIndex", "Bookings", new { Area = "DeskBooking" })">
+            <div class="row align-items-center justify-content-center stretched-link">
+            <div class="col">
+            </div>
+            <div class="col-auto">
+            <i class="fas fa-user-tag f-20 text-white theme-capri"></i>
+            </div>
+            </div>
+            </a>
+            </div>
+            </div>
+            </div> *@
+    </div>
+
+    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DeskBooking.DeskBookingHelper.ActionDeskBookMonitor))
+    {
+        <hr />
+        <div class="row ">
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Booking Attendance Status</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskBookingAttendanceStatusIndex", "Bookings",
+                            new { Area = "DeskBooking" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>Floor Plan : Moc-4</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("FloorPlanIndex", "Bookings", new { Area = "DeskBooking" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        var datatableFlag = "NA";
+
+        function localScript() {
+            initSelect2();
+            BookingDateChage();
+            //DeskAreaChange();
+            OfficeChange();
+            ShiftChange();
+        }
+        function BookingDateChage() {
+            $('#BookingDate').change(function () {
+                console.log("check");
+                var selectedDate = $(this).val();
+                var office = $('#DeskOffice').val();
+                var desk = $('#Desk').val();
+                var selectedShift = $('#Shift').val();
+                var areaId = $('#DeskArea').val();
+
+                var newdate = moment($("#BookingDate").val(), "YYYY-MM-DD HH:mm").format('YYYY-MM-DD HH:mm');
+
+                if (selectedDate === '' || selectedDate == null) {
+
+                    $('#DeskOffice').empty();
+                    $('#Shift').empty();
+                    $('#DeskArea').empty();
+                    $('#Desk').empty();
+                    return;
+                }
+
+                if (selectedDate != '' || selectedDate != null) {
+
+                    $('#DeskOffice').empty();
+                    $('#Shift').empty();
+                    $('#DeskArea').empty();
+                    $('#Desk').empty();
+
+                    $.ajax({
+                        url: "@Url.Action("GetOfficeList", "Bookings", new { Area = "DeskBooking" })",
+                        type: 'GET',
+                        data: {},
+                        beforeSend: function () {
+                            showModalLoader();
+                        },
+                        success: function (data) {
+                            let dropdown = $('#DeskOffice');
+                            dropdown.empty();
+                            var options = '';
+                            var flag = false;
+                            var phase = null;
+                            $(data).each(function () {
+
+                                options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+
+                            });
+                            dropdown.html(options);
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideModalLoader();
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+                else {
+                    $('#Shift').empty();
+                    $('#DeskArea').empty();
+                    $('#Desk').empty();
+
+                    if ($("#BookingDate").val() == null || $("#BookingDate").val() == '' || $("#BookingDate").val() == 'null') {
+                        return;
+
+                    }
+
+                    var newdate = moment($("#BookingDate").val(), "YYYY-MM-DD HH:mm").format('YYYY-MM-DD HH:mm');
+
+                    $.ajax({
+                        url: "@Url.Action("GetDeskListForBooking", "Bookings", new { Area = "DeskBooking" })",
+                        type: 'GET',
+                        data: {
+                            office: office,
+                            selectedDate: newdate,
+                            shift: selectedShift,
+                            areaId: areaId,
+                        },
+                        beforeSend: function () {
+                            showModalLoader();
+                        },
+                        success: function (data) {
+                            let dropdown = $('#Desk');
+                            dropdown.empty();
+                            var options = '';
+                            var optgroup = null;
+                            var optgroupValStart = null;
+                            var optgroupValEnd = null;
+                            var flag = false;
+                            var phase = null;
+                            optgroupValStart = '';
+                            optgroupValEnd = '';
+                            options += '<option> </option>';
+                            $(data).each(function () {
+
+                                if (this.dataGroupField != null && this.dataGroupField != optgroup) {
+                                    optgroup = this.dataGroupField;
+                                    optgroupValStart = ' <optgroup label="' + this.dataGroupField + '" style="color: teal!important;font - size: 16px!important; " >';
+                                    options += optgroupValStart;
+                                }
+                                options += ' <option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                if (this.dataGroupField != null && this.dataGroupField != optgroup) {
+                                    optgroup = this.dataGroupField;
+                                    optgroupValEnd = ' </optgroup>';
+                                    options += optgroupValEnd;
+                                }
+                            });
+                            dropdown.html(options);
+                            if (flag == false) {
+                                phase = null;
+                            }
+                            dropdown.val(phase);
+                            hideModalLoader();
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+
+            });
+        }
+
+        function OfficeChange() {
+
+            $('#DeskOffice').change(function () {
+
+                var selectedoffice = $(this).val();
+                var shift = $('#Shift').val();
+
+                var selectedDate = $('#BookingDate').val();
+                var office = $('#DeskOffice').val();
+                var desk = $('#Desk').val();
+                var shift = $('#Shift').val();
+                var areaId = $('#DeskArea').val();
+
+                var newdate = moment($("#BookingDate").val(), "YYYY-MM-DD HH:mm").format('YYYY-MM-DD HH:mm');
+
+                if (selectedoffice == null || selectedoffice === '') {
+                    $('#Shift').empty();
+                    $('#Desk').empty();
+                }
+                else {
+                    $.ajax({
+                        url: "@Url.Action("GetShiftList", "Bookings", new { Area = "DeskBooking" })",
+                        type: 'GET',
+                        data: {
+                            office: selectedoffice,
+                        },
+                        beforeSend: function () {
+                            showModalLoader();
+                        },
+                        success: function (data) {
+                            let dropdown = $('#Shift');
+                            dropdown.empty();
+                            var flag = false;
+                            var phase = null;
+                            var options = '';
+                            options += '<option> </option>';
+                            $(data).each(function () {
+
+                                if (this.dataValueField == "GS") {
+                                    flag = true;
+                                     options += '<option selected="selected" value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                }
+                                else {
+                                    options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                }
+
+                            });
+                            dropdown.html(options);
+
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideModalLoader();
+                            $("#Shift").select2().select2('val', 'GS');
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            showError(result);
+                        }
+                    });
+
+                    // $.ajax({
+                    //     url: "@Url.Action("GetDeskListForBooking", "Bookings", new { Area = "DeskBooking" })",
+                    //     type: 'GET',
+                    //     data: {
+                    //         office: office,
+                    //         selectedDate: newdate,
+                    //         shift: shift
+                    //     },
+                    //     beforeSend: function () {
+                    //         showModalLoader();
+                    //     },
+                    //     success: function (data) {
+                    //         let dropdown = $('#Desk');
+                    //         dropdown.empty();
+                    //         var flag = false;
+                    //         var phase = null;
+
+                    //         var options = '';
+                    //         options += '<option> </option>';
+                    //         $(data).each(function () {
+                    //             flag = true;
+                    //             options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                    //         });
+                    //         dropdown.html(options);
+                    //         if (flag == false) {
+                    //             phase = null;
+                    //         }
+
+                    //         dropdown.val(phase);
+                    //         hideModalLoader();
+                    //     },
+                    //     error: function (result) {
+                    //         hideModalLoader();
+                    //         showError(result);
+                    //     }
+                    // });
+                }
+            });
+        }
+
+        function ShiftChange() {
+            $('#Shift').change(function () {
+
+                var selectedShift = $(this).val();
+                var office = $('#DeskOffice').val();
+
+                var selectedDate = $(this).val();
+                var areaId = $('#DeskArea').val();
+
+                if ($("#BookingDate").val() == null || $("#BookingDate").val() == '' || $("#BookingDate").val() == 'null') {
+                    return;
+
+                }
+
+                var newdate = moment($("#BookingDate").val(), "YYYY-MM-DD HH:mm").format('YYYY-MM-DD HH:mm');
+
+                if (selectedShift == null || selectedShift == '' || selectedShift == 'null') {
+
+                    $('#DeskArea').empty();
+                    $('#Desk').empty();
+                }
+                else {
+
+                    $.ajax({
+                        url: "@Url.Action("GetDeskListForBooking", "Bookings", new { Area = "DeskBooking" })",
+                        type: 'GET',
+                        data: {
+                            office: office,
+                            selectedDate: newdate,
+                            shift: selectedShift,
+                            areaId: areaId,
+                        },
+                        beforeSend: function () {
+                            showModalLoader();
+                        },
+                        success: function (data) {
+                            let dropdown = $('#Desk');
+                            dropdown.empty();
+                            var options = '';
+                            var optgroup = null;
+                            var optgroupValStart = null;
+                            var optgroupValEnd = null;
+                            var flag = false;
+                            var phase = null;
+                            optgroupValStart = '';
+                            optgroupValEnd = '';
+                            options += '<option> </option>';
+                            $(data).each(function () {
+
+                                if (this.dataGroupField != null && this.dataGroupField != optgroup) {
+                                    optgroup = this.dataGroupField;
+                                    optgroupValStart = ' <optgroup label="' + this.dataGroupField + '" style="color: teal!important;font - size: 16px!important; " >';
+                                    options += optgroupValStart;
+                                }
+                                options += ' <option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                if (this.dataGroupField != null && this.dataGroupField != optgroup) {
+                                    optgroup = this.dataGroupField;
+                                    optgroupValEnd = ' </optgroup>';
+                                    options += optgroupValEnd;
+                                }
+                            });
+                            dropdown.html(options);
+                            if (flag == false) {
+                                phase = null;
+                            }
+                            dropdown.val(phase);
+                            hideModalLoader();
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+            });
+        }
+
+        // function DeskAreaChange() {
+        //     $('#DeskArea').change(function () {
+        //         var selectedDeskArea = $(this).val();
+
+        //         var office = $('#DeskOffice').val();
+        //         var selectedDate = $('#BookingDate').val();
+        //         var shift = $('#Shift').val();
+        //         var areaId = $('#DeskArea').val();
+
+        //         if (selectedDeskArea == null || selectedDeskArea === '') {
+        //             $('#Desk').empty();
+        //         }
+        //         else {
+        //             $.ajax({
+        //                 url: "@Url.Action("GetDeskList", "Bookings", new { Area = "DeskBooking" })",
+        //                 type: 'GET',
+        //                 data: {
+        //                     office: office,
+        //                     selectDate: selectedDate,
+        //                     shift: shift,
+        //                     areaId: areaId,
+        //                 },
+        //                 beforeSend: function () {
+        //                     showModalLoader();
+        //                 },
+        //                 success: function (data) {
+        //                     let dropdown = $('#Desk');
+        //                     dropdown.empty();
+        //                     var flag = false;
+        //                     var phase = null;
+
+        //                     var options = '';
+        //                     options += '<option> </option>';
+        //                     $(data).each(function () {
+        //                         flag = true;
+        //                         options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+        //                     });
+        //                     dropdown.html(options);
+        //                     if (flag == false) {
+        //                         phase = null;
+        //                     }
+
+        //                     dropdown.val(phase);
+        //                     hideModalLoader();
+        //                 },
+        //                 error: function (result) {
+        //                     hideModalLoader();
+        //                     notify($.i18n('Error'), result.responseText, 'danger');
+        //                 }
+        //             });
+        //         }
+        //     });
+
+        // }
+
+        function PostSaveReLoad(data) {
+
+            if (data.messageType == "OK") {
+                $("#modalcontainer").modal('hide');
+                window.location.reload();
+            }
+        }
+    </script>
+}

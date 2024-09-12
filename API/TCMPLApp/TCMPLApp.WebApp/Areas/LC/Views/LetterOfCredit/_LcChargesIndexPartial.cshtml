@@ -1,0 +1,53 @@
+﻿@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+
+<form id="frmGridLcChargesIndex" class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+
+            @* @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionEditLc))
+                {*@
+           @* @if (Model.LcStatusVal == 1)
+            {*@
+                <div class="row">
+                    <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw50"
+                   data-url='@Url.Action("LcChargesCreate", "LetterOfCredit", new { Area = "LC" })'
+                   data-statichtmlsourcedivid=""
+                   data-id="@ViewBag.ApplicationId"
+                   data-modaltitle="Add Lc Charges "
+                   data-modalheader="Add  Lc Charges">
+                        <i class="fas fa-plus"></i> Create
+                    </a>
+                </div>
+            @*}*@
+
+            <hr />
+            @*  }*@
+
+            <div id="idLcChargesIndex" class="">
+                <div class="bg-gray-active rounded ">
+                    <table id="tbGridLcChargesIndex" class="table table-striped table-bordered table-responsive-lg" style="width:100%">
+                        <thead class="bg-info text-white">
+                            <tr role="row">
+                                @*<th></th>*@
+                                <th>@localizer["LC charges status"]</th>
+                                <th>@localizer["Basic charges"]</th>
+                                <th>@localizer["Other charges"]</th>
+                                <th>@localizer["Tax"]</th>
+                                <th>@localizer["Commission Rate"]</th>
+                                <th>@localizer["Days"]</th>
+                                <th>@localizer["File"]</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div id="result"></div>
+
+        </div>
+    </div>
+</form>
+

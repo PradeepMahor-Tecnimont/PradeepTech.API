@@ -1,0 +1,158 @@
+﻿@model TCMPLApp.WebApp.Models.LcAcceptanceDetailsViewModel
+
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionEditLc))
+            {
+
+                @if (Model.SendToTreasury == 1 && Model.LcStatusVal == 1 && Model.Status == 0)
+                {
+                    <div class="row">
+                        <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw50"
+                   data-url='@Url.Action("LcAcceptanceCreate", "LetterOfCredit", new { Area = "LC" })'
+                   data-statichtmlsourcedivid=""
+                   data-id="@Model.ApplicationId"
+                   data-modaltitle="Create acceptance"
+                   data-modalheader="Create acceptance">
+                            <i class="fas fa-plus"></i> Create - LC acceptance details
+                        </a>
+                    </div>
+                    <hr />
+                }
+                @if (Model.SendToTreasury == 1 && Model.LcStatusVal == 1 && Model.Status == 1)
+                {
+                    <div class="row">
+                        <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw50"
+                   data-url='@Url.Action("LcAcceptanceEdit", "LetterOfCredit", new { Area = "LC" })'
+                   data-statichtmlsourcedivid=""
+                   data-id="@Model.ApplicationId"
+                   data-modaltitle="Edit acceptance"
+                   data-modalheader="Edit acceptance">
+                            <i class="fas fa-edit"></i> Edit - LC acceptance details
+                        </a>
+                    </div>
+                    <hr />
+                }
+
+            }
+
+            <div class="row p-1">
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.AcceptanceDate)</div>
+                        <div class="dd-met">@( Model.AcceptanceDate )</div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.PaymentDateAct)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.PaymentDateAct)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ActualAmountPaid)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.ActualAmountPaid)</div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Remarks)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Remarks)</div>
+                    </div>
+                </div>
+            </div>
+
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionEditLc))
+            {
+                @if (Model.LcStatusVal == 1 && Model.Status == 1)
+                {
+                    <hr />
+                    <div class="row p-1">
+                        <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw50"
+                   data-url='@Url.Action("LcClosureEdit", "LetterOfCredit", new { Area = "LC" })'
+                   data-statichtmlsourcedivid=""
+                   data-id="@Model.ApplicationId"
+                   data-modaltitle="Lc Closure "
+                   data-modalheader="Lc Closure ">
+                            <i class="fas fa-edit"></i> Edit - LC closure details
+                        </a>
+                    </div>
+
+                }
+
+                <hr />
+            }
+
+            <div class="row p-1">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LcClPaymentDate)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.LcClPaymentDate)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LcClActualAmount)</div>
+                        <div class="dd-met">@( Model.LcClActualAmount )</div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LcClOtherCharges)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.LcClOtherCharges)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LcStatusText)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.LcStatusText)</div>
+                    </div>
+                </div>
+            </div>
+            @*<hr />*@
+            @if (Model.LcStatusVal == 0)
+            {
+                <div class="row p-1">
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LcClModOn)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LcClModOn)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LcClModBy)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LcClModBy)</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row p-1">
+                <div class="col-xl-12 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LcClRemarks)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.LcClRemarks)</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+

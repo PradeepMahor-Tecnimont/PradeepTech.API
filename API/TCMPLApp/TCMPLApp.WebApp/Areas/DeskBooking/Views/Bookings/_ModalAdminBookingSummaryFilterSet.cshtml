@@ -1,0 +1,58 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel
+
+<form class="form-filter-datetime"
+      id="formAdminBookingSummaryFilterSet"
+      asp-area="DeskBooking"
+      asp-controller="Bookings"
+      asp-action="AdminBookingSummaryFilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Booking Summary Filter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Filters setup</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <label asp-for="BookingDate" class="control-label"></label>
+                    <select asp-for="BookingDate" class="form-control chosen-select Select2" data-placeholder="Please select..."
+                            asp-items="ViewBag.BookingDatesList" required>
+                        <option value="" hidden>Please select...</option>
+                    </select>
+                    <span asp-validation-for="BookingDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Office" class="control-label"></label>
+                    <select asp-for="Office" class="form-control chosen-select" asp-items="ViewBag.OfficeList" data-placeholder="Please select...">
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="Office" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>

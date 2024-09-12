@@ -1,0 +1,87 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.EmployeeCloneViewModel
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Employee"
+      asp-action="CloneEmployee"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessRedirect('/HRMasters/Employee')"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Empno)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Clone employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.Name [@Model.Empno]</h5>
+            </div>
+            <div class="card-block">
+                <h6 class="mb-2 f-w-300">New employee type</h6>
+                <div class="form-group">
+                    <select asp-for="Emptype" class="form-control Select2 " asp-items="ViewBag.EmptypeList" required>
+                        <option value="" hidden disabled selected>Please select...</option>
+                    </select>
+                    <span asp-validation-for="Emptype" class="text-danger"></span>
+                </div>
+
+                <h6 class="mb-2 f-w-300">New employee no</h6>
+                <div class="form-group">
+                    <input asp-for="EmpnoNew" class="form-control" placeholder="New employee no" required />
+                    <span asp-validation-for="EmpnoNew" class="text-danger"></span>
+                </div>
+                
+                <h6 class="mb-2 f-w-300">New date of joining</h6>
+                <div class="form-group">
+                    <input asp-for="DoJ" class="form-control" type="date" placeholder="dd-mm-yyyy" required />
+                    <span asp-validation-for="DoJ" class="text-danger"></span>
+                </div>
+
+                <h6 class="mb-2 f-w-300">New parent costcode</h6>
+                <div class="form-group">
+                    <select asp-for="Parent" class="form-control Select2" asp-items="ViewBag.CostcenterList" required>
+                        <option value="" hidden disabled selected>Please select...</option>
+                    </select>
+                    <span asp-validation-for="Parent" class="text-danger"></span>
+                </div>
+
+                <h6 class="mb-2 f-w-300">New assign costcode</h6>
+                <div class="form-group">
+                    <select asp-for="Assign" class="form-control Select2" asp-items="ViewBag.CostcenterList" required>
+                        <option value="" hidden disabled selected>Please select...</option>
+                    </select>
+                    <span asp-validation-for="Assign" class="text-danger"></span>
+                </div>
+               
+                <h6 class="mb-2 f-w-300">New office</h6>
+                <div class="form-group">
+                    <select asp-for="Office" class="form-control Select2" asp-items="ViewBag.PlaceList" required>
+                        <option value="" hidden disabled selected>Please select...</option>
+                    </select>
+                    <span asp-validation-for="Office" class="text-danger"></span>
+                </div>                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+                data-text="Clone">
+            Clone
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,116 @@
+﻿@{
+
+    ViewData["Title"] = "Employee workspace details";
+
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+</ol>
+
+}
+@section styles
+    {
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+<link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+<link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+
+    }
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee workspace details</p>
+    </div>
+    <div class="card-block mr-2 ml-2 pr-2 pl-2" style="min-height: 450px;">
+        <div class="row">
+            <div class="col-lg-4">
+
+                 <label for="ddlEmployeeList">Select Employee</label>
+        <select class="form-control Select2 col-lg-4 " placeholder="Please select" id="ddlFilterList" name="ddlEmployeeList"
+                asp-items="ViewBag.Empno">
+            <option selected></option>
+        </select>
+            </div>
+       
+        </div>
+        <div class="card-pill">
+
+            <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+
+                <li class="nav-item">
+                  @*  <a class="nav-link" id="tabs-swpInfo-tab"
+                       href="#" aria-controls="tabs-swpInfo" aria-selected="true"></a>*@
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                @await Html.PartialAsync("_LoaderPartial")
+
+                <div class="tab-pane fade show active" id="tabs-swpInfo" role="tabpanel" aria-labelledby="tabs-swpInfo-tab">
+
+                    <div id="pw-swpInfo">
+
+                        <div id="pv-empswpdetails">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{ 
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script type="text/javascript">
+
+
+
+
+    $("#ddlFilterList").change(function () {
+        var empno = $(this).val();
+        loadEmployeeWorkspacedetails(empno); 
+    });
+
+    function loadEmployeeWorkspacedetails(empno)
+    {
+         var divid = $("#pv-empswpdetails");
+         
+            if (empno == '') {
+                divid.empty();
+                $("#div-empswpdetails").removeClass("active");
+                return;
+            }
+            else
+                $("#div-empswpdetails").addClass("active");
+
+               $.ajax({
+                    url: '@Url.Action("EmployeeSWPWorkStatus", "SWP", new { Area = "SWP" })',
+                    data: {
+                        'employeeNo': empno
+                    },
+                    type: 'POST',
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data) {
+                        divid.html(data);
+                        //loadScript();
+                        hideLoader();
+                    },
+                    error: function (result) {
+                        console.log(result);
+                        hideLoader();
+                        errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                        notify("error", errorText, 'Error');
+                    }
+                });
+    }
+
+</script>
+}

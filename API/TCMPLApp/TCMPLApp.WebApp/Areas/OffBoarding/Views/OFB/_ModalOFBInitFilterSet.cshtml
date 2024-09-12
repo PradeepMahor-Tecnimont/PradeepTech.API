@@ -1,0 +1,63 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="formOFBInitDetailsExcel"
+      asp-area="OffBoarding"
+      asp-controller="OFB"
+      asp-action="OFBInitExcelDownload"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+    <div style="display:none">
+
+        <input type="hidden" asp-for="@Model.IsFiltered" />
+        @Html.TextBoxFor(model => model.StartYear, "{0:yyyy}", htmlAttributes: new { @type = "hidden" ,@required = "required"})
+        @Html.TextBoxFor(model => model.EndYear, "{0:yyyy}", htmlAttributes: new { @type = "hidden",@required = "required" })
+    </div>
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Filter"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Filters setup"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="StartYear" class="control-label"></label>
+                            <input id="startYearFilter" class="form-control selectYearFilter" data-date-format="yyyy" placeholder="@localizer["Select Start Year"]" value="@Model.StartYear?.ToString("yyyy")" required />
+                            <span asp-validation-for="StartYear" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="EndYear" class="control-label"></label>
+                            <input id="endYearFilter" class="form-control selectYearFilter" data-date-format="yyyy" placeholder="@localizer["Select End Year"]" value="@Model.EndYear?.ToString("yyyy")" required />
+                            <span asp-validation-for="EndYear" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnExportOFBInitDetailsExcel"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <div id="OFBInitDetails_Loader" class="spinner-border text-info text-center hidden "
+             style="width: 2.5rem; height: 2.5rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

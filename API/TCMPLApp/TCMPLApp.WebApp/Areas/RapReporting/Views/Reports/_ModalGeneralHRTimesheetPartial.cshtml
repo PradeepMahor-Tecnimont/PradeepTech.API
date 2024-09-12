@@ -1,0 +1,43 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+    <input id="Yyyy" readonly type="hidden" asp-for="@Model.Yyyy" />
+    <input id="YearMode" readonly type="hidden" asp-for="@Model.YearMode" />
+    <input id="Yyyymm" readonly type="hidden" asp-for="@Model.Yyyymm" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["General Reports - HR"]</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Timesheet"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+
+            </div>
+            <div class="card-block">                             
+                <div class="form-group">
+                    <label asp-for="Empno" class="control-label"></label>
+                    <select asp-for="Empno" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Empnos" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="Empno" class="text-danger"></span>
+                </div>                              
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">        
+        <a class="btn btn-primary" id="lemp2011Report" title="Employee report" href="#"
+            data-inprogress="0"
+            data-jqueryselector="generateReportPartial"
+            data-url="@Url.Action("TimesheetHRReport", "Reports", new {Area ="RapReporting",
+                                                                       empno = @Model.Empno,
+                                                                       yymm = @Model.Yymm })"
+            data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+            data-text="Download">
+            
+            @localizer["Download"]
+        </a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>

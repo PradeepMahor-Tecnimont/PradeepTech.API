@@ -1,0 +1,480 @@
+﻿@model TCMPLApp.WebApp.Areas.Timesheet.TimesheetViewModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Home Page";
+    const string actionName = "Index";
+    const string controllerName = "Home";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Timesheet</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 6px;
+        }
+
+        .weekend {
+            background-color: lightgray;
+        }
+
+        #timesheetTable {
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+    </style>
+}
+
+<input id="Yyyy" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyy" />
+<input id="Yyyymm" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-5">
+        <a href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/Timesheet%20IS%203%20Manual.pdf" target="_blank" title="User manual">
+            <i class="fas fa-info-circle fa-2x"></i>
+        </a>
+    </div>
+</div>
+<div class="card-toolbar p-l-15 ">
+    <div role="toolbar">
+        <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("FilterGet", "Home", new { Area = "Timesheet" })'
+                data-modaltitle="Filter"
+                data-modalheader="Filter">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+            {
+                @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy)
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)))
+                ;
+            }
+
+        </button>
+    </div>
+
+</div>
+<div class="m-2"></div>
+<div class="col-sm-12">
+    <div class="row">
+        @if ((CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionDeptEmployeeTimesheetReport)) ||
+        (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionAllEmployeeTimesheetReport)) ||
+        (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionEmployeeTimesheetReport)))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>My Timesheet</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a id="lDownloadTimesheetReport" href="#"
+                           data-inprogress="0"
+                           data-jqueryselector="generatereport"
+                           class="btn btn-outline-primary border-none f-right text-nowrap"
+                           data-url="@Url.Action("DownloadTimesheetReport", "Reports", new
+                            {
+                                Area = "Timesheet",
+                                empno = CurrentUserIdentity.EmpNo,
+                                yymm = @Model.FilterDataModel.Yyyymm
+                            })"
+                           title="@localizer["Download"]">
+                            @localizer["Download"]
+                        </a>
+                        <a class="btn btn-outline-primary border-none text-nowrap f-left"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw75"
+                           data-url="@Url.Action("EmployeeTimesheet", "Home", new { Area = "Timesheet" })"
+                           title="@localizer["View"]">
+                            @localizer["View"]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if ((CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionDeptEmployeeTimesheetReport)) ||
+        (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionAllEmployeeTimesheetReport)))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee report</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a id="lSelectEmployeeList" href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw40"
+                           data-url="@Url.Action("SelectEmployeeList", "Reports", new { Area = "Timesheet" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 id="lSelectEmployeeList_Text" class="mb-2 f-w-300">Timesheet report of an employee</h7>
+                                    <div class="text-center">
+                                        <div id="lSelectEmployeeList_Loader" class="spinner-border text-info text-center hidden "
+                                             style="width: 2.5rem; height: 2.5rem;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    &#160;
+                                </div>
+                                <div id="lSelectEmployeeList_Icon" class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3 hidden">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee Timesheet</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw75"
+                           data-url="@Url.Action("EmployeeTimesheet", "Home", new { Area = "Timesheet" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Employee Timesheet</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee Timesheet</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("EmployeeReportIndex", "Reports", new { Area = "Timesheet" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Employee Reports</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionDeptEmployeeTimesheetReport))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Book OSC Manhours</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("OSCMhrsIndex", "OSCMhrs", new { Area = "Timesheet",
+                                                                                yymm = @Model.FilterDataModel.Yyyymm})">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Book outside subcontractor manhours</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+    <hr />
+    <div class="row">
+        @if ((CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionDeptTimesheet)) ||
+        (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionAllEmployeeTimesheetReport)))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee wise timesheet status</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("EmployeeIndex", "TSStatus", new { Area = "Timesheet" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Employee wise timesheet status</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Department wise timesheet status</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DepartmentIndex", "TSStatus", new { Area = "Timesheet" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Department wise timesheet status</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-building f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Project wise timesheet status</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ProjectIndex", "TSStatus", new { Area = "Timesheet" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Project wise timesheet status</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-industry f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Timesheet.TimesheetHelper.ActionAllEmployeeTimesheetReport))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Reminder email for APPROVE / POST </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ReminderEmailIndex", "TSStatus", new { Area = "Timesheet" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Reminder email for Approval and Posting of timesheet</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-envelope-open f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/site-timesheet.js" asp-append-version="true"></script>
+    <script src="~/js/OSCMhrs.js" asp-append-version="true"></script>
+    <script src="~/js/EmpTimesheet.js" asp-append-version="true"></script>
+    <script>
+
+        $(document).ready(function () {
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                $("#filterGet").click();
+            }
+            else {
+                var urlCheckReportHit = "@Url.Action("CheckReportHit", "Reports", new { Area = "Timesheet" })";
+                var urlGetReport = "@Url.Action("GetReport", "Reports", new { Area = "Timesheet" })";
+                CheckReportHit(urlCheckReportHit, urlGetReport);
+            }
+        });
+
+        function localScript() {
+            initSelect2();
+
+            var yearMonthListUrl = "@Url.Action("GetYearMonthList", "Home", new { Area = "Timesheet" })";
+            callTimesheetFilterListeners(yearMonthListUrl);
+
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                hideFilterCancelButton('HIDE');
+            }
+            else {
+                hideFilterCancelButton('SHOW');
+            }
+
+            callFilterDefaultsListeners();
+
+            callTimesheetPartialReportListeners();
+
+            var cancelButtonRedirectUrl = "@Url.Action("RedirectPage", "Home", new
+            {
+                Area = "Timesheet",
+                actionName = @actionName,
+                controllerName = @controllerName
+            })";
+            callCancelButtonListeners(cancelButtonRedirectUrl);
+
+            var timesheetUrl = '@Url.Action("GetTimesheetData", "Home", new { Area = "Timesheet" })';
+
+            const selectedmonth = $('#Yyyymm').val().slice(-2);
+            const selectedyear = $('#Yyyymm').val().slice(0, 4);
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthName = monthNames[parseInt(selectedmonth, 10) - 1];
+
+            let monthyear = monthName + "-" + selectedyear;
+
+            $('#monthYear').text(monthyear);
+
+            var selectedValueOnLoad = $('#AssignCostcode').val();
+
+            if (selectedValueOnLoad) {
+                $('#timesheetdetails').removeClass("hidden");
+                $('#timesheetTable').removeClass("hidden");
+                loadDataBasedOnDepartment(selectedValueOnLoad, monthyear, timesheetUrl);
+            }
+
+            $('#AssignCostcode').change(function () {
+                var selectedValueOnChange = $('#AssignCostcode').val();
+
+                if (selectedValueOnChange != "") {
+                    $('#timesheetdetails').removeClass("hidden");
+                    $('#timesheetTable').removeClass("hidden");
+                    loadDataBasedOnDepartment(selectedValueOnChange, monthyear, timesheetUrl);
+                }
+                else {
+                    notify('error', "Please select Assigned cost code", 'danger');
+                    $('#timesheetdetails').addClass("hidden");
+                    $('#timesheetTable').addClass("hidden");
+                }
+
+            });
+
+        }
+
+        function CheckReportHit(urlCheckReportHit, urlGetReport) {
+            $.ajax({
+                url: urlCheckReportHit,
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    if (data != null) {
+                        reportHitEntry(urlGetReport);
+                    }
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                }
+            });
+        }
+
+        function reportHitEntry(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (blob, status, xhr) {
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        }
+
+    </script>
+}

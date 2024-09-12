@@ -1,0 +1,555 @@
+﻿@model TCMPLApp.WebApp.Areas.RapReporting.RapViewModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    const string actionName = "ExpectedJobsIndex";
+    const string controllerName = "Transactions";
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+    <li class="breadcrumb-item "><a asp-action="TransactionsIndex" asp-controller="Transactions" asp-area="RapReporting">Transactions</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Expected jobs</li>
+</ol>
+}
+
+@section styles
+{
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+<!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+<!-- Material Datepicker css -->
+<link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Expected jobs";
+}
+
+<input id="Yyyy" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyy" />
+<input id="YearMode" readonly type="hidden" asp-for="@Model.FilterDataModel.YearMode" />
+<input id="Yyyymm" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+<input id="CostCode" readonly type="hidden" asp-for="@Model.FilterDataModel.CostCode" />
+<input id="Projno" readonly type="hidden" asp-for="@Model.FilterDataModel.Projno" />
+
+
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.IsFiltered" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.IsActive" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.IsActiveFuture" />
+
+<div class="card-toolbar p-l-15">
+    <div role="toolbar">
+        <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("FilterGet", "Home", new { Area = "RapReporting" })'
+                data-actionName=@actionName
+                data-controllerName=@controllerName
+                data-modaltitle="Filter"
+                data-modalheader="Filter">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+            {
+                @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy)
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.YearMode))
+            {
+                @Html.Raw(localizer[", Year mode : "] + (Model.FilterDataModel.YearMode == "A" ? "April - March" : "January - December"))
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)))
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.CostCode))
+            {
+                @Html.Raw(localizer[", Cost code : "] + Model.FilterDataModel.CostCode)
+                ;
+            }
+
+        </button>
+
+    </div>
+</div>
+<div class="m-2"></div>
+
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Expected jobs</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+
+            <a title="" class="btn btn-outline-primary btn-sm border-none" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw50"
+               data-url='@Url.Action("ExpectedJobsCreate", "Transactions", new { Area = "RapReporting" })'
+               data-modaltitle="Create expected jobs"
+               data-modalheader="Create expected jobs">
+                <i class="fas fa-plus"></i> Expected jobs
+            </a>
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ExpectedJobsFilterGet", "Transactions", new { Area = "RapReporting" })'
+               data-modaltitle="Filters - Expected jobs"
+               data-modalheader="Filters - Expected jobs">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+        </div>
+    </div>
+
+    <div class="m-1"></div>
+
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch"
+                   placeholder="Search project no...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+
+                    <th></th>
+                    <th>Project no.</th>
+                    <th>Project name</th>
+                    <th>Is Active</th>
+                    <th>Active future</th>
+                    <th>Final Project </th>
+                    <th>TMA Group</th>
+                    <th>Is locked </th>
+                    <th>Project Type</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script src="~/lib/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js" asp-append-version="true"></script>
+<script src="~/js/site-rap.js" asp-append-version="true"></script>
+<script type="text/javascript">
+
+            function localScript() {
+                initSelect2();
+
+                var yearMonthListUrl = "@Url.Action("GetYearMonthList", "Home", new {Area = "RapReporting"})";
+                callRapReportingFilterListeners(yearMonthListUrl);
+
+                var cancelButtonRedirectUrl = "@Url.Action("RedirectPage", "Home", new {Area = "RapReporting",
+                                                                                        actionName = @actionName,
+                                                                                        controllerName = @controllerName})";
+                callCancelButtonListeners(cancelButtonRedirectUrl);
+
+                $('.numbers').keyup(function () {
+                     this.value = this.value.replace(/[^0-9\.\-]/g,'');
+                });
+
+                $( "#btnNoOfMonths" ).click(function() {
+                    var url = $(this).data('url');
+                    var noOfMonths = $("#NoOfMonths").val();
+                    if (noOfMonths == null || noOfMonths.length == 0 || noOfMonths == 0 || noOfMonths.length >= 4){
+                        if (noOfMonths >= 4){
+                            notify('error', "Invalid No of months, Max 3 digits only", 'danger');
+                            $("#NoOfMonths").focus()
+                            return;
+                        }
+                        notify('error', "Invalid No of months, Not null or 0", 'danger');
+                         $("#NoOfMonths").focus()
+                        return;
+                    }
+                         callExpctSettingWIthUrl(url);
+                         $("#NoOfMonths").val("");
+                 });
+
+                $( "#btnNewProjCost" ).click(function() {
+                    var url = $(this).data('url');
+                    var costCode = $("#costCode").val();
+                    var newProjectNo = $("#NewProjectNo").val();
+
+                    if (newProjectNo == null || newProjectNo.length < 1 || newProjectNo.length > 7){
+                            notify('error', "Invalid new project no, 7 char only" , 'danger');
+                             $("#NewProjectNo").focus()
+                            return;
+                        }
+
+                    if (costCode == null || costCode.length != 4 ){
+                            notify('error', "Invalid cost code, 4 digits required ", 'danger');
+                             $("#costCode").focus()
+                            return;
+                    }
+
+                      callExpctSettingWIthUrl(url);
+                      $("#costCode").val("");
+                      $("#NewProjectNo").val("");
+
+                 });
+
+                 $( "#btnRealProjectNo" ).click(function() {
+                     var url = $(this).data('url');
+                    var realProjectNo = $("#RealProjectNo").val();
+                    if (realProjectNo == null || realProjectNo.length < 1 || realProjectNo.length > 7){
+                            notify('error', "Invalid Real project no, 7 char only" , 'danger');
+                            $("#RealProjectNo").focus()
+                            return;
+                        }
+                         callExpctSettingWIthUrl(url);
+                         $("#RealProjectNo").val("");
+                 });
+
+                  $( "#btnExpectedProjectNo" ).click(function() {
+                      var url = $(this).data('url');
+                    var expectedProjectNo = $("#ExpectedProjectNo").val();
+                    if (expectedProjectNo == null || expectedProjectNo.length < 1 || expectedProjectNo.length > 7){
+                            notify('error', "Invalid Expected project no, 7 char only" , 'danger');
+                            $("#ExpectedProjectNo").focus()
+                            return;
+                        }
+                         callExpctSettingWIthUrl(url);
+                         $("#ExpectedProjectNo").val("");
+                 });
+
+
+              }
+
+            $(document).ready(function () {
+                if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                    $('#YearMode').val() == null || $('#YearMode').val() == '' ||
+                    $('#Yyyymm').val() == null || $('#Yyyymm').val() == '' ) {
+                    $("#filterGet").click();
+                }
+                else {
+                    localLoadDataTable();
+                }
+            });
+            function localLoadDataTable() {
+                var table = $('#tbGrid').DataTable({
+                    drawCallback: function (settings) {
+                        loadScript();
+                    },
+                    destroy: true,
+                    pageLength: 25,
+                    lengthMenu: [25,50],
+                    processing: true,
+                    responsive: true,
+                    autoWidth: false,
+                    serverSide: true,
+                    stateSave: true,
+                    info: false,
+                    filter: false,
+                    layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                  @if ((bool)@Context.Items["isMobile"] == false)
+                    {
+                        <text>
+                            ordering: false,
+                            columns: [
+                                {
+                                    data: null,
+                                    render: function (data, type, row) {
+                                        return '<a class="btn btn-outline-info btn-sm border-none" ' +
+                                            ' data-jqueryselector="openmodal" ' +
+                                            ' data-modalcontainer="modalcontainer" '+
+                                            ' data-url="@Url.Action("ExpectedJobsDetails", "Transactions", new { Area = "RapReporting" })"' +
+                                            ' data-modalpopupwidth="rightw50" ' +
+                                            ' data-projno="' + data.projectNo + '"' +
+                                            ' data-modaltitle="Expected jobs details" ' +
+                                            ' data-modalheader="Expected jobs details" ' +
+                                            ' > ' +
+                                            ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                            ' </a>'
+                                    },
+                                    'className': "td-icon",
+                                },
+                                { data: "projectNo" },
+                                { data: "projectName"},
+                                {
+                                    data: null,
+                                    width: '3.0rem',
+                                    render: function (data, type, row) {
+                                        if (data.isActive) {
+                                            return ' <i class="	fas fa-check f-20 deepskyblueColor "   aria-hidden="true"></i> ';
+
+                                        } else {
+                                            return ' ';
+
+                                        }
+                                    },
+                                    class: ' text-center  align-middle'
+                                },
+
+                                {
+                                    data: null,
+                                    width: '3.0rem',
+                                    render: function (data, type, row) {
+                                        if (data.isActiveFuture) {
+                                            return ' <i class="	fas fa-check f-20 deepskyblueColor "   aria-hidden="true"></i> ';
+
+                                        } else {
+                                            return ' ';
+
+                                        }
+                                    },
+                                    class: ' text-center  align-middle'
+                                },
+                                { data: "finalProjectNo" },
+                                { data: "newCostcode" },
+                                {
+                                    data: null,
+                                    width: '3.0rem',
+                                    render: function (data, type, row) {
+                                        if (data.isLocked) {
+                                            return ' <i class="	fas fa-check f-20 deepskyblueColor "   aria-hidden="true"></i> ';
+
+                                        } else {
+                                            return ' ';
+
+                                        }
+                                    },
+                                    class: ' text-center  align-middle'
+                                },
+                                { data: "projectType" , width: '3.0rem', },
+                                {
+                                    'data': null,
+                                    render: function (data, type, row) {
+
+                                            return '<button class="btn btn-outline-secondary btn-sm border-none" ' +
+                                                ' data-jqueryselector="openmodal" ' +
+                                                ' data-modalcontainer="modalcontainer" ' +
+                                                ' data-url="@Url.Action("ExpectedJobsSetting", "Transactions", new { Area = "RapReporting" })"' +
+                                                ' data-modalpopupwidth="rightw35" ' +
+                                                ' data-projno="' + data.projectNo + '"' +
+                                                ' data-modaltitle="Setting expected jobs" ' +
+                                                ' data-modalheader="Setting expected jobs" ' +
+                                                ' > ' +
+                                                ' <i class="fas fa-cog" aria-hidden="true"></i> ' +
+                                                ' </button>'
+                                    },
+                                    'className': "td-icon",
+                                },{
+                                    'data': null,
+                                    render: function (data, type, row) {
+
+                                            return '<button class="btn btn-outline-primary btn-sm border-none" ' +
+                                                ' data-jqueryselector="openmodal" ' +
+                                                ' data-modalcontainer="modalcontainer" ' +
+                                                ' data-url="@Url.Action("ExpectedJobsEdit", "Transactions", new { Area = "RapReporting" })"' +
+                                                ' data-modalpopupwidth="rightw50" ' +
+                                                ' data-projno="' + data.projectNo + '"' +
+                                                ' data-modaltitle="Edit expected jobs" ' +
+                                                ' data-modalheader="Edit expected jobs" ' +
+                                                ' > ' +
+                                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                                ' </button>'
+
+                                    },
+                                    'className': "td-icon",
+                                },
+                                {
+                                    data: null,
+                                    render: function (data, type, row) {
+                                            return ' <button class="btn btn-outline-danger btn-sm border-none "  ' +
+                                                ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                                ' data-url="@Url.Action("ExpectedJobsDelete", "Transactions", new { Area = "RapReporting" })" ' +
+                                                ' data-postsavereloaddatatable="OK" ' +
+                                                ' data-projno="' + data.projectNo + '" ' +
+                                                ' data-modaltitle="Please Confirm!" ' +
+                                                ' data-confirmationtext="Delete project no ' + data.projectNo + ' ?" ' +
+                                                ' data-confirmationtype="warning" data-confirmbuttontext="Delete application"> ' +
+                                                ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                                ' </button> ';
+
+                                            return '';
+                                    },
+                                    'className': "td-icon",
+                                }
+                            ],
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            ordering: false,
+                            columns: [
+                                {
+                                    data: null,
+                                    render: function (data, type, row) {
+                                        var item = '<div class="card">';
+                                        item += '<div class="card-mobiledatatable">';
+
+                                        item += '</div></div>';
+                                        return item
+                                    },
+                                    sortable: false,
+                                    searchable: false,
+                                    className: "datatable-td-mobile"
+                                }
+                            ],
+                        </text>
+                    }
+                    ajax: {
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        url: '@Url.Action("GetListsExpectedJobs", "Transactions", new {Area = "RapReporting"})',
+                        type: 'GET',
+                        cache: true,
+                        dataType: "json",
+                        data: function (d) {
+                            d.columns = null;
+                            d.order = null;
+                            d.search = null;
+                            d.isActive = $("#FilterDataModel_IsActive").val();
+                            d.isActiveFuture = $("#FilterDataModel_IsActiveFuture").val();
+                            d.genericSearch = $('#GenericSearch').val();
+                            d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                            d.startDateTime = null; // $('#FilterDataModel_StartDateTime').val();
+                            d.endDateTime = null; // $('#FilterDataModel_EndDateTime').val();
+                            d.statusTypeId = null; // $('#FilterDataModel_StatusTypeId').val();
+                            //d.companyCode =  $('#FilterDataModel_CompanyCode').val();
+                            //d.vendor =  $('#FilterDataModel_Vendor').val();
+                            //d.currency =  $('#FilterDataModel_Currency').val();
+                            //d.projno =  $('#FilterDataModel_Projno').val();
+                            //d.isActive = $('#FilterDataModel_IsActive').val();
+                            //d.endDate = $('#FilterDataModel_EndDate').val();
+                            },
+                            error: function (request, status, error) {
+                                notify('error', request.responseText, 'danger');
+                            }
+                        }
+                });
+            }
+
+         function callExpctSettingWIthUrl(url){
+
+             //notify('success', "url : " + url, 'Success');
+             // return;
+
+             var v_noOfMonths = $("#NoOfMonths").val();
+                var v_projectNo = $("#ProjectNo").val();
+                var v_realProjectNo = $("#RealProjectNo").val();
+                var v_expectedProjectNo = $("#ExpectedProjectNo").val();
+                var v_NewProjectNo = $("#NewProjectNo").val();
+                var v_costCode = $("#costCode").val();
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    cache: false,
+                    data: {
+                        projno : v_projectNo,
+                        noOfMonths: v_noOfMonths,
+                        realProjectNo: v_realProjectNo,
+                        expectedProjectNo: v_expectedProjectNo,
+                        NewProjectNo: v_NewProjectNo,
+                        costCode: v_costCode
+                    },
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data, status, error) {
+
+                        hideLoader();
+
+                            if(data.success){
+                                 notify('success', data.response, 'Success');
+                            }
+                            else{
+                                notify('error', data.response, 'danger');
+                            }
+
+                    },
+                     error: function (request, status, error) {
+                        notify('error', request.response, 'danger');
+                    }
+                });
+            };
+
+    $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                var dataTable = $('#tbGrid').DataTable();
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            var dataTable = $('#tbGrid').DataTable();
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+     function PostSaveReLoadDataTable(data) {
+        if (data.success) {
+            localLoadDataTable();
+                $("#modalcontainer").modal('hide');
+
+
+            hideLoader();
+            notify('success', data.response, 'Success');
+            }
+        };
+
+     function PostFilterReLoadDataTable(data) {
+        if (data.success) {
+
+              $("#FilterDataModel_IsActive").val(data.isActive);
+                $("#FilterDataModel_IsActiveFuture").val(data.isActiveFuture);
+
+
+            localLoadDataTable();
+
+
+                $("#modalcontainer").modal('hide');
+            hideLoader();
+            notify('success', data.response, 'Success');
+            }
+        };
+
+
+
+</script>
+}

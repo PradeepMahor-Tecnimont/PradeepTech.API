@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TCMPLApp</title>
+
+    <!--Render Styles-->
+    @await RenderSectionAsync("Styles", required: false)
+    <!--Render Styles-->
+
+</head>
+<body>
+    <div >
+        <main role="main" >
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+﻿@model TCMPLApp.Domain.Models.HRMasters.View.CostCenterMasterMain
+
+@{
+    ViewData["Title"] = "Cost center detail";
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="CostCenter" asp-area="HRMasters">Cost centers</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cost center detail</li>
+    </ol>
+}
+
+    @section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Cost center : <b>@Model.CostCode @Model.Name</b></h5>
+                <a href="~/HRMasters/CostCenter" title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                    <i class="fas fa-undo"></i>
+                    Back
+                </a>
+                @if (Model.IsLinked == 0 && CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.RolePayRollAdmin))
+            {
+                <button class="btn btn-outline-danger btn-sm border-none float-right" id="idDeactivateCostCenter" onclick="showDeleteConfirmationPopup(event,this);"
+                    data-jqueryselector="showconfirmationmodal"
+                    data-url='@Url.Action("DeactivateCostCenter", "CostCenter", new { Area = "HRMasters" })'
+                    data-redirecturl='@Url.Action("Index", "CostCenter", new { Area = "HRMasters" })'
+                    data-id="@Model.CostCodeId"
+                    data-modaltitle="Please Confirm!"
+                    data-confirmationtext="Do you want to deactivate @Model.CostCode ?"
+                    data-confirmationtype="warning"
+                    data-confirmbuttontext="Deactivate cost center">
+                    <i class="fas fa-trash" aria-hidden="true"></i> Deactivate
+                </button>
+            }
+        </div>
+        <div class="card-block">
+            <div class="card-pill">
+                <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">Main</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-hod-tab" data-toggle="pill" href="#tabs-hod" role="tab" aria-controls="tabs-hod" aria-selected="false"
+                           data-url="@Url.Action("HoDTabDetail", "CostCenter", new { Area = "HRMasters" })"
+                           data-id="@Model.CostCodeId"
+                           data-divid="pw-hod"
+                           data-area="HRMasters"
+                           data-controller="CostCenter"
+                           data-action="HoDTabDetail">HoD</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-costcontrol-tab" data-toggle="pill" href="#tabs-costcontrol" role="tab" aria-controls="tabs-costcontrol" aria-selected="false"
+                           data-url="@Url.Action("CostControlTabDetail", "CostCenter", new { Area = "HRMasters" })"
+                           data-id="@Model.CostCodeId"
+                           data-divid="pw-costcontrol"
+                           data-area="HRMasters"
+                           data-controller="CostCenter"
+                           data-action="CostControlTabDetail">Cost control</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-afc-tab" data-toggle="pill" href="#tabs-afc" role="tab" aria-controls="tabs-afc" aria-selected="false"
+                           data-url="@Url.Action("AFCTabDetail", "CostCenter", new { Area = "HRMasters" })"
+                           data-id="@Model.CostCodeId"
+                           data-divid="pw-afc"
+                           data-area="HRMasters"
+                           data-controller="CostCenter"
+                           data-action="AFCTabDetail">AFC</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="tab-tabContent">
+                    @await Html.PartialAsync("_LoaderPartial")
+                    <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                        <div class="card-deck">
+                            <div class="card shadow col-md-12 col-xl-12">
+                                <div class="card-block">
+                                    @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.RolePayRollAdmin))
+                                    {
+                                        <div class="row">
+                                            <a title="Edit cost center main" class="btn btn-outline-primary btn-sm border-none" href="#"
+                                           data-jqueryselector="openmodal"
+                                           data-modalcontainer="modalcontainer"
+                                           data-modalpopupwidth="rightw50"
+                                           data-url='@Url.Action("Edit", "CostCenter", new { Area = "HRMasters" })'
+                                           data-statichtmlsourcedivid=""
+                                           data-modaltitle="Edit cost center"
+                                           data-modalheader="Edit cost center"
+                                           data-id="@Model.CostCodeId">
+                                                <i class="fas fa-edit"></i>
+                                                Edit
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                                @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.RolePayRollAdmin))
+                                {
+                                    <hr />
+                                }
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.Abbr)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.Abbr)</div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.HoDName)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.HoD) - @Html.DisplayFor(model => model.HoDName)</div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.SecretaryName)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.Secretary) - @Html.DisplayFor(model => model.SecretaryName)</div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.ParentCostCodeName)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.ParentCostCode) - @Html.DisplayFor(model => model.ParentCostCodeName)</div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.NoOfEmps)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.NoOfEmps)</div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.CntRoll)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.CntRoll)</div>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.CntFTC)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.CntFTC)</div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.EnggNonenggDesc)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.EnggNonenggDesc)</div>
+                                    </div>                                    
+                                    <div class="form-group col-md-3">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.Groups)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.Groups) - @Html.DisplayFor(model => model.GroupsName)</div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.CostGroup)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.CostGroup) - @Html.DisplayFor(model => model.CostGroupName)</div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.CostType)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.CostType) - @Html.DisplayFor(model => model.CostTypeName)</div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.SDate)</div>
+                                        @if (Model.SDate == null)
+                                        {
+                                            <div class="dd-met">-</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="dd-met">@Html.DisplayFor(model => model.SDate)</div>
+                                        }
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.EDate)</div>
+                                        @if (Model.EDate == null)
+                                        {
+                                            <div class="dd-met">-</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="dd-met">@Html.DisplayFor(model => model.EDate)</div>
+                                        }
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.SAPCC)</div>
+                                        @if (String.IsNullOrEmpty(Model.SAPCC))
+                                        {
+                                            <div class="dd-met">-</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="dd-met">@Html.DisplayFor(model => model.SAPCC)</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-hod" role="tabpanel" aria-labelledby="tabs-hod-tab">
+                        <div id="pw-hod">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-costcontrol" role="tabpanel" aria-labelledby="tabs-costcontrol-tab">
+                        <div id="pw-costcontrol">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-afc" role="tabpanel" aria-labelledby="tabs-afc-tab">
+                        <div id="pw-afc">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-costcenter.js"></script>
+    <script>
+        $(document).ready(function() {
+            localScript();
+        });
+
+
+        function localScript() {
+            initSelect2();
+
+            var phaseListUrl = "@Url.Action("GetPhases", "CostCenter", new {Area = "HRMasters"})";
+            listenCostCenterCmId(phaseListUrl);
+        };
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+    </script>
+}

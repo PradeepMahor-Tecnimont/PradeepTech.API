@@ -1,0 +1,127 @@
+﻿@model TCMPLApp.WebApp.Models.LockStatusDetailEditViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="EmpGenInfoDetails"
+      asp-action="LockStatusEdit"
+      id="formLockStatus"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="EmpNo" />
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Lock Status Edit"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header ">
+                <h5 class="dd-met">@(Model.EmpNo + " - " + Model.EmpName)</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsPrimaryOpen" class="control-label"></label>
+                            <select asp-for="IsPrimaryOpen" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Open</option>
+                                <option value="-1">Locked</option>
+                            </select>
+                            <span asp-validation-for="IsPrimaryOpen" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsSecondaryOpen" class="control-label"></label>
+                            <select asp-for="IsSecondaryOpen" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Open</option>
+                                <option value="-1">Locked</option>
+                            </select>
+                            <span asp-validation-for="IsSecondaryOpen" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsMediclaimOpen" class="control-label"></label>
+                            <select asp-for="IsMediclaimOpen" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Open</option>
+                                <option value="-1">Locked</option>
+                            </select>
+                            <span asp-validation-for="IsMediclaimOpen" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsAadhaarOpen" class="control-label"></label>
+                            <select asp-for="IsAadhaarOpen" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Open</option>
+                                <option value="-1">Locked</option>
+                            </select>
+                            <span asp-validation-for="IsAadhaarOpen" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsPassportOpen" class="control-label"></label>
+                            <select asp-for="IsPassportOpen" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Open</option>
+                                <option value="-1">Locked</option>
+                            </select>
+                            <span asp-validation-for="IsPassportOpen" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsNominationOpen" class="control-label"></label>
+                            <select asp-for="IsNominationOpen" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Open</option>
+                                <option value="-1">Locked</option>
+                            </select>
+                            <span asp-validation-for="IsNominationOpen" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsGtliOpen" class="control-label"></label>
+                            <select asp-for="IsGtliOpen" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Open</option>
+                                <option value="-1">Locked</option>
+                            </select>
+                            <span asp-validation-for="IsGtliOpen" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

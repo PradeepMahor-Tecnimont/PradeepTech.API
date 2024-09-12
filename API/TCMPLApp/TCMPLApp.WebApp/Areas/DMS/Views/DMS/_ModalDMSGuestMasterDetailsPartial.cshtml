@@ -1,0 +1,165 @@
+﻿@model TCMPLApp.WebApp.Models.DMSGuestMasterDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="Masters"
+      asp-action="DMSGuestMasterDetails"
+      id="formDMSGuestMasterDetails"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="GuestMasterId" />
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Guest master details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Guest master details</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.GuestEmpNo)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw( Model.GuestEmpNo)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.GuestName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.GuestName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ProjName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ProjNo5 + " : " + Model.ProjName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CostCode)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CostCode)
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.FromDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.FromDate.Value.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ToDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ToDate.Value.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TargetDesk)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TargetDesk)
+                                </div>
+                            </div>
+                        </div>
+
+                     @*   <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CreatedBy)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CreationDate)
+                                </div>
+                                <div class="dd-met">
+                                    @if (Model.CreationDate != null)
+                                    {
+                                        @Html.Raw(Model.CreationDate.Value.ToString("dd-MMM-yyyy"))
+                                    }
+
+                                </div>
+                            </div>
+                        </div>*@
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ModifiedBy)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ModifiedBy)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ModifiedDate)
+                                </div>
+                                <div class="dd-met">
+                                    @if (Model.ModifiedDate != null)
+                                    {
+                                        @Html.Raw(Model.ModifiedDate.Value.ToString("dd-MMM-yyyy"))
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

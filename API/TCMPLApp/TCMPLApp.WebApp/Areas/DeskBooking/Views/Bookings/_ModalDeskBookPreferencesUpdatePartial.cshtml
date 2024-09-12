@@ -1,0 +1,137 @@
+﻿@model TCMPLApp.WebApp.Models.DeskBookingPreferencesUpdateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Bookings"
+      asp-action="DeskBookingPreferencesEdit"
+      id="formSmartDeskBook"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript();initToastrMessage();"
+      data-ajax-success="PostSaveReLoad(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.KeyId" />
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.EmployeeName" />
+    <input type="hidden" asp-for="@Model.Emptype" />
+    <input type="hidden" asp-for="@Model.EmpGrade" />
+    <input type="hidden" asp-for="@Model.Parent" />
+
+    <div class="modal-header">
+        <h5 class="modal-title"> @localizer["Desk Booking Preferences"]   </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Desk Booking Preferences</h5>
+            </div>
+            <div class="card-block ">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmployeeName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(" " + Model.Empno + " - " + Model.EmployeeName)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 ">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Parent)
+                                </div>
+
+                                <div class="dd-met">
+                                    @Html.Raw("[ " + Model.Parent + " ] " + Model.ParentDesc)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentOfficeLocation)
+                                </div>
+
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentOfficeLocation)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-md-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    <label id="lblTags" class="control-label">Tags</label>
+                                </div>
+                                <div class="dd-met">
+                                    <label id="bTag"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <label asp-for="Office" class="control-label"></label>
+                                <select asp-for="Office" class="form-control chosen-select Select2" data-placeholder="Please select..."
+                                        asp-items="ViewBag.BookingOfficeList" required>
+                                    <option value="" hidden disabled selected>Please select...</option>
+                                </select>
+                                <span asp-validation-for="Office" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <label asp-for="Shift" class="control-label"></label>
+                                <select asp-for="Shift" class="form-control chosen-select Select2" data-placeholder="Please select..."
+                                        asp-items="ViewBag.ShiftList" required>
+                                    <option value="" hidden disabled selected>Please select...</option>
+                                </select>
+                                <span asp-validation-for="Shift" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+
+                            <div class="form-group">
+                                <label asp-for="DeskArea" class="control-label"></label>
+                                <select asp-for="DeskArea" class="form-control chosen-select Select2" data-placeholder="Please select..."
+                                        asp-items="ViewBag.DeskAreas" required>
+                                    <option value="" hidden disabled selected>Please select...</option>
+                                </select>
+                                <span asp-validation-for="DeskArea" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnsubmit"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+    <div id="results" style="display:none">@TempData["Message"]</div>
+</form>

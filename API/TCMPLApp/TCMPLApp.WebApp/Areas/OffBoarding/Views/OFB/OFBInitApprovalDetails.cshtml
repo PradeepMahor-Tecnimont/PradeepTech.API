@@ -1,0 +1,125 @@
+﻿@model TCMPLApp.WebApp.Models.OFBApprovalUpdateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Init Details";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="OFBIndex" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item "><a asp-action="OFBApprovalsIndex" asp-controller="OFB" asp-area="OffBoarding">Approvals</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Approve</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<input type="hidden" asp-for="Empno" />
+
+<div class="card bg-gray-active border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="card-header" style="padding:10px 18px;">
+        <h5 class="card-title">
+            @localizer["Off-Boarding - Exits approval by"] @Model.ActionDesc
+        </h5>
+    </div>
+    <div class="m-1"></div>
+    <div class="card-block">
+        <div class="card-pill">
+            <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">@localizer["Details"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-approval-tab" data-toggle="pill" href="#tabs-approval" role="tab" aria-controls="tabs-approval" aria-selected="false"
+                       data-url="@Url.Action("OFBApprovalsDetailsIndex", "OFB", new { Area = "OffBoarding" })"
+                       data-id="@Model.Empno"
+                       data-callback="loadOFBApprovalsDetailsDataTable()"
+                       data-divid="pw-approval"
+                       data-area="OffBoarding"
+                       data-controller="OFB"
+                       data-action="OFBApprovalsDetailsIndex">
+                        @localizer["Approval Status"]
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                    @await Html.PartialAsync("_OFBInitApprovalDetailsPartial.cshtml", Model)
+
+                </div>
+                <div class="tab-pane fade" id="tabs-approval" role="tabpanel" aria-labelledby="tabs-approval-tab">
+                    <div id="pw-approval">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let pvvUrlOFBApprovalDetailsList = '@Url.Action("GetListsOFBApprovalsDetails", "OFB")';
+
+        function loadOFBApprovalsDetailsDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbOFBApprovalDetails",
+                pColumns: datatableColumnsOFBApprovalsDetails,
+                pUrl: pvvUrlOFBApprovalDetailsList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    empno: $('#Empno').val() ? $('#Empno').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+
+            });
+        }
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumnsOFBApprovalsDetails = [
+                    { 'data': "actionDesc" },
+                    { 'data': "remarks" },
+                    { 'data': "approvalStatus" },
+                    {
+                        'data': "approvalDate",
+                        'render': function (data) {
+                            if (data)
+                                return moment(data).format('DD-MMM-YYYY');
+                            else
+                                return '';
+                        }
+                    },
+                    { 'data': "approverName" },
+
+                ];
+
+            </text>
+        }
+            function setApprovalType() {
+                $("#ApprovalType").val("HOLD");
+            }
+
+    </script>
+}

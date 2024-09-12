@@ -1,0 +1,235 @@
+﻿@model TCMPLApp.WebApp.Models.SLLeaveDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Attendance"
+      asp-action="SLLeaveReview"
+      id="formSLLeaveReview"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin($('btneditleave'))"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="loadScript();"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+    @Html.HiddenFor(m => m.ApplicationId)
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Sick Leave application"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Application Id <b>@Html.DisplayFor(model => model.ApplicationId)</b></h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">Entry type </div>
+                            <div class="dd-met">@(Model.FlagIsAdj == "OK" ? "Leave adjustment" : "Leave application")</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.ApplicationDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.ApplicationDate)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.POffice) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.POffice)</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Project) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Project)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeadName) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeadName)</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.CareTaker) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.CareTaker)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveType) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveType)</div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeavePeriod) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeavePeriod)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.StartDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.StartDate)</div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.EndDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.EndDate)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Reason) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Reason)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LastReporting) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LastReporting)</div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.ResumingDuty) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.ResumingDuty)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.PhoneNumber) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.PhoneNumber)</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.StdNumber) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.StdNumber)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Address) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Address)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.MedicalCertificate) </div>
+                            <div class="dd-met">@(Model.MedicalCertificate == "1" ? "Yes" : "-")</div>
+                        </div>
+                    </div>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Discrepancies))
+                {
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <div class="dt-met">Your application contains following discrepancies</div>
+                                <div class="dd-met">@(Model.Discrepancies)</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FlagIsAdj == "KO")
+                {
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-mb-4 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.LeadApproval) </div>
+                                <div class="dd-met">@(Model.LeadApproval)</div>
+                            </div>
+                            <div class="col-mb-4 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.HodApproval) </div>
+                                <div class="dd-met">@(Model.HodApproval)</div>
+                            </div>
+                            <div class="col-mb-4 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.HRApproval) </div>
+                                <div class="dd-met">@(Model.HRApproval)</div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-mb-4 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.LeadReason) </div>
+                                <div class="dd-met">@(Model.LeadReason)</div>
+                            </div>
+                            <div class="col-mb-4 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.HodReason) </div>
+                                <div class="dd-met">@(Model.HodReason)</div>
+                            </div>
+                            <div class="col-mb-4 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.HRReason) </div>
+                                <div class="dd-met">@(Model.HRReason)</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <div style="font-weight:600">Sick Leave availed during calendar year</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-mb-4 col-xl-4">
+                            <div class="dt-met">Sick Leave Availed</div>
+                            <div class="dd-met text-danger">@(Model.SLAvailed)</div>
+                        </div>
+                        <div class="col-mb-4 col-xl-4">
+                            <div class="dt-met">Sick Leave Applied</div>
+                            <div class="dd-met text-danger">@(Model.SLApplied)</div>
+                        </div>
+                        <div class="col-mb-4 col-xl-4">
+                            <div class="dt-met">Sick Leave Total</div>
+                            <div class="dd-met text-danger">@(Model.SLAvailed + Model.SLApplied)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <input asp-for="Remarks" class="form-control" placeholder="Remarks" />
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        @if (Model.FlagCanApprove == "OK")
+        {
+            <button class="btn btn-primary" type="button" id="btnapprove" name="approve" value="OK"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Approve"]">
+                @localizer["Approve"]
+            </button>
+            <button class="btn btn-danger" type="button" id="btnreject" name="reject" value="OK"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Reject"]">
+                @localizer["Reject"]
+            </button>
+        }
+
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

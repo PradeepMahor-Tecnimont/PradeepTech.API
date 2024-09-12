@@ -1,0 +1,279 @@
+﻿@model TCMPLApp.WebApp.Models.DMSAssetTakeHomeIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWP">Smart work planning</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="DMSAsset" asp-area="SWP">Desk asset management</a></li>
+        <li class="breadcrumb-item active">Gatepass</li>
+    </ol>
+}
+
+@section styles
+{
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/css/site-print.css")" rel="stylesheet" type="text/css" />
+}
+
+@{
+    ViewData["Title"] = "Gatepass";
+}
+
+<div id="asset2homediv" name="asset2homediv">
+    <div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Gatepass</p>
+        </div>
+        @*<div class="card-toolbar">
+                <div role="toolbar">
+                    <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw35"
+                       data-url='@Url.Action("OfficeWorkSpaceFilterGet", "SWP", new { Area = "SWP" })'
+                       data-modaltitle="Filters - Office workspace"
+                       data-modalheader="Filters - Office workspace">
+                        <i class="fas fa-filter"></i>&nbsp;Filters
+                    </a>
+                    <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+                       data-actionid="OfficeWorkSpaceIndex"
+                       data-url='@Url.Action("ResetFilter", "SWP", new { Area = "SWP" })'
+                       href="#"
+                       onclick="resetFilter(event, this);"
+                       style="display: none;">
+                        <i class="fas fa-filter"></i> Reset
+                    </a>
+                </div>
+            </div>*@
+
+        <div class="m-1"></div>
+        <div class="bg-gray-active rounded ">
+            <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        <th> @Html.DisplayNameFor(model => model.Unqid) </th>
+                        <th> @Html.DisplayNameFor(model => model.Deskid) </th>
+                        <th> @Html.DisplayNameFor(model => model.Empno) </th>
+                        <th> @Html.DisplayNameFor(model => model.Name) </th>
+                        <th> </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    } 
+    <script type="text/javascript">
+    
+        var datatableModal = "false";
+
+         function localScript() {
+            if (datatableModal == "true") {                
+                localGatePassDataTable();                
+            }
+        }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+        });
+
+        function btnClick() {
+            datatableModal = "true";            
+            return false;
+        }
+
+        function printcontent(el) {        
+            printElement(document.getElementById(el));
+        }
+
+        function localLoadDataTable() {
+            var table = $('#tbDataGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                ordering: false,
+                destroy: true,
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                    ordering: false,
+                columns: [
+                        { data: "unqid", width: '3.0rem' },
+                        { data: "deskid", width: '3.0rem' },
+                        { data: "empno", width: '3.0rem' },
+                        { data: "name", width: '15.0rem' },
+                        {
+                            data: null,
+                            render: function (data, type, row) {
+                                return '<a class="btn btn-sm-icon " id="btnAsset" data-jqueryselector="openmodal" onclick="btnClick();"  ' +                               
+                                       ' data-modalcontainer="modalcontainer"  ' +
+                                       ' data-url="@Url.Action("GatePassDetailModal", "DMSAsset", new { Area = "SWP" })"  ' +
+                                       ' data-modalpopupwidth="rightw50"  ' +
+                                       ' data-unqid="' + data.unqid + '"' +
+                                       ' data-empno="' + data.empno + '"' +
+                                       ' data-deskid="' + data.deskid + '"' +
+                                       ' data-modaltitle="Gatepass"  ' +
+                                       ' data-modalheader="Gatepass">  ' +
+                                       ' <i class="fa fa-print" aria-hidden="true"></i>  ' +
+                                       ' </a> ';
+
+                            },
+                            'className': "td-icon text-center  align-middle",
+                        }
+                    ],
+                    </text>
+                }
+                else
+                {
+                    <text>
+                    ordering: false,
+                    columns: [
+                        {
+                            data: null,
+                            render: function (data, type, row) {
+                                var item = '<div class="card">';
+                                item += '<div class="card-mobiledatatable">';
+                                 item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Unqid)' + '</dt><dd class="col-lg-8">' + data.unqid + '</dd></dl>';
+                                item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Deskid)' + '</dt><dd class="col-lg-8">' + data.deskid + '</dd></dl>';
+                                item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Empno)' + '</dt><dd class="col-lg-8">' + data.empno + '</dd></dl>';
+                                item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Name)' + '</dt><dd class="col-lg-8">' + data.name + '</dd></dl>';
+                                item += '</div></div>';
+                                return item
+                            },
+                            sortable: false,
+                            searchable: false,
+                            className: "datatable-td-mobile"
+                        }
+                    ],
+                    </text>
+                }
+                ajax: {
+                    //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListGatePass", "DMSAsset", new { Area = "SWP" })',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.unqid = $('#FilterDataModel_Unqid').val();
+                        d.genericSearch = null;
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        function localGatePassDataTable() {
+            var table = $('#tbGridGatePass').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                 ordering: false,
+                destroy: true,
+                responsive: true,
+                autoWidth: false,
+                bLengthChange: false,
+                bInfo: false,
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                //dom: 'rt<"row"<"col-1"l><"col">><"clear">',
+                layout: { topStart: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+                "initComplete": function(settings, json) {
+                    $('#tbGridGatePass tr:last').after('<tr><td>Keyboard</td><td>-NA-</td><td>Keyboard</td><td class="text-center align-middle">1</td></tr><tr><td>Mouse</td><td>-NA-</td><td>Mouse</td><td class="text-center align-middle">1</td></tr>');
+                },
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                    ordering: false,
+                    columns: [
+                        { data: "assetType", width: '3.0rem', },
+                        { data: "assetid", width: '3.0rem', },
+                        { data: "description", width: '10.0rem', },
+                        {
+                            data: null,
+                            width: '3.0rem',
+                            render: function (data, type, row) {
+                                    return '1';
+                                }, 
+                            class: 'text-center  align-middle'
+                        }
+                    ],
+                    </text>
+                }
+                else
+                {
+                    <text>
+                    ordering: false,
+                    columns: [
+                        {
+                            data: null,
+                            render: function (data, type, row) {
+                                var item = '<div class="card">';
+                                   item += '</div>';
+                                return item;
+                            },
+                            sortable: false,
+                            searchable: false,
+                            className: "datatable-td-mobile"
+                        }
+                    ],
+                    </text>
+                }
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListGatepassModal", "DMSAsset", new { Area = "SWP" })',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = null;
+                        d.unqid = $("#formGatepass input[id=Unqid]").val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+        
+    </script>
+     <script src="@Url.Content("~/js/site-print.js")" type="text/javascript"></script>
+}

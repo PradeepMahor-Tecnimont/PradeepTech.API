@@ -1,0 +1,276 @@
+﻿@model TCMPLApp.WebApp.Models.JobmasterMainDetailViewModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="col-xl-12">
+    <div class="card">        
+        <div class="card-body">
+            <div class="card-deck">
+                <div class="card shadow col-md-12 col-xl-5" id="div-job">
+                    <h4 class="theme-light-grey">@localizer["Job attributes"]</h4>
+                    <div class="card-body">
+                        <div class="row">                            
+                            <div class="form-group col-mb-6 col-xl-6">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.FormMode)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.FormMode)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-6">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.Revision)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.Revision)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-6">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.CompanyName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.CompanyName)</div>                                
+                            </div>
+                            <div class="form-group col-md-6 col-xl-6">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.JobTypeName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.JobTypeName)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-6">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.IsConsortium)</div>
+                                <div class="dd-met">@(Model.IsConsortium == 1 ? "Yes" : "No")</div>                                
+                            </div>
+                            <div class="form-group col-md-6 col-xl-6">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.Tcmno)
+                                    &nbsp;
+                                    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobUpdateTcmno)
+                                    && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobUpdateTcmno))
+                                    {
+                                        <a title="Edit PM/JS" id="idEditJob"
+                                       class="btn btn-outline-primary btn-sm border-white" href="#"
+                                       data-jqueryselector="openmodal"
+                                       data-modalcontainer="modalcontainer"
+                                       data-modalpopupwidth="rightw35"
+                                       data-url='@Url.Action("Edit", "JOB", new { Area = "JOB" })'
+                                       data-id="@Model.Projno"
+                                       data-modaltitle="Edit job"
+                                       data-modalheader="Edit job">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    }
+                                </div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.Tcmno)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="card shadow col-md-12 col-xl-7" id="div-project">
+                    <h4 class="theme-light-grey">@localizer["Project title"]</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-mb-6 col-xl-12">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ShortDesc)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.ShortDesc)</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-mb-6 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.Place)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.Place)</div>                                
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.StateName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.StateName)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.CountryName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.CountryName)</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-mb-6 col-xl-12">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ScopeOfWorkName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.ScopeOfWorkName)</div>
+                            </div>                            
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-deck" style="margin-top: 10px">
+                <div class="card shadow col-md-12 col-xl-6" id="div-plant">
+                    <h4 class="theme-light-grey">@localizer["Plant details"]</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-mb-6 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.PlantTypeName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.PlantTypeName)</div>                                
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.BusinessLineName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.BusinessLineName)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.SubBusinessLineName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.SubBusinessLineName)</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>                
+                <div class="card shadow col-md-12 col-xl-6" id="div-afc">
+                    <h4 class="theme-light-grey">@localizer["AFC input"]</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-mb-6 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ClientCodeName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.ClientCodeName)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ProjectTypeName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.ProjectTypeName)</div>                                
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-4">                                
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.InvoiceToGrpName)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.InvoiceToGrpName)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-deck" style="margin-top: 10px">
+                <div class="card shadow col-md-12 col-xl-12" id="div-client">
+                    <h4 class="theme-light-grey">@localizer["Client details"]</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-mb-6 col-xl-6">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.Client)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.Client)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.StartDate)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.StartDate)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ExpCloseDate)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.ExpCloseDate)</div>
+                            </div>                            
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ContractNumber)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.ContractNumber)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ContractDate)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.ContractDate)</div>
+                            </div>                            
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.RevCloseDate)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.RevCloseDate)</div>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ActualCloseDate)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.ActualCloseDate)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+@*
+
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">                        
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.FormMode)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.FormMode)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                       <div class="dt-met">@Html.DisplayNameFor(model => model.Revision)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Revision)</div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-12">
+                    <div class="form-group">
+                       <div class="dt-met">@Html.DisplayNameFor(model => model.ClientName)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.ClientName)</div>
+                    </div>
+                </div>               
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.OpeningMonth)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.OpeningMonth)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.JobOpenDate)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.JobOpenDate)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ClosingDateRev1)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.ClosingDateRev1)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ActualClosingDate)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.ActualClosingDate)</div>
+                    </div>
+                </div>                
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ScopeOfWork)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.ScopeOfWork)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Projtype)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Projtype)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Industry)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Industry)</div>
+                    </div>
+                </div>  
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ContractualLanguage)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.ContractualLanguage)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">                
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.BudgetAttached)</div>
+                        <div class="dd-met">@(Model.BudgetAttached == 1 ? "Yes" : "No")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.JobStatus)</div>
+                        <div class="dd-met">@(Model.BudgetAttached == 1 ? "Active" : "Closed")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                </div>               
+            </div>
+            
+        </div>
+    </div>
+</div>
+*@

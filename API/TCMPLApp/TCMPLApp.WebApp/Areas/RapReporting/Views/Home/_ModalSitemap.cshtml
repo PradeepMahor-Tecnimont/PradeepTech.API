@@ -1,0 +1,370 @@
+﻿@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+
+
+<div class="modal-header">
+    <h5 class="modal-title">@localizer["Sitemap"]</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body h-75">
+    <div class="input-group pt-1 pl-1 pr-1 ">
+        <input type="search" class="form-control form-control-sm border" id="serachSiteMap" name="serachSiteMap" placeholder="Search..." onkeyup="filterSiteMap()" onsearch="filterSiteMap()">
+    </div>
+    <div class="m-2"></div>    
+    <div style="max-height:95%; overflow-y: scroll;">
+        <nav aria-label="RAP Reporting">
+            <ul id="sitemapUL" class="treeview-navigation" role="tree" aria-label="RAP Reporting">
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsCostCode) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProjectManager) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProco) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsAFC) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsHR) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsMasters))
+                {
+                    <li role="none">
+                        <a role="treeitem" href="@Url.Action("GeneralIndex", "Reports", new { Area = "RapReporting" })" aria-current="page"><span class="label">General reports</span></a>
+                        <ul id="id-gen-subtree" role="group" aria-label="General reports">
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsCostCode))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("GeneralCostcenterIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Costcenter</span></a>
+                                    <ul id="id-gen-sub-subtree" role="group" aria-label="Costcenter">
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("GeneralCostcenterIndex", "Reports", new { Area = "RapReporting" })"> <span class="label">Before posting</span></a>
+                                            <ul id="id-gen-sub-sub-subtree" role="group" aria-label="Before posting">
+                                                <li role="none"><span>Costcenter Manhours Report</span> </li>
+                                                <li role="none"><span>Hours exceeding 240</span> </li>
+                                                <li role="none"><span>Monthly costcodewise manhours</span> </li>
+                                                <li role="none"><span>Manhours of costcenter</span> </li>
+                                                <li role="none"><span>Leave manhours</span> </li>
+                                                <li role="none"><span>Odd timesheet</span> </li>
+                                                <li role="none"><span>Timesheet not posted</span> </li>
+                                                <li role="none"><span>Timesheet status</span> </li>
+                                            </ul>
+                                        </li>
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("GeneralCostcenterIndex", "Reports", new { Area = "RapReporting" })" onload="onSuccessTab('afterpost')"> <span class="label">After posting</span></a>
+                                            <ul id="id-gen-sub-sub-subtree" role="group" aria-label="After posting">
+                                                <li role="none"><span>Hours costcode & activity wise</span> </li>
+                                                <li role="none"><span>Projectwise costcode activity wise</span> </li>
+                                                <li role="none"><span>Project costcode hours OT breakup</span> </li>
+                                                <li role="none"><span>Project costcode hours OT breakup (Crosstab)</span> </li>
+                                                <li role="none"><span>Project manhours</span> </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProjectManager))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("GeneralProjectIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Project</span></a>
+                                    <ul id="id-proj-subtree" role="group" aria-label="Project">
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("GeneralProjectIndex", "Reports", new { Area = "RapReporting" })"> <span class="label">Before posting</span></a>
+                                            <ul id="id-gen-sub-sub-subtree" role="group" aria-label="Before posting">
+                                                <li role="none"><span>Projectwise Manhours Report</span> </li>
+                                                <li role="none"><span>Monthly Jobwise Manhours</span> </li>
+                                            </ul>
+                                        </li>
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("GeneralProjectIndex", "Reports", new { Area = "RapReporting" })" onload="onSuccessTab('afterpost')"> <span class="label">After posting</span></a>
+                                            <ul id="id-proj-sub-sub-subtree" role="group" aria-label="After posting">
+                                                <li role="none"><span>Gradewise Manhours</span> </li>
+                                                <li role="none"><span>Work Position Wise</span> </li>
+                                                <li role="none"><span>Project Costcode Budget Booked</span> </li>
+                                                <li role="none"><span>Hours Costcode & Activity Wise</span> </li>
+                                                <li role="none"><span>Projectwise Costcode Activity Hours</span> </li>
+                                                <li role="none"><span>Project Costcode Wise Manhours OT Breakup</span> </li>
+                                                <li role="none"><span>Employee Manhours OT Breakup</span> </li>
+                                                <li role="none"><span>CrossTab OT Breakup </span> </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProco))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("GeneralProcoIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Proco</span></a>
+                                    <ul id="id-proco-sub-subtree" role="group" aria-label="After posting">
+                                        <li role="none"><span>Projection Given By HODs</span> </li>
+                                        <li role="none"><span>Projection on Expected Jobs</span> </li>
+                                        <li role="none"><span>Proco TS ACT</span></li>
+                                        <li role="none"><span>Timesheet Status</span> </li>
+                                        <li role="none"><span>Costcenterwise TS Status</span></li>
+                                        <li role="none"><span>Costcenter list (Not Posted)</span></li>
+                                        <li role="none"><span>Expected Jobs</span> </li>
+                                        <li role="none"><span>Kallo Daily</span> </li>
+                                        <li role="none"><span>Projection List</span> </li>
+                                        <li role="none"><span>Covid Manhrs Distribution</span> </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsAFC))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("GeneralAFCIndex", "Reports", new { Area = "RapReporting" })"><span class="label">AFC</span></a>
+                                    <ul id="id-afc-sub-subtree" role="group" aria-label="After posting">
+                                        <li role="none"><span>Auditor Report</span> </li>
+                                        <li role="none"><span>Finance TS</span> </li>
+                                        <li role="none"><span>Job Project List</span> </li>
+                                        <li role="none"><span>Auditor - Subcontractor wise</span> </li>
+                                        <li role="none"><span>Covid Manhrs Distribution</span> </li>
+                                        <li role="none"><span>Manhour export to SAP</span> </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsHR))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("GeneralHRIndex", "Reports", new { Area = "RapReporting" })"><span class="label">HR</span></a>
+                                    <ul id="id-afc-sub-subtree" role="group" aria-label="After posting">
+                                        <li role="none"><span>Posted Manhours of a resource</span> </li>
+                                        <li role="none"><span>Subcontractor Timesheet</span> </li>
+                                        <li role="none"><span>Timesheet Not Filled</span> </li>
+                                        <li role="none"><span>Timesheet Not Posted</span> </li>
+                                        <li role="none"><span>Levae Manhours</span> </li>
+                                        <li role="none"><span>Timesheet</span> </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsMasters))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("GeneralMasterIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Master</span></a>
+                                    <ul id="id-afc-sub-subtree" role="group" aria-label="After posting">
+                                        <li role="none"><span>Project Activity (Costcode)</span> </li>
+                                        <li role="none"><span>Activity</span> </li>
+                                        <li role="none"><span>TLPCodes Master</span> </li>
+                                        <li role="none"><span>Employee List (Assign)</span> </li>
+                                        <li role="none"><span>Employee List (Parent)</span> </li>
+                                        <li role="none"><span>Project Activity (Project)</span> </li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsCostCode) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProjectManager) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProco) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsEnggMngr) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsNonEnggMngr) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsAFC))
+                {
+                    <li role="none">
+                        <a role="treeitem" href="@Url.Action("AnalyticalIndex", "Reports", new { Area = "RapReporting" })" aria-current="page"><span class="label">Analytical reports</span></a>
+                        <ul id="id-any-subtree" role="group" aria-label="Analytical reports">
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsCostCode))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("AnalyticalCostcenterIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Costcenter</span></a>
+                                    <ul id="id-any-sub-subtree" role="group" aria-label="Costcenter">
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("AnalyticalCostcenterIndex", "Reports", new { Area = "RapReporting" })"> <span class="label">Before posting</span></a>
+                                            <ul id="id-any-sub-sub-subtree" role="group" aria-label="Before posting">
+                                                <li role="none"><span>Manhour Booked (TM02)</span> </li>
+                                            </ul>
+                                        </li>
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("AnalyticalCostcenterIndex", "Reports", new { Area = "RapReporting" })" onload="onSuccessTab('afterpost')"> <span class="label">After posting</span></a>
+                                            <ul id="id-any-sub-sub-subtree" role="group" aria-label="After posting">
+                                                <li role="none"><span>CHA1STA6TM02</span> </li>
+                                                <li role="none"><span>CHA1STA6TM02 Combined</span> </li>
+                                            </ul>
+                                        </li>
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("AnalyticalCostcenterIndex", "Reports", new { Area = "RapReporting" })" onload="onSuccessTab('afterpost')"> <span class="label">General</span></a>
+                                            <ul id="id-any-sub-sub-subtree" role="group" aria-label="General">
+                                                <li role="none"><span>CHA1 Expected</span> </li>
+                                                <li role="none"><span>CHA1 Expected Combined</span> </li>
+                                                <li role="none"><span>CHA1 Expected Simulation</span> </li>
+                                                <li role="none"><span>CHA1 Expected Simulation Combined</span> </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProjectManager))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("AnalyticalProjectIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Project</span></a>
+                                    <ul id="id-any-sub-subtree" role="group" aria-label="Project">
+                                        <li role="none"><span>TM01 TM11</span></li>
+                                        <li role="none"><span>TM11A</span></li>
+                                        <li role="none"><span>TM11B</span></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProco))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("AnalyticalProcoIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Proco</span></a>
+                                    <ul id="id-any-sub-subtree" role="group" aria-label="Proco">
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("AnalyticalProcoIndex", "Reports", new { Area = "RapReporting" })"> <span class="label">Before posting</span></a>
+                                            <ul id="id-any-sub-sub-subtree" role="group" aria-label="Before posting">
+                                                <li role="none"><span>TCM Jobs - CostCentre</span> </li>
+                                                <li role="none"><span>Reimbursable Jobs + PO</span> </li>
+                                                <li role="none"><span>Corporate WorkLoad</span> </li>
+                                                <li role="none"><span>Corporate WorkLoad - Simulation</span> </li>
+                                                <li role="none"><span>TM01 Dupl</span> </li>
+                                                <li role="none"><span>Resource Availability Schedule</span> </li>
+                                            </ul>
+                                        </li>
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("AnalyticalProcoIndex", "Reports", new { Area = "RapReporting" })" onload="onSuccessTab('afterpost')"> <span class="label">After posting</span></a>
+                                            <ul id="id-any-sub-sub-subtree" role="group" aria-label="After posting">
+                                                <li role="none"><span>TMA</span> </li>
+                                                <li role="none"><span>TMA Summary</span> </li>
+                                                <li role="none"><span>TCm Jobs - Group</span> </li>
+                                                <li role="none"><span>CHA1STA6TM02</span> </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsEnggMngr))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("AnalyticalEnggIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Engineering</span></a>
+                                    <ul id="id-any-sub-subtree" role="group" aria-label="Engineering">
+                                        <li role="none"><span>CHA1 Expt - Engineering : Combined</span></li>
+                                        <li role="none"><span>CHA1 Expt - Engineering (Simul) : Combined</span></li>
+                                        <li role="none"><span>CHA1 Expt - Engineering : Mumbai</span></li>
+                                        <li role="none"><span>CHA1 Expt - Engineering (Simul) : Mumbai</span></li>
+                                        <li role="none"><span>CHA1 Expt - Engineering : Delhi</span></li>
+                                        <li role="none"><span>CHA1 Expt - Engineering (Simul) : Delhi</span></li>
+                                        <li role="none"><span>Breakup Year</span></li>
+                                        <li role="none"><span>Breakup Engg</span></li>
+                                        <li role="none"><span>Auditor - Subcontractor wise</span></li>
+                                        <li role="none"><span>Outside Subcontractor report</span></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsNonEnggMngr))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("AnalyticalNonEnggIndex", "Reports", new { Area = "RapReporting" })"><span class="label">Non-Engineering</span></a>
+                                    <ul id="id-any-sub-subtree" role="group" aria-label="Non-Engineering">
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("AnalyticalNonEnggIndex", "Reports", new { Area = "RapReporting" })"> <span class="label">General</span></a>
+                                            <ul id="id-any-sub-sub-subtree" role="group" aria-label="General">
+                                                <li role="none"><span>CHA1 Expt - Non Engineering : Combined</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Non Engineering (Simul) : Combined</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Non Engineering : Mumbai</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Non Engineering (Simul) : Mumbai</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Non Engineering : Delhi</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Non Engineering (Simul) : Delhi</span> </li>
+
+                                            </ul>
+                                        </li>
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("AnalyticalNonEnggIndex", "Reports", new { Area = "RapReporting" })" onload="onSuccessTab('afterpost')"> <span class="label">Procurement</span></a>
+                                            <ul id="id-any-sub-sub-subtree" role="group" aria-label="Procurement">
+                                                <li role="none"><span>CHA1 Expt - Procurement : Combined</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Procurement : Mumbai</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Procurement : Delhi</span> </li>
+                                            </ul>
+                                        </li>
+                                        <li role="none">
+                                            <a role="treeitem" href="@Url.Action("AnalyticalNonEnggIndex", "Reports", new { Area = "RapReporting" })" onload="onSuccessTab('afterpost')"> <span class="label">Proco</span></a>
+                                            <ul id="id-any-sub-sub-subtree" role="group" aria-label="Proco">
+                                                <li role="none"><span>CHA1 Expt - Proco: Combined</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Proco: Mumbai</span> </li>
+                                                <li role="none"><span>CHA1 Expt - Proco: Delhi</span> </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+
+                                </li>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsAFC))
+                            {
+                                <li role="none">
+                                    <a role="treeitem" href="@Url.Action("AnalyticalAFCIndex", "Reports", new { Area = "RapReporting" })"><span class="label">AFC</span></a>
+                                    <ul id="id-gen-sub-subtree" role="group" aria-label="AFC">
+                                        <li role="none"><span>TMA</span></li>
+                                        <li role="none"><span>TMA Summary</span></li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsTopMgmt))
+                {
+                    <li role="none">
+                        <a role="treeitem" href="@Url.Action("ManagementIndex", "Reports", new { Area = "RapReporting" })" aria-current="page"><span class="label">Management reports</span></a>
+                        <ul id="id-mgt-subtree" role="group" aria-label="Management reports">
+                            <li role="none"><span>TMA</span></li>
+                            <li role="none"><span>TMA Summary</span></li>
+                            <li role="none"><span>CHA1Expt-Engg & Non Engg : Combined</span></li>
+                            <li role="none"><span>CHA1Expt-Engg & Non Engg (Simul) : Combined</span></li>
+                            <li role="none"><span>CHA1Expt-Engg & Non Engg : Mumbai</span></li>
+                            <li role="none"><span>CHA1Expt-Engg & Non Engg (Simul) : Mumbai</span></li>
+                            <li role="none"><span>CHA1Expt-Engg & Non Engg : Delhi</span></li>
+                            <li role="none"><span>CHA1Expt-Engg & Non Engg (Simul) : Delhi</span></li>
+                            <li role="none"><span>Break Up All</span></li>
+                            <li role="none"><span>Breakup Period</span></li>
+                            <li role="none"><span>Plant Engineering</span></li>
+                        </ul>
+                    </li>
+                }
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionCostCodeEdit) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionHoDFormsEdit) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoMastersEdit) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoTrans))
+                {
+                    <li role="none">
+                        <a role="treeitem" href="@Url.Action("TransactionsIndex", "Transactions", new { Area = "RapReporting" })" aria-current="page"><span class="label">Transactions</span></a>
+                        <ul id="id-trans-subtree" role="group" aria-label="Transactions">
+                            <li role="none">
+                                <a role="treeitem" href="@Url.Action("MasterIndex", "Transactions", new { Area = "RapReporting" })"> <span class="label">Master</span></a>
+                                <ul id="id-trans-sub-subtree" role="group" aria-label="Master">
+                                    <li role="none"><span>Activity master</span> </li>
+                                    <li role="none"><span>Project activity</span> </li>
+                                    <li role="none"><span>RAP hours</span> </li>
+                                    <li role="none"><span>Tlp master</span> </li>
+                                    <li role="none"><span>Update number of employee</span> </li>
+                                    <li role="none"><span>Wrk hours</span> </li>
+                                </ul>
+                            </li>
+                            <li role="none"><span>Add expected jobs</span> </li>
+                            <li role="none"><span>Update movements</span> </li>
+                            <li role="none"><span>Manhours projections - current jobs</span> </li>
+                            <li role="none"><span>Manhours projections - expected jobs</span> </li>
+                            <li role="none"><span>Overtime update</span> </li>
+                            <li role="none"><span>Outside subcontracts</span> </li>
+                        </ul>
+                    </li>
+                }
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionCostCodeEdit) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionHoDFormsEdit) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoMastersEdit) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoTrans))
+                {
+                    <li role="none">
+                        <a role="treeitem" href="@Url.Action("ManageIndex", "Transactions", new { Area = "RapReporting" })" aria-current="page"><span class="label">Manage</span></a>
+                        <ul id="id-mgt-subtree" role="group" aria-label="Management reports">
+                            <li role="none"><span>Download Report</span></li>
+                            <li role="none"><span>Update Employee Count (Script)</span></li>
+                            <li role="none"><span>Repost</span></li>
+                            <li role="none"><span>Move Month</span></li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+</div>
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}

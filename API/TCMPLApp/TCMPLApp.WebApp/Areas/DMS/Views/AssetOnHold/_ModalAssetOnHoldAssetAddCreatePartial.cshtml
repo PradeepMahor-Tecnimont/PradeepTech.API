@@ -1,0 +1,107 @@
+﻿@model TCMPLApp.WebApp.Models.AssetOnHoldAssetAddCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="AssetOnHold"
+      asp-action="AssetOnHoldAssetAddCreate"
+      id="formAssetOnHoldAssetAddCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="ActionType" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Asset on hold assetAdd create"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Asset on hold assetAdd create</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="AssetCategory" class="control-label"></label>
+                            <select asp-for="AssetCategory" class="form-control Select2" asp-items="ViewBag.AssetCategoryList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="AssetCategory" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="AssetId" class="control-label"></label>
+                            <select asp-for="AssetId" class="form-control Select2" asp-items="ViewBag.AssetIdList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="AssetId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Empno" class="control-label"></label>
+                            <select asp-for="Empno" class="form-control Select2" asp-items="ViewBag.EmpList" data-placeholder="Please select..." >
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Empno" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="DeskId" class="control-label"></label>
+                            <select asp-for="DeskId" class="form-control Select2" asp-items="ViewBag.DeskIdList" data-placeholder="Please select..." >
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="DeskId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="AssignCode" class="control-label"></label>
+                            <select asp-for="AssignCode" class="form-control Select2" asp-items="ViewBag.AssignList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="AssignCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ActionType" class="control-label"></label>
+                            <select asp-for="ActionType" class="form-control Select2" asp-items="ViewBag.ActionTypeList" data-placeholder="Please select..." disabled required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ActionType" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

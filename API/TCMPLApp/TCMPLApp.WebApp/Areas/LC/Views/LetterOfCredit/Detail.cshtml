@@ -1,0 +1,653 @@
+﻿@model TCMPLApp.WebApp.Models.LcMainDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+
+@{
+    ViewData["Title"] = "LetterOfCredit modification";
+}
+@section styles
+{
+
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+<link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+<link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+<style>
+    @@media (-webkit-min-device-pixel-ratio: 1.25) {
+        .openbal .col-xl-1, .closebal .col-xl-1 {
+            flex: 0 0 12% !important;
+            max-width: 12% !important;
+        }
+    }
+</style>
+}
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="LC">Letter of credit home</a></li>
+    <li class="breadcrumb-item "><a asp-action="Index" asp-controller="LetterOfCredit" asp-area="LC">Letter of credit</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Details</li>
+</ol>
+}
+
+
+<div style="display:none">
+    @Html.HiddenFor(m => m.ApplicationId)
+</div>
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-header">
+            <h5 class="card-title">
+                Serial no : <b>@Model.LcSerialNo </b>
+
+            </h5>
+            <a asp-action="Index" asp-controller="LetterOfCredit" asp-area="LC" class="btn btn-outline-info btn-sm border-none float-right">
+                <i class="fas fa-undo"></i>
+                Back
+            </a>
+
+        </div>
+        <div class="card-block" style="min-height: 450px;">
+            <div class="card-pill">
+                <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-basicInfo-tab"
+                           href="Detail?ApplicationId=@Model.ApplicationId" aria-controls="tabs-basicInfo" aria-selected="true">Basic info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-bankingDetail-tab" data-toggle="pill" href="#tabs-bankingDetail" role="tab" aria-controls="tabs-bankingDetail" aria-selected="false"
+                           data-url="@Url.Action("LcBankingDetail", "LetterOfCredit", new { Area = "LC"} )"
+                           data-id="@Model.ApplicationId"
+                           data-divid="pw-bankingDetail"
+                           data-area="LC"
+                           data-controller="LetterOfCredit"
+                           data-action="BankingDetail">Banking detail</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-lcamountDetail-tab" data-toggle="pill" href="#tabs-lcamountDetail" role="tab" aria-controls="tabs-lcamountDetail" aria-selected="false"
+                           data-url="@Url.Action("LCAmountDetail", "LetterOfCredit", new { Area = "LC"} )"
+                           data-id="@Model.ApplicationId"
+                           data-divid="pw-lcamountDetail"
+                           data-area="LC"
+                           data-controller="LetterOfCredit"
+                           data-action="LCAmountDetail">LC amount detail</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-acceptanceDetail-tab" data-toggle="pill" href="#tabs-acceptanceDetail" role="tab" aria-controls="tabs-acceptanceDetail" aria-selected="false"
+                           data-url="@Url.Action("LcAcceptanceDetail", "LetterOfCredit", new { Area = "LC" })"
+                           data-id="@Model.ApplicationId"
+                           data-divid="pw-acceptanceDetail"
+                           data-area="LC"
+                           data-controller="LetterOfCredit"
+                           data-action="AcceptanceDetail">Acceptance detail</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-lcCharges-tab" data-toggle="pill" href="#tabs-lcCharges" role="tab" aria-controls="tabs-lcCharges" aria-selected="false"
+                           data-url="@Url.Action("LcChargesDetail", "LetterOfCredit", new { Area = "LC" })"
+                           data-id="@Model.ApplicationId"
+                           data-divid="pw-lcCharges"
+                           data-area="LC"
+                           data-controller="LetterOfCredit"
+                           data-action="LcCharges">LC charge </a>
+                    </li>
+                    @* <li class="nav-item">
+                        <a class="nav-link" id="tabs-lcChargesList-tab" data-toggle="pill" href="#tabs-lcChargesList" role="tab" aria-controls="tabs-lcChargesList" aria-selected="false"
+                        data-url="@Url.Action("LcChargesList", "LetterOfCredit", new { Area = "LC" })"
+                        data-id="@Model.ApplicationId"
+                        data-divid="pw-lcChargesList"
+                        data-area="LC"
+                        data-controller="LetterOfCredit"
+                        data-action="lcChargesList">LC charges (DataTable)</a>
+                        </li>*@
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-liveStatus-tab" data-toggle="pill" href="#tabs-liveStatus" role="tab" aria-controls="tabs-liveStatus" aria-selected="false"
+                           data-url="@Url.Action("LcLiveStatusDetail", "LetterOfCredit", new { Area = "LC" })"
+                           data-id="@Model.ApplicationId"
+                           data-divid="pw-liveStatus"
+                           data-area="LC"
+                           data-controller="LetterOfCredit"
+                           data-action="LiveStatus">Live status</a>
+                    </li>
+
+
+                </ul>
+                <div class="tab-content">
+                    @await Html.PartialAsync("_LoaderPartial")
+                    <div class="tab-pane fade show active" id="tabs-basicInfo" role="tabpanel" aria-labelledby="tabs-basicInfo-tab">
+
+                        <div id="pw-basicInfo">
+                            @await Html.PartialAsync("_LcMainDetailPartial.cshtml",Model)
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="tabs-bankingDetail" role="tabpanel" aria-labelledby="tabs-bankingDetail-tab">
+                        <div id="pw-bankingDetail">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-lcamountDetail" role="tabpanel" aria-labelledby="tabs-lcamountDetail-tab">
+                        <div id="pw-lcamountDetail">
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="tabs-acceptanceDetail" role="tabpanel" aria-labelledby="tabs-acceptanceDetail-tab">
+                        <div id="pw-acceptanceDetail">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-lcCharges" role="tabpanel" aria-labelledby="tabs-lcCharges-tab">
+                        <div id="pw-lcCharges">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-liveStatus" role="tabpanel" aria-labelledby="tabs-liveStatus-tab">
+                        <div id="pw-liveStatus">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-lcChargesList" role="tabpanel" aria-labelledby="tabs-lcChargesList-tab">
+                        <div id="pw-lcChargesList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+<script>
+        $(document).ready(function () {
+            localScript();
+            intDataTabletbPoSapInvoice();
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+            initDropZone();
+
+            localLoadLcChargesDataTable();
+            calculateRates();
+        };
+
+         function intDataTabletbPoSapInvoice(){
+          $("#tbGridLcPoSapInvoice").DataTable({
+            destroy: true,
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [5,10],
+            processing: true,
+            serverSide: false,
+            stateSave: false,
+            info: true,
+            filter: true,
+            aaSorting: [[1, 'asc']], // start to sort data in second column
+            aaSorting: [[1, 'asc']], // start to sort data in second column
+            pagingType:'full'
+       });
+
+
+    }
+
+        function calculateRates(){
+
+             if($("#AmountInInr").val()){
+                     $("#amountInInr").val($("#AmountInInr").val());
+                }
+
+         $("#ExchangeRate").change(function(){
+
+                var exchangeRate =  0;
+                var lcAmount =  0;
+
+                if($("#ExchangeRate").val()){
+                      exchangeRate =  $("#ExchangeRate").val();
+                }
+
+                if($("#LcAmount").val()){
+                      lcAmount =  $("#LcAmount").val();
+                }
+
+                var calculatedAmount = exchangeRate * lcAmount;
+
+                $("#AmountInInr").val(calculatedAmount.toFixed(2));
+                $("#amountInInr").val(calculatedAmount.toFixed(2));
+
+            });
+
+           $("#LcAmount").change(function(){
+                 var exchangeRate =  0;
+                var lcAmount =  0;
+
+                if($("#ExchangeRate").val()){
+                      exchangeRate =  $("#ExchangeRate").val();
+                }
+
+                if($("#LcAmount").val()){
+                      lcAmount =  $("#LcAmount").val();
+                }
+
+                var calculatedAmount = exchangeRate * lcAmount;
+
+                $("#AmountInInr").val(calculatedAmount.toFixed(2));
+                $("#amountInInr").val(calculatedAmount.toFixed(2));
+           });
+        }
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#validityDate").on("change", function (event, date) {
+                $("#ValidityDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+
+            $("#issueDate").on("change", function (event, date) {
+                $("#IssueDate").val(date.format("DD-MMM-YYYY"));
+                $('#validityDate').bootstrapMaterialDatePicker('setMinDate', date);
+
+                 var mDate = moment(date);
+
+
+                 if ($('#TenureNoOfDays').val())
+                 {
+
+                     var days = $("#TenureNoOfDays").val();
+                    var paymentDateEst = mDate.add(days, 'day').format('DD-MMM-YYYY');
+
+                    $("#PaymentDateEst").val(paymentDateEst);
+                    $('#paymentDateEst').val(paymentDateEst);
+                 }
+
+            });
+
+            $("#TenureNoOfDays").change(function(){
+
+                var mDate =  moment($("#IssueDate").val());
+
+                    var days = $("#TenureNoOfDays").val();
+
+                    var paymentDateEst = mDate.add(days, 'day').format('DD-MMM-YYYY');
+
+                    $("#PaymentDateEst").val(paymentDateEst);
+                    $('#paymentDateEst').val(paymentDateEst);
+           });
+
+            $("#acceptanceDate").on("change", function (event, date) {
+                $("#AcceptanceDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+            $("#paymentDateAct").on("change", function (event, date) {
+                $("#PaymentDateAct").val(date.format("DD-MMM-YYYY"));
+            });
+
+            $("#paymentDateEst").on("change", function (event, date) {
+                $("#PaymentDateEst").val(date.format("DD-MMM-YYYY"));
+            });
+
+              $("#exchageRateDate").on("change", function (event, date) {
+                $("#ExchageRateDate").val(date.format("DD-MMM-YYYY"));
+            });
+               $("#lcClPaymentDate").on("change", function (event, date) {
+                $("#LcClPaymentDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+             if ($('#ValidityDate').val()) {
+                    $('#validityDate').bootstrapMaterialDatePicker('setDate', new Date($("#ValidityDate").val()));
+                }
+
+                 if ($('#AcceptanceDate').val()) {
+                    $('#acceptanceDate').bootstrapMaterialDatePicker('setDate', new Date($("#AcceptanceDate").val()));
+                }
+
+                 if ($('#PaymentDateAct').val()) {
+                    $('#paymentDateAct').bootstrapMaterialDatePicker('setDate', new Date($("#PaymentDateAct").val()));
+                }
+
+                 if ($('#PaymentDateEst').val()) {
+                    $('#paymentDateEst').bootstrapMaterialDatePicker('setDate', new Date($("#PaymentDateEst").val()));
+                }
+                  if ($('#ExchageRateDate').val()) {
+                    $('#exchageRateDate').bootstrapMaterialDatePicker('setDate', new Date($("#ExchageRateDate").val()));
+                }
+
+                if ($('#LcClPaymentDate').val()) {
+                    $('#lcClPaymentDate').bootstrapMaterialDatePicker('setDate', new Date($("#LcClPaymentDate").val()));
+                }
+
+             if ($('#IssueDate').val()) {
+                  var mNewDate =  moment($("#IssueDate").val());
+
+                    $('#issueDate').bootstrapMaterialDatePicker('setDate', new Date($("#IssueDate").val()));
+                    $('#validityDate').bootstrapMaterialDatePicker('setMinDate', new Date( mNewDate.add(1, 'day')));
+
+                 if ($('#TenureNoOfDays').val())
+                 {
+                     var mDate =  moment($("#IssueDate").val());
+
+                     var days = $("#TenureNoOfDays").val();
+                    var paymentDateEst = mDate.add(days, 'day').format('DD-MMM-YYYY');
+
+                    $("#PaymentDateEst").val(paymentDateEst);
+                    $('#paymentDateEst').val(paymentDateEst);
+                 }
+             }
+
+        }
+
+         Dropzone.autoDiscover = false;
+
+        function initDropZone() {
+
+            detachDropZone();
+
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            var vreturn = 0;
+
+            if( formId == "#lcChargesCreate" ) {
+                vreturn = 1;
+            }
+              if( formId == "#lcChargesEdit"  ) {
+                vreturn = 1;
+            }
+
+              if( vreturn == 0  ) {
+                return;
+            }
+
+             $('#btnLcChargesSubmit').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitlcChargesCreateForm();
+            });
+
+              $('#btnLcChargesEditSubmit').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitlcChargesEditForm();
+            });
+
+               $("div#iddropzone2").dropzone({
+                url: '@Url.Action("TrainingFileUpload", "EmployeeTraining", new {Area = "SWPVaccine"})',
+                autoProcessQueue: false,
+                uploadMultiple: false   ,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize:1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles:".pdf",
+                init: function () {
+                    var myDropzone = this;
+
+                    this.on("processing", function (file) {
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+
+                        if (data.success) {
+                            onSuccessTab('lcCharges');
+                            intDataTabletbLcCharges(null);
+                            //localLoadLcChargesDataTable();
+                            $('#modalcontainer').modal('hide');
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+
+                        if (data.success) {
+                            onSuccessTab('lcCharges');
+                            intDataTabletbLcCharges(null);
+                            localLoadLcChargesDataTable();
+                              $('#modalcontainer').modal('hide');
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                },
+                error: function (request, status, error) {
+                    this.removeAllFiles(true);
+                    notify('error', status, request, error);
+                }
+
+            });
+        }
+
+         function submitlcChargesCreateForm() {
+
+            if ($("#lcChargesCreate").length == 0) {
+
+                 return;
+            }
+
+            var formElementById = document.getElementById("lcChargesCreate");
+
+            if (!formElementById.checkValidity()) {
+                    notify("error", "Form contains errors.", "Error");
+                    return;
+                }
+
+            if ($("div#iddropzone2").length == 1) {
+                oDropZone2 = Dropzone.forElement("div#iddropzone2");
+
+                if (oDropZone2.files.length == 1) {
+                oDropZone2.processQueue();
+                return;
+                }
+
+            }
+            $("#lcChargesCreate").submit();
+        }
+
+         function submitlcChargesEditForm() {
+
+              if ($("#lcChargesEdit").length == 0) {
+
+                 return;
+            }
+
+            var formElementById = document.getElementById("lcChargesEdit");
+
+            if (!formElementById.checkValidity()) {
+                    notify("error", "Form contains errors.", "Error");
+                    return;
+                }
+
+            if ($("div#iddropzone2").length == 1) {
+                oDropZone2 = Dropzone.forElement("div#iddropzone2");
+
+                if (oDropZone2.files.length == 1) {
+                oDropZone2.processQueue();
+                return;
+                }
+
+            }
+            $("#lcChargesEdit").submit();
+        }
+
+        function detachDropZone() {
+                $("#dropZoneWrapper").hide();
+                $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                dropzoneControl.destroy();
+                }
+                });
+    }
+
+        function localLoadLcChargesDataTable() {
+
+             let formId = "#" + $("div#idLcChargesIndex").closest("form").attr("id");
+
+             if(formId !="#frmGridLcChargesIndex"){
+                    return;
+             }
+            var table = $('#tbGridLcChargesIndex').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                dom: 'rt<"row"<"col-1"l><"col"p>><"clear">',
+              @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                        //     {
+                        //    data: null,
+                        //    render: function (data, type, row) {
+                        //        return '<button class="btn btn-outline-primary btn-sm border-none" '+
+                        //                'data-jqueryselector="openmodal" '+
+                        //                'data-modalcontainer="modalcontainer" '+
+                        //                'data-url="@Url.Action("LcChargesEdit", "LetterOfCredit", new { Area = "LC" })" '+
+                        //                'data-modalpopupwidth="rightw50" '+
+                        //                'data-id="'+ data.applicationId + '" '+
+                        //                'data-modaltitle="Edit LC charges" '+
+                        //                'data-modalheader="Edit LC charges"> '+
+                        //                '<i class="fas fa-edit" aria-hidden="true"></i> '+
+                        //                '</button>';
+
+                        //    },
+                        //    className: "td-icon",
+                        //},
+
+                            //{ data: "applicationId" },
+                            //{ data: "lcKeyId" },
+                            { data: "lcChargesStatusText" },
+                            { data: "basicCharges" },
+                            { data: "otherCharges" },
+                            { data: "tax" },
+                            { data: "commissionRate" },
+                            { data: "days" },
+                                  {
+                            data: null,
+                            render: function (data, type, row) {
+
+                                if (data.clintFileName != null)
+                                {
+                                     return ' <a href="#"  class="btn btn-outline-primary btn-sm border-none" onclick="ofbfileDownload(event, this);" title="'+ data.clintFileName + '" '+
+                                        'data-url="@Url.Action("DownloadFile", "LetterOfCredit", new { Area = "LC" })" '+
+                                        'data-modalcontainer="modalcontainer" '+
+                                        'data-keyid="'+ data.applicationId + '" '+
+                                        'data-clientfilename="'+ data.serverFileName + '"> '+
+                                        '<i class="fas fa-file-download"></i> '+ data.clintFileName + ' '+
+                                        '</a>';
+                                }else{
+                                    return '';
+                                }
+                            },
+                            width: '30.0rem'
+                        },
+                        ],
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ],
+                    </text>
+                }
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsLcCharges", "LetterOfCredit")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                        d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                        d.startDateTime = null; // $('#FilterDataModel_StartDateTime').val();
+                        d.endDateTime = null; // $('#FilterDataModel_EndDateTime').val();
+                        d.applicationId =$('#ApplicationId').val();
+                        //d.isActive = $('#FilterDataModel_IsActive').val();
+                        //d.endDate = $('#FilterDataModel_EndDate').val();
+                        },
+                        error: function (request, status, error) {
+                            notify('error', request.responseText, 'danger');
+                        }
+                    }
+            });
+
+            //dataTableSearch();
+        }
+
+          function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+</script>
+}

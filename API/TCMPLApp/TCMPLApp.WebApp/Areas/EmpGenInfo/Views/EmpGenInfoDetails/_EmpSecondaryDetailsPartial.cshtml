@@ -1,0 +1,232 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeeSecondaryDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+}
+<input type="hidden" asp-for="@Model.Empno" />
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-body" style="min-height: 450px;">
+            <div class="app-h4 app-card-header p-2">
+                @if (isOnBehalf == IsOk)
+                {
+                    @localizer["Employee Details (On BeHalf)"]
+                }
+                else
+                {
+                    @localizer["Employee Details"]
+                }
+
+            </div>
+            <span id="spanDescriptionSecondaryStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-12">
+                    <div class="card-body">
+                        <div class="row p-2">
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.BloodGroup)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.BloodGroup)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Religion)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Religion) </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.MaritalStatus)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.MaritalStatus)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-6">
+                    <div class="app-h4 app-card-header p-2">@localizer["Residential Address (Current Mumbai Address)"]</div>
+                    <div class="card-body">
+                        <div class="row p-2">
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RAdd1)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RAdd1)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RHouseNo)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RHouseNo)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RCity)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RCity)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RDistrict)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RDistrict)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RPincode)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RPincode)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RState)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RState)</div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RCountry)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RCountry)</div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.PhoneRes)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.PhoneRes)</div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.MobileRes)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.MobileRes)</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow col-md-12 col-xl-6">
+                    <div class="app-h4 app-card-header p-2">
+                        @localizer["Name / Address of Relative / Friend (To be contacted in case of EMERGENCY)"]
+                    </div>
+                    <div class="card-body">
+                        <div class="row p-2">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RefPersonName)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RefPersonName)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.RefPersonPhone)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.RefPersonPhone)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.FAdd1)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.FAdd1) </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.FHouseNo)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.FHouseNo)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.FCity)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.FCity)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.FDistrict)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.FDistrict)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.FPincode)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.FPincode)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.FState)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.FState)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.FCountry)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.FCountry)</div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-12">
+                    <div class="app-h4 app-card-header p-2">@localizer["Additional Information"]</div>
+
+                    <div class="card-body">
+                        <div class="row p-2">
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.CoBusText)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.CoBusText)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.PickUpPoint)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.PickUpPoint)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.MobileOff)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.MobileOff)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Fax)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Fax)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Voip)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Voip)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="results" style="display:none">@TempData["Message"]</div>
+        </div>
+    </div>
+</div>

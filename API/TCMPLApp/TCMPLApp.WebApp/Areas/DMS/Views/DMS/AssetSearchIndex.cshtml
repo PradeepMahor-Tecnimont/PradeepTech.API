@@ -1,0 +1,180 @@
+﻿@model TCMPLApp.WebApp.Models.AssetSearchViewModel
+@{
+    ViewData["Title"] = "Asset Search";
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Asset Search</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<form asp-controller="DMS"
+      asp-action="AssetSearchIndex"
+      id="formAssetSearchIndex">
+    <input type="hidden" asp-for="SearchByAssetId" />
+
+    <input class="hidden" id="AssetId" name="AssetId" value="@Model.AssetId">
+
+    <div class="col-sm-12">
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="input-group pt-1 pr-1 ">
+                    <input class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" value="@Model.SearchByAssetId"
+                           placeholder="Search Asset Id...">
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row ">
+            <div class="col-xl-2 col-md-12 col-sm-12 "></div>
+            <div class="col-xl-8 col-md-12 col-sm-12 ">
+                <div class=" mt-1 ml-1 mr-1 ">
+                    <div class="card-deck" style="min-height:570px;">
+                        <div class="card shadow col-md-12 col-xl-12 ">
+                            <div class="card-block pl-0 pr-0">
+                                <div class="card-header" style="height: 40px!important;padding-left: 15px;padding-top: 5px;">
+                                    <h5 class="card-title">
+                                        <b>
+                                            Asset Id @if (!string.IsNullOrEmpty(Model.AssetId))
+                                                @Html.Raw("- [ " + @Model.AssetId + " ]")
+                                        </b>
+                                    </h5>
+                                    <br />
+                                </div>
+                                @if (!string.IsNullOrEmpty(@Model.AssetId))
+                                {
+                                    <br />
+                                    <div class="row m-0 p-0 w-100">
+                                        <div id="assetSearchIndexPartial" class="w-100">
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.Raw("No data found")
+                                    ;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-md-12 col-sm-12 "></div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-costcenter.js"></script>
+    <script>
+        $(document).ready(function () {
+            localScript();
+
+            if ($("#AssetId").val() != "" || $("#AssetId").val() != '') {
+
+                $("#assetSearchIndexPartial").load('@Url.Action("AssetSearchDetailsIndexPartial", "DMS")?id=@Model.AssetId');
+            }
+            loadScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            reloadLocation();
+
+        };
+
+        function PostSave(data) {
+
+            if (data.success) {
+
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+
+                if ($("#AssetId").val() != "" || $("#AssetId").val() != '') {
+
+                    $("#assetSearchIndexPartial").load('@Url.Action("AssetSearchIndexPartial", "DMS")?id=@Model.AssetId');
+                }
+
+
+            }
+
+            $('#SearchByAssetId').val($('#GenericSearch').val());
+            var frm = $('#formAssetSearchIndex');
+            frm.submit();
+        }
+
+
+        function PostSaveForDesk(data) {
+
+
+            hideLoader();
+            notify('success', data.response, 'Success');
+
+            if ($(data).val() != "" || $(data).val() != '') {
+
+                $('#SearchByAssetId').val($(data).val());
+
+                if ($(data).val() != "" || $(data).val() != '') {
+                    $("#assetSearchIndexPartial").load('@Url.Action("AssetSearchIndex", "DMS")?id=@Model.AssetId');
+                    document.querySelector("#lDesktop").click();
+                }
+
+            };
+
+        }
+
+
+        function reloadLocation() {
+            $("#closeBtn").off('click').on('click', function () {
+
+                $('#SearchByAssetId').val($('#GenericSearch').val());
+                var frm = $('#formAssetSearchIndex');
+                frm.submit();
+            });
+
+            $("#cancelBtn").off('click').on('click', function () {
+
+                $('#SearchByAssetId').val($('#GenericSearch').val());
+                var frm = $('#formAssetSearchIndex');
+                frm.submit();
+            });
+        }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").val() != "" || $("#GenericSearch").val() != '') {
+                    $('#SearchByAssetId').val($('#GenericSearch').val());
+                    var frm = $('#formAssetSearchIndex');
+                    frm.submit();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").val() != "" || $("#GenericSearch").val() != '') {
+                $('#SearchByAssetId').val($('#GenericSearch').val());
+                var frm = $('#formAssetSearchIndex');
+                frm.submit();
+            }
+        });
+    </script>
+}

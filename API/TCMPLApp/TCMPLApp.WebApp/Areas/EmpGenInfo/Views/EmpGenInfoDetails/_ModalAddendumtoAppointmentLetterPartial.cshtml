@@ -1,0 +1,94 @@
+﻿@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="EmpGenInfoDetails"
+      asp-action="GetAddendumtoAppointmentLetter"
+      id="formAddendumtoAppointmentLetter"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);doTest();localscript();"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">Addendum to Appointment Letter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Addendum to Appointment Letter"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-12 col-mb-12 col-xl-12" style="max-height:500px!important;position:relative;overflow-y:scroll">
+                            <div class="form-group" style="justify-content">
+                                <p>Dated : - <b> @ViewBag.PCommunicationDate </b></p>
+                                <p>To,</p>
+                                <p><b>@ViewBag.EmployeeName</b></p>
+                                <p>Tecnimont Private Limited</p>
+                                <p style="text-decoration:underline"><b>Sub: - Addendum to the Appointment Letter</b></p>
+                                <p>Dear <b>@ViewBag.EmployeeName</b>,</p>
+                                <p>On behalf of Tecnimont Private Limited, a company incorporated under the laws of India with its registered office at Tecnimont House, Chincholi Bunder, 504, Link Road, Malad (West), Mumbai – 400064, India (<b>"Company”</b>), we would like to inform you that pursuant to the review of the internal human resources policy and processes by the Company’s management, the Company would like to carry out certain amendment to your appointment letter (<b>“Letter”</b>) whereby the Company had offered and you had accepted a position in the Company as an employee as well as the terms and conditions of your employment as set out in the Letter.</p>
+                                <p>This addendum to the Letter (<b>“Addendum”</b>), will be a legally binding agreement read with the Letter. The Company and you shall hereinafter collectively be referred to as the <b>“Parties”</b>.</p>
+                                <p>A.	The additional terms and conditions set out herein below shall form an integral part of the Letter.</p>
+                                <p style="padding-left:15px;text-decoration:underline;">1.	Adherence to the Policies of the Company / Maire Group</p>
+                                <p style="padding-left:35px;">You will, in addition to the terms and conditions of employment specifically stated herein, also be governed by the rules, regulations and such other practices, systems, procedures and policies framed, amended, modified or omitted by the Company from time to time including but not limited to the Code of Ethics, Business Integrity Policy, the Activation Matrices, Guidelines of the Maire Group on Privacy as well as all the policies, guidelines and rules defined in the Maire Group document management system to the extent applicable shall be binding on you and are an integral part of your contractual obligations with the Company and you declare to have carefully read and take due note of these documents and fully accept their contents.</p>
+                                <p style="padding-left:15px;text-decoration:underline;">2.	Market Abuse Regulations </p>
+                                <p style="padding-left:35px;">You are also hereby made aware that the Company is controlled by Maire Tecnimont S.p.A. that is a joint stock company whose financial instruments are traded on the "EuroNext Milan" regulated market organized and managed by Borsa Italiana S.p.A. Therefore, the Company is subject - among the others - to the mandatory provisions of European Union Regulation no. 596/2014 of the European Parliament and of the Council of 16 April 2014 (so-called "Market Abuse Regulation"). The Company therefore invites you to read the "Procedure for managing Inside Information and Potential Inside Information" available on the website of Maire Tecnimont S.p.A. <a href="#">www.mairetecnimont.com</a> (Section "Governance" - "Corporate Repository") adopted, pursuant to law and regulations in force, in order to ensure the correct management of corporate information and, in particular, of "Inside Information" regarding Maire Tecnimont S.p.A. and its subsidiaries. In particular, we invite you to read and become aware of the "Rules of Conduct" indicated therein, that all the employees of Maire Tecnimont S.p.A. and its subsidiaries, as well as collaborators, are required to comply with in relation to the duly execution of the tasks or assignments entrusted (see, in particular, Article 7 of the aforementioned Procedure).”</p>
+                                <p>B.	On and from the date of your acknowledgement of this Addendum in the manner as notified to you by the Company in writing, the additional terms and conditions as set out herein above shall form an integral part of the Letter. To the extent the said terms and conditions are already provided in the Letter, the Letter shall stand modified and be subject to the provisions set out herein above.</p>
+                                <p>C.	In the event of any inconsistency with the provisions of above referred clauses and the Letter, the provisions of above referred clauses shall prevail.</p>
+                                <p>D.	This Addendum constitutes and contains the entire agreement and understanding of the Parties with respect to the subject matter hereof and supersedes all previous communications, negotiations, commitments, agreements either oral or written between the Parties. </p>
+                                <p>I acknowledge that I have read the above terms and conditions, I accept and confirm the above. </p>
+                                <p>Employee No: <b>@ViewBag.Empno</b></p>
+                                <p>Employee Name: <b>@ViewBag.EmployeeName</b></p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12 ">
+                            <hr>
+                            @if (ViewBag.PAcceptanceStatusVal == "1")
+                            {
+                                <p>Signature:<b class="text-green"> @Html.Raw(@ViewBag.Signature)</b></p>
+                            }
+                            else if (ViewBag.PAcceptanceStatusVal == "2")
+                            {
+                                <p>
+                                    Signature:<b class="text-danger" style=""> @Html.Raw(@ViewBag.Signature)</b>
+                                </p>
+                            }
+
+                            @if (ViewBag.PAcceptanceStatusVal == "0")
+                            {
+                                <input type="checkbox" id="chkConsent" />
+                                <label class="cr" style="top: 0px;"></label>
+                                <span style="color:#0047ab; font-size:1rem;font-weight:bold;">I Accept the above terms & condition</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="padding-bottom:0px">
+        @if (ViewBag.PAcceptanceStatusVal == "0")
+        {
+            <button class="btn btn-primary" type="button" id="btnconfirm" style="cursor:not-allowed"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Wait...'
+                    data-text="Confirm" disabled>
+                Submit to HR
+            </button>
+        }
+        <a class="btn btn-secondary" asp-controller="EmpGenInfoDetails" asp-action="LoAAddendumAppointmentLetterIndex" title="@localizer["Cancel"]">
+            @localizer["Cancel"]
+        </a>
+
+    </div>
+</form>

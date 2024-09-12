@@ -1,0 +1,239 @@
+﻿@{
+    ViewData["Title"] = "Report home page";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk Management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Reports</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-sm-12">
+    <div class="row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITAdm))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk management status</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("StatusIndex", "Reports", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Search for employee, desk and asset details
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-exclamation f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk management workload</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("WorkloadIndex", "Reports", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Desk management workload
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-list-alt f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Asset distribution report</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ExcelDownloadAssetDistribution", "Reports", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="	fas fa-desktop f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Office desk status</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("OfficeDeskStatusExcelDownload", "Reports", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-building f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Asset with IT pool report</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw35"
+                           data-url='@Url.Action("EmployeeAssetWithITPoolExcel", "Reports", new { Area = "DMS" })'>
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Emp/Desk In More Than 1Places</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("EmpInMoreThan1PlacesIndex", "Reports", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-exclamation f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/site-rap.js" asp-append-version="true"></script>
+    <script>
+
+        $(document).ready(function () {
+
+        });
+
+        function localScript() {
+            initSelect2();
+
+            $('#btnExportAssetWithITPoolExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                exportAssetWithITPoolExcel();
+            });
+
+        }
+
+        function exportAssetWithITPoolExcel() {
+
+            var vAssetCategoryVal = $("#formAssetWithITPoolExcel select[id=AssetCategory]").val();
+            var vassetCategoryText = $("#formAssetWithITPoolExcel select[id=AssetCategory]").find(':selected').text();
+
+            //if (vAssetCategoryVal == null || vAssetCategoryVal == '') {
+            //    toastr.error('Invalid Asset Category ');
+            //    return;
+            //}
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formAssetWithITPoolExcel input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("EmployeeAssetWithITPoolExcel", "Reports", new {Area = "DMS" })',
+                type: "POST",
+                data: {
+                    assetCategoryVal: vAssetCategoryVal,
+                    assetCategoryText: vassetCategoryText,
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                    $("#btnExportAssetWithITPoolExcel").hide();
+                    $('#AssetWithITPool_Loader').removeClass("hidden");
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    toastr.success("File downloaded successfully.");
+                    hideLoader();
+                    $("#modalcontainer").modal('hide');
+
+                    $("#btnExportAssetWithITPoolExcel").show();
+                    $('#AssetWithITPool_Loader').addClass("hidden");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                    $("#btnExportAssetWithITPoolExcel").show();
+                    $('#AssetWithITPool_Loader').addClass("hidden");
+                }
+            });
+        }
+    </script>
+}

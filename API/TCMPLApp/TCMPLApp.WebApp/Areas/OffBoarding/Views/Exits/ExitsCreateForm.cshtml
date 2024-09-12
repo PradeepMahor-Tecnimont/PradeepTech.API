@@ -1,0 +1,199 @@
+﻿@model TCMPLApp.WebApp.Models.OffBoardingExitsCreateViewModel
+@{
+    ViewData["Title"] = "Off-Boarding - Edit exit form";
+
+    Html.AntiForgeryToken();
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a asp-action="Index" asp-controller="Exits" asp-area="OffBoarding">Exits</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create</li>
+    </ol>
+}
+
+@Html.AntiForgeryToken()
+<form asp-action="Create"
+      asp-controller="Exits"
+      asp-area="OffBoarding"
+      id="idCreateEmpOffBoarding"
+      method="post"
+      accept-charset="UTF-8">
+
+    <div class="container-fluid bg-gray-active border rounded shadow m-auto py-2 col-xl-9">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Off-Boarding - Initiate Off-Boarding(Exit)</p>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="form-group">
+                    <label for="ddlEmployeeList">Select Employee</label>
+                    <select asp-for="Empno" class="form-control Select2 " placeholder="Please select" id="ddlFilterList" asp-items="ViewBag.Empno">
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Empno" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="childcontent-div" id="div-empdetails">
+            <div id="pv-empdetails">
+
+            </div>
+        </div>
+        <div class="row">
+@*            <div class="col-xl-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.HRNote)
+                    <textarea rows="2" class="form-control" asp-for="HRNote"></textarea>
+                    <span asp-validation-for="HRNote" class="text-danger"></span>
+
+                </div>
+            </div>
+*@            <div class="col-xl-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.Remarks)
+                    <textarea rows="2" class="form-control" asp-for="Remarks"></textarea>
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.EndByDate)
+                    <input class="form-control" type="date" asp-for="EndByDate" />
+                    <span asp-validation-for="EndByDate" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.RelievingDate)
+                    <input class="form-control" type="date" asp-for="RelievingDate" />
+                    <span asp-validation-for="RelievingDate" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.Address)
+                    <textarea rows="2" class="form-control" asp-for="Address"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.ResignationDate)
+                    <input class="form-control" type="date" asp-for="ResignationDate" />
+                    <span asp-validation-for="ResignationDate" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.EmailId)
+                    <input class="form-control" asp-for="EmailId" />
+                    <span asp-validation-for="EmailId" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.MobilePrimary)
+                    <input class="form-control" asp-for="MobilePrimary" />
+                    <span asp-validation-for="MobilePrimary" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+
+                    @Html.DisplayNameFor(m => m.AlternateNumber)
+                    <input class="form-control" asp-for="AlternateNumber" />
+                    <span asp-validation-for="AlternateNumber" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 ">
+                &nbsp;
+            </div>
+            <div class="col-xl-6">
+                <button type="submit" class="btn btn-primary mx-3">
+                    <i class="fas fa-save fa-1x"></i>
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    $(document).ready(function () {
+        localScript();
+        employeeSelected();
+    });
+    function localScript() {
+        initSelect2();
+        $("#ddlFilterList").off("change").on("change", employeeSelected);
+        employeeSelected();
+
+    }
+
+    function employeeSelected() {
+        var divid = $("#pv-empdetails");
+
+        var empno = $("#ddlFilterList").val();
+
+
+        if (empno == '') {
+            divid.empty();
+            $("#div-empdetails").removeClass("active");
+            return;
+        }
+        else
+            $("#div-empdetails").addClass("active");
+
+        $.ajax({
+            url: '@Url.Action("GetEmpDetails", "Exits", new { Area = "OffBoarding" })',
+            data: {
+                'empno': empno
+            },
+            type: 'GET',
+            beforeSend: function () {
+                showModalLoader();
+            },
+            success: function (data) {
+                divid.html(data);
+                hideModalLoader();
+            },
+            error: function (result) {
+                hideModalLoader();
+                errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                notify("error", errorText, 'Error');
+            }
+        });
+    }
+    </script>
+}

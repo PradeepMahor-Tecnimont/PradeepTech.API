@@ -1,0 +1,83 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "moment.js@2.30.1",
+      "destination": "wwwroot/lib/moment.js/"
+    },
+    {
+      "library": "bootstrap-datepicker@1.10.0",
+      "destination": "wwwroot/lib/bootstrap-datepicker/"
+    },
+    {
+      "library": "dropzone@5.9.3",
+      "destination": "wwwroot/lib/dropzone/"
+    },
+    {
+      "library": "jquery-ajax-unobtrusive@3.2.6",
+      "destination": "wwwroot/lib/jquery-ajax-unobtrusive/"
+    },
+    {
+      "library": "toastr.js@2.1.4",
+      "destination": "wwwroot/lib/toastr.js/"
+    },
+    {
+      "library": "font-awesome@6.5.2",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "bootstrap@4.6.0",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "bootstrap-sweetalert@1.0.1",
+      "destination": "wwwroot/lib/bootstrap-sweetalert/"
+    },
+    {
+      "library": "jquery.serializeJSON@3.2.1",
+      "destination": "wwwroot/lib/jquery.serializeJSON/"
+    },
+    {
+      "library": "bootstrap-material-datetimepicker@2.7.1",
+      "destination": "wwwroot/lib/bootstrap-material-datetimepicker/"
+    },
+    {
+      "library": "datatables-plugins@2.0.8",
+      "destination": "wwwroot/lib/datatables-plugins/",
+      "files": [
+        "sorting/datetime-moment.js",
+        "sorting/datetime-moment.min.js"
+      ]
+    },
+    {
+      "library": "fullcalendar@6.1.14",
+      "destination": "wwwroot/lib/fullcalendar/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "@fullcalendar/core@6.1.14",
+      "destination": "wwwroot/lib/fullcalendar/core/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net@2.0.8",
+      "destination": "wwwroot/lib/datatables.net/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net-bs4@2.0.8",
+      "destination": "wwwroot/lib/datatables.net-bs4/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/lib/jquery/dist/"
+    }
+  ]
+}

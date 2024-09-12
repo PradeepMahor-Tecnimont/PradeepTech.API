@@ -1,0 +1,426 @@
+﻿@model TCMPLApp.WebApp.Models.VoluntaryParentPolicyViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@*@{
+        UserIdentity currentUserIdentity = CurrentUserIdentity;
+    }
+*@
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "VoluntaryParentPolicy";
+}
+
+<input type="hidden" asp-for="@Model.VoluntaryParentPolicyDetail.PApplicationId" id="keyId" />
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active">Voluntary Parents Policy</li>
+    </ol>
+}
+
+<div style="display:none">
+</div>
+
+<div role="toolbar">
+    <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-20">
+        <a class="" style="margin-top:2px;"
+           href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/Voluntary_Parents_Policy_FAQ.pdf" target="_blank" title="FAQ">
+            <i class="fas fa-info-circle fa-2x"></i>
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>
+            Voluntary Parents Policy
+
+            @if (Model.VoluntaryParentPolicyDetail.PApplicationId != null)
+            {
+                @if (Model.VoluntaryParentPolicyDetail.PIsLock == 0)
+                {
+                    @if (Model.IsEnableMod == 1)
+                    {
+                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp))
+                        {
+                            <button title="Lock" class="btn btn-outline-danger btn-sm float-right "
+                                    onclick="showDeleteConfirmationPopup(event,this);"
+                                    data-jqueryselector="showconfirmationmodal"
+                                    data-url="@Url.Action("VoluntaryParentPolicyLock", "GeneralInfo", new { Area = "EmpGenInfo" })"
+                                    data-id="@Model.VoluntaryParentPolicyDetail.PApplicationId"
+                                    data-redirecturl="@Url.Action("VoluntaryParentPolicyIndex", "GeneralInfo", new { Area = "EmpGenInfo" })"
+                                    data-modaltitle="Please Confirm!"
+                                    data-confirmationtext="Do you want to Lock Voluntary Parent Policy ?"
+                                    data-confirmationtype="warning"
+                                    data-confirmbuttontext="Lock">
+                                Click here to lock
+                            </button>
+                        }
+                        else
+                        {
+                            <b class="text-danger "> ( Not yet locked by user ) </b>
+                        }
+                    }
+                    else
+                    {
+                        <b class="text-danger "> ( Not yet locked by user ) </b>
+                    }
+                }
+                else
+                {
+                    <b class="text-danger "> ( Locked by user ) </b>
+                }
+            }
+            else
+            {
+                <b class="text-danger "> ( Not yet locked by user ) </b>
+            }
+        </p>
+    </div>
+    @if (Model.VoluntaryParentPolicyDetail.PApplicationId != null)
+    {
+        <div class="card-block">
+            <div class="form-group">
+                <div class="row  pb-2">
+                    <div class="col-md-4">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.VoluntaryParentPolicyDetail.PEmployee)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.VoluntaryParentPolicyDetail.PEmpno) : @Html.DisplayFor(model => model.VoluntaryParentPolicyDetail.PEmployee)</div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row ">
+                            <div class="col-md-4 ">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.VoluntaryParentPolicyDetail.PPremiumAmt)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.VoluntaryParentPolicyDetail.PPremiumAmt) </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.VoluntaryParentPolicyDetail.PGstAmt)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.VoluntaryParentPolicyDetail.PGstAmt) </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.VoluntaryParentPolicyDetail.PTotalPremium)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.VoluntaryParentPolicyDetail.PTotalPremium) </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row  pt-2">
+                    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp))
+                    {
+                        @if (Model.IsEnableMod == 1)
+                        {
+                            @if (Model.VoluntaryParentPolicyDetail.PIsLock == 0)
+                            {
+                                <div class="col-md-3 ">
+                                    <label asp-for="@Model.VoluntaryParentPolicyDetail.PInsuredSumId" class="control-label"></label>
+                                    <select id="insuredSumId" asp-for="@Model.VoluntaryParentPolicyDetail.PInsuredSumId"
+                                            class="form-control form-control-sm chosen-select-required "
+                                            data-placeholder=" Please select..." asp-items="ViewBag.SumInsureds" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="@Model.VoluntaryParentPolicyDetail.PInsuredSumId" class="text-danger"></span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.VoluntaryParentPolicyDetail.PInsuredSumWords)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.VoluntaryParentPolicyDetail.PInsuredSumWords) </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-md-3">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.VoluntaryParentPolicyDetail.PInsuredSumWords)</div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.VoluntaryParentPolicyDetail.PInsuredSumWords) </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-3">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.VoluntaryParentPolicyDetail.PInsuredSumWords)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.VoluntaryParentPolicyDetail.PInsuredSumWords) </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <div class="card-toolbar ">
+        <div role="toolbar ">
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp))
+            {
+                @if (Model.IsEnableMod == 1)
+                {
+                    @if (Model.VoluntaryParentPolicyDetail.PIsLock == 0)
+                    {
+                        <a class="btn btn-outline-primary btn-sm border-white "
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw35"
+                           data-url='@Url.Action("VoluntaryParentPolicyCreate", "GeneralInfo", new { Area = "EmpGenInfo" })'
+                           data-modaltitle="VoluntaryParentPolicyCreate"
+                           data-modalheader="VoluntaryParentPolicyCreate">
+                            <i class="fas fa-plus"></i>&nbsp;@localizer["Create"]
+                        </a>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <table id="tbGrid" class="table table-striped table-bordered ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Relation)</th>
+                    <th>@Html.DisplayNameFor(model => model.Gender)</th>
+                    <th>@Html.DisplayNameFor(model => model.Dob) </th>
+
+                    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp).ToString() == "True")
+                    {
+                        @if (Model.IsEnableMod == 1)
+                        {
+                            @if (Model.VoluntaryParentPolicyDetail.PIsLock.ToString() == "0")
+                            {
+                                <th>Action</th>
+                            }
+                        }
+                    }
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        //<script src="~/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" asp-append-version="true"></script>
+        //<script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+    }
+
+    <script type="text/javascript">
+        function localScript() {
+            initDatePicker();
+            reloadLocation();
+        }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+            updateInsuredSum();
+        });
+
+        function initDatePicker() {
+
+            let min_date = moment().subtract(18, 'years');
+            $('.datepicker').datepicker({
+                format: 'dd-MM-yyyy',
+                weekStart: 0,
+                time: false,
+                maxDate: min_date,
+                useCurrent: false,
+                nowButton: true
+            }).on('change', function (e, date) {
+                var dob = $(this).val();
+                $("#Dob").val(moment(dob, 'DD-MMM-YYYY').format("DD-MMM-YYYY"));
+                $(this).datepicker('hide');
+            });
+        }
+
+        function localLoadDataTable() {
+
+            let IsActionFeatureVpp = "@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp)";
+
+            var table = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                responsive: true,
+                autoWidth: false,
+                lengthMenu: [25, 50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            if (@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp).ToString() == "True" && Model.VoluntaryParentPolicyDetail.PIsLock.ToString() == "0" && Model.IsEnableMod.ToString() == "1")
+            {
+                <text>
+                        ordering: false,
+                        columns: [
+                        { data: "name" },
+                        { data: "relation" },
+                        { data: "gender" },
+                        { data: "dob" },
+                        {
+                            data: null,
+                            render: function (data, type, row) {
+                                if (data.isDeleteVal == 0) {
+                                     return '<button class="btn btn-outline-danger btn-sm border-none"  ' +
+                                     ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                     ' data-url="@Url.Action("VoluntaryParentPolicyDelete", "GeneralInfo", new { Area = "EmpGenInfo" })" ' +
+                                     ' data-redirecturl="VoluntaryParentPolicyIndex" ' +
+                                     ' data-PostSaveReLoadDataTable="OK" ' +
+                                     ' data-id="' + data.applicationId + '!-!' + data.keyIdDetail + '"' +
+                                     ' data-modaltitle="Please Confirm!" ' +
+                                     ' data-confirmationtext="Delete record - ' + data.name + ' ?" ' +
+                                     ' data-confirmationtype="warning" data-confirmbuttontext="Delete"> ' +
+                                     ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                     ' </button> ';
+                                }
+                                 if (data.isDeleteVal == 1) {
+                                     return ' ';
+                                 }
+
+                            },
+                            'className': "td-icon",
+                        }
+                    ],
+                </text>
+            }
+            if (@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp).ToString() != "True" || Model.VoluntaryParentPolicyDetail.PIsLock.ToString() != "0" || Model.IsEnableMod.ToString() != "1")
+            {
+                <text>
+                        ordering: false,
+                        columns: [
+                        { data: "name" },
+                        { data: "relation" },
+                        { data: "gender" },
+                        { data: "dob" }
+                    ],
+                </text>
+            }
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetVoluntaryParentPolicyList", "GeneralInfo")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                    d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                    d.startDateTime = null; // $('#FilterDataModel_StartDateTime').val();
+                    d.endDateTime = null; // $('#FilterDataModel_EndDateTime').val();
+                    d.statusTypeId = null; // $('#FilterDataModel_StatusTypeId').val();
+                    //d.isActive = $('#FilterDataModel_IsActive').val();
+                    //d.endDate = $('#FilterDataModel_EndDate').val();
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                                                                                                                                    });
+                                                 //dataTableSearch();
+                                                  }
+
+        function setConditions() {
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+            localLoadDataTable();
+            hideLoader();
+        }
+
+        function PostSaveReLoadDataTable(data) {
+
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function updateInsuredSum() {
+            $("#insuredSumId").off('change').on('change', function () {
+                var insuredSumId = $(this).val();
+                var keyId = $("#keyId").val();
+                $.ajax({
+                    url: "@Url.Action("VoluntaryParentPolicyUpdate", "GeneralInfo", new {Area = "EmpGenInfo"})",
+                    data: {
+                        'keyId': keyId,
+                        'insuredSumId': insuredSumId
+                    },
+                    type: 'POST',
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data) {
+
+                        notify('success', data.response, 'Success');
+                        location.reload();
+                        hideLoader();
+                    },
+                    error: function (result) {
+                        hideLoader();
+                        setTimeout(
+                            function () {
+                                location.reload();
+                            }, 3500);
+
+                        notify('error', result.responseText, 'danger');
+                    }
+                });
+            });
+        }
+
+        function reloadLocation() {
+            $("#closeBtn").off('click').on('click', function () {
+                //if ($("#showInsuredSumDropdownlist").val('hidden'))
+                //    $("#modalcontainer").modal('hide');
+                //else
+                location.reload();
+            });
+
+            $("#cancelBtn").off('click').on('click', function () {
+                //console.log($('#showInsuredSumDropdownlist').val());
+                //if ($("#showInsuredSumDropdownlist").val('hidden'))
+                //    $("#modalcontainer").modal('hide');
+                //else
+                location.reload();
+            });
+        }
+    </script>
+}

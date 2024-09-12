@@ -1,0 +1,281 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeePassportAndAadhaarDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-body" style="min-height: 450px;">
+
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-6">
+                    <div class="app-h4 app-card-header p-2">@localizer["Aadhaar Details"]</div>
+                    @if (@Model.LockStatusDetailViewModel.IsAadhaarOpen == "OK")
+                    {
+                        <form asp-controller="EmpGenInfoDetails"
+                          asp-action="AadhaarDetailsEdit"
+                              id="formAadharAndPassport"
+                              data-ajax="true"
+                              data-ajax-method="post"
+                              data-ajax-begin="onBegin(null)"
+                              data-ajax-complete="onComplete(null);"
+                              data-ajax-success="PostSave(data);onSuccessTab('PassportAndAadhaarDetails')"
+                              data-ajax-failure="onError"
+                              accept-charset="UTF-8">
+                            <div class="card-body">
+
+                                <input type="hidden" id="hasAadhar" asp-for="HasAadhar" />
+
+                                <div class="row p-2">
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="HasAadhar" id="hasAadhar" class="control-label"></label>
+                                            <select asp-for="HasAadhar" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                                <option selected></option>
+                                                <option value="Y">Yes</option>
+                                                <option value="N">No</option>
+                                            </select>
+                                            <span asp-validation-for="HasAadhar" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row p-2" id="AadhaarData" style="display: none">
+                                    <div class="col-xl-6 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="AdhaarNo" id="adhaarNo" class="control-label"></label>
+                                            <input asp-for="AdhaarNo" class="form-control text-uppercase" placeholder="Aadhaar No" required />
+                                            <span asp-validation-for="AdhaarNo" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="AdhaarName" class="control-label"></label>
+                                            <input asp-for="AdhaarName" class="form-control text-uppercase" placeholder="Name" required />
+                                            <span asp-validation-for="AdhaarName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divAadhaarDetails" style="display: none">
+
+                                    <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                                       data-jqueryselector="openmodal"
+                                       data-modalcontainer="modalcontainer"
+                                       data-modalpopupwidth="rightw30"
+                                       data-url='@Url.Action("FileUploadEdit", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })'
+                                       data-statichtmlsourcedivid=""
+                                    @*data-empno="@Model.PrimaryDetails.Empno"*@
+                                       data-fileType="AC"
+                                       data-modaltitle="File upload"
+                                       data-modalheader="File upload">
+                                        <i class="fas fa-edit"></i> Upload Aadhaar copy
+                                    </a>
+
+                                </div>
+                                <div class="form-group" id="BtnConfirm" style="display: none">
+                                    <a class="btn btn-secondary f-right" asp-controller="Home" asp-action="Index" title="@localizer["Cancel"]">
+                                        @localizer["Cancel"]
+                                    </a>
+                                    <span class="f-right">&nbsp; &nbsp;</span>
+                                    <button class="btn btn-primary f-right" type="submit" id="btnconfirm"
+                                            data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                            data-text="@localizer["Save"]">
+                                        @localizer["Save"]
+                                    </button>
+                                </div>
+                            </div>
+                            <br>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.AdhaarNo)</div>
+                                        <div class="dd-met text-uppercase">@Html.DisplayFor(model => model.AdhaarNo)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.AdhaarName)</div>
+                                        <div class="dd-met text-uppercase">@Html.DisplayFor(model => model.AdhaarName)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+
+                <div class="card shadow col-md-12 col-xl-6">
+                    <div class="app-h4 app-card-header p-2">@localizer["Passport Details"]</div>
+                    @if (@Model.LockStatusDetailViewModel.IsPassportOpen == "OK")
+                    {
+                        <form asp-controller="EmpGenInfoDetails"
+                          asp-action="PassportDetailsEdit"
+                              id="formAadharAndPassport"
+                              data-ajax="true"
+                              data-ajax-method="post"
+                              data-ajax-begin="onBegin(null)"
+                              data-ajax-complete="onComplete(null);"
+                              data-ajax-success="PostSave(data);onSuccessTab('PassportAndAadhaarDetails')"
+                              data-ajax-failure="onError"
+                              accept-charset="UTF-8">
+
+                            <input type="hidden" asp-for="@Model.IssueDate" />
+                            <input type="hidden" asp-for="@Model.ExpiryDate" />
+                            <input type="hidden" id="hasPassport" asp-for="HasPassport" />
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="HasPassport" id="hasPassport" class="control-label"></label>
+                                            <select asp-for="HasPassport" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                                <option selected></option>
+                                                <option value="Y">Yes</option>
+                                                <option value="N">No</option>
+                                            </select>
+                                            <span asp-validation-for="HasPassport" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row p-2" id="PassportData" style="display: none">
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="Surname" class="control-label"></label>
+                                            <input asp-for="Surname" class="form-control text-uppercase" placeholder="Surname" required />
+                                            <span asp-validation-for="Surname" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="GivenName" class="control-label"></label>
+                                            <input asp-for="GivenName" class="form-control text-uppercase" placeholder="Name" required />
+                                            <span asp-validation-for="GivenName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="PassportNo" class="control-label"></label>
+                                            <input asp-for="PassportNo" class="form-control text-uppercase" placeholder="Passport No" required />
+                                            <span asp-validation-for="PassportNo" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="IssuedAt" class="control-label"></label>
+                                            <input asp-for="IssuedAt" class="form-control text-uppercase" placeholder="Issued At" required />
+                                            <span asp-validation-for="IssuedAt" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="IssueDate" class="control-label"></label>
+                                            <input id="issueDate" class="form-control datepicker" placeholder="@localizer["Issue Date"]" value="@Model.IssueDate?.ToString("dd-MMM-yyyy")" required />
+                                            <span asp-validation-for="IssueDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="ExpiryDate" class="control-label"></label>
+                                            <input id="expiryDate" class="form-control datepicker" placeholder="@localizer["Expiry Date"]" value="@Model.ExpiryDate?.ToString("dd-MMM-yyyy")" required />
+                                            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div id="divPassportDetail" style="display: none">
+                                    <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2 " href="#"
+                                       data-jqueryselector="openmodal"
+                                       data-modalcontainer="modalcontainer"
+                                       data-modalpopupwidth="rightw30"
+                                       data-url='@Url.Action("FileUploadEdit", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })'
+                                       data-statichtmlsourcedivid=""
+                                       data-fileType="PP"
+                                    @*data-empno="@Model.PrimaryDetails.Empno"*@
+                                       data-modaltitle="File upload"
+                                       data-modalheader="File upload">
+                                        <i class="fas fa-edit"></i> Upload Passport copy
+                                    </a>
+
+                                </div>
+                                <div class="form-group" id="BtnConfirmP" style="display: none">
+                                    <a class="btn btn-secondary f-right" asp-controller="Home" asp-action="Index" title="@localizer["Cancel"]">
+                                        @localizer["Cancel"]
+                                    </a>
+                                    <span class="f-right">&nbsp; &nbsp;</span>
+                                    <button class="btn btn-primary f-right" type="submit" id="btnconfirm"
+                                            data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                            data-text="@localizer["Save"]">
+                                        @localizer["Save"]
+                                    </button>
+                                </div>
+                            </div>
+                            <br />
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met ">@Html.DisplayNameFor(model => model.Surname)</div>
+                                        <div class="dd-met text-uppercase">@Html.DisplayFor(model => model.Surname)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.GivenName)</div>
+                                        <div class="dd-met text-uppercase">@Html.DisplayFor(model => model.GivenName)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PassportNo)</div>
+                                        <div class="dd-met text-uppercase">@Html.DisplayFor(model => model.PassportNo)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.IssuedAt)</div>
+                                        <div class="dd-met text-uppercase">@Html.DisplayFor(model => model.IssuedAt)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.IssueDate)</div>
+                                        <div class="dd-met text-uppercase">@Html.ValueFor(model => model.IssueDate,"{0:dd-MMM-yyyy}")</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.ExpiryDate)</div>
+                                        <div class="dd-met text-uppercase">@Html.ValueFor(model => model.ExpiryDate,"{0:dd-MMM-yyyy}")</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_EmpGenInfoDataTableColumnsPartial", Model.LockStatusDetailViewModel);
+    }
+    <script src="~/js/EmployeeGenInfo.js" asp-append-version="true"></script>
+
+
+    }

@@ -1,0 +1,136 @@
+﻿@model IEnumerable< TCMPLApp.Domain.Models.ProfileAction>
+
+<script type="text/javascript">
+    let pvvUrlJobMailList = "@Url.Action("GetJobMailList", "JOB")";
+    let pvvUrlJobPhaseList = "@Url.Action("GetJobPhaseList", "JOB")";
+    let pvvUrlJobBudgetList = '@Url.Action("GetBudget", "JOB")';
+    let pvvUrlJobResponsibleList = '@Url.Action("GetResponsibleApproversList", "JobResponsibleApprovers")';
+
+    let pvvUrlJobBudgetTemplateDownload = '@Url.Action("JobBudgetXLTemplateDownload", "JOB", new { Area = "JOB"})';
+
+    let phaseEditDeleteAllowed;
+
+    phaseEditDeleteAllowed = @(Model.Any(m => m.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobUpdatePhases) ? "true" : "false")  ;
+
+    mailDeleteAllowed = @((CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobUpdateMailList)
+                            && Model.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobUpdateMailList)) ? "true" : "false");
+
+    @if ((bool)@Context.Items["isMobile"] == false)
+    {
+        <text>
+
+            let datatableColumnsPhases = [
+                {
+                    data: "isexists",
+                    className: "td-icon",
+                    render: function (data, type, row) {
+                        if (phaseEditDeleteAllowed == true) {
+                            return '<button class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("PhaseEdit", "JOB", new { Area = "JOB" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + row.projno + '!-!' + row.phase + '"' +
+                                ' data-modaltitle="Edit details" ' +
+                                ' data-modalheader="Edit details" ' +
+                                ' > ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        } else {
+                            return '';
+                        }
+                    }
+                },
+                { data: "phase", 'className': "text-center" },
+                { data: "description" },
+                { data: "tmagrp" },
+                { data: "tmagrpdesc" },
+                {
+                    data: "blockBooking",
+                    render: function (data, type, row) {
+                        if (row.blockBooking == 1) {
+                            return "Yes";
+                        } else {
+                            return "No";
+                        }
+                    }
+                },
+                {
+                    data: "blockOt",
+                    render: function (data, type, row) {
+                        if (row.blockOt == 1) {
+                            return "Yes";
+                        } else {
+                            return "No";
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    className: "td-icon",
+                    render: function (data, type, row) {
+                        if ((data.isexists == 0 || data.isexists == "0") && phaseEditDeleteAllowed == true) {
+                            return ' <button class="btn btn-outline-danger btn-sm border-none sweet-multiple"  ' +
+                                ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-actionmode="partial"' +
+                                ' data-divpartial="#pw-phases"' +
+                                ' data-url="@Url.Action("PhaseDelete", "JOB", new { Area = "JOB" })" ' +
+                                ' data-id="' + data.projno + '!-!' + data.phase + '"' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Delete job phase ' + data.phase + ' for project no. ' + data.projno + ' ?" ' +
+                                ' data-confirmationtype="warning" data-confirmbuttontext="Delete" ' +
+                                ' title="Delete job phase"> ' +
+                                ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                ' </button> ';
+                        } else {
+                            return '';
+                        }
+                    }
+                }
+            ];
+
+        let datatableColumnsMailList = [
+            { 'data': "costName" },
+            { 'data': "employeeName" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.canDelete == "OK" && mailDeleteAllowed == true) {
+                        return ' <button class="btn btn-outline-danger btn-sm border-none"  ' +
+                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-url="@Url.Action("MailListDelete", "JOB", new { Area = "JOB" })" ' +
+                        ' data-postsavereloaddatatable="KO" ' +
+                        ' data-costcode="' + data.costcode + '" ' +
+                        ' data-projno="' + data.projno + '" ' +
+                        ' data-callback="postDeleteMailListReload" ' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                        ' data-confirmationtext="Remove ' + data.appNo + ' from mailing list?" ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Remove from mailing list"> ' +
+                            ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                            ' </button> ';
+                    }
+                    else {
+
+                        return '';
+                    }
+                }
+            }
+        ];
+
+        let datatableColumnsBudget = [
+            { 'data': "projno" },
+            { 'data': "phase" },
+            { 'data': "yymm" },
+            { 'data': "costcode" },
+            { 'data': "initialBudget" },
+            { 'data': "newBudget" }
+        ];
+
+        let datatableColumnsResponsible = [
+            { 'data': "responsibleName" },
+            { 'data': "employee" }
+        ];
+
+        </text>
+    }
+</script>

@@ -1,0 +1,88 @@
+﻿@model TCMPLApp.Domain.Models.HRMasters.EmployeeMasterApplications
+
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">            
+            @if (Model.Status == 1)
+            {
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditEmplmast))
+                {
+                <div class="row">
+                    <a title="Edit employee application rights" class="btn btn-outline-primary btn-sm border-none" href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw35"
+                       data-url='@Url.Action("ApplicationsEdit", "Employee", new { Area = "HRMasters" })'
+                       data-statichtmlsourcedivid=""
+                       data-id="@Model.Empno"
+                       data-modaltitle="Edit application rights"
+                       data-modalheader="Edit application rights">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </div>
+                <hr />
+                }
+            }
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Expatriate)</div>
+                        <div class="dd-met">@(Model.Expatriate == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.HrOpr)</div>
+                        <div class="dd-met">@(Model.HrOpr == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.InvAuth)</div>
+                        <div class="dd-met">@(Model.InvAuth == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.JobIncharge)</div>
+                        <div class="dd-met">@(Model.JobIncharge == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Newemp)</div>
+                        <div class="dd-met">@(Model.Newemp == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Payroll)</div>
+                        <div class="dd-met">@(Model.Payroll == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ProcOpr)</div>
+                        <div class="dd-met">@(Model.ProcOpr == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Seatreq)</div>
+                        <div class="dd-met">@(Model.Seatreq == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Submit)</div>
+                        <div class="dd-met">@(Model.Submit == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>

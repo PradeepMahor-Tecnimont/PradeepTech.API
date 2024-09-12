@@ -1,0 +1,250 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.EmployeeMasterOrganizationEditViewModel
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Employee"
+      asp-action="OrganizationEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('organization');PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Empno)
+    @Html.HiddenFor(m => m.JobTitle)
+    @Html.HiddenFor(m => m.TitCd)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit organization details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.Name [ @Model.Empno ]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Dol" class="control-label"></label>
+                            <input asp-for="Dol" class="form-control" type="date" placeholder="dd-mmm-yyyy" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Dor" class="control-label"></label>
+                            <input asp-for="Dor" class="form-control" type="date" placeholder="dd-mmm-yyyy" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Secretary" class="control-label"></label>
+                            <input asp-for="Secretary" class="form-control" placeholder="Secretary" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Location" class="control-label"></label>
+                            <select asp-for="Location" class="form-control Select2" asp-items="ViewBag.LocationList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @* <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <label asp-for="TitCd" class="control-label"></label>
+                            <select asp-for="TitCd" class="form-control Select2" asp-items="ViewBag.JobTitle">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div> *@
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Mngr" class="control-label"></label>
+                            <select asp-for="Mngr" class="form-control Select2" asp-items="ViewBag.MngrList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="EmpHod" class="control-label"></label>
+                            <select asp-for="EmpHod" class="form-control Select2" asp-items="ViewBag.EmphodList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Sapemp" class="control-label"></label>
+                            <input asp-for="Sapemp" class="form-control" placeholder="SAPEMP" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Itno" class="control-label"></label>
+                            <input asp-for="Itno" class="form-control" placeholder="PAN" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="ContractEndDate" class="control-label"></label>
+                            <input asp-for="ContractEndDate" class="form-control" type="date" placeholder="dd-mmm-yyyy" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Subcontract" class="control-label"></label>
+                            <select asp-for="Subcontract" class="form-control Select2" asp-items="ViewBag.SubcontractList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Cid" class="control-label"></label>
+                            <input asp-for="Cid" class="form-control" placeholder="Contract Id" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Bankcode" class="control-label"></label>
+                            <select asp-for="Bankcode" class="form-control Select2" asp-items="ViewBag.BankcodeList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Acctno" class="control-label"></label>
+                            <input asp-for="Acctno" class="form-control" placeholder="Account no" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Ifscno" class="control-label"></label>
+                            <input asp-for="Ifscno" class="form-control" placeholder="IFSC no" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Place" class="control-label"></label>
+                            <select asp-for="Place" class="form-control Select2" asp-items="ViewBag.Place">
+                                <option value="" hidden disabled selected>Optional</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Graduation" class="control-label"></label>
+                            <select asp-for="Graduation" class="form-control Select2" asp-items="ViewBag.Graduation">
+                                <option value="" hidden disabled selected>Optional</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">                        
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="DiplomaYear" class="control-label"></label>
+                            <input asp-for="DiplomaYear" class="form-control" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Gradyear" class="control-label"></label>
+                            <input asp-for="Gradyear" class="form-control" placeholder="2015" />
+                        </div>                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">                        
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="PostgraduationYear" class="control-label"></label>
+                            <input asp-for="PostgraduationYear" class="form-control" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Expbefore" class="control-label"></label>
+                            <input asp-for="Expbefore" class="form-control" placeholder="12.5" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">                       
+                         <div class="col-xl-6 col-md-12">
+                            <label asp-for="Qualification" class="control-label"></label>
+                            <select asp-for="Qualification" class="form-control Select2" asp-items="ViewBag.Qualification" multiple="multiple">
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="QualGroup" class="control-label"></label>
+                            <select asp-for="QualGroup" class="form-control Select2" >
+                                <option value="">Select...</option>
+                                <option value="1">1-Engineering Degree</option>
+                                <option value="2">2-Diploma</option>
+                                <option value="3">3-Certificate</option>
+                                <option value="4">4-Non Engg. Degree</option>
+                                <option value="5">5-Below Degree</option>
+                            </select>                           
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row"> 
+                         <div class="col-xl-6 col-md-6">
+                            <label asp-for="Gratutityno" class="control-label"></label>
+                            <input asp-for="Gratutityno" class="form-control" placeholder="" />
+                        </div>  
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Aadharno" class="control-label"></label>
+                            <input asp-for="Aadharno" class="form-control" placeholder="" />
+                        </div>                                              
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <div class="row">                        
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Pfno" class="control-label"></label>
+                            <input asp-for="Pfno" class="form-control" placeholder="" />
+                        </div>  
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Uanno" class="control-label"></label>
+                            <input asp-for="Uanno" class="form-control" placeholder="" />
+                        </div>                        
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Superannuationno" class="control-label"></label>
+                            <input asp-for="Superannuationno" class="form-control" placeholder="" />
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Pensionno" class="control-label"></label>
+                            <input asp-for="Pensionno" class="form-control" placeholder="" />
+                        </div>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

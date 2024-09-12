@@ -1,0 +1,69 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="leaveFilterSet"
+      asp-area="SWP"
+      asp-controller="SWP"
+      asp-action="SmartAttendancePlanningFilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Filter"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Filters setup"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <label asp-for="Assign" class="control-label"></label>
+                    <select asp-for="Assign" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.AssignList"  >
+                        <option selected></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EmployeeTypeList" class="control-label"></label>
+                    <select asp-for="EmployeeTypeList" class="form-control chosen-select-multiple" multiple="multiple"
+                            data-placeholder="Please select..." asp-items="ViewBag.EmployeeTypeList">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GradeList" class="control-label"></label>
+                    <select asp-for="GradeList" class="form-control chosen-select-multiple" multiple="multiple"
+                            data-placeholder="Please select..." asp-items="ViewBag.GradeList">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Desk assignment planned</label>
+                    <select asp-for="DeskAssigmentStatus" class="form-control chosen-select" data-placeholder="Please select..." >
+                        <option selected>All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Assigned" >Assigned</option>
+                    </select>
+                </div>            
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

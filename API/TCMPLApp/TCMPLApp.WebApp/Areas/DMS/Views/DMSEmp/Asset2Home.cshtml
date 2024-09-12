@@ -1,0 +1,315 @@
+﻿@model TCMPLApp.WebApp.Models.Asset2HomeIndexViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Asset on Desk";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Asset details</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<form asp-controller="SWP"
+      asp-action="Asset2HomeRequest"
+      id="formAsset2Home">
+
+    <input type="hidden" id="Empno" />
+    <input type="hidden" id="Deskid" />
+    <input type="hidden" id="Unqid" />
+
+    @{
+        ViewData["Title"] = "Asset on Desk";
+    }
+
+    <div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Desk: <span id="spanDeskid"></span></p>
+        </div>
+        <div class="card-toolbar">
+            <div role="toolbar">
+                <div id="discardDiv" class="hidden">
+                    <a name="Discard" id="Discard" style="float: right;"
+                       class="btn btn-sm btn-primary m-1 mr-1" onclick="onDiscard()">
+                        @localizer["Discard"]
+                    </a>
+                    <span class="redColor p-r-50 p-t-10 f-w-600" style="float:right">Already request exists, you may click Discard to delete it</span>&nbsp; &nbsp;
+                </div>
+                <div id="confirmDiv" class="hidden">
+                    <a name="Confirm" id="Confirm" style="float:right"
+                       class="btn btn-sm btn-primary m-1 mr-1" onclick="onSave()">
+                        @localizer["Confirm"]
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="m-1 p-1"></div>
+        <div class="bg-gray-active rounded ">
+            <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        @*<th rowspan="2">@Html.DisplayNameFor(model => model.Deskid)</th>*@
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.AssetType)</th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.Assetid)</th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.Description)</th>
+                        <th colspan="5" class="text-center">
+                            @Html.DisplayNameFor(model => model.Istaking2home)
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="text-center align-middle">
+                            @localizer["Yes"]
+                        </th>
+                        <th class="text-center align-middle">
+                            @localizer["No"]
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+
+        function localScript() {
+            initSelect2();
+        }
+
+        function localLoadDataTable() {
+            var table = $('#tbDataGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                ordering: false,
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                bLengthChange: false,
+                bInfo: false,
+                filter: false,
+                layout: { topStart: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    //{ data: "deskid",  width: '3.0rem'  },
+                    { data: "assetType", width: '3.0rem' },
+                    { data: "assetid", width: '6.0rem' },
+                    { data: "description", width: '10.0rem' },
+                    {
+                        data: null,
+                        width: '3.0rem',
+                        render: function (data, type, row, meta) {
+                            if (meta.row == 0) {
+                                $("#Empno").val(data.empno);
+                                $("#Deskid").val(data.deskid);
+                                $("#Unqid").val(data.unqid);
+                                $("#spanDeskid").text(data.deskid);
+                                if (data.unqid != '' && data.unqid != null) {
+                                    $("#discardDiv").removeClass("hidden");
+                                    $("#confirmDiv").addClass("hidden");
+                                }
+                                else {
+                                    $("#confirmDiv").removeClass("hidden");
+                                    $("#discardDiv").addClass("hidden");
+                                }
+                            }
+                            if (data.istaking2home == 1) {
+                                return ' <div class="radio d-inline text-center "> ' +
+                                    ' <input type="radio" class="rdasset" ' +
+                                    ' id="rdYes_' + data.assetid + '"  name="' + data.assetid + ';' + data.deskid + '"  ' +
+                                    ' value="true"  checked="true">  ' +
+                                    ' <label for="rdYes_' + data.assetid + '" class="cr margin-top-5"></label>' +
+                                    ' </div>';
+                            }
+                            else {
+                                return ' <div class="radio d-inline text-center "> ' +
+                                    ' <input type="radio" class="rdasset" ' +
+                                    ' id="rdYes_' + data.assetid + '"  name="' + data.assetid + ';' + data.deskid + '"  ' +
+                                    ' value="true" >  ' +
+                                    ' <label for="rdYes_' + data.assetid + '" class="cr margin-top-5"></label>' +
+                                    ' </div>';
+                            }
+                        },
+                        class: ' text-center  align-middle'
+                    }, {
+                        data: null,
+                        width: '3.0rem',
+                        render: function (data, type, row) {
+
+                            if (data.istaking2home == 2) {
+                                return ' <div class="radio d-inline text-center "> ' +
+                                    ' <input type="radio" class="rdasset" ' +
+                                    ' id="rdNo_' + data.assetid + '"  name="' + data.assetid + ';' + data.deskid + '"  ' +
+                                    ' value="false" checked="true"  >  ' +
+                                    ' <label for="rdNo_' + data.assetid + '" class="cr margin-top-5"></label>' +
+                                    ' </div>';
+                            }
+                            else {
+                                return ' <div class="radio d-inline text-center "> ' +
+                                    ' <input type="radio" class="rdasset" ' +
+                                    ' id="rdNo_' + data.assetid + '"  name="' + data.assetid + ';' + data.deskid + '"  ' +
+                                    ' value="false"   >  ' +
+                                    ' <label for="rdNo_' + data.assetid + '" class="cr margin-top-5"></label>' +
+                                    ' </div>';
+                            }
+                        },
+                        class: ' text-center  align-middle'
+                    },
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.AssetType)' + '</dt><dd class="col-lg-8">' + data.assetType + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Assetid)' + '</dt><dd class="col-lg-8">' + data.assetid + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Description)' + '</dt><dd class="col-lg-8">' + data.description + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Istaking2home)' + '</dt><dd class="col-lg-8">' + data.istaking2home + '</dd></dl>';
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListDeskAssets", "DMSEmp")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                });
+
+            }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+        });
+
+        function onSave() {
+
+            var table = $('#tbDataGrid').DataTable();
+            var data = table.rows().data();
+
+            var paramsRdAsset = table.$('input.rdasset').serializeArray();
+            objs = [];
+
+            $.each(paramsRdAsset, function (i, field) {
+                itemAsset = {}
+                itemAsset["asset"] = field.name;
+                itemAsset["asset2Home"] = field.value;
+
+                objs.push(itemAsset);
+            });
+
+            $.ajax({
+                //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("Asset2HomePost", "DMSEmp", new { Area = "DMS" })',
+                type: 'POST',
+                data: {
+                    assetData: objs
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    hideLoader();
+                    if (data.success) {
+                        notify("success", data.response, "Success");
+                        localLoadDataTable();
+                    }
+                    else {
+                        notify("error", data.response, "Error");
+                    }
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+
+            return false;
+        }
+
+        function onDiscard() {
+            $.ajax({
+                //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("Asset2HomeDiscardPost", "DMSEmp", new { Area = "DMS" })',
+                type: 'POST',
+                data: {
+                    unqid: $("#Unqid").val()
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    hideLoader();
+                    if (data.success) {
+                        notify("success", data.response, "Success");
+                        localLoadDataTable();
+                    }
+                    else {
+                        notify("error", data.response, "Error");
+                    }
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+
+            return false;
+        }
+
+    </script>
+}

@@ -1,0 +1,151 @@
+﻿@model TCMPLApp.WebApp.Models.AadhaarDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlAadhaarDetailsEdit = isOnBehalf == IsOk ? ("OnBehalfAadhaarDetailsEdit") : ("AadhaarDetailsEdit");
+    string urlFileUpload = isOnBehalf == IsOk ? Url.Action("OnBehalfFileUploadEdit", "EmpGenInfoDetails") : Url.Action("FileUploadEdit", "EmpGenInfoDetails");
+
+}
+
+<div class="card-deck" style="margin-top: 10px; margin-left:5px; min-height: 300px;">
+    <div class="card shadow col-md-12 col-xl-6">
+
+        <div class="app-h4 app-card-header p-2">
+            @if (isOnBehalf == IsOk)
+            {
+                @localizer["Aadhaar Details (On BeHalf)"]
+            }
+            else
+            {
+                @localizer["Aadhaar Details"]
+            }
+        </div>
+
+
+        <span id="spnIdHasScanFile" class=" m-0 alert alert-success @(string.IsNullOrEmpty(Model.HasScanFileAadhaar) ? "hidden" : "")"
+              style="text-align: left;">
+            @localizer["Aadhaar scan file uploaded"]
+        </span>
+       @* <span id="spnIdHasScanFile" class="alert alert-danger
+                    @(string.IsNullOrEmpty(Model.HasScanFileAadhaar) ? "" : "hidden")
+                    @(Model.HasAadhaar == IsOk ? "" : "hidden")"
+              style="text-align: left;">
+            @localizer["Aadhaar scan file not uploaded"]
+
+        </span>*@
+
+
+        @if (@Model.LockStatusDetailViewModel.IsAadhaarOpen == "OK")
+        {
+            <form asp-controller="EmpGenInfoDetails"
+              asp-action=@urlAadhaarDetailsEdit
+                  id="formAadharAndPassport"
+                  data-ajax="true"
+                  data-ajax-method="post"
+                  data-ajax-update="#pw-AadhaarDetails"
+                  data-ajax-begin="onBegin(null)"
+                  data-ajax-complete="onComplete(null);localScript()"
+                  data-ajax-success="PostSaveAadhaar(data);"
+                  data-ajax-failure="onError"
+                  accept-charset="UTF-8">
+                <div class="card-body">
+
+                    <input type="hidden" asp-for="@Model.KeyId" />
+                    <input type="hidden" asp-for="@Model.Empno" />
+
+                    <span id="spanDescriptionAaStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+                    <div class="row p-2">
+                        <div class="col-xl-4 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="HasAadhaar" class="control-label"></label>
+                                <select asp-for="HasAadhaar" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.HasAadhaar" required>
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="HasAadhaar" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-2" id="AadhaarData" style="display: none">
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="AdhaarNo" class="control-label"></label>
+                                <input asp-for="AdhaarNo" class="form-control text-uppercase" placeholder="Aadhaar No" required />
+                                <span asp-validation-for="AdhaarNo" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="AdhaarName" class="control-label"></label>
+                                <input asp-for="AdhaarName" class="form-control text-uppercase" placeholder="Name" required />
+                                <span asp-validation-for="AdhaarName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="BtnConfirm">
+                        <a class="btn btn-secondary f-right" asp-controller="Home" asp-action="Index" title="@localizer["Cancel"]">
+                            @localizer["Cancel"]
+                        </a>
+                        <span class="f-right">&nbsp; &nbsp;</span>
+                        <button class="btn btn-primary f-right" type="submit" id="btnconfirm"
+                                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                data-text="@localizer["Save"]">
+                            @localizer["Save"]
+                        </button>
+                    </div>
+                </div>
+                <br>
+            </form>
+            <div id="divAadhaarDetails" class="form-group">
+                @if (@Model.AdhaarNo != null && @Model.HasAadhaar == IsOk)
+                {
+                    <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw30"
+                       data-url=@urlFileUpload
+                       data-statichtmlsourcedivid=""
+                       data-id="@Model.Empno"
+                       data-fileType="AC"
+                       data-refNumber="@Model.AdhaarNo"
+                       data-modaltitle="File upload"
+                       data-modalheader="File upload">
+                        <i class="fas fa-edit"></i> Upload Aadhaar copy
+                    </a>
+                }
+
+
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+                <span id="spanDescriptionAaStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+                <div class="row p-2">
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.AdhaarNo)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.AdhaarNo)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.AdhaarName)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.AdhaarName)</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

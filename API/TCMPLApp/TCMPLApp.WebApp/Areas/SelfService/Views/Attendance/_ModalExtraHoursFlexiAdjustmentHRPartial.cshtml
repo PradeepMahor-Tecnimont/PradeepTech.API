@@ -1,0 +1,98 @@
+﻿@model TCMPLApp.WebApp.Models.ExtraHoursFlexiClaimAdjustmentHRViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Attendance"
+      asp-action="HrExtraHoursFlexiAdjustment"
+      id="formExtraHoursFlexiAdjustmentHr"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript();loadScript()"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["OT Claim Adjustment"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Html.DisplayFor(model => model.Employee)</h5>
+            </div>
+            <div class="card-block">
+                <table class="table table-bordered table-responsive-lg  ">
+                    <thead class="bg-info text-white border ">
+                        <tr>
+                            <td style="min-width: 7rem; "></td>
+                            <td>@localizer["Weekly OT"]</td>
+                            <td>@localizer["Holiday OT"]</td>
+                            <td>@localizer["Comp OC"]</td>
+                            @Html.HiddenFor(m => m.ClaimNo)
+                            @Html.HiddenFor(m => m.ClaimedOt)
+                            @Html.HiddenFor(m => m.ClaimedHhot)
+                            @Html.HiddenFor(m => m.ClaimedCo)
+                            @Html.HiddenFor(m => m.LeadApprovedOt)
+                            @Html.HiddenFor(m => m.LeadApprovedHhot)
+                            @Html.HiddenFor(m => m.LeadApprovedCo)
+                            @Html.HiddenFor(m => m.HoDApprovedOt)
+                            @Html.HiddenFor(m => m.HoDApprovedHhot)
+                            @Html.HiddenFor(m => m.HoDApprovedCo)
+                        </tr>
+                    </thead>
+                    <tbody class=" border">
+                        <tr>
+                            <td>@localizer["Claimed"]</td>
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ClaimedOt))</td>
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ClaimedHhot))</td>
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ClaimedCo))</td>
+                        </tr>
+                        <tr>
+                            <td>@localizer["Lead Apprd"]</td>
+
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.LeadApprovedOt ?? 0))</td>
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.LeadApprovedHhot ?? 0))</td>
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.LeadApprovedCo ?? 0))</td>
+                        </tr>
+                        <tr>
+                            <td>@localizer["Hod Apprd"]</td>
+
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.HoDApprovedOt ?? 0))</td>
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.HoDApprovedHhot ?? 0))</td>
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.HoDApprovedCo ?? 0))</td>
+                        </tr>
+                        <tr>
+                            <td>@localizer["Hr Apprd"]</td>
+
+                            <td>
+                                <input required value="0" asp-for="HRApprovedOt" class="form-control  form-control-sm" />
+                            </td>
+                            <td>
+                                <input required value="0" asp-for="HRApprovedHhot" class="form-control form-control-sm" />
+                            </td>
+                            <td>
+                                <input required value="0" asp-for="HRApprovedCo" class="form-control form-control-sm" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-danger" id="approvedOTMsg"></div>
+            <div class="text-danger" id="approvedHHOTMsg"></div>
+            <div class="text-danger" id="approvedCOMsg"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

@@ -1,0 +1,111 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form class="form-filter-datetime"
+      id="formFilterSet"
+      asp-area="BG"
+      asp-controller="BGAction"
+      asp-action="FilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+    <input type="hidden" asp-for="@Model.BgFromDate" />
+    <input type="hidden" asp-for="@Model.BgToDate" />
+    <input type="hidden" asp-for="@Model.BgValFromDate" />
+    <input type="hidden" asp-for="@Model.BgValToDate" />
+    <input type="hidden" asp-for="@Model.BgClaimFromDate" />
+    <input type="hidden" asp-for="@Model.BgClaimToDate" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Filter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Filters setup</h5>
+            </div>
+            <div class="card-toolbar-modal">
+               
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="mb-2 col-xl-12 col-md-12">
+                            <label asp-for="Projno" class="control-label"></label>
+                            <select asp-for="Projno" class="form-control Select2" asp-items="ViewBag.ProjectList">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <div class="row">
+                        <div class="mb-2 col-xl-12 col-md-12">
+                            <label asp-for="BgType" class="control-label"></label>
+                            <select asp-for="BgType" class="form-control Select2">
+                                <option></option>>
+                                <option value="Advance">Advance</option>
+                                <option value="Peformance">Peformance</option>
+                            </select>
+                        </div>
+                     </div>
+                 </div>               
+                <div class="form-group">
+                    <h6 class="mb-2 f-w-300">BG date</h6>
+                    <div class="row">                        
+                        <div class="col-md-6 col-xl-6">
+                            <label asp-for="BgFromDate" class="control-label"></label>
+                            <input id="bgFromDateFilter" class="form-control datepickerFilter" placeholder="@localizer["From date"]" value="@Model.BgFromDate?.ToString("DD-MMM-YYYY")" />
+                        </div>
+                        <div class="col-md-6 col-xl-6">
+                            <label asp-for="BgToDate" class="control-label"></label>
+                            <input id="bgToDateFilter" class="form-control datepickerFilter" placeholder="@localizer["To date"]" value="@Model.BgToDate?.ToString("DD-MMM-YYYY")" />                            
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <h6 class="mb-2 f-w-300">BG validity date</h6>
+                    <div class="row">
+                        <div class="col-md-6 col-xl-6">
+                            <label asp-for="BgValFromDate" class="control-label"></label>
+                            <input id="bgValFromDateFilter" class="form-control datepickerFilter" placeholder="@localizer["From date"]" value="@Model.BgValFromDate?.ToString("DD-MMM-YYYY")" />
+                        </div>
+                        <div class="col-md-6 col-xl-6">
+                            <label asp-for="BgValToDate" class="control-label"></label>
+                            <input id="bgValToDateFilter" class="form-control datepickerFilter" placeholder="@localizer["To date"]" value="@Model.BgValToDate?.ToString("DD-MMM-YYYY")" />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <h6 class="mb-2 f-w-300">BG claim date</h6>
+                    <div class="row">
+                        <div class="col-md-6 col-xl-6">
+                            <label asp-for="BgClaimFromDate" class="control-label"></label>
+                            <input id="bgClaimFromDateFilter" class="form-control datepickerFilter" placeholder="@localizer["From date"]" value="@Model.BgClaimFromDate?.ToString("DD-MMM-YYYY")" />
+                        </div>
+                        <div class="col-md-6 col-xl-6">
+                            <label asp-for="BgClaimToDate" class="control-label"></label>
+                            <input id="bgClaimToDateFilter" class="form-control datepickerFilter" placeholder="@localizer["To date"]" value="@Model.BgClaimToDate?.ToString("DD-MMM-YYYY")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+                data-text="Confirm">Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>

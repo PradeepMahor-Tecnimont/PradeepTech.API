@@ -1,0 +1,126 @@
+﻿@model TCMPLApp.WebApp.Models.ExpectedJobsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Transactions"
+      asp-action="ExpectedJobsEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+             <input type="hidden" asp-for="@Model.Projno" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit expected jobs</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Edit expected jobs"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="Projno" class="control-label"></label>
+                            <input if="projno" class="form-control" maxlength="7" value="@Model.Projno" readonly />
+                            <span asp-validation-for="Projno" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="Active" class="control-label"></label>
+                            <select asp-for="Active" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                            <span asp-validation-for="Active" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="Bu" class="control-label"></label>
+                            <input asp-for="Bu" class="form-control"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="Activefuture" class="control-label"></label>
+                            <select asp-for="Activefuture" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                            <span asp-validation-for="Activefuture" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="FinalProjno" class="control-label"></label>
+                            <input asp-for="FinalProjno" class="form-control" maxlength="7"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="Newcostcode" class="control-label"></label>
+                            <select asp-for="Newcostcode" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.NewCostCodes" >
+                                <option selected></option>
+                            </select>
+                            
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="Tcmno" class="control-label"></label>
+                            <input asp-for="Tcmno" class="form-control" maxlength="5"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="Lck" class="control-label"></label>
+                            <select asp-for="Lck" class="form-control chosen-select" data-placeholder="Please select..." >
+                                <option selected></option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="ProjType" class="control-label"></label>
+                            <select asp-for="ProjType" class="form-control chosen-select" data-placeholder="Please select..." >
+                                <option selected></option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                             
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

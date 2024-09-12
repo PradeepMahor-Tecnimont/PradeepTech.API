@@ -1,0 +1,158 @@
+﻿@model TCMPLApp.WebApp.Models.InvConsumableBulkCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+
+<form asp-controller="INV"
+      asp-action="ConsumablesXLUpload"
+      asp-area="DMS"
+      id="formConsumablesXLUpload"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin($('btnname'))"
+      data-ajax-complete="onComplete(null);loadScript()"
+      data-ajax-success="onSuccess(null);PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+
+    <input type="hidden" asp-for="@Model.PODate" />
+    <input type="hidden" asp-for="@Model.InvoiceDate" />
+    <input type="hidden" asp-for="@Model.WarrantyEndDate" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Consumables upload"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Consumables upload"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="ConsumableType" class="control-label"></label>
+                            <select asp-for="ConsumableType" class="form-control Select2" asp-items="ViewBag.ConsumableTypeList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ConsumableType" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="Quantity" class="control-label"></label>
+                            <input asp-for="Quantity" class="form-control" placeholder="Quantity" required />
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="divRAMSelectList" class="hidden">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-6">
+                                <label asp-for="RAMCapacity" class="control-label"></label>
+                                <select asp-for="RAMCapacity" class="form-control Select2" data-placeholder="Please select...">
+                                    <option selected></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 ">
+                            <label asp-for="ConsumableDesc" class="control-label"></label>
+                            <input asp-for="ConsumableDesc" class="form-control" placeholder="Description" required />
+                            <span asp-validation-for="ConsumableDesc" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6 ">
+                            <label asp-for="PO" class="control-label"></label>
+                            <input asp-for="PO" class="form-control" placeholder="PO Number"  />
+                            <span asp-validation-for="PO" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="PODate" class="control-label"></label>
+                            <input id="pODate" class="form-control datepicker" placeholder="@localizer["PO Date"]" value=""  />
+                            <span asp-validation-for="PODate" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="Vendor" class="control-label"></label>
+                            <input asp-for="Vendor" class="form-control" placeholder="Vendor"  />
+                            <span asp-validation-for="Vendor" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="Invoice" class="control-label"></label>
+                            <input asp-for="Invoice" class="form-control" placeholder="Invoice"  />
+                            <span asp-validation-for="Invoice" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="InvoiceDate" class="control-label"></label>
+                            <input id="invoiceDate" class="form-control datepickerFilter" placeholder="@localizer["Date"]" value=""  />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="WarrantyEndDate" class="control-label"></label>
+                            <input id="warrantyEndDate" class="form-control datepickerFilter" placeholder="@localizer["Date"]" value=""  />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+
+                            <button type="button" name="ConsumablesXLTemplate" id="btnConsumablesXLTemplate" title="Excel Download" class=" btn btn-sm btn-outline-primary mx-2">
+                                <i class="far fa-file-excel "></i> Download template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                    <div class="dz-details">
+                        <div class="dz-filename"><span data-dz-name></span></div>
+                        <div class="dz-size" data-dz-size></div>
+                        <img data-dz-thumbnail />
+                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                    </div>
+                    <div class="dz-default dz-message" data=""><span>Drop excel file here to upload</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-outline-primary" type="button" id="btnUploadConsumablesXL"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Upload Consumables"]">
+            @localizer["Upload Consumables"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+    <div id="results" style="display:none">@TempData["Message"]</div>
+</form>

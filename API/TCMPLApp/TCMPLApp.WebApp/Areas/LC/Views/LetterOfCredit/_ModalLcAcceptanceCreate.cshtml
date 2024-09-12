@@ -1,0 +1,81 @@
+﻿@model TCMPLApp.WebApp.Models.LcAcceptanceCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="LetterOfCredit"
+      asp-action="LcAcceptanceCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('acceptanceDetail');PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.ApplicationId)
+
+    <input type="hidden" asp-for="@Model.AcceptanceDate" />
+    <input type="hidden" asp-for="@Model.PaymentDateAct" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Acceptance details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["New acceptance details"]</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                              <label asp-for="ActualAmountPaid" class="control-label"></label>
+                            <input asp-for="ActualAmountPaid" class="form-control" type="number" placeholder="" required />
+                            <span asp-validation-for="ActualAmountPaid" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="AcceptanceDate" class="control-label"></label>
+                            <input id="acceptanceDate" class="form-control datepicker" placeholder="@localizer["Acceptance date"]" value="" required />
+                            <span asp-validation-for="AcceptanceDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="PaymentDateAct" class="control-label"></label>
+                            <input id="paymentDateAct" class="form-control datepicker" placeholder="@localizer["Payment act date"]" value="" required />
+                            <span asp-validation-for="PaymentDateAct" class="text-danger"></span>
+                        </div>
+                      
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

@@ -1,0 +1,936 @@
+﻿@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Smart work planning</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+<div style="display:none">
+    @*    @Html.TextBoxFor(model => model.FilterDataModel.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    *@
+
+
+</div>
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-r-5">
+        <a href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/Smartworkplanning%20-%20User%20Manual.pdf" target="_blank">
+            <i class="fas fa-info-circle fa-2x"></i>
+
+        </a>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="row">
+
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionPrimaryWsPlanning
+        || p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionPrimaryWsStatus))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Primary workspace planning</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("PWSPlanningForIndividualEmpIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-cog	 f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <environment exclude="Production" include="Development,Staging">
+                @*<div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+            <div class="card-header">
+            <h5>Primary workspace planning - Individual </h5>
+            </div>
+            <div class="card-block card-tile">
+            <a href="@Url.Action("PWSPlanningForIndividualEmpIndex", "SWP", new { Area = "SWP" })">
+            <div class="row align-items-center justify-content-center stretched-link">
+            <div class="col">
+            <h7 class="mb-2 f-w-300"> Use for individual employee </h7>
+            </div>
+            <div class="col-auto">
+            <i class="fas fa-user-shield f-20 text-white theme-capri"></i>
+            </div>
+            </div>
+            </a>
+            </div>
+            </div>
+            </div>*@
+            </environment>
+        }
+
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionOfficeWsPlanning
+        || p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionOfficeWsStatus))
+        {
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Office workspace planning</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("OfficeWorkSpaceIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-truck-monster f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionSmartWsPlanning
+        || p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionSmartWsWsStatus))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Smart workspace planning</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("SmartAttendancePlanning", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-check   f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionPrimaryWsPlanning
+        || p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionPrimaryWsStatus))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee project mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("EmployeeProjectMappingIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-invoice f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @*            <div class="col-md-4 col-xl-3">
+        <div class="card card-tpl">
+        <div class="card-header">
+        <h5>Non-eligible users working from home </h5>
+        </div>
+        <div class="card-block card-tile">
+        <a href="@Url.Action("NonSWSEmpAtHome", "SWP", new { Area = "SWP" })">
+        <div class="row align-items-center justify-content-center stretched-link">
+        <div class="col">
+        <h3 class="mb-2 f-w-300"> </h3>
+        </div>
+        <div class="col-auto">
+        <i class="fas fa-user-times f-20 text-white theme-red"></i>
+        </div>
+        </div>
+        </a>
+        </div>
+        </div>
+        </div>
+        *@            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Office workspace - absent list </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("OWSEmpAbsentIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="	far fa-building	 f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Smart workspace - present list </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("SWSEmpPresentIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users	f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <environment exclude="Production">
+
+
+
+            </environment>
+
+
+        }
+    </div>
+
+    <hr />
+    <div class="row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionPrimaryWsStatusAdmin))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Primary workspace planning (Admin)</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AdminPWSPlanningIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-cog	 f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Smart workspace planning (Admin)</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AdminSWSPlanning", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-clinic-medical f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Office workspace - absent list (Admin)</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AdminOWSEmpAbsentIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="	fas fa-building	 f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Smart workspace - present list (Admin) </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AdminSWSEmpPresentIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users	f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Deputation workspace list (Admin)</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AdminDWSIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="	fas fa-warehouse  f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            @*
+        <div class="col-md-4 col-xl-3">
+        <div class="card card-tpl">
+        <div class="card-header">
+        <h5>Non-eligible users WFH (Admin view)</h5>
+        </div>
+        <div class="card-block card-tile">
+        <a href="@Url.Action("NonSWSEmpAtHomeAdmin", "SWP", new { Area = "SWP" })">
+        <div class="row align-items-center justify-content-center stretched-link">
+        <div class="col">
+        <h3 class="mb-2 f-w-300"> </h3>
+        </div>
+        <div class="col-auto">
+        <i class="fas fa-user-times f-20 text-white theme-red"></i>
+        </div>
+        </div>
+        </a>
+        </div>
+        </div>
+        </div>
+        *@
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Deskallocation report</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ExcelDownloadDeskallocationSWP", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="	fas fa-desktop	 f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Exclude employee </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ExcludeEmployeeIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="	fas fa-user	 f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Attendance status </h5>
+                    </div>
+                    <div class="card-block card-tile">
+
+                        <a href="#" data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw35"
+                           data-url='@Url.Action("AttendanceStatusExcel", "SWP", new { Area = "SWP" })'
+                           data-modaltitle="Create"
+                           data-modalheader="Create">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-check	f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Future employee coming to office</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("FutureEmpComingToOfficeIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users	f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Sub-cont. Emp attendance - Prev 10days</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                            data-jqueryselector="binarydownload"
+                            data-url="@(Url.Action("AttendanceStatusExcelSubContract", "SWP", new { Area = "SWP" }))"
+                            
+                            >
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                    <div class="text-center tileLoader hidden ">
+                                        <div class="spinner-border text-info text-center  "
+                                             style="width: 2.5rem; height: 2.5rem;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users	f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            @*
+        <environment include="Development">
+        <div class="col-md-4 col-xl-3">
+        <div class="card card-tpl">
+        <div class="card-header">
+        <h5>Desk asset management</h5>
+        </div>
+        <div class="card-block card-tile">
+        <a href="@Url.Action("Index", "DMSAsset", new { Area = "SWP" })">
+        <div class="row align-items-center justify-content-center stretched-link">
+        <div class="col">
+        <h7 class="mb-2 f-w-300"></h7>
+        </div>
+        <div class="col-auto">
+        <i class="fas fa-tools f-20 text-white theme-green"></i>
+        </div>
+        </div>
+        </a>
+        </div>
+        </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+        <div class="card card-tpl">
+        <div class="card-header">
+        <h5>Workplace details</h5>
+        </div>
+        <div class="card-block card-tile">
+        <a href="@Url.Action("EmployeeSWPWorkStatusIndex", "SWP", new { Area = "SWP" })">
+        <div class="row align-items-center justify-content-center stretched-link">
+        <div class="col">
+        <h7 class="mb-2 f-w-300"></h7>
+        </div>
+        <div class="col-auto">
+        <i class="fas fa-file-invoice f-20 text-white theme-dark-green"></i>
+        </div>
+        </div>
+        </a>
+        </div>
+        </div>
+        </div>
+        </environment>
+        *@
+        }
+
+    </div>
+    <environment include="Development">
+        <div class="childcontent-div" id="div-empswpdetails">
+            <div id="pv-empswpdetails">
+            </div>
+        </div>
+    </environment>
+
+
+</div>
+
+@section Scripts
+    {
+
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        function localScript() {
+            initFilter();
+
+            $('#btnExportAttendanceStatusExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                exportPWSPlanning();
+            });
+
+            $('#btnExportDateAttendanceExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                exportOnDatePWSPlanning();
+
+            });
+
+            /// <summary>
+            /// Start - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+            /// </summary>
+            $('#btnExportMonthlyAttendanceExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                exportMonthlyPWSPlanning();
+
+            });
+            /// <summary>
+            /// End - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+            /// </summary>
+
+            $(".tabChange").on('click', function (event) {
+
+                $("#attendanceStatusExcel input[id=startDateFilter]").val("");
+                $("#attendanceStatusExcel input[id=startOnDateFilter]").val("");
+                /// <summary>
+                /// Start - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+                /// </summary>
+                $("#attendanceStatusExcel input[id=startMonthDateFilter]").val("");
+                /// <summary>
+                /// End - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+                /// </summary>
+                $("#attendanceStatusExcel input[id=endDateFilter]").val("");
+
+                $("#attendanceStatusExcel input[id=StartDate]").val("");
+                $("#attendanceStatusExcel input[id=EndDate]").val("");
+
+            });
+
+        }
+        function initFilter() {
+
+            var currYear = moment().year();
+            var curYearLastDate = new Date(currYear, 11, 31);
+            var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+            var curdate = new Date();
+            var minDate = "01/" + (curdate.getFullYear() - 1);
+            var maxDate = "12/" + (curdate.getFullYear());
+
+
+            $('.materialdatepickerFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                useCurrent: false
+            });
+
+            $('.datepickerFilter').datepicker({
+                format: "MM-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                changeMonth: true,
+                changeYear: true,
+                startDate: minDate,
+                endDate: curdate
+            });
+
+
+            $('#startOnDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#startMonthDateFilter').datepicker({
+                format: 'MM-yyyy',
+                changeYear: true,
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val();
+                $("#StartDate").val(moment(fvDate, 'MMMM-YYYY').format("DD-MMM-YYYY"));
+                $(this).datepicker('hide');
+            });
+
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+                var vStartDate = moment(date);
+                var futureMonthEnd = moment(vStartDate).endOf('month');
+                
+                $('#endDateFilter').bootstrapMaterialDatePicker('setDate', futureMonthEnd);
+                $('#endDateFilter').val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+                $("#EndDate").val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+
+                //$('#endDateFilter').bootstrapMaterialDatePicker('setMinDate', date);
+                //$('#endDateFilter').bootstrapMaterialDatePicker('setMaxDate', curYearLastDate);
+
+                //$("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+            });
+
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+        }
+
+        function exportPWSPlanning() {
+
+            let vStartDate = $("#attendanceStatusExcel input[id=StartDate]").val();
+            let vEndDate = $("#attendanceStatusExcel input[id=EndDate]").val();
+            let vIsExcludeX1Employees = $("#attendanceStatusExcel input[name=IsExcludeX1Employees]:checked").val();
+            let vIncludeEmployeeLocation = $("#attendanceStatusExcel input[name=IncludeEmployeeLocation]:checked").val();
+
+            if (vStartDate == null || vStartDate == '') {
+                toastr.error('Invalid Start Date ');
+                return;
+            }
+            if (vEndDate == null || vEndDate == '') {
+                toastr.error('Invalid End Date');
+                return;
+            }
+
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#attendanceStatusExcel input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("AttendanceStatusExcel", "SWP", new {Area = "SWP" })',
+                type: "POST",
+                data: {
+                    isExcludeX1Employees: vIsExcludeX1Employees,
+                    includeEmployeeLocation: vIncludeEmployeeLocation,
+                    startDate: vStartDate,
+                    endDate: vEndDate
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showModalLoader();
+                    $("#btnExportAttendanceStatusExcel").hide();
+                    $('#attendanceStatus_Loader').removeClass("hidden");
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                },
+                complete: function(xhr){
+                    hideModalLoader();
+                    $("#btnExportAttendanceStatusExcel").show();
+                    $('#attendanceStatus_Loader').addClass("hidden");
+
+                }
+            });
+        }
+
+        function exportOnDatePWSPlanning() {
+
+            let vStartDate = $("#attendanceStatusExcel input[id=StartDate]").val();
+            let vIsExcludeX1EmployeesForDay = $("#attendanceStatusExcel input[name=IsExcludeX1EmployeesForDay]:checked").val();
+            let vIncludeEmployeeLocation = $("#attendanceStatusExcel input[name=IncludeEmployeeLocationForDay]:checked").val();
+            if (vStartDate == null || vStartDate == '') {
+                toastr.error('Invalid Start Date : ' + vStartDate);
+                return;
+            }
+
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#attendanceStatusExcel input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("AttendanceStatusExcelOnDate", "SWP", new {Area = "SWP" })',
+                type: "POST",
+                data: {
+                    startDate: vStartDate,
+                    includeEmployeeLocation: vIncludeEmployeeLocation,
+                    IsExcludeX1EmployeesForDay: vIsExcludeX1EmployeesForDay
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                    $("#btnExportDateAttendanceExcel").hide();
+                    $('#dateAttendance_Loader').removeClass("hidden");
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+
+                    $("#btnExportDateAttendanceExcel").show();
+                    $('#dateAttendance_Loader').addClass("hidden");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                    $("#btnExportDateAttendanceExcel").show();
+                    $('#dateAttendance_Loader').addClass("hidden");
+                }
+            });
+
+        }
+
+        function exportSubContractAttendance(){
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("AttendanceStatusExcelSubContract", "SWP", new {Area = "SWP" })',
+                type: "GET",
+                data: {
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                    $("#btnExportDateAttendanceExcel").hide();
+                    $('#dateAttendance_Loader').removeClass("hidden");
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+
+                    $("#btnExportDateAttendanceExcel").show();
+                    $('#dateAttendance_Loader').addClass("hidden");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                    $("#btnExportDateAttendanceExcel").show();
+                    $('#dateAttendance_Loader').addClass("hidden");
+                }
+            });
+        }
+
+        /// <summary>
+        /// Start - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+        /// </summary>
+        function exportMonthlyPWSPlanning() {
+
+            let vStartDate = $("#attendanceStatusExcel input[id=StartDate]").val();
+            let vIsExcludeX1EmployeesForMonth = $("#attendanceStatusExcel input[name=IsExcludeX1EmployeesForMonth]:checked").val();
+            let vIncludeEmployeeLocation = $("#attendanceStatusExcel input[name=IncludeEmployeeLocationForMonth]:checked").val();
+            if (vStartDate == null || vStartDate == '') {
+                toastr.error('Invalid Start Date : ' + vStartDate);
+                return;
+            }
+
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#attendanceStatusExcel input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("AttendanceStatusExcelForMonth", "SWP", new {Area = "SWP" })',
+                type: "POST",
+                data: {
+                    startDate: vStartDate,
+                    includeEmployeeLocation: vIncludeEmployeeLocation,
+                    isExcludeX1EmployeesForMonth: vIsExcludeX1EmployeesForMonth
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                    $("#btnExportMonthlyAttendanceExcel").hide();
+                    $('#monthlyAttendance_Loader').removeClass("hidden");
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+
+                    $("#btnExportMonthlyAttendanceExcel").show();
+                    $('#monthlyAttendance_Loader').addClass("hidden");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                    $("#btnExportMonthlyAttendanceExcel").show();
+                    $('#monthlyAttendance_Loader').addClass("hidden");
+                }
+            });
+
+        }
+                                /// <summary>
+                                /// End - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+                                /// </summary>
+
+    </script>
+}

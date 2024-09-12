@@ -1,0 +1,205 @@
+﻿@model TCMPLApp.WebApp.Models.VaccinationOfficeBatch2CreateViewModel
+
+@{
+    ViewData["Title"] = "TCMPL Vaccination Drive - Batch 2";
+}
+
+<div class="container col-xl-5 col-lg-8 col-md-10 col-sm-12">
+    <div class="card bg-light mb-4 shadow-3">
+        <div class="card-header app-h4 app-card-header">
+            TCMPL Vaccination Drive - Registration
+        </div>
+        <div class="card-body">
+            <div class="mb-2 border-bottom border-1 ">
+                <form asp-action="RegisterForBatch2Create" asp-controller="VaccinationOffice" enctype="multipart/form-data" method="post">
+                    <div class="container">
+                        @if (Model.SelfJab1Date.HasValue)
+                        {
+                            <div class="row mb-2 border-bottom border-1">
+                                <div class="col-md-6 ">
+                                    <label class="control-label required" asp-for="SelfVaccineType"></label>
+                                </div>
+                                <div class="col-md-6 mb-2">
+
+                                    <span class="text-info font-weight-bold">@Model.SelfVaccineType</span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2 border-bottom border-1">
+                                <div class="col-md-6 ">
+                                    <label class="control-label required" asp-for="SelfJab1Date"></label>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <span class="text-info font-weight-bold"> @Html.DisplayFor(m => m.SelfJab1Date) </span>
+                                </div>
+                            </div>
+                            <div class="row mb-2 border-bottom border-1">
+                                <div class="col-md-6 ">
+                                    <label class="control-label required" asp-for="SelfJab2Date"></label>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <span class="text-info font-weight-bold">@(Model.SelfJab2Date)</span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(m => m.SelfJab1Date)
+                            @Html.HiddenFor(m => m.SelfJab2Date)
+                            @Html.HiddenFor(m => m.SelfVaccineType)
+                            @Html.HiddenFor(m => m.JabNumber)
+                        }
+                        <div class="row mb-2 border-bottom border-1">
+                            <div class="col-md-6 ">
+                                <label class="control-label required" asp-for="JabNumber"></label>
+                            </div>
+                            <div class="col-md-6">
+                                @Html.HiddenFor(m => m.JabNumber)
+
+                                <span class="text-info font-weight-bold">@(Html.DisplayFor(m => m.JabNumber))</span>
+
+                                <span asp-validation-for="JabNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-2 border-bottom border-1">
+                            <div class="col-md-6 ">
+                                <label class="control-label required" asp-for="PreferredJabDate"></label>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="row">
+                                    <div class="container-fluid">
+                                        @foreach (var jabDate in ViewBag.RadioListJabDate)
+                                        {
+                                            <div class="custom-control custom-radio col-md-6">
+                                                <input type="radio" value="@jabDate.Val" class="custom-control-input" id="id(@jabDate.Val)" asp-for="PreferredJabDate">
+                                                <label class="custom-control-label text-primary" for="id(@jabDate.Val)">@jabDate.Text</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <span asp-validation-for="PreferredJabDate" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="row mb-2 border-bottom border-1">
+                            <div class="col-md-6 ">
+                                <label class="control-label required" asp-for="RegistrationFor"></label>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <select id="idSelRegistrationFor" class="Select2" asp-for="RegistrationFor" asp-items="ViewBag.SelectListRegistrationFor">
+                                    <option></option>
+                                </select>
+                                <span asp-validation-for="RegistrationFor" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        @*<div class="d-none" id="idFamilyDetails">
+            <div>
+                <table id="idTblFamilyMembers" class="table table-striped table-bordered text-muted text-monospace table-responsive-lg ">
+                    <thead>
+                        <tr>
+                            <th>Family Member Name</th>
+                            <th>Relation</th>
+                            <th>Year of Birth</th>
+                            <th>Del</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0;i < Model.FamilyMember.Count; i++)
+                        {
+                            <tr class=@(i==0 ? "d-none" : "")>
+                                <td>
+                                    <input class="form-control" asp-for="@Model.FamilyMember[i].FamilyMemberName" />
+                                    <span asp-validation-for="@Model.FamilyMember[i].FamilyMemberName" class="text-danger"></span>
+                                </td>
+                                <td>
+
+                                    <select id="idSelRelations"  class="form-control " asp-for="@Model.FamilyMember[i].Relation" asp-items="ViewBag.SelectListRelations">
+                                        <option></option>
+                                    </select>
+                                    <span asp-validation-for="@Model.FamilyMember[i].Relation" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input class="form-control" asp-for="@Model.FamilyMember[i].YearOfBirth" />
+                                    <span asp-validation-for="@Model.FamilyMember[i].YearOfBirth" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-danger " onclick="removeRow(this);">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>*@
+                    </div>
+                    <div class=" d-flex flex-row mb-2 ">
+                        <button id="idBtnAddFamilyMember" onclick="return addBlankRow();" class="btn btn-outline-primary d-none">Add Family Member</button>
+
+                        <button type="submit" id="idBtnSave" class="btn btn-primary ml-auto">Next</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        var rowCounter = 0;
+        //$("#idSelRegistrationFor").change(function () {
+        //    var vaccinationFor = $(this).val();
+        //    if (vaccinationFor == "SELF") {
+        //        $("#idFamilyDetails").addClass("d-none");
+        //        $("#idBtnAddFamilyMember").addClass("d-none");
+        //    }
+        //    else {
+        //        $("#idFamilyDetails").removeClass("d-none");
+        //        $("#idBtnAddFamilyMember").removeClass("d-none");
+        //    }
+        //});
+
+
+
+        //$("#idBtnAddFamilyMember").click(function () {
+        //    var clonedRow = $("#idTblFamilyMembers tr").eq(1).clone();
+        //    clonedRow = clonedRow.removeClass('d-none');
+        //    $("#idTblFamilyMembers tbody").append(clonedRow);
+        //});
+
+        function addBlankRow() {
+            rowCounter = rowCounter + 1;
+
+            var clonedRow = $("#idTblFamilyMembers tr").eq(1).clone();
+            clonedRow = clonedRow.removeClass('d-none');
+
+            $(clonedRow).find("input").each(function () {
+                $(this).attr('name', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+                $(this).attr('id', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+            });
+            $(clonedRow).find("select").each(function () {
+                $(this).attr('name', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+                $(this).attr('id', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+            });
+
+            $(clonedRow).find("span").each(function () {
+                $(this).attr('data-valmsg-for', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+            });
+
+            $("#idTblFamilyMembers tbody").append(clonedRow);
+            return false;
+        }
+
+        function removeRow(obj) {
+ 
+            $(obj).closest('tr').remove();
+        }
+    </script>
+}

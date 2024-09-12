@@ -1,0 +1,46 @@
+﻿@model TCMPLApp.WebApp.Areas.ERS.HRCVReferEmpDetailViewModel;
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<div id="divModalHRCVReferEmpDetailPartial">
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Referred by"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Html.DisplayNameFor(model => model.ShortDesc) : @Html.DisplayFor(model => model.ShortDesc)</h5>
+            </div>
+            <div class="card-block">                
+                <div class="row">                
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Empno)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Empno) - @Html.DisplayFor(model => model.EmpName)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.EmpEmail)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.EmpEmail)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.EmpParent)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.EmpParent) - @Html.DisplayFor(model => model.EmpParentName)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">    
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</div>

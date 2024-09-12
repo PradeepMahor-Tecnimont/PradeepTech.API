@@ -1,0 +1,329 @@
+﻿@model TCMPLApp.WebApp.Models.TimesheetEmployeeIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    const string actionName = "EmployeeIndex";
+    const string controllerName = "TSStatus";
+
+    ViewData["Title"] = "Employee wise timesheet status";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Timesheet">TimeSheet</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Employee wise status</li>
+    </ol>
+}
+
+@section Styles {    
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 6px;
+        }
+
+        .weekend {
+            background-color: lightgray;
+        }
+
+        #timesheetTable {
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+    </style>
+}
+
+<div style="display:none">
+    <input id="Yyyy" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyy" />
+    <input id="Yyyymm" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+    <input id="selTabName" name="selTabName" type="text" value="home" />
+    <input asp-for="@Model.FilterDataModel.GenericSearch" type="text" />
+</div>
+
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["Employee wise timesheet status"]</h5>
+        </div>
+        <div class="card-toolbar">
+            <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                    data-jqueryselector="openmodal"
+                    data-modalcontainer="modalcontainer"
+                    data-modalpopupwidth="rightw35"
+                    data-url='@Url.Action("FilterGet", "Home", new { Area = "Timesheet" })'
+                    data-actionName=@actionName
+                    data-controllerName=@controllerName
+                    data-modaltitle="Filter"
+                    data-modalheader="Filter">
+                <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+                @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+                {
+                    @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy)
+                    ;
+                }
+                @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+                {
+                    @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                             : "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)))
+                    ;
+                }
+            </button>
+        </div>
+        <div class="card-pill">
+            <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" onclick="setTabName('home')" id="tab-home-tab" data-toggle="pill" href="#tab-home" role="tab" aria-controls="tab-home" aria-selected="true">Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-locked-tab" data-toggle="pill" href="#tabs-locked" role="tab" aria-controls="tabs-locked" aria-selected="false"
+                       onclick="setTabName('locked')"
+                       data-url="@Url.Action("EmployeeLockedIndex", "TSStatus", new { Area = "Timesheet" })"
+                       data-divid="pw-locked"
+                       data-callback="loadTimesheetLockedDataTable()"
+                       data-area="Timesheet"
+                       data-controller="TSStatus"
+                       data-action="EmployeeLockedIndex">@localizer["Lock"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-approved-tab" data-toggle="pill" href="#tabs-approved" role="tab" aria-controls="tabs-approved" aria-selected="false"
+                       onclick="setTabName('approved')"
+                       data-url="@Url.Action("EmployeeApprovedIndex", "TSStatus", new { Area = "Timesheet" })"
+                       data-divid="pw-approved"
+                       data-area="Timesheet"
+                       data-controller="TSStatus"
+                       data-action="EmployeeApprovedIndex">@localizer["Approve"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-posted-tab" data-toggle="pill" href="#tabs-posted" role="tab" aria-controls="tabs-posted" aria-selected="false"
+                       onclick="setTabName('posted')"
+                       data-url="@Url.Action("EmployeePostedIndex", "TSStatus", new { Area = "Timesheet" })"
+                       data-divid="pw-posted"
+                       data-area="Timesheet"
+                       data-controller="TSStatus"
+                       data-action="EmployeePostedIndex">@localizer["Post"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-notfilled-tab" data-toggle="pill" href="#tabs-notfilled" role="tab" aria-controls="tabs-notfilled" aria-selected="false"
+                       onclick="setTabName('notfilled')"
+                       data-url="@Url.Action("EmployeeNotfilledIndex", "TSStatus", new { Area = "Timesheet" })"
+                       data-divid="pw-notfilled"
+                       data-area="Timesheet"
+                       data-controller="TSStatus"
+                       data-action="EmployeeNotfilledIndex">@localizer["Not filled"]</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade show active" id="tab-home" role="tabpanel" aria-labelledby="tab-home-tab">
+                    <div class="card-deck">
+                        <div class="card shadow">
+                            <div class="card-block">
+                                @await Html.PartialAsync("_EmployeeStatusListPartial.cshtml", Model)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-locked" role="tabpanel" aria-labelledby="tabs-locked-tab">
+                    <div class="card-deck">
+                        <div class="card shadow">
+                            <div class="card-block">
+                                <div id="pw-locked">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-approved" role="tabpanel" aria-labelledby="tabs-approved-tab">
+                    <div class="card-deck">
+                        <div class="card shadow">
+                            <div class="card-block">
+                                <div id="pw-approved">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-posted" role="tabpanel" aria-labelledby="tabs-posted-tab">
+                    <div class="card-deck">
+                        <div class="card shadow">
+                            <div class="card-block">
+                                <div id="pw-posted">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-notfilled" role="tabpanel" aria-labelledby="tabs-notfilled-tab">
+                    <div class="card-deck">
+                        <div class="card shadow">
+                            <div class="card-block">
+                                <div id="pw-notfilled">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="results" style="display:none">@TempData["Message"]</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_CommonDataTableColumnstPartial");
+    }
+
+    <script src="~/js/TimesheetDetails.js" asp-append-version="true"></script>
+    <script src="~/js/site-timesheet.js" asp-append-version="true"></script>
+    <script src="~/js/EmpTimesheet.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                $("#filterGet").click();
+            }
+            else {
+                loadTimesheetStatusDataTable();
+                localScript();
+            }
+        });
+
+        function localScript() {
+            initSelect2();
+
+            loadTimesheetEmployeeProjectDataTable();
+
+            callTimesheetPartialReportListeners();
+
+            var cancelButtonRedirectUrl = "@Url.Action("RedirectPage", "Home", new
+            {
+                Area = "Timesheet",
+                actionName = @actionName,
+                controllerName = @controllerName
+            })";
+            callCancelButtonListeners(cancelButtonRedirectUrl);
+
+            // Employee timesheet
+            var timesheetUrl = '@Url.Action("GetTimesheetData", "Reports", new { Area = "Timesheet" })';
+
+            const selectedmonth = $('#Yyyymm').val().slice(-2);
+            const selectedyear = $('#Yyyymm').val().slice(0, 4);
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthName = monthNames[parseInt(selectedmonth, 10) - 1];
+
+            let monthyear = monthName + "-" + selectedyear;
+
+            $('#monthYear').text(monthyear);
+
+            var empno = $('#Empno').val();
+
+            var selectedValueOnLoad = $('#Assign').val();
+
+            if (selectedValueOnLoad) {
+                $('#timesheetdetails').removeClass("hidden");
+                $('#timesheetTable').removeClass("hidden");
+                loadDataBasedOnDepartment(selectedValueOnLoad, monthyear, timesheetUrl, empno);
+            }
+
+            $('#AssignCostcode').change(function () {
+                var selectedValueOnChange = $('#AssignCostcode').val();
+
+                if (selectedValueOnChange != "") {
+                    $('#timesheetdetails').removeClass("hidden");
+                    $('#timesheetTable').removeClass("hidden");
+                    loadDataBasedOnDepartment(selectedValueOnChange, monthyear, timesheetUrl, empno);
+                }
+                else {
+                    notify('error', "Please select Assigned cost code", 'danger');
+                    $('#timesheetdetails').addClass("hidden");
+                    $('#timesheetTable').addClass("hidden");
+                }
+
+            });
+        }
+
+        function PostSaveReLoad(data) {
+            var tabName = $('#selTabName').val();
+            var genericSearch = $('#FilterDataModel_GenericSearch').val();
+            
+            if (data.messageType = "OK" || data.messageType == "OO") {
+                if (tabName == "locked") {
+                    loadTimesheetLockedDataTable();
+                } if (tabName == "approved") {
+                    loadTimesheetApprovedDataTable();
+                } if (tabName == "posted") {
+                    loadTimesheetPostedDataTable();
+                }
+                hideLoader();
+                notify(data.messageType == "OK" && data.messageText == "Successfully updated" ? "success" : "warning", data.messageText, data.messageType == "OK" && data.messageText == "Successfully updated" ? "success" : "warning");
+            }
+            if (data.messageType == "KO") {
+                showError(data.messageText);
+            }
+        }
+
+        function downloadTimesheet(pEmpno, pyymm) {
+            $.ajax({
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("DownloadTimesheetReport", "Reports", new { Area = "Timesheet" })',
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                data: {
+                    empno: pEmpno,
+                    yymm: pyymm
+                },
+                success: function (data) {
+                    if (data.success != false) {
+                        notify('success', "File downloaded successfully.", 'success');
+                        window.location.href = "@Url.Action("DownloadTimesheetReport", "Reports")?Area=Timesheet&empno=" + pEmpno + "&yymm=" + pyymm;
+                    } else {
+                        notify('error', data.response, 'danger');
+                    }
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    showError(result);
+                }
+            });
+        }
+    </script>
+}

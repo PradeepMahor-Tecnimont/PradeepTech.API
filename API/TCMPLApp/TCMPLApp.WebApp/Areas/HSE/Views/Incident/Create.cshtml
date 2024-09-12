@@ -1,0 +1,361 @@
+﻿@model TCMPLApp.Domain.Models.HSE.Incident
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    Html.AntiForgeryToken();
+    ViewData["Title"] = "New Incident Report";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="HSE">HSE</a></li> 
+        <li class="breadcrumb-item"><a asp-action="IncidentIndex" asp-controller="Home" asp-area="HSE">Incident preliminary report</a></li> 
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Incident" asp-area="HSE">Incident preliminary report summary</a></li>  
+        <li class="breadcrumb-item active" aria-current="page">New incident preliminary report </li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        li {list-style-type: none;}
+    </style>
+}
+
+<form asp-action="Create"
+      asp-controller="Incident"
+      asp-area="HSE"
+      id="idCreateIncident"
+      method="post"
+      accept-charset="UTF-8">
+
+    <div class="container-fluid bg-white border rounded shadow m-auto py-2 col-xl-9">
+        <div class="app-h4 app-card-header mb-2">
+            <p>New Incident Report</p>
+        </div>        
+        <div class="row">
+            <div class="col-xl-4 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Office">Office</label>
+                    <select asp-for="Office" class="form-control Select2 required" placeholder="Please select" asp-items="ViewBag.OfficeList" required>
+                        <option></option>                        
+                    </select>
+                    <span asp-validation-for="Office" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Loc">Location where incident occured</label>
+                    <input class="form-control" type="text" asp-for="Loc" required />
+                    <span asp-validation-for="Loc" class="text-danger"></span>
+                </div>
+            </div> 
+            <div class="col-xl-4 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Inctype">Type of accident / incident</label>
+                    <select asp-for="Inctype" class="form-control Select2 required" placeholder="Please select" asp-items="ViewBag.IncidentTypeList" required>
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Inctype" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-4 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Incdate">Incident date</label>                   
+                    <input asp-for="Incdate" class="form-control required" type="date" required/>
+                    <span asp-validation-for="Incdate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Inctime">Incident time</label>                   
+                    <input asp-for="Inctime" class="form-control required" type="time" required/>
+                    <span asp-validation-for="Inctime" class="text-danger"></span>
+                </div>
+            </div>      
+            <div class="col-xl-4 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Nature">Nature of injury</label>
+                    <select asp-for="Nature" class="form-control Select2 required" placeholder="Please select" asp-items="ViewBag.NatureTypeList" required>
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Nature" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+                <label>Body part injured</label>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="col-xl-3 col-md-6 col-6">
+                 <div class="form-group">
+                     <ul>
+                        <li>
+                            <input asp-for="BAbdomen" type="checkbox" title="Abdomen" />
+                            <label asp-for="BAbdomen" class="cr"></label>
+                        </li>
+                        <li>
+                            <input asp-for="BAnkle" type="checkbox" title="Z" text="Ankle" />
+                            <label asp-for="BAnkle" class="cr"></label>
+                        </li>
+                        <li>
+                            <input asp-for="BBack" type="checkbox" title="B" text="Back" />
+                            <label asp-for="BBack" class="cr"></label>
+                         </li>
+                        <li>
+                            <input asp-for="BChest" type="checkbox" title="C" text="Chest" />
+                            <label asp-for="BChest" class="cr"></label>
+                         </li>
+                        <li>
+                            <input asp-for="BEar" type="checkbox" title="R" text="Ear" />
+                            <label asp-for="BEar" class="cr"></label>
+                         </li>                                               
+                     </ul>
+                 </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-6">
+                 <div class="form-group">
+                     <ul>                             
+                        <li>
+                            <input asp-for="BElbow" type="checkbox" title="Y" text="Elbow" />
+                            <label asp-for="BElbow" class="cr"></label>
+                        </li> 
+                         <li>
+                            <input asp-for="BEye" type="checkbox" title="E" text="Eye" />
+                            <label asp-for="BEye" class="cr"></label>    
+                        </li> 
+                         <li>
+                            <input asp-for="BFace" type="checkbox" title="F" text="Face" />
+                            <label asp-for="BFace" class="cr"></label>    
+                        </li> 
+                         <li>
+                            <input asp-for="BFoot" type="checkbox" title="O" text="Foot" />
+                            <label asp-for="BFoot" class="cr"></label>
+                        </li>
+                        <li>
+                            <input asp-for="BForearm" type="checkbox" title="X" text="Forearm" />
+                            <label asp-for="BForearm" class="cr"></label>   
+                        </li>                                               
+                     </ul>
+                 </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-6">
+                <div class="form-group">
+                    <ul>
+                        <li>
+                            <input asp-for="BHead" type="checkbox" title="H" text="Head" /> 
+                            <label asp-for="BHead" class="cr"></label>
+                        </li>      
+                        <li>
+                            <input asp-for="BHip" type="checkbox" title="P" text="Hip" />
+                            <label asp-for="BHip" class="cr"></label>
+                        </li>
+                        <li>
+                            <input asp-for="BKnee" type="checkbox" title="K" text="Knee" />
+                            <label asp-for="BKnee" class="cr"></label>  
+                        </li>
+                        <li>
+                            <input asp-for="BLegs" type="checkbox" title="L" text="Legs" />
+                            <label asp-for="BLegs" class="cr"></label>  
+                        </li>
+                        <li>
+                            <input asp-for="BMouth" type="checkbox" title="M" text="Mouth" />
+                            <label asp-for="BMouth" class="cr"></label>    
+                        </li>                        
+                    </ul>                      
+                </div>                     
+            </div>  
+            <div class="col-xl-3 col-md-4 col-4">
+                <div class="form-group">
+                    <ul>
+                        <li>
+                            <input asp-for="BNeck" type="checkbox" title="N" text="Neck" />
+                            <label asp-for="BNeck" class="cr"></label> 
+                        </li>
+                        <li>
+                            <input asp-for="BShoulder" type="checkbox" title="S" text="Shoulder" />
+                            <label asp-for="BShoulder" class="cr"></label>      
+                        </li>
+                        <li>
+                            <input asp-for="BThigh" type="checkbox" title="G" text="Thigh" />
+                            <label asp-for="BThigh" class="cr"></label>
+                        </li>
+                        <li>
+                            <input asp-for="BWrist" type="checkbox" title="W" text="Wrist" />
+                            <label asp-for="BWrist" class="cr"></label>
+                        </li>
+                        <li>
+                            <input asp-for="BOther" type="checkbox" title="T" text="Other" />
+                            <label asp-for="BOther" class="cr"></label> 
+                        </li>
+                    </ul>
+                </div>
+            </div> 
+        </div>        
+        <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+                <label class="f-w-600">Details of injured person (For incident causing injury to person / persons)</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-2 col-md-4 col-4">
+                <div class="form-group">
+                    <label asp-for="Empno">Employee no</label>                   
+                    <input asp-for="Empno" class="form-control" type="text"/>                    
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-8 col-8">
+                <div class="form-group">
+                    <label asp-for="Empname">Employee name</label>                   
+                    <input asp-for="Empname" class="form-control required" type="text" required/>
+                    <span asp-validation-for="Empname" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-2 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Age">Age</label>                   
+                    <input asp-for="Age" class="form-control required" type="text" required/>
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+            </div>
+             <div class="col-xl-2 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Sex">Gender</label>                   
+                    <select asp-for="Sex" class="form-control Select2 required" placeholder="Please select" asp-items="ViewBag.GenderList" required>
+                        <option></option>
+                        <option value="F">Female</option>
+                        <option value="M">Male</option>                        
+                    </select>
+                    <span asp-validation-for="Sex" class="text-danger"></span>                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-4 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Costcode">Department of injured person</label>
+                    <select asp-for="Costcode" class="form-control Select2 required" placeholder="Please select" asp-items="ViewBag.CostcenterList" required>
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Costcode" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-8 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Desg">Designation</label>
+                    <input asp-for="Desg" class="form-control" type="text"  />
+                </div>
+            </div>            
+        </div>
+        <div class="row">            
+            <div class="col-xl-4 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Subcontract">Sub-contract employee</label>
+                    <select asp-for="Subcontract" class="form-control Select2 required" placeholder="Please select" required>
+                        <option></option>
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                    <span asp-validation-for="Subcontract" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-8 col-md-6 col-6">
+                <div class="form-group">
+                    <label asp-for="Subcontractname">if yes, name of sub-contractor</label>
+                    <input asp-for="Subcontractname" class="form-control" type="text" />                    
+                    <span asp-validation-for="Subcontractname" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+                <div class="form-group">
+                    <label asp-for="Aid">Referred medical aid (max. 200 characters)</label> 
+                    <textarea asp-for="Aid" rows="2" class="form-control" maxlength="200" required ></textarea>
+                    <span asp-validation-for="Aid" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+                <div class="form-group">
+                    <label asp-for="Description">Brief description of accident / incident (max. 300 characters)</label> 
+                    <textarea asp-for="Description" rows="2" class="form-control"maxlength="300"  required ></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+                <div class="form-group">
+                    <label asp-for="Causes">Probable causes (max. 200 characters)</label> 
+                    <textarea asp-for="Causes" rows="2" class="form-control" maxlength="200" required ></textarea>
+                    <span asp-validation-for="Causes" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+                <div class="form-group">
+                    <label asp-for="Action">Immediate action (max. 200 characters)</label> 
+                    <textarea asp-for="Action" rows="2" class="form-control" maxlength="200" required ></textarea>
+                    <span asp-validation-for="Action" class="text-danger"></span>
+                </div>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="col-xl-6 ">
+                &nbsp;
+            </div>
+            <div class="col-xl-6">
+                <button class="btn btn-primary mx-3 float-right" type="submit" id="btnconfirm"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Confirm"]">
+                    @localizer["Confirm"]
+                </button>
+                <a class="btn btn-secondary mx-3 float-right"
+                     asp-area="hse"    
+                     asp-controller="Incident"
+                     asp-action="Index">@localizer["Cancel"]</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}   
+
+    <script>
+        var dataTable;
+        $(document).ready(function () {            
+            $("#Subcontract").change(function (e) {
+
+                var subcontract = $('#Subcontract').val();
+                var subcontractname = $('#Subcontractname');
+                var subcontractError = $('#Subcontractname-error');
+
+                if(subcontract == 'Y') {
+                    subcontractname.prop('required', true);
+                    subcontractname.prop('readonly', false);
+                    subcontractError.prop('style', 'display:block');
+                } else {
+                    subcontractname.removeAttr('required');
+                    subcontractname.prop('readonly', true);
+                    subcontractError.prop('style', 'display:none');
+                }
+            });
+        });
+    </script>
+}
+
+

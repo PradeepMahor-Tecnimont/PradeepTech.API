@@ -1,0 +1,99 @@
+﻿@model TCMPLApp.WebApp.Models.ManhoursProjectionsExpectedJobsDetailModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    string lckAdminAction = "0";
+    if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoTransProjLockAdmin))
+    {
+        lckAdminAction = "1";
+    }
+}
+
+<form id="formManHoursProjectionsExpectedJobsDetail"
+      name="formManHoursProjectionsExpectedJobsDetail"
+      asp-controller=""
+      asp-action=""
+      data-ajax="true"
+      data-ajax-update=""
+      accept-charset="UTF-8">     
+
+    <input type="hidden" id="projno" asp-for="@ViewData["Project"]" />       
+    <input type="hidden" id="projno" asp-for="@ViewData["Project"]" />       
+    <input type="hidden" id="lck" asp-for="@ViewData["Lck"]" />
+    <input type="hidden" id="lckAdminAction" value="@lckAdminAction" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Monthwise projections</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>    
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h6>Project : @ViewData["Project"] - @ViewData["ProjectName"]</h6>
+                <h6>Cost code : @ViewData["Costcode"] - @ViewData["CostcodeName"]</h6>
+            </div>
+            <div class="card-toolbar">
+                <div role="toolbar">       
+                    @if ((ViewBag.Lck == "0") || (ViewBag.Lck == "1" && lckAdminAction == "1"))
+                    {
+                        <a title="Create" class="btn btn-outline-primary btn-sm border-none" href="#"
+                            data-jqueryselector="openmodal"
+                            data-modalcontainer="modalcontainer"
+                            data-modalpopupwidth="rightw40"
+                            data-url='@Url.Action("ManhoursProjectionsExpectedJobsProjectionsCreate", "Transactions", new { Area = "RapReporting" })'
+                            data-modaltitle="Create"
+                            data-modalheader="Create"
+                            data-costcode = "@ViewData["Costcode"]"
+                            data-projno="@ViewData["Project"]">
+                                &nbsp;&nbsp;<i class="fas fa-plus"></i> Create
+                        </a>
+                        <a title="Create bulk" class="btn btn-outline-primary btn-sm border-none" href="#"
+                            data-jqueryselector="openmodal"
+                            data-modalcontainer="modalcontainer"
+                            data-modalpopupwidth="rightw40"
+                            data-url='@Url.Action("ManhoursProjectionsExpectedJobsProjectionsCreateBulk", "Transactions", new { Area = "RapReporting" })'
+                            data-modaltitle="Create bulk"
+                            data-modalheader="Create bulk"
+                            data-costcode = "@ViewData["Costcode"]"
+                            data-projno="@ViewData["Project"]">
+                                &nbsp;&nbsp;<i class="fas fa-plus"></i> Create bulk
+                        </a>
+                        <a title="Update bulk" class="btn btn-outline-primary btn-sm border-none" href="#"
+                            data-jqueryselector="openmodal"
+                            data-modalcontainer="modalcontainer"
+                            data-modalpopupwidth="rightw40"
+                            data-url='@Url.Action("ManhoursProjectionsExpectedJobsImport", "Transactions", new { Area = "RapReporting" })'
+                            data-modaltitle="Update bulk"
+                            data-modalheader="Update bulk"
+                            data-costcode = "@ViewData["Costcode"]"
+                            data-projno="@ViewData["Project"]">
+                                &nbsp;&nbsp;<i class="fas fa-edit"></i> Update bulk
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="bg-gray-active rounded ">
+                    <table id="tbGridDetail" class="table table-striped table-bordered table-responsive ">
+                        <thead class="bg-info text-white">
+                            <tr role="row">
+                                <th></th>
+                                <th>Year month</th>
+                                <th>Hours</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+		                    <tr><th></th><th></th><th></th><th></th></tr>
+	                    </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">        
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

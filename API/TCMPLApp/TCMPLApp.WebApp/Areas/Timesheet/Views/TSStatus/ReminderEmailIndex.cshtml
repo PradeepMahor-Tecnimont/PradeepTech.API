@@ -1,0 +1,213 @@
+﻿@model TCMPLApp.WebApp.Models.TimesheetRemindeEmailIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    const string actionName = "ReminderEmailIndex";
+    const string controllerName = "TSStatus";
+    ViewData["Title"] = "Reminder email for APPROVE and POST";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="Timesheet">TimeSheet</a></li>        
+        <li class="breadcrumb-item active" aria-current="page">Reminder email</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+
+<div style="display:none">
+    <input id="Yyyy" name="Yyyy" type="hidden" value="@ViewBag.yyyy" />
+    <input id="Yyyymm" name="Yyyymm" type="hidden" value="@ViewBag.Yyyymm" />
+    <input id="MonYear" name="MonYear" type="hidden" value="@ViewBag.MonthYear" />
+</div> 
+
+<div class="card-toolbar p-l-15 ">
+    <div role="toolbar">
+        <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("FilterGet", "Home", new { Area = "Timesheet" })'
+                data-actionName=@actionName
+                data-controllerName=@controllerName
+                data-modaltitle="Filter"
+                data-modalheader="Filter">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+            {
+                @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy)
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            :                                                        "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)))
+                ;
+            }
+
+        </button>
+    </div>
+</div>
+<div class="m-5"></div>
+<div class="col-sm-12">
+    <div class="d-flex flex-row">
+        <b>Actual working hours: @ViewBag.WrkHours</b>
+    </div>
+    <div class="m-5"></div>
+    <div class="row">
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Send reminder email to APPROVE</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#!"
+                       onclick="reminderEmail('Approve')">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Send reminder for APPROVAL of timesheet</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-envelope f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>                
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Send reminder email to POST</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#!"
+                       onclick="reminderEmail('Post')">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Send reminder for POSTING of timesheet</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-envelope f-20 text-white theme-dark-orange"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_CommonDataTableColumnstPartial");
+    }
+
+    <script src="~/js/TimesheetDetails.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                $("#filterGet").click();
+            }
+            else {
+                localScript();
+            }
+        });
+
+        function localScript() {            
+            initSelect2();
+        }
+
+        function reminderEmail(statusName) {
+            if (statusName == '' || statusName == null) {
+                return;
+            }
+
+            var yymm = $("#Yyyymm").val();
+            var monthYear = $("#MonYear").val();
+            var processName = '';
+
+            switch (statusName.toUpperCase()) {               
+                case 'APPROVE':
+                    processName = 'APPROVAL';
+                    break;
+                case 'POST':
+                    processName = 'POSTING';
+                    break;
+            }
+
+            $.ajax({
+                url: '@Url.Action("SendReminder", "TSStatus", new {Area = "Timesheet"})',
+                data: {
+                    'id': yymm + '!-! !-!' + statusName,
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    var email = '';
+                    var subject = 'Pending ' + processName + ' of TIMESHEET for the month ' + monthYear;
+                    var emailBody = '';                   
+
+                    $(data).each(function () {                        
+                        if (email.length > 0) {
+                            email += ';';
+                        }
+                        email += this.recepientMail;
+                    });
+                    
+                    emailBody = 'Dear Sir/Madam,' + '%0D%0A' + '%0D%0A';
+                    emailBody += 'This is to inform you that TIMESHEET are pending for ' + processName + ' by you for month ' + monthYear + '%0D%0A' + '%0D%0A';
+                    emailBody += 'Do the needful at the earliest.' + '%0D%0A' + '%0D%0A';                        
+                    emailBody += 'Thanks,' + '%0D%0A';
+                    emailBody += 'Timesheet application' + '%0D%0A' + '%0D%0A' + '%0D%0A';
+                    emailBody += 'This is an system generated automated TCMPL Mail, do not reply.';
+
+                    if (email.length > 5) {
+                        window.location = 'mailto:' + '?bcc=' + email + ' &subject=' + subject + ' &body=' + emailBody;
+                    }
+                    else {
+                        notify('error', 'No recepients found', 'danger');
+                    }
+
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+    </script>
+}

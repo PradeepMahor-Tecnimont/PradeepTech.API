@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWP">Smart work planning</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Desk asset management</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Asset 2 home requests</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("Asset2HomeIndex", "DMSAsset", new { Area = "SWP" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Need to confirm assest to be carried to home</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-tools f-20 text-white theme-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Orphan asset requests</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("OrphanAssetIndex", "DMSAsset", new { Area = "SWP" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Need to confirm assest taken to IT pool</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-toolbox f-20 text-white theme-blue"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Asset 2 home gatepass</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("GatePassIndex", "DMSAsset", new { Area = "SWP" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"></h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fa fa-print f-20 text-white theme-dark-orange"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

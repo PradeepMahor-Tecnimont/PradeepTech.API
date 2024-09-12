@@ -1,0 +1,60 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="reportFilterSet"
+      asp-area="HRMasters"
+      asp-controller="Reports"
+      asp-action="FilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="onSuccessRedirect('/HRMasters/Reports')"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />    
+    <input type="hidden" asp-for="@Model.ActionName" value="@ViewBag.Actionname" />
+    <input type="hidden" id="UrlText" value="/HRMasters/Reports/" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Report filters : " + ViewBag.Title]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Report filters : " + ViewBag.Title]</h5>
+            </div>
+            <div class="card-block">
+                @if (ViewBag.Param == "Period")
+                {
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input id="startDateFilter" class="form-control datepickerFilter" placeholder="@localizer["Start date"]" value="@Model.StartDate?.ToString("DD-MMM-YYYY")" />
+                    </div>
+                    <div class="form-group ">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input id="endDateFilter" class="form-control datepickerFilter" placeholder="@localizer["End date"]" value="@Model.EndDate?.ToString("DD-MMM-YYYY")" />
+                    </div>
+                }
+                @if (ViewBag.Param == "YearMonth")
+                {
+                    <div class="form-group">
+                        <label class="control-label">Select month</label>
+                        <input id="monthDateFilter" class="form-control datepicker2" data-date-format="mm-yyyy" placeholder="@localizer["Month"]" value="@Model.StartDate?.ToString("DD-MMM-YYYY")" />
+                    </div>
+                }   
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

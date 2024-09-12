@@ -1,0 +1,131 @@
+﻿@model TCMPLApp.WebApp.Models.LcBankCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="LetterOfCredit"
+      asp-action="LcBankingCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('bankingDetail');PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.ApplicationId)
+
+    <input type="hidden" asp-for="@Model.ValidityDate" />
+    <input type="hidden" asp-for="@Model.IssueDate" />
+    <input type="hidden" asp-for="@Model.PaymentDateEst" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Banking details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["New banking details"]</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="IssuingBank" class="control-label"></label>
+                            <select asp-for="IssuingBank" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.IssuingBanks" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="IssuingBank" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="DiscountingBank" class="control-label"></label>
+                            <select asp-for="DiscountingBank" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.DiscountingBanks" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="DiscountingBank" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="AdvisingBank" class="control-label"></label>
+                            <select asp-for="AdvisingBank" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.AdvisingBanks" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="AdvisingBank" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="DurationType" class="control-label"></label>
+                            <select asp-for="DurationType" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.DurationType" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="DurationType" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="TenureNoOfDays" class="control-label"></label>
+                            <input asp-for="TenureNoOfDays" class="form-control" maxlength="3" type="number" placeholder="" required />
+                            <span asp-validation-for="TenureNoOfDays" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="LCNumber" class="control-label"></label>
+                            <input asp-for="LCNumber" class="form-control" type="number" placeholder="" />
+                        </div>
+                    </div>
+                </div>
+                  <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-md-6 ">
+                            <label asp-for="IssueDate" class="control-label"></label>
+                            <input id="issueDate" class="form-control datepicker" placeholder="@localizer["Issue date"]" value="" required />
+                            <span asp-validation-for="IssueDate" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="ValidityDate" class="control-label"></label>
+                            <input id="validityDate" class="form-control datepicker" placeholder="@localizer["Validity date"]" value="" required />
+                            <span asp-validation-for="ValidityDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="PaymentDateEst" class="control-label"></label>
+                            <input id="paymentDateEst" readonly class="form-control " placeholder="@localizer["Payment date est"]" value="" required />
+                            <span asp-validation-for="PaymentDateEst" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

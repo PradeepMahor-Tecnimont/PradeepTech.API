@@ -1,0 +1,34 @@
+﻿@model TCMPLApp.WebApp.Models.ModuleUserRoleCostCodeViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+
+<div class="input-group pt-1 pl-1 pr-1 ">
+    <input type="text" class="form-control form-control-sm border" id="ModuleUserRoleCostcodeSearch" name="GenericSearch"
+           onkeypress="genericSearchKeypress('ModuleUserRoleCostcodeSearch')" placeholder="Search...">
+    <div class="input-group-append">
+        <button class="btn btn-sm btn-outline-info" type="button" id="buttonModuleUserRoleCostcode"
+                onclick="genericSearchOnClick('ModuleUserRoleCostcodeSearch')">
+            <i class="fa fa-search"></i>
+        </button>
+    </div>
+</div>
+<div class="card-table">
+
+    <div class="table-responsive">
+        <table id="tbModuleUserRolesCostcode" class="table table-striped table-bordered table-responsive-lg">
+            @if ((bool)@Context.Items["isMobile"] == false)
+            {
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.ModuleText)</th>
+                        <th>@Html.DisplayNameFor(model => model.RoleText)</th>
+                        <th>@Html.DisplayNameFor(model => model.ParentText)</th>
+                        <th>@Html.DisplayNameFor(model => model.Employee)</th>
+                    </tr>
+                </thead>
+            }
+        </table>
+    </div>
+</div>
+

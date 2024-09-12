@@ -1,0 +1,457 @@
+﻿@model TCMPLApp.WebApp.Areas.ERS.Models.HRUploadedCVIndexViewModel
+
+@{
+    ViewData["Title"] = "List of uploaded CVs";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="ERS">Employee Referral Program</a></li>
+        <li class="breadcrumb-item active" aria-current="page">HR List of uploaded CVs</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />
+}
+
+@Html.HiddenFor(m => m.FilterDataModel.Status)
+@Html.HiddenFor(m => m.FilterDataModel.JobRefCode)
+@Html.HiddenFor(m => m.FilterDataModel.Location)
+<div style="display:none">
+    <input readonly type="datetime" asp-for="@Model.FilterDataModel.OpenFromDate" />
+    <input readonly type="datetime" asp-for="@Model.FilterDataModel.OpenToDate" />
+</div>
+
+
+@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.ERS.ERSHelper.ActionHR))
+{
+    <div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>List of uploaded CVs</p>
+        </div>    
+        <div class="d-flex flex-row">            
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("CvFilterGet", "HR", new { Area = "ERS" })'
+               data-modaltitle="Filters - CV"
+               data-modalheader="Filters - CV">
+                    <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+                data-actionid="HRUploadedCVIndex"
+           data-url='@Url.Action("ResetFilter", "HR", new { Area = "ERS" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                    <i class="fas fa-filter"></i> Reset
+            </a>
+            <a title="Download CV" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                onclick="downloadCVs();">
+                <i class="fas fa-download"></i> Download CVs
+            </a>
+            <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+               href="ExcelDownload">
+                    <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+        </div>
+        <div class="m-1"></div>
+        <div class="bg-gray-active rounded ">
+            <div class="input-group pt-1 pl-1 pr-1 ">
+                <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th style="text-align:center">
+                            <input type="checkbox" class="" name="selectAll" id="selectAll">
+                        </th>                   
+                        <th>@Html.DisplayNameFor(model => model.CvStatus)</th>
+                        <th>@Html.DisplayNameFor(model => model.JobReferenceCode)</th>
+                        <th>@Html.DisplayNameFor(model => model.DateOfPosting)</th>
+                        <th>@Html.DisplayNameFor(model => model.CandidateName)</th>
+                        <th>@Html.DisplayNameFor(model => model.CandidateEmail)</th>                   
+                        <th>@Html.DisplayNameFor(model => model.CandidateMobile)</th>       
+                        <th>@Html.DisplayNameFor(model => model.ReferedByEmpno)</th>       
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+            </table>
+            <div id="result"></div>
+        </div>
+    </div>
+}
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+    <script src="~/lib/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js" asp-append-version="true"></script>
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+
+    <script>
+        var dataTable;
+
+        $(document).ready(function () {            
+            loadDataTable();
+        });
+        
+        $("#selectAll").change(function() {
+            var isChecked = this.checked;
+            $('#tbGrid td input:checkbox').prop('checked', isChecked);
+        });
+
+        function localScript() {
+            initSelect2();          
+            initFilter();
+        };
+        
+        function initFilter() {
+            $('#openFromDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $('#openToDateFilter').bootstrapMaterialDatePicker('setMinDate', date);
+
+                $("#OpenFromDate").val(date.format('DD-MMM-YYYY'));
+
+            });
+
+            $('#openToDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#OpenToDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            if ($('#OpenFromDate').val()) {
+                $('#openFromDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#OpenFromDate").val()));
+            }
+            if ($('#OpenToDate').val())
+                $('#openToDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#OpenToDate").val()));
+
+        }
+
+        function loadDataTable() {
+            dataTable = $('#tbGrid').DataTable({
+                 drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                order: [[1, "asc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,                
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                'columnDefs': [
+                    { sortable: false, targets: [0, 9] }
+                ],
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                    columns: [
+                        {
+                        'data': null,
+                            'render': function (data, type, full, meta) {
+                            return ' <div class="checkbox d-inline text-center "> ' +
+                                       ' <input type="checkbox" class="chk" ' +
+                                        ' id="' + data.candidateCvOsName + '!-!' + data.jobReferenceCode + '!-!' + data.pan + '!-!' + data.candidateEmail + '"' +
+                                        ' name="' + data.candidateCvOsName + '!-!' + data.jobReferenceCode + '!-!' + data.pan + '!-!' + data.candidateEmail + '"' +
+                                        ' value="' + data.candidateCvOsName + '!-!' + data.jobReferenceCode + '!-!' + data.pan + '!-!' + data.candidateEmail + '" > ' +
+                                    ' </div>';                           
+                        },
+                        'className': "td-icon",
+                        },
+                        //{
+                        //    'data': null,
+                        //    render: function (data, type, row) {
+                        //        return '<button title="Detail" class="btn btn-sm-icon" ' +
+                        //            ' data-jqueryselector="openmodal" ' +
+                        //            ' data-modalcontainer="modalcontainer" '+
+                        //            ' data-url="@Url.Action("CVReferEmpDetail", "HR", new { Area = "ERS" })"' +
+                        //            ' data-modalpopupwidth="rightw35" ' +
+                        //            ' data-id="' + data.vacancyJobKeyId + '"' +
+                        //            ' data-candidateEmail="' + data.candidateEmail + '"' +
+                        //            ' data-modaltitle="CV detail" ' +
+                        //            ' data-modalheader="CV detail" ' +
+                        //            ' title="CV detail" >' +
+                        //            ' <i class="fa fa-eye" aria-hidden="true"></i> ' +
+                        //            ' </button>';                                                             
+                        //    },
+                        //    'className': "td-icon",
+                        //},                        
+                        {   'data': "cvStatus" },
+                        {   'data': "jobReferenceCode" },                        
+                        {   'data': "dateOfPosting" },                        
+                        {   'data': "candidateName" },                   
+                        {   'data': "candidateEmail"  },
+                        {   'data': "candidateMobile" },
+                        {   'data': "name" },
+                        {
+                            'data': null,
+                            render: function (data, type, row) {
+                                    return '<a href="#" onclick="ofbfileDownload(event, this);"' +
+                                        'data-url="@Url.Action("DownloadCandidateCV", "User", new { Area = "Ers" })"' + 
+                                        'data-keyid="' + data.candidateCvOsName + '!-!' + data.jobReferenceCode + '!-!' + data.pan + '!-!' + data.candidateEmail + '"' +   
+                                        'data-clientfilename="' + data.jobReferenceCode + '_' + data.candidateEmail + '_CV.pdf"' +
+                                         
+                                        //' href="/ERS/User/DownloadCandidateCV/' + data.candidateCvOsName + '!-!' + data.jobReferenceCode + '!-!' + data.pan + '!-!' + data.candidateEmail + '"' +
+                                        ' title="Download CV" >' +                                                                 
+                                        ' <i class="fas fa-download" aria-hidden="true"></i> ' +
+                                        ' </a>';                                                             
+                            },
+                            'className': "td-icon",
+                        },
+                        {
+                        'data': null, 
+                            render: function (data, type, row) {
+                            return '<button onclick="enableDisableCvStatus();" class="btn btn-sm-icon" ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("CVAction", "HR", new { Area = "ERS" })"' +
+                            ' data-modalpopupwidth="rightw35" ' +
+                            ' data-id="' + data.vacancyJobKeyId + '!-!' + data.candidateEmail + '"' +                        
+                            ' data-modaltitle="CV action" ' +
+                            ' data-modalheader="CV action" ' +
+                            ' title="CV action" >' +
+                                    ' <i class="fa fa-font" aria-hidden="true"></i> ' +
+                                    ' </button>';
+                            },
+                            'className': "td-icon",
+                        },
+                ],
+                    </text>
+                }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetUploadedCVList", "HR")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;                   
+                    d.genericSearch = $('#GenericSearch').val();
+                    d.status = $('#FilterDataModel_Status').val();
+                    d.jobRefCode = $('#FilterDataModel_JobRefCode').val();
+                    d.location = $('#FilterDataModel_Location').val();
+                    d.openFromDate = $('#FilterDataModel_OpenFromDate').val();
+                    d.openToDate = $('#FilterDataModel_OpenToDate').val();
+                   },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        };
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+    
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function getVacancyDetail(id) {            
+            var divContainer = $('#pw-vacancy');
+            $.ajax({
+                url: "@Url.Action("HRVacancyDetail", "HR", new { Area = "ERS" })",
+                type: "GET",
+                cache: false,
+                data: {
+                    id: id
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divContainer.html(data);
+                    $('#divModalHRVacancyDetailPartial .card-header').hide();
+                    $('#divModalHRVacancyDetailPartial .modal-header').hide();
+                    $('#divModalHRVacancyDetailPartial .modal-footer').hide();
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+        function getReferralEmployeeDetail(id, candidateEmail) {
+            var divContainer = $('#pw-referred');
+            $.ajax({
+                url: "@Url.Action("CVReferEmpDetail", "HR", new { Area = "ERS" })",
+                type: "GET",
+                cache: false,
+                data: {
+                    id: id,
+                    candidateEmail: candidateEmail
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divContainer.html(data);
+                    $('#divModalHRCVReferEmpDetailPartial .card-header').hide();
+                    $('#divModalHRCVReferEmpDetailPartial .modal-header').hide();
+                    $('#divModalHRCVReferEmpDetailPartial .modal-footer').hide();
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+        function getCVActionDetail(jobKeyid, candidateEmail) {
+            var divContainer = $('#pw-cv-detail');
+            $.ajax({
+                url: "@Url.Action("CVActionDetail", "HR", new { Area = "ERS" })",
+                type: "GET",
+                cache: false,
+                data: {
+                    jobKeyid: jobKeyid,
+                    candidateEmail: candidateEmail
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divContainer.html(data);
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+        function downloadCVs() {
+            var table = $('#tbGrid').DataTable();
+            var data = table.rows().data();
+
+            var paramsApprovals = table.$('input.chk').serializeArray();
+
+            objs = [];
+            
+            $.each(paramsApprovals, function (i, field) {
+                itemApprl = {}
+                //itemApprl["vacancyJobKeyId"] = field.name;
+                itemApprl["id"] = field.value;
+                
+                objs.push(itemApprl);
+            });
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: "@Url.Action("DownloadCandidateCVBulk", "HR", new { Area = "ERS" })",
+                type: 'POST',
+                data: {
+                    cvId: objs
+                },
+                xhr: function() {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function(blob, status, xhr) {                                       
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");                    
+
+                },
+                error: function(xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+
+            return false;
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+            $("#FilterDataModel_Status").val(data.status);
+            $("#FilterDataModel_JobRefCode").val(data.jobRefCode);
+            $("#FilterDataModel_Location").val(data.location);
+            $("#FilterDataModel_OpenFromDate").val(data.openFromDate);
+            $("#FilterDataModel_OpenToDate").val(data.openToDate);
+
+            loadDataTable();
+            hideLoader();
+        }
+
+    </script>
+}
+
+

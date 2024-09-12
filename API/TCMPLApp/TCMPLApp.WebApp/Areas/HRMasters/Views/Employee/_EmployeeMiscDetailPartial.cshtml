@@ -1,0 +1,262 @@
+﻿@model TCMPLApp.Domain.Models.HRMasters.EmployeeMasterMisc
+
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+            @if (Model.Status == 1)
+            {
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditEmplmast))
+                {
+                    <div class="row">
+                        <a title="Edit miscellaneous detail" class="btn btn-outline-primary btn-sm border-none" href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw50"
+                           data-url='@Url.Action("MiscellaneousEdit", "Employee", new { Area = "HRMasters" })'
+                           data-statichtmlsourcedivid=""
+                           data-id="@Model.Empno"
+                           data-modaltitle="Edit miscellaneous detail"
+                           data-modalheader="Edit miscellaneous detail">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                    <hr />
+                }
+            }
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.DeptCode)</div>
+                        <div class="dd-met">@(Model.DeptCode == null ? "-NA-" : Model.DeptCode)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Eow)</div>
+                        <div class="dd-met">@(Model.Eow == null ? "-NA-" : Model.Eow)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.EowDate)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.EowDate)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.EowWeek)</div>
+                        <div class="dd-met">@(Model.EowWeek == null ? "-NA-" : Model.EowWeek)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.EsiCover)</div>
+                        <div class="dd-met">@(Model.EsiCover == null ? "-NA-" : Model.EsiCover)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Ipadd)</div>
+                        <div class="dd-met">@(Model.Ipadd == null ? "-NA-" : Model.Ipadd)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobcategoorydesc)</div>
+                        <div class="dd-met">@(Model.Jobcategoorydesc == null ? "-NA-" : Model.Jobcategoorydesc)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobcategory)</div>
+                        <div class="dd-met">@(Model.Jobcategory == null ? "-NA-" : Model.Jobcategory)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobdiscipline)</div>
+                        <div class="dd-met">@(Model.Jobdiscipline == null ? "-NA-" : Model.Jobdiscipline)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobdisciplinedesc)</div>
+                        <div class="dd-met">@(Model.Jobdisciplinedesc == null ? "-NA-" : Model.Jobdisciplinedesc)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobgroup)</div>
+                        <div class="dd-met">@(Model.Jobgroup == null ? "-NA-" : Model.Jobgroup)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobgroupdesc)</div>
+                        <div class="dd-met">@(Model.Jobgroupdesc == null ? "-NA-" : Model.Jobgroupdesc)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobsubcategory)</div>
+                        <div class="dd-met">@(Model.Jobsubcategory == null ? "-NA-" : Model.Jobsubcategory)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobsubcategorydesc)</div>
+                        <div class="dd-met">@(Model.Jobsubcategorydesc == null ? "-NA-" : Model.Jobsubcategorydesc)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobsubdiscipline)</div>
+                        <div class="dd-met">@(Model.Jobsubdiscipline == null ? "-NA-" : Model.Jobsubdiscipline)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobsubdisciplinedesc)</div>
+                        <div class="dd-met">@(Model.Jobsubdisciplinedesc == null ? "-NA-" : Model.Jobsubdisciplinedesc)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.JobtitleCode)</div>
+                        <div class="dd-met">@(Model.JobtitleCode == null ? "-NA-" : Model.JobtitleCode)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Jobtitledesc)</div>
+                        <div class="dd-met">@(Model.JobtitleCode == null ? "-NA-" : Model.Jobtitledesc)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.JobgroupdescMilan)</div>
+                        <div class="dd-met">@(Model.JobtitleCode == null ? "-NA-" : Model.JobgroupdescMilan)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Lastday)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Lastday)</div>
+                    </div>
+                </div>               
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LocId)</div>
+                        <div class="dd-met">@(Model.LocId == null ? "-NA-" : Model.LocId)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.NoTcmUpd)</div>
+                        <div class="dd-met">@(Model.NoTcmUpd == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Oldco)</div>
+                        <div class="dd-met">@(Model.Oldco == null ? "-NA-" : Model.Oldco)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Ondeputation)</div>
+                        <div class="dd-met">@(Model.Ondeputation == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>                
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Pfslno)</div>
+                        <div class="dd-met">@(Model.Pfslno == null ? "-NA-" : Model.Pfslno)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Projno)</div>
+                        <div class="dd-met">@(Model.Projno == null ? "-NA-" : Model.Projno)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Pwd)</div>
+                        <div class="dd-met">@(Model.Pwd == null ? "-NA-" : Model.Pwd)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Reporting)</div>
+                        <div class="dd-met">@(Model.Reporting == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>               
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Reporto)</div>
+                        <div class="dd-met">@(Model.Reporto == null ? "-NA-" : Model.Reporto)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Secretary)</div>
+                        <div class="dd-met">@(Model.Secretary == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.TransIn)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.TransIn)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.TransOut)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.TransOut)</div>
+                    </div>
+                </div>                
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.UserDomain)</div>
+                        <div class="dd-met">@(Model.UserDomain == null ? "-NA-" : Model.UserDomain)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Userid)</div>
+                        <div class="dd-met">@(Model.Userid == null ? "-NA-" : Model.Userid)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.WebItdecl)</div>
+                        <div class="dd-met">@(Model.WebItdecl == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.WinidReqd)</div>
+                        <div class="dd-met">@(Model.WinidReqd == 1 ? "Yes" : "-")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>

@@ -1,0 +1,169 @@
+﻿@model IList<TCMPLApp.Domain.Models.Attendance.ExtraHoursClaimDetailDataTable>
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="modal-header">
+    <h5 class="modal-title">Leave application</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["Extra hours claim detail"]</h5>
+        </div>
+        <div class="card-block">
+            <table class="table m-0 table-bordered ">
+                <thead class="bg-light">
+                    <tr class=" text-primary">
+                        <th colspan="6" class="text-center">
+                            @localizer["Employee :"] <span class="font-weight-bold"> @ViewData["Employee"] </span>&nbsp;&nbsp;&nbsp;
+                            @localizer["Claim period :"] <span class="font-weight-bold">@ViewData["ClaimPeriod"]</span>
+                        </th>
+                    </tr>
+                    <tr class="">
+                        <th class="text-center font-weight-normal">@localizer[""]</th>
+                        <th class="text-center font-weight-normal">@localizer["Status"]</th>
+                        <th class="text-center font-weight-normal">@localizer["WeekDay OT"]</th>
+                        <th class="text-center font-weight-normal">@localizer["HoliDay OT"]</th>
+                        <th class="text-center font-weight-normal">@localizer["Comp. Off"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="">
+                        <td class="text-info text-center font-weight-bold bg-light">@localizer["Employee"]</td>
+                        <td class="text-center ">@localizer["-"]</td>
+                        <td class="text-center ">@ViewData["EmpWeekDayOT"]</td>
+                        <td class="text-center ">@ViewData["EmpHoliDayOT"]</td>
+                        <td class="text-center ">@ViewData["EmpCompOff"]</td>
+                    </tr>
+                    <tr class="">
+                        <td class="text-info text-center font-weight-bold bg-light">@localizer["Lead"]</td>
+                        <td class="text-center ">@ViewData["LeadStatus"]</td>
+                        <td class="text-center ">@ViewData["LeadWeekDayOT"]</td>
+                        <td class="text-center ">@ViewData["LeadHoliDayOT"]</td>
+                        <td class="text-center ">@ViewData["LeadCompOff"]</td>
+                    </tr>
+                    <tr class="">
+                        <td class="text-info text-center font-weight-bold bg-light">@localizer["Hod"]</td>
+                        <td class="text-center ">@ViewData["HodStatus"]</td>
+                        <td class="text-center ">@ViewData["HodWeekDayOT"]</td>
+                        <td class="text-center ">@ViewData["HodHoliDayOT"]</td>
+                        <td class="text-center ">@ViewData["HodCompOff"]</td>
+                    </tr>
+                    <tr class="">
+                        <td class="text-info text-center font-weight-bold bg-light">@localizer["HR"]</td>
+                        <td class="text-center ">@ViewData["HRStatus"]</td>
+                        <td class="text-center ">@ViewData["HRWeekDayOT"]</td>
+                        <td class="text-center ">@ViewData["HRHoliDayOT"]</td>
+                        <td class="text-center ">@ViewData["HRCompOff"]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table id="tbGrid" class="table m-0 table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        <th></th>
+                        <th>@localizer["PDate"]</th>
+                        <th>@localizer["Day"]</th>
+                        <th>@localizer["Shift"]</th>
+                        <th>@localizer["First"]<br />@localizer["Punch"]</th>
+                        <th>@localizer["Last"]<br />@localizer["Punch"]</th>
+                        <th>@localizer["Work"]<br /> @localizer["Hours"]</th>
+                        <th>@localizer["Delta"]<br />@localizer["Hours"]</th>
+                        <th>@localizer["Extra"]<br />@localizer["Hours"]</th>
+                        <th>@localizer["Timesheet"]<br />@localizer["WorkHrs"]</th>
+                        <th>@localizer["Timesheet"]<br />@localizer["WorkHrs"]</th>
+                        <th>@localizer["Remarks"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var dayDetail = (Model.First()).DayDetail;
+                        var excessElemCount = dayDetail.Split(";").Count() - 11;
+                        excessElemCount = excessElemCount > 0 ? excessElemCount : 0;
+                        
+                        string[] aryDaydetail;
+
+                    }
+                    @for (int i = 0; i < Model.ToList().Count; i++)
+                    {
+
+                        aryDaydetail = Model[i].DayDetail.Replace(";0;", ";;").Replace(";0;", ";;").Split(";");
+
+
+
+                        <tr>
+                            <td>
+                                @*<button class="btn btn-sm-icon"
+                                            data-jqueryselector="openmodal"
+                                            data-modalcontainer="modalcontainer"
+                                            data-url="@Url.Action("GetListPunchListForDay", "Attendance", new { Area = "SelfService" })"
+                                            data-modalpopupwidth="rightw35"
+                                            data-punchdate="@Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")"
+                                            data-empno="@Model.ToList()[i].Empno"
+                                            data-modaltitle="Punch list"
+                                            data-modalheader="Punch list for " @Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")>
+                                        <i class="far fa-list-alt" aria-hidden="true"></i>
+                                    </button>*@
+                            </td>
+                            <td>@aryDaydetail[0]</td><!--Date-->
+                            <td>@aryDaydetail[1]</td><!--Day-->
+                            <td>@aryDaydetail[2]</td><!--Shift Code-->
+                            <td>@aryDaydetail[3]</td><!--First punch-->
+                            <td>@aryDaydetail[4]</td><!--Second punch-->
+
+                            <td>@aryDaydetail[5 + excessElemCount]  </td><!--WorkHours-->
+                            <td>@aryDaydetail[6 + excessElemCount] </td><!--Delta hours-->
+                            <td>@aryDaydetail[7 + excessElemCount]  </td><!--Extra hours-->
+                            <td>@Model[i].TsWorkHrs</td>
+                            <td>@Model[i].TsExtraHrs</td>
+                            <td>@aryDaydetail[8 + excessElemCount]</td><!--Remarks-->
+                        </tr>
+                        @if (aryDaydetail[1].ToUpper() == "SUN" || i == Model.Count - 1)
+                        {
+                            <tr data-week-totals="1" role="row">
+                                <th rowspan="3" colspan="2">@localizer["Weekly Totals"]</th>
+                                <td colspan="2">@localizer["Worked Hours :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(int.Parse(Model[i].WeekDetail.Split(";")[0]))</td>
+                                <td colspan="3">
+                                    @localizer["Comp. Off Hrs :"]
+                                    <span>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(decimal.ToInt32(Model[i].WeekClaimedCo))</span>
+                                </td>
+                                <td colspan="3">
+                                    @localizer["Applicable weekday extrahours :"]
+                                    <span>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(decimal.ToInt32(Model[i].WeekExtrahoursApplicable))</span>
+                                </td>
+                                <td colspan="3">
+                                    @localizer["WeekDay OT Claim:"]
+                                    <span>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(decimal.ToInt32(Model[i].WeekExtrahoursClaim))</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="3"></td>
+                                <td colspan="3">
+                                    @localizer["Applicable holiday extrahours :"]
+                                    <span>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(decimal.ToInt32(Model[i].WeekHolidayOtApplicable))</span>
+                                </td>
+
+                                <td colspan="3">
+                                    @localizer["HoliDay OT Claim :"]  <span>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(decimal.ToInt32(Model[i].WeekHolidayOtClaim))</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">@localizer["Delta Hours :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(int.Parse(Model[i].WeekDetail.Split(";")[4]))</td>
+                                <td colspan="3">@localizer["BFwd Delta Hrs :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(int.Parse(Model[i].WeekDetail.Split(";")[1]))</td>
+                                <td colspan="3">@localizer["CFwd Delta Hours :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(int.Parse(Model[i].WeekDetail.Split(";")[2]))</td>
+                                <td colspan="3">@localizer["Penalty Leave Hours :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(int.Parse(Model[i].WeekDetail.Split(";")[3]))</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div id="result"></div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Close"]</button>
+</div>

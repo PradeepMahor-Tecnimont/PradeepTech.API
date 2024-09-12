@@ -1,0 +1,200 @@
+﻿@model TCMPLApp.WebApp.Models.PunchDetailsViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreLeaveCreateEditDeleteId = 173;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item active">Flexi Punch details</li>
+    </ol>
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+    <!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+    <!-- Material Datepicker css -->
+    <link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Flexi Punch details";
+
+}
+@Html.TextBoxFor(model => model.FilterDataModel.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+@Html.HiddenFor(m => m.FilterDataModel.Empno)
+
+
+<div class="container-fluid bg-white border rounded shadow m-auto p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Flexi Punch details</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("FlexiPunchDetailsFilterGet", "Attendance", new { Area = "SelfService" })'
+               data-modaltitle="Filters - Leave ledger"
+               data-modalheader="Filters - Leave ledger">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="FlexiPunchDetailsIndex"
+               data-url='@Url.Action("ResetFilter", "Attendance", new { Area = "SelfService" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+        </div>
+    </div>
+
+    <div class="m-1"></div>
+
+    <div class="bg-gray-active rounded ">
+
+        <div class="childcontent-div" id="div-flexipunchdetails">
+            <div id="pv-flexipunchdetails">
+            </div>
+        </div>
+
+        @*<table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+        <thead class="bg-info text-white">
+        <tr role="row">
+        <th>PDate</th>
+        <th>Day</th>
+        <th>Shift</th>
+        <th>First<br />Punch</th>
+        <th>Last<br />Punch</th>
+        <th>Work<br /> Hours</th>
+        <th>Delta<br />Hours</th>
+        <th>Extra<br />Hours</th>
+        <th>Remarks</th>
+        </tr>
+        </thead>
+        </table>*@
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+               function localScript() {
+
+                   initSelect2();
+                   initFilter();
+
+                    ajaxDSSelect2({ 
+                        pSelect2Id: "#empnoForPunchDetails", 
+                        pUrl: "@Url.Action("GetPagingEmployeeSelectList", "Attendance", new { Area = "SelfService" })",
+                        pRequestVerificationToken: "" ,
+                        pPreSelectedId: $("#FilterDataModel_Empno").val(), 
+                        pFilter1: "", 
+                        pFilter2: "" 
+                    }) ;
+                }
+
+               function initFilter() {
+
+                   var curdate = new Date();
+
+                   // var minDate = "01/" + (curdate.getFullYear() - curdate.getMonth());
+                   // var maxDate = "12/" + (curdate.getFullYear());
+                   /*
+                   var minDate = new Date(curdate.getFullYear(), curdate.getMonth(), 1);
+
+                   var maxDate = new Date(curdate.getFullYear(), 11, 31);
+                   $('.datepickerFilter').datepicker({
+                       format: "MM-yyyy",
+                       startView: "months",
+                       minViewMode: "months",
+                       changeMonth: true,
+                       changeYear: true,
+                       startDate: minDate,
+                       endDate: maxDate
+                   });
+                   */
+                   $('#startDateFilter').datepicker({
+                       format: 'MM-yyyy',
+                       changeYear: true,
+                       startView: "months",
+                       minViewMode: "months",
+                       changeMonth: true
+                       
+                   }).on('change', function (e, date) {
+
+                       var fvDate = $(this).val();
+                       $("#StartDate").val(moment(fvDate, 'MMMM-YYYY').format("DD-MMM-YYYY"));
+                       $(this).datepicker('hide');
+                   });
+                   if ($("#StartDate").val()) {
+                       $('#startDateFilter').val(moment($("#StartDate").val(),"DD-MMM-YYYY").format('MMMM-YYYY'));
+                   }
+               }
+
+               $(document).ready(function () {
+                   localLoadDataTable();
+               });
+
+               function localLoadDataTable() {
+                   var divid = $("#pv-flexipunchdetails");
+
+                   if ($(divid).length == 0)
+                       return;
+
+                   $.ajax({
+                       url: '@Url.Action("GetFlexiPunchDetails", "Attendance", new { Area = "SelfService" })',
+                       type: 'GET',
+                       data: {
+                           search : null,
+                           genericSearch : null,
+                           startDate: ($('#FilterDataModel_StartDate').val()),
+                           empno: ($('#FilterDataModel_Empno').val())
+                       },
+                       beforeSend: function () {
+                           showLoader();
+                       },
+                       success: function (data) {
+                           divid.html(data);
+                           hideLoader();
+                           loadScript();
+                           initToastrMessage();
+                       },
+                       error: function (result) {
+                           hideLoader();
+                           errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                           notify("error", errorText, 'Error');
+                       }
+                   });
+               }
+
+               function PostFilterReLoadDataTable(data) {
+                    $("#modalcontainer").modal('hide');
+                   $("#FilterDataModel_StartDate").val(data.startDate);
+                   $("#FilterDataModel_Empno").val(data.empno);
+
+                   localLoadDataTable();
+                   hideLoader();
+               }
+
+        
+    </script>
+}

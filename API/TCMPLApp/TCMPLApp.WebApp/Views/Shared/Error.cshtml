@@ -1,0 +1,23 @@
+﻿@model ErrorViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Error";
+}
+
+<div id="divErrorMessage">
+    <p class="text-danger">@Model.Message</p>
+</div>
+@*@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+<h3>Error</h3>
+<p>
+    Internal error occured
+</p>
+<p class="text-danger">
+    <strong>@Model.Message</strong>
+</p>*@

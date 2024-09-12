@@ -1,0 +1,88 @@
+﻿@model TCMPLApp.WebApp.Models.EmpPensionFundForMarriedMemberCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlPensionFundMarriedAdd = isOnBehalf == IsOk ? ("OnBehalfEmpPensionFundMarriedMemAdd") : ("EmpPensionFundMarriedMemAdd");
+
+}
+@Html.AntiForgeryToken()
+
+<form asp-controller="EmpGenInfoDetails"
+      asp-action=@urlPensionFundMarriedAdd
+      id="formEmpPensionFundForMarriedMembers"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);loadEmpPensionFundMarriedListDataTable()"
+      data-ajax-success="PostSave(data);onDataTableReloadSuccess;onSuccessTab('EmpPensionFundM')"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.NomDob" />
+    <input type="hidden" asp-for="@Model.Empno" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Add Employee Pension Fund Details(Married)"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add Employee Pension Fund Details(Married)</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="form-group dd-met col-mb-6 col-xl-12">
+                        (Please mention details of spouse and children only)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="NomName" class="control-label"></label>
+                            <input asp-for="NomName" class="form-control text-uppercase" required />
+                            <span asp-validation-for="NomName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="NomAdd1" class="control-label"></label>
+                            <textarea asp-for="NomAdd1" class="form-control" rows="2" maxlength="200" required></textarea>
+                            <span asp-validation-for="NomAdd1" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Relation" class="control-label"></label>
+                            <input asp-for="Relation" class="form-control text-uppercase" required />
+                            <span asp-validation-for="Relation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="NomDob" class="control-label"></label>
+                            <input id="nomDob" class="form-control datepickerFilter" placeholder="@localizer["Nominee Birth Date"]" value="@Model.NomDob?.ToString("dd-MMM-yyyy")" required />
+                            <span asp-validation-for="NomDob" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

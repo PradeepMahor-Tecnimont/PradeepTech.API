@@ -1,0 +1,503 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Desk Management</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+
+<div class="col-sm-12">
+    <div class="row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionAssetIssue))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Transactions - Issued to employee</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("InvTransactionIndex", "INV", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Transactions</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-laptop f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee Inventory</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw25"
+                           data-url="@Url.Action("SelectEmployee", "INV", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Transactions - Employee wise</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITAdm))
+        {
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Inventory</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("Index", "INV", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cog f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            @*   <div class="col-md-4 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Asset on Desk</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="@Url.Action("Asset2Home", "DMSEmp", new { Area = "DMS" })">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">User can specify which assets to be carried to home</h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-tools f-20 text-white theme-green"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div> *@
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>Masters</h5>
+                        <span class="f-14 f-w-700"> &#10148; </span>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("Index", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cog f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk Assignment</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAssignmentNewIndex", "DeskAssignment", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cog f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Movements</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("Index", "Movements", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Bulk employee / taskforce movement request</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-truck-loading f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>DMS Guest master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DMSGuestMasterIndex", "DMS", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cog f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk block</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskBlockIndex", "DMS", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-chair f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="col-md-4 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Desk details for Help Desk Engg</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="@Url.Action("DeskAssignmentIndexReadonly", "DeskAssignment", new { Area = "DMS" })">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300"></h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-cog f-20 text-white theme-green"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div> *@
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>Reports</h5>
+                        <span class="f-14 f-w-700"> &#10148; </span>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ReportIndex", "Home", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>AssetOnHold</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AssetOnHoldIndex", "AssetOnHold", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>New Joining</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("NewEmployeeIndex", "DMS", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>Floor Plan</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("FloorPlanIndex", "DMS", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Asset Search</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AssetSearchIndex", "DMS", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cog f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>MOC5 - Exclude Employees</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ExcludeIndex", "DMS", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <card-tag card-title="Airoli Employees In Dms"
+                          sub-title=""
+                          url="@Url.Action("AiroliEmpInDmUsermasterIndex", "DMS", new { Area = "DMS" })"
+                          icon-style="fa fa-users f-20 text-white theme-red">
+                </card-tag>
+            </div>
+
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITHelpDeskEng))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>List - Employee Inventory</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AssetMapWithEmpIndex", "DMS", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITHelpDesk))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Help Desk - Desk View</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAssignmentNewIndexReadonly", "DeskAssignment", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cog f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Help Desk - Status Summary</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("StatusIndex", "Reports", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Search for employee, desk and asset details
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-exclamation f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-costcenter.js"></script>
+    <script>
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {
+            initSelect2();
+
+        };
+
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadModuleDataTable();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+
+        function EmpnoChange() {
+            $('#Empno').on('change', function (e) {
+                var empno = $('#Empno').val();
+                var itemId = $('#ItemId').val();
+
+                if (empno != null && empno != '') {
+                    $.ajax({
+                        url: "@Url.Action("GetReturnItem", "INV", new { Area = "DMS" })",
+                        data: {
+                            'id': empno
+                        },
+                        type: 'GET',
+                        beforeSend: function () {
+                            showLoader();
+                        },
+                        success: function (data) {
+                            let dropdown = $('#ItemId');
+                            dropdown.empty();
+                            var flag = false;
+                            var options = '';
+
+                            $(data).each(function () {
+                                if (this.dataValueField == itemId) {
+                                    flag = true;
+                                    options += '<option selected="selected" value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                }
+                                else {
+                                    options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                }
+                            });
+                            dropdown.html(options);
+
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideLoader();
+                        },
+                        error: function (result) {
+                            hideLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+            });
+        }
+
+    </script>
+}

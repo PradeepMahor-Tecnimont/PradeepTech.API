@@ -1,0 +1,118 @@
+﻿@model TCMPLApp.WebApp.Areas.RapReporting.MovemastViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<input type="hidden" id="LockMonth" value="@ViewBag.LockMonth" />
+
+<form id="formMovementCreate"
+      asp-controller="Transactions"
+      asp-action="MovementCreate"     
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"      
+      data-ajax-success="onDataTableReloadSuccess;postSaveReLoadDataTable(data.success)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+     <input type="hidden" asp-for="@Model.Yymm" value="@ViewBag.strYYMM" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["New movement"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["New movement"]</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="Costcode" class="control-label"></label>                            
+                            <input asp-for="Costcode" class="form-control" readonly type="text" value="@ViewBag.Costcode" required />
+                            <span asp-validation-for="Costcode" class="text-danger"></span>
+                        </div>                    
+                        <div class="col-md-6">
+                           <label class="control-label">YYYYMM</label>                          
+                           <input id="strYymm" class="form-control" type="month" placeholder="yyyymm" min="@ViewBag.LockMonth" 
+                                value="@ViewBag.maxYYMM" onchange="monthHandler(event);" required />
+                           @*<span asp-validation-for="Yymm" class="text-danger"></span>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                           <label asp-for="Movement" class="control-label"></label>
+                           <input asp-for="Movement" class="form-control" readonly type="number" placeholder="0" />
+                           <span asp-validation-for="Movement" class="text-danger"></span>
+                        </div>                    
+                        <div class="col-md-6">
+                           <label asp-for="Movetotcm" class="control-label"></label>
+                           <input asp-for="Movetotcm" class="form-control" type="number" placeholder="0" />
+                           <span asp-validation-for="Movetotcm" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                           <label asp-for="Movetosite" class="control-label"></label>
+                           <input asp-for="Movetosite" class="form-control" type="number" placeholder="0" />
+                           <span asp-validation-for="Movetosite" class="text-danger"></span>
+                        </div>                   
+                        <div class="col-md-6">
+                           <label asp-for="Movetoothers" class="control-label"></label>
+                           <input id="Movetoothers" class="form-control" type="number" placeholder="0" />
+                           <span asp-validation-for="Movetoothers" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                           <label asp-for="ExtSubcontract" class="control-label"></label>
+                           <input asp-for="ExtSubcontract" class="form-control" type="number" placeholder="0" />
+                           <span asp-validation-for="ExtSubcontract" class="text-danger"></span>
+                        </div>                    
+                        <div class="col-md-6">
+                           <label asp-for="FutRecruit" class="control-label"></label>
+                           <input asp-for="FutRecruit" class="form-control" type="number" placeholder="0" />
+                           <span asp-validation-for="FutRecruit" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                           <label asp-for="IntDept" class="control-label"></label>
+                           <input asp-for="IntDept" class="form-control" type="number" placeholder="0" />
+                           <span asp-validation-for="IntDept" class="text-danger"></span>
+                        </div>                    
+                        <div class="col-md-6">
+                           <label asp-for="HrsSubcont" class="control-label"></label>
+                           <input asp-for="HrsSubcont" class="form-control" type="number" placeholder="0" />
+                           <span asp-validation-for="HrsSubcont" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>               
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+ 
+

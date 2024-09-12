@@ -1,0 +1,83 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.DesignationUpdateViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<form asp-controller="Others"
+      asp-action="DesignationEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onDataTableReloadSuccess"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Desgcode)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit designation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Desgcode" class="control-label"></label>
+                    <input asp-for="Desgcode" class="form-control" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Desg" class="control-label"></label>
+                    <input asp-for="Desg" class="form-control" placeholder="Designation" required />
+                    <span asp-validation-for="Desg" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="DesgNew" class="control-label"></label>
+                    <input asp-for="DesgNew" class="form-control" placeholder="Designation" required />
+                    <span asp-validation-for="DesgNew" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Ord" class="control-label"></label>
+                    <input asp-for="Ord" class="form-control" placeholder="Ord" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Subcode" class="control-label"></label>
+                    <input asp-for="Subcode" class="form-control" placeholder="Subcode" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

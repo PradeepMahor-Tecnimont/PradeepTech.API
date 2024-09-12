@@ -1,0 +1,42 @@
+﻿@Html.AntiForgeryToken()
+<form asp-action="TrainingFileUpload"
+      asp-controller="EmployeeTraining"
+      asp-area="SWPVaccine"
+      method="post"
+      accept-charset="UTF-8"
+      id="first-approval">
+
+    <div class="modal-header">
+        <h5 class="modal-title">File Upload</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="load-bar load-bar-modal d-none">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="card-header app-h4 app-card-header">
+            <p id="modalheader" class="mb-1">File Upload</p>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <a class="btn btn-outline-primary btn-sm border-white" href="~/asset/SWP-TrainingTemplate.xlsx" target="_blank"><i class="fas fa-file-excel " aria-hidden="true"></i>&nbsp;Download Template</a>
+            </div>
+
+            <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                <div class="dz-details">
+                    <div class="dz-filename"><span data-dz-name></span></div>
+                    <div class="dz-size" data-dz-size></div>
+                    <img data-dz-thumbnail />
+                    <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                </div>
+                <div class="dz-default dz-message" data=""><span>Drop excel file here to upload</span></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" onclick="UploadFile();">Upload</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</form>

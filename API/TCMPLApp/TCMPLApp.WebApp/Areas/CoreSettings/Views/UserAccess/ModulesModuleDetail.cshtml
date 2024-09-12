@@ -1,0 +1,314 @@
+﻿@model TCMPLApp.WebApp.Models.ModuleRolesViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Module details";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="CoreSettings">Core Settings</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="UserAccess" asp-area="CoreSettings">User Access</a></li>
+        <li class="breadcrumb-item"><a asp-action="ModulesIndex" asp-controller="UserAccess" asp-area="CoreSettings">Modules</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Details</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+<form id="formModuleDetails">
+    @Html.HiddenFor(m => m.FilterDataModel.IsActive)
+
+    <input type="hidden" asp-for="ModuleId" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.RoleId" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Empno" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.ActionId" />
+    @*<input readonly type="hidden" asp-for="@Model.FilterDataModel.IsFiltered" />
+    *@
+
+    <div class="col-sm-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header">
+                <h5 class="card-title">
+                    @localizer["Module name"] : <b>@Model.ModuleName [ @Model.ModuleId ] </b>
+                </h5>
+                <a href='@Url.Action("ModulesIndex", "UserAccess", new { Area = "CoreSettings" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                    <i class="fas fa-undo"></i>
+                    @localizer["Back"]
+                </a>
+            </div>
+            <div class="card-block">
+                <div class="card-pill">
+                    <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">@localizer["Roles"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-rolesaction-tab" data-toggle="pill" href="#tabs-rolesaction" role="tab" aria-controls="tabs-rolesaction" aria-selected="false"
+                               data-url="@Url.Action("ModulesModuleRolesActionIndex", "UserAccess", new { Area = "CoreSettings" })"
+                               data-id="@Model.ModuleId"
+                               data-divid="pw-rolesaction"
+                               data-callback="loadModuleRolesActionDataTable()"
+                               data-area="CoreSettings"
+                               data-controller="UserAccess"
+                               data-action="ModulesModuleRolesActionIndex"
+                               onclick="ResetFilter()">
+                                @localizer["Roles Actions"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-userrole-tab" data-toggle="pill" href="#tabs-userrole" role="tab" aria-controls="tabs-userrole" aria-selected="false"
+                               data-url="@Url.Action("ModulesModuleUserRolesIndex", "UserAccess", new { Area = "CoreSettings" })"
+                               data-id="@Model.ModuleId"
+                               data-divid="pw-userrole"
+                               data-callback="loadModuleUserRolesDataTable()"
+                               data-area="CoreSettings"
+                               data-controller="UserAccess"
+                               data-action="ModulesModuleUserRolesIndex"
+                               onclick="ResetFilter()">
+                                @localizer["User Roles"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-userroleaction-tab" data-toggle="pill" href="#tabs-userroleaction" role="tab" aria-controls="tabs-userroleaction" aria-selected="false"
+                               data-url="@Url.Action("ModulesModuleUserRolesActionIndex", "UserAccess", new { Area = "CoreSettings" })"
+                               data-id="@Model.ModuleId"
+                               data-divid="pw-userroleaction"
+                               data-callback="loadModuleUserRolesActionDataTable()"
+                               data-area="CoreSettings"
+                               data-controller="UserAccess"
+                               data-action="ModulesModuleUserRolesActionIndex"
+                               onclick="ResetFilter()">
+                                @localizer["User Roles Actions"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-delegate-tab" data-toggle="pill" href="#tabs-delegate" role="tab" aria-controls="tabs-delegate" aria-selected="false"
+                               data-url="@Url.Action("ModulesModuleDelegateIndex", "UserAccess", new { Area = "CoreSettings" })"
+                               data-id="@Model.ModuleId"
+                               data-divid="pw-delegate"
+                               data-callback="loadModuleDelegateDataTable()"
+                               data-area="CoreSettings"
+                               data-controller="UserAccess"
+                               data-action="ModulesModuleDelegateIndex">
+                                @localizer["Delegate"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-costCode-tab" data-toggle="pill" href="#tabs-costCode" role="tab" aria-controls="tabs-costCode" aria-selected="false"
+                               data-url="@Url.Action("ModulesModuleUserRoleCostCodeIndex", "UserAccess", new { Area = "CoreSettings" })"
+                               data-id="@Model.ModuleId"
+                               data-divid="pw-costCode"
+                               data-callback="loadModuleUserRoleCostCodeDataTable()"
+                               data-area="CoreSettings"
+                               data-controller="UserAccess"
+                               data-action="ModulesModuleUserRoleCostCodeIndex">
+                                @localizer["User Role CostCode"]
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        @await Html.PartialAsync("_LoaderPartial")
+                        <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                            @await Html.PartialAsync("_MainDetailPartial.cshtml", Model)
+                        </div>
+                        <div class="tab-pane fade" id="tabs-rolesaction" role="tabpanel" aria-labelledby="tabs-rolesaction-tab">
+                            <div id="pw-rolesaction">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabs-userrole" role="tabpanel" aria-labelledby="tabs-userrole-tab">
+                            <div id="pw-userrole">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabs-userroleaction" role="tabpanel" aria-labelledby="tabs-userroleaction-tab">
+                            <div id="pw-userroleaction">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabs-delegate" role="tabpanel" aria-labelledby="tabs-delegate-tab">
+                            <div id="pw-delegate">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabs-costCode" role="tabpanel" aria-labelledby="tabs-costCode-tab">
+                            <div id="pw-costCode">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_ModuleDetailDataTableColumnsPartial");
+
+    }
+    <script src="~/js/ModuleDetails.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            GetRolesList();
+            GetActions();
+            GetEmployees();
+        };
+
+        function GetRolesList() {
+            var vModule = $("#formModuleDetails input[id=ModuleId]").val();
+
+            var vRole = $('#RoleId').val();
+
+            let vRoleId = $("#RoleId");
+
+            $.ajax({
+                url: "@Url.Action("GetRolesList", "UserAccess", new { Area = "CoreSettings" })",
+                type: 'GET',
+                data: {
+                    module: vModule,
+                    role: vRole
+                },
+                beforeSend: function () {
+                    showModalLoader();
+                    vRoleId.prop("disabled", true);
+                },
+                success: function (data) {
+                    let dropdown = vRoleId;
+                    dropdown.empty();
+                    var options = '';
+                    var flag = false;
+                    var phase = null;
+                    $(data).each(function () {
+
+                        options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+
+                    });
+                    dropdown.html(options);
+                    if (flag == false) {
+                        phase = null;
+                    }
+
+                    dropdown.val(phase);
+                    hideModalLoader()
+                    vRoleId.prop("disabled", false);
+                },
+                error: function (result) {
+                    hideModalLoader();
+                    vRoleId.prop("disabled", false);
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        };
+
+
+        function GetActions() {
+
+            $('#RoleId').on('change', function (e) {
+
+                var vModule = $("#formModuleDetails input[id=ModuleId]").val();
+                var vRole = $('#RoleId').val();
+
+                let vActionId = $("#ActionId");
+
+                 $.ajax({
+                     url: "@Url.Action("GetActionsList", "UserAccess", new { Area = "CoreSettings" })",
+                     type: 'GET',
+                     data: {
+                         module: vModule,
+                         role: vRole
+                     },
+                     beforeSend: function () {
+                         showModalLoader();
+                         vActionId.prop("disabled", true);
+                     },
+                     success: function (data) {
+                         let dropdown = vActionId;
+                         dropdown.empty();
+                         var options = '';
+                         var flag = false;
+                         var phase = null;
+                         $(data).each(function () {
+
+                             options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+
+                         });
+                         dropdown.html(options);
+                         if (flag == false) {
+                             phase = null;
+                         }
+
+                         dropdown.val(phase);
+                         hideModalLoader()
+                         vActionId.prop("disabled", false);
+                     },
+                     error: function (result) {
+                         hideModalLoader();
+                         vActionId.prop("disabled", false);
+                         notify($.i18n('Error'), result.responseText, 'danger');
+                     }
+                 });
+
+         });
+ };
+
+        function GetEmployees() {
+        $('#RoleId').on('change', function (e) {
+            var vModule = $("#formModuleDetails input[id=ModuleId]").val();
+            var vRole = $('#RoleId').val();
+
+            $.ajax({
+                url: "@Url.Action("GetEmployeesList", "UserAccess", new { Area = "CoreSettings" })",
+                type: 'GET',
+                data: {
+                    module: vModule,
+                    role: vRole
+                },
+                beforeSend: function () {
+                    showModalLoader();
+                    $("#Empno").prop("disabled", true);
+                },
+                success: function (data) {
+                    let dropdown = $('#Empno');
+                    dropdown.empty();
+                    var options = '';
+                    var flag = false;
+                    var phase = null;
+                    $(data).each(function () {
+
+                        options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+
+                    });
+                    dropdown.html(options);
+                    if (flag == false) {
+                        phase = null;
+                    }
+
+                    dropdown.val(phase);
+                    hideModalLoader()
+                    $("#Empno").prop("disabled", false);
+                },
+                error: function (result) {
+                    hideModalLoader();
+                    $("#Empno").prop("disabled", false);
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+
+    });
+};
+    </script>
+}

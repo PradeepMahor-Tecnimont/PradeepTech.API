@@ -1,0 +1,686 @@
+﻿@model TCMPLApp.WebApp.Models.HRVppConfigProcessStatusViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "VPP Configuration Process";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active" aria-current="page">VPP Configuration Process</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>VPP Configuration Process</p>
+    </div>
+    <div class="d-flex flex-row">
+        <a title="New Configuration Process" class="btn btn-outline-primary btn-sm border border-white" href="#"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("VppConfigProcessCreate", "VppConfigProcess", new { Area = "EmpGenInfo" })'
+           data-statichtmlsourcedivid=""
+           data-modaltitle="New Configuration Process"
+           data-modalheader="New Configuration Process">
+            <i class="fas fa-plus"></i> Create
+        </a>
+        @*<a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+            data-jqueryselector="openmodal"
+            data-modalcontainer="modalcontainer"
+            data-modalpopupwidth="rightw35"
+            data-url='@Url.Action("VppConfigProcessFilterGet", "VppConfigProcess", new { Area = "EmpGenInfo" })'
+            data-modaltitle="Filters - Configuration Process"
+            data-modalheader="Filters - Configuration Process">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+            data-actionid="VppConfigProcessIndex"
+            data-url='@Url.Action("ResetFilter", "VppConfigProcess", new { Area = "EmpGenInfo" })'
+            href="#"
+            onclick="resetFilter(event, this);"
+            style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+            </a>
+            <a style="float:right"
+            class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+            href="#"
+            data-jqueryselector="openmodal"
+            data-modalcontainer="modalcontainer"
+            data-modalpopupwidth="rightw35"
+            data-url='@Url.Action("VppConfigProcessExcelDownload", "VppConfigProcess", new { Area = "EmpGenInfo" })'>
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a> *@
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbConfigProcess" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@Html.DisplayNameFor(m => m.StartDate)</th>
+                    <th>@Html.DisplayNameFor(m => m.EndDate)</th>
+                    <th>@Html.DisplayNameFor(m => m.IsApplicableToAllText)</th>
+                    @* <th>@Html.DisplayNameFor(m => m.IsDisplayPremiumText)</th> *@
+                    <th>@Html.DisplayNameFor(m => m.IsDraftText)</th>
+                    <th>@Html.DisplayNameFor(m => m.EmpJoiningDate)</th>
+                    <th>@Html.DisplayNameFor(m => m.IsInitiateConfigText)</th>
+                    <th>@Html.DisplayNameFor(m => m.ModifiedOn)</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            loadConfigProcessDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+            //$("#dropZoneWrapper").hide();
+
+            //initUploadPremiumFile();
+            $(document).ready(function () {
+                var selectedApplicableToAll = $('#IsApplicableToAll').val();
+
+                if (selectedApplicableToAll == '0') {
+                    $("#divJoiningDate").removeClass("hidden");
+                    $("#divJoiningDate").addClass("display");
+                    $("#empJoiningDate").attr('required', true);
+
+                }
+                else {
+                    $("#divJoiningDate").removeClass("display");
+                    $("#divJoiningDate").addClass("hidden");
+                }
+
+                // var isdraftval = $("#isdraft").val();
+
+                // if (isdraftval == '1') {
+                //     $("#IsDisplayPremium").prop('disabled', true);
+                //     $("#IsApplicableToAll").prop('disabled', true);
+                // } else {
+
+                //     $("#IsDisplayPremium").prop('disabled', false);
+                //     $("#IsApplicableToAll").prop('disabled', false);
+                // }
+            });
+
+            $('#IsApplicableToAll').on('change', function (e) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                var selectedApplicableToAll = $('#IsApplicableToAll').val();
+
+                if (selectedApplicableToAll == '0') {
+                    $("#divJoiningDate").removeClass("hidden");
+                    $("#divJoiningDate").addClass("display");
+                    $("#empJoiningDate").attr('required', true);
+                }
+                else {
+                    $("#divJoiningDate").removeClass("display");
+                    $("#divJoiningDate").addClass("hidden");
+                    $("#empJoiningDate").attr('required', false);
+                }
+            });
+
+            initImportProcess();
+
+        };
+
+        let vVUloadConfigProcessDataTableList = "@Url.Action("GetListsVppConfigProcessList", "VppConfigProcess")";
+
+        function loadConfigProcessDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbConfigProcess",
+                pColumns: datatableColumns,
+                pUrl: vVUloadConfigProcessDataTableList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("VppConfigProcessDetail", "VppConfigProcess", new { Area = "EmpGenInfo" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.keyId + '"' +
+                                ' data-modaltitle="Configuration Process Detail" ' +
+                                ' data-modalheader="Configuration Process Detail" ' +
+                                ' > ' +
+                                ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon",
+                    },
+                    {
+                        data: null,
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            if (data.startDate) {
+                                return moment(data.startDate).format("DD-MMM-YYYY");
+                            }
+                            else {
+                                return "";
+                            }
+
+                        }
+
+                    },
+                    {
+                        data: "endDate",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            return moment(data).format("DD-MMM-YYYY");
+                        }
+                    },
+                    { data: "isApplicableToAllText" },
+                    // { data: "isDisplayPremiumText" },
+                    { data: "isDraftText" },
+                    {
+                        data: null,
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            if (data.empJoiningDate) {
+                                return moment(data.empJoiningDate).format("DD-MMM-YYYY");
+                            }
+                            else {
+                                return null;
+                            }
+
+                        }
+                    },
+                    { data: "isInitiateConfigText" },
+                    {
+                        data: "modifiedOn",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            return moment(data).format("DD-MMM-YYYY HH:mm:ss");
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.canEdit == 0) {
+                                return "";
+                            }
+                            else {
+
+                                return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" ' +
+                                    ' data-url="@Url.Action("VppConfigProcessEdit", "VppConfigProcess", new { Area = "EmpGenInfo" })" ' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.keyId + '"' +
+                                    ' data-modaltitle="Edit Configuration Process" ' +
+                                    ' data-modalheader="Edit Configuration Process"> ' +
+                                    ' &nbsp;Edit' +
+                                    ' </button>';
+                            }
+
+                        },
+                        className: "td-icon",
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.canActivate == 1) {
+                                return '<button title="Active" class="btn btn-outline-primary btn-sm border-none text-nowrap  " ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" ' +
+                                    ' data-url="@Url.Action("VppConfigProcessActiveDetails", "VppConfigProcess", new { Area = "EmpGenInfo" })"' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.keyId + '"' +
+                                    ' data-modaltitle="Active Configuration Process " ' +
+                                    ' data-modalheader="Active Configuration Process " >' +
+                                    ' Active' +
+                                    ' </button>';
+
+                            }
+                            else { return ""; }
+                        },
+                        className: "td-icon",
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.canDeactivate == 1) {
+                                return '<button title="Deactivate" class="btn btn-outline-danger btn-sm border-none text-nowrap" ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" ' +
+                                    ' data-url="@Url.Action("VppConfigProcessDeactivate", "VppConfigProcess", new { Area = "EmpGenInfo" })" ' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.keyId + '"' +
+                                    ' data-modaltitle="Deactive Configuration Process" ' +
+                                    ' data-modalheader="Deactive Configuration Process"> ' +
+                                    ' &nbsp;Deactivate' +
+                                    ' </button>'
+                            }
+                            else { return ""; }
+                        },
+                        className: "td-icon",
+                    },
+                    // {
+                    //     'data': null,
+                    //     render: function (data, type, row) {
+
+                    //         return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                    //             ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                    //             ' data-jqueryselector = "showconfirmationmodal" ' +
+                    //             ' data-url="@Url.Action("VppConfigProcessDelete", "VppConfigProcess", new { Area = "EmpGenInfo" })"' +
+                    //             ' data-id="' + data.keyId + '"' +
+                    //             ' data-PostDeleteReLoadDataTables="OK" ' +
+                    //             ' data-modaltitle="Please Confirm!" ' +
+                    //             ' data-confirmationtext="Do you want to Delete Configuration Process \n' + data.keyid + ' " ' +
+                    //             ' data-confirmationtype="warning" ' +
+                    //             ' title="Delete Configuration Process" ' +
+                    //             ' data-confirmbuttontext="Delete Configuration Process" > ' +
+                    //             ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                    //             ' </button>';
+
+                    //     },
+                    //     'className': "td-icon text-center  align-middle",
+                    // }
+
+                ];
+            </text>
+        }
+
+            $("#GenericSearch").keypress(function (event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearch").length) {
+                        loadConfigProcessDataTable();
+                    }
+                }
+            });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadConfigProcessDataTable();
+            }
+        });
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $('#empJoiningDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EmpJoiningDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            // $('#startDateFilter').bootstrapMaterialDatePicker({
+            //     format: 'DD-MMM-YYYY',
+            //     weekStart: 0,
+            //     time: false
+            // }).on('change', function (e, date) {
+            //     $("#StartDate").val(date.format('DD-MMM-YYYY'));
+            // });
+
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                minDate: new Date()
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+        }
+
+        //Dropzone.autoDiscover = false;
+
+        function PostSaveReLoadDataTable(data) {
+
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                loadConfigProcessDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadConfigProcessDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        };
+
+        function PostSave(data) {
+            console.log(data);
+            if (data.success) {
+                loadConfigProcessDataTable();
+                hideLoader();
+                $("#modalcontainer").modal('hide');
+                notify('success', data.response, 'Success');
+            }
+            else {
+                // loadConfigProcessDataTable();
+                // $("#modalcontainer").modal('hide');
+                notify('error', data.response, 'danger');
+            }
+
+        };
+
+        function initImportProcess() {
+
+            if ($("#formVppConfigProcess").length != 0) {
+                initDropZone(".xlsx");
+            }
+            $('#btnDownloadTemplate').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadXLTemplate();
+            });
+
+            // $('#btnconfirm').on('click').on('click', function () {
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            //     submitFormXL();
+            // });
+
+        };
+
+        function initDropZone(fileTypeExtension) {
+            $("#dropZoneWrapper").show();
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    return;
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("xxx", "xxx", new {Area = "xxx"})',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+
+                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    // of the sending event because uploadMultiple is set to true.
+                    this.on("processing", function (file) {
+                        //console.log($(formId).attr("action"));
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        } else {
+                            notify("error", data.response, "File upload failed.");
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        } else {
+                            notify("error", data.response, "File upload failed.");
+                            if (data.fileContent != null) {
+                                var blob = b64toBlob(data.fileContent.fileContents, data.fileContent.contentType);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = data.fileContent.fileDownloadName;
+                                link.click();
+                            }
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+
+            const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, {
+                    type: contentType
+                });
+                return blob;
+            };
+        };
+
+        function downloadXLTemplate() {
+
+            //toastr.success("Hit - downloadXLTemplate ");
+            return;
+
+            $.ajax({
+                headers: {
+                    "RequestVerificationToken": $('#formVppConfigProcess input[name="__RequestVerificationToken"]').val()
+                },
+                url: "@Url.Action("VppConfigProcessXLTemplate", "VppConfigProcess", new { Area = "EmpGenInfo"})",
+                type: "GET",
+                data: {},
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1])
+                            filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        };
+
+        function submitFormXL() {
+
+            var formVppConfigProcess = $("#formVppConfigProcess");
+            // let vStartDate = $("#formVppConfigProcess input[id=StartDate]").val();
+            let vEndDate = $("#formVppConfigProcess input[id=EndDate]").val();
+            let vEmpJoiningDate = $("#formVppConfigProcess input[id=EmpJoiningDate]").val();
+
+            let vIsDisplayPremiumVal = $("#formVppConfigProcess select[id=IsDisplayPremium]").val();
+            let vIsDisplayPremiumText = $("#formVppConfigProcess select[id=IsDisplayPremium]").find(':selected').text();
+
+            let vIsApplicableToAllVal = $("#formVppConfigProcess select[id=IsApplicableToAll]").val();
+            let vIsApplicableToAllText = $("#formVppConfigProcess select[id=IsApplicableToAll]").find(':selected').text();
+
+            // let vIsInitiateConfigVal = $("#formVppConfigProcess select[id=IsInitiateConfig]").val();
+            // let vIsInitiateConfigText = $("#formVppConfigProcess select[id=IsInitiateConfig]").find(':selected').text();
+
+            if (vIsApplicableToAllText == "No") {
+
+                if (vEmpJoiningDate == null || vEmpJoiningDate == '') {
+
+                    toastr.error("Please select Employee Joining Date");
+                }
+            }
+
+            // console.log(vStartDate);
+            // console.log(vEndDate);
+            // console.log(vEmpJoiningDate);
+
+            if ($(formVppConfigProcess).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+            else {
+                $(formVppConfigProcess).submit();
+            }
+
+            // toastr.success("Hit - Submit Form");
+            // return;
+
+            // oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            // if (oDropZone2.files.length == 0) {
+            //     notify("error", "No files selected.", "Error");
+            //     return;
+            // }
+            // else {
+
+            //}
+            //oDropZone2.processQueue();
+        };
+
+        function SaveAsDraft() {
+            $("#BtnName").val("SaveDraft");
+            var frm = $('#formVppConfigProcess');
+            frm.submit();
+
+        }
+
+        function SaveAsEditDraft() {
+
+            var frm = $('#formVppConfigProcess');
+            frm.submit();
+
+        }
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadConfigProcessDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        };
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                loadConfigProcessDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        };
+    </script>
+}

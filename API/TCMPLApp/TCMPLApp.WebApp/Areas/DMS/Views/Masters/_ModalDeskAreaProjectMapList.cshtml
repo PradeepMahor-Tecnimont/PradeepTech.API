@@ -1,0 +1,91 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAreaProjectMapUpdateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Masters"
+      asp-action="DeskAreaProjectMapList"
+      id="formProjectDetailIndex"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="KeyId" />
+    <input type="hidden" asp-for="AreaId" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Desk Area Project Mapping"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Desk Area Project Mapping</h5>
+            </div>
+            <div class="card-toolbar">
+                <div role="toolbar">
+                    <a title="Create" class="btn btn-outline-primary btn-sm border-none" href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("DeskAreaProjectMapCreate", "Masters", new { Area = "DMS", areaId = @Model.AreaId })'
+                       data-modaltitle="Create"
+                       data-modalheader="Create"
+                       data-id="@Model.AreaId.ToString()">
+                        &nbsp;&nbsp;<i class="fas fa-plus"></i> Create
+                    </a>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.AreaId)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.AreaId + " - " + Model.AreaDesc)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.AreaCatgDesc)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.AreaCatgCode + " - " + Model.AreaCatgDesc)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="overflow:auto">
+                    <table id="tblProjectDetails" class="table table-bordered  table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr class="font-weight-bold">
+                                <th>@Html.DisplayNameFor(model => model.AreaId)</th>
+                                <th>@Html.DisplayNameFor(model => model.ProjectNo)</th>
+                                <th>@Html.DisplayNameFor(model => model.ProjectNoName)</th>
+                                <th>@Html.DisplayNameFor(model => model.ModifiedBy)</th>
+                                <th>@Html.DisplayNameFor(model => model.ModifiedOn)</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

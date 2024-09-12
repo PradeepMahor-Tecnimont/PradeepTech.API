@@ -1,0 +1,298 @@
+﻿@model TCMPLApp.WebApp.Models.OFBRollbackIndexViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Rollback History";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="OFBIndex" asp-controller="Home" asp-area="OffBoarding"> Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Rollback History</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<form asp-controller="OFB"
+      asp-action="OFBRollbackIndexGetDetails"
+      id="formOFBRollbackIndexEdit">
+
+    <input type="hidden" asp-for="Empno" name="id" id="Empno" />
+</form>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Rollback History</p>
+    </div>
+
+    <div class="d-flex flex-row">
+        <a name="CurrentStatus" id="CurrentStatus" class="btn btn-outline-primary btn-sm border-white  "
+           href='@Url.Action("OFBRollbackPendingIndex", "OFB", new { Area = "OffBoarding" })'>
+            <i class="fas fa-walking"></i>&nbsp;Goto Pending
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("OFBRollbackExcelDownloadHistory", "OFB", new { Area = "OffBoarding" }))">
+            <i class="fas fa-file-excel green-color"></i> Export
+        </a>
+
+
+       
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbOFBRollbackHistoryIndex" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>                    
+                    <th>@Html.DisplayNameFor(m => m.Empno)</th>
+                    <th>@Html.DisplayNameFor(m => m.EmployeeName)</th>
+                    <th>@Html.DisplayNameFor(m => m.Parent)</th>
+                    <th>@Html.DisplayNameFor(m => m.Grade)</th>
+                    <th>@Html.DisplayNameFor(m => m.Remarks)</th>
+                    <th>@Html.DisplayNameFor(m => m.RequestedBy)</th>
+                    <th>@Html.DisplayNameFor(m => m.RequestedOn)</th>
+                    <th>@Html.DisplayNameFor(m => m.ApprovedBy)</th>
+                    <th>@Html.DisplayNameFor(m => m.ApprovedOn)</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+        $(document).ready(function () {
+            loadOFBRollbackHistoryIndexDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            //initFilter();
+
+            //$('#btnExportOFBRollbackHistoryIndexDetailsExcel').off('click').on('click', function () {
+            //    event.preventDefault();
+            //    event.stopPropagation();
+            //    exportOFBRollbackIndexDetailsExcel();
+            //});
+        };
+
+        let pvvUrlOFBRollbackIndexList = '@Url.Action("GetListsOFBRollbackHistory", "OFB")';
+
+        function loadOFBRollbackHistoryIndexDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbOFBRollbackHistoryIndex",
+                pColumns: datatableColumnsOFBRollbackIndex,
+                pUrl: pvvUrlOFBRollbackIndexList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+
+            });
+        }
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumnsOFBRollbackIndex = [                    
+                    { 'data': "empno" },
+                    { 'data': "employeeName" },
+                    { 'data': "parent" },
+                    { 'data': "grade" },                   
+                    { 'data': "remarks" },
+                    { 'data': "requestedBy" },
+                    {
+                        'data': "requestedOn",
+                        'render': function (data) {
+                            return moment(data).format('DD-MMM-YYYY');
+                        }
+                    },
+                    { 'data': "approvedBy" },
+                    {
+                        'data': "approvedOn",
+                        'render': function (data) {
+                            return moment(data).format('DD-MMM-YYYY');
+                        }
+                    }                      
+                ];
+
+            </text>
+        }
+
+            function exportOFBRollbackIndexDetailsExcel() {
+
+                let vStartYear = $("#formOFBRollbackIndexDetailsExcel input[id=StartYear]").val();
+                let vEndYear = $("#formOFBRollbackIndexDetailsExcel input[id=EndYear]").val();
+
+                if (vStartYear > vEndYear) {
+                    toastr.error('Please Select Valid End Year.! ');
+                    return;
+                }
+
+                $.ajax({
+                    headers: { "RequestVerificationToken": $('#OFBRollbackIndexExcelDownload input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("OFBRollbackIndexExcelDownload", "OFB", new {Area = "OffBoarding" })',
+                    type: "POST",
+                    data: {
+                        startYear: vStartYear,
+                        endYear: vEndYear
+                    },
+                    cache: false,
+                    xhr: function () {
+                        var xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState == 2) {
+                                if (xhr.status == 200) {
+                                    xhr.responseType = "blob";
+                                }
+                            }
+                        };
+                        return xhr;
+                    },
+                    beforeSend: function () {
+                        showLoader();
+                        $("#btnExportOFBRollbackIndexDetailsExcel").hide();
+                        $('#OFBRollbackIndexDetails_Loader').removeClass("hidden");
+                    },
+
+                    success: function (blob, status, xhr) {
+
+                        var filename = "";
+                        var disposition = xhr.getResponseHeader('Content-Disposition');
+                        if (disposition && disposition.indexOf('attachment') !== -1) {
+                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                            var matches = filenameRegex.exec(disposition);
+                            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                        }
+                        var link = document.createElement('a');
+                        var url = window.URL.createObjectURL(blob);
+
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename;
+                        link.click();
+                        link.remove();
+                        window.URL.revokeObjectURL(url);
+                        toastr.success("File downloaded successfully.");
+                        hideLoader();
+                        $("#modalcontainer").modal('hide');
+
+                        $("#btnExportOFBRollbackIndexDetailsExcel").show();
+                        $('#OFBRollbackIndexDetails_Loader').addClass("hidden");
+                    },
+                    error: function (xhr) {
+                        showError(xhr);
+                        hideLoader();
+                        $("#btnExportOFBRollbackIndexDetailsExcel").show();
+                        $('#OFBRollbackIndexDetails_Loader').addClass("hidden");
+                    }
+                });
+            }
+
+        function initFilter() {
+
+            $('.datepickerFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false
+            });
+
+            var curdate = new Date();
+
+            var minYear = curdate.getFullYear() - 1;
+            var maxYear = curdate.getFullYear();
+
+            $('.selectYearFilter').datepicker({
+                format: "yyyy",
+                startView: "years",
+                minViewMode: "years",
+                maxViewMode: "years",
+                changeYear: true,
+                clearBtn: true,
+                defaultViewDate: {
+                    year: maxYear
+                },
+
+            });
+
+            $('#StartYearFilter').datepicker({
+                format: 'yyyy',
+                changeYear: true,
+
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val();
+                if (fvDate) {
+                    $("#StartYear").val(moment(fvDate, 'YYYY').format("YYYY"));
+                }
+                else {
+                    $("#StartYear").val("");
+                }
+                $(this).datepicker('hide');
+            });
+            if ($("#StartYear").val()) {
+                $('#StartYearFilter').val(moment($("#StartYear").val(), "YYYY").format('YYYY'));
+            }
+
+            $('#EndYearFilter').datepicker({
+                format: 'yyyy',
+                changeYear: true,
+
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val();
+                if (fvDate) {
+                    $("#EndYear").val(moment(fvDate, 'YYYY').format("YYYY"));
+                }
+                else {
+                    $("#EndYear").val("");
+                }
+                $(this).datepicker('hide');
+            });
+            if ($("#EndYear").val()) {
+                $('#EndYearFilter').val(moment($("#EndYear").val(), "YYYY").format('YYYY'));
+            }
+        }
+
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadOFBRollbackHistoryIndexDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadOFBRollbackHistoryIndexDataTable();
+            }
+        });
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                //loadOFBRollbackHistoryIndexDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        };
+    </script>
+}

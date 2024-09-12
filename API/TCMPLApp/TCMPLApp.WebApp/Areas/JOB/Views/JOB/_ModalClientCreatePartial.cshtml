@@ -1,0 +1,65 @@
+﻿@model TCMPLApp.WebApp.Models.ClientCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="JOB"
+      asp-action="ClientCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="localScript(); onComplete(null)"
+      data-ajax-success="notifySuccess('Client created');"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Projno)    
+
+    <div class="modal-header">
+        <h5 class="modal-title">New Client</h5>
+        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>*@
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["New Client"] </h5>
+                <a title="Back" id="idBack"
+                   class="btn btn-outline-info btn-sm border-none float-right" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw35"
+                   data-url='@Url.Action("EditAFC", "JOB", new { Area = "JOB" })'
+                   data-id="@Model.Projno"
+                   data-modaltitle="Back"
+                   data-modalheader="Back"
+                   data-callback="openModalListner">
+                    <i class="fas fa-undo" aria-hidden="true"></i> &nbsp;
+                    @localizer["Back"]
+                </a>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ClientName" class="control-label"></label>
+                                <input asp-for="ClientName" class="form-control" required />
+                                <span asp-validation-for="ClientName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm" 
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        @*<button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>*@
+    </div>
+</form>
+

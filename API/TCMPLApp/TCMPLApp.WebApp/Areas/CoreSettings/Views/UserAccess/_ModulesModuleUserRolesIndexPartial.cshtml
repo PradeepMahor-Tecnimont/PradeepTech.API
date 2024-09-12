@@ -1,0 +1,146 @@
+﻿@model TCMPLApp.WebApp.Models.ModuleUserRolesViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    string ModuleName = ViewBag.ModuleName;
+    string Module = ViewBag.Module;
+
+}
+
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+
+<input type="hidden" asp-for="ModuleId" />
+
+
+<div id="divModuleUserRoleLogs">
+    <div class="d-flex flex-row">
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("ModuleUserRoleFilterGet", "UserAccess", new { Area = "CoreSettings" })'
+           data-moduleName=@ModuleName
+           data-module=@Module
+           data-modaltitle="Filters"
+           data-modalheader="Filters">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="UserAccesssModuleRolesUsersIndex"
+           data-url='@Url.Action("ResetFilter", "UserAccess", new { Area = "CoreSettings" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+        <a class="btn btn-outline-primary btn-sm border-white"
+           onclick="GotoModuleUserRoleLogs()"
+           data-id="@Model.ModuleId"
+           title="@localizer["Goto - module user role logs"]">
+            <i class="fas fa-list"></i>&nbsp; @localizer["Goto - module user role logs"]
+        </a>
+    </div>
+    <div class="input-group pt-1 pl-1 pr-1 ">
+        <input type="text" class="form-control form-control-sm border" id="ModuleUserRoleSearch" name="GenericSearch"
+               onkeypress="genericSearchKeypress('ModuleUserRoleSearch')" placeholder="Search...">
+        <div class="input-group-append">
+            <button class="btn btn-sm btn-outline-info" type="button" id="buttonModuleUserRole"
+                    onclick="genericSearchOnClick('ModuleUserRoleSearch')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div id="divModuleUserRoles" style="display: none">
+    <div class="d-flex flex-row">
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("ModuleUserRoleLogsFilterGet", "UserAccess", new { Area = "CoreSettings" })'
+           data-moduleName="ModuleUserRoleLogsFilter"
+           data-module=@Module
+           data-modaltitle="Filters"
+           data-modalheader="Filters">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="UserAccesssModuleUserRoleLogsIndex"
+           data-url='@Url.Action("ResetFilter", "UserAccess", new { Area = "CoreSettings" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+        <a class="btn btn-outline-primary btn-sm border-white "
+           onclick="GotoModuleUserRole()"
+           data-id="@Model.ModuleId"
+           title="@localizer["Goto - module user roles"]">
+            <i class="fas fa-list"></i>&nbsp; @localizer["Goto - module user roles"]
+        </a>
+    </div>
+    <div class="input-group pt-1 pl-1 pr-1 ">
+        <input type="text" class="form-control form-control-sm border" id="ModuleUserRoleLogsSearch" name="GenericSearch"
+               onkeypress="genericSearchKeypress('ModuleUserRoleLogsSearch')" placeholder="Search...">
+        <div class="input-group-append">
+            <button class="btn btn-sm btn-outline-info" type="button" id="buttonModuleUserRoleLogs"
+                    onclick="genericSearchOnClick('ModuleUserRoleLogsSearch')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<div class="card-table">
+
+    <div class="table-responsive" id="tblModuleUserRole">
+        <table id="tbModuleUserRoles" class="table table-striped table-bordered table-responsive-lg">
+            @if ((bool)@Context.Items["isMobile"] == false)
+            {
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>@localizer[Html.DisplayNameFor(model => model.Role)]</th>
+                        <th>@localizer[Html.DisplayNameFor(model => model.Employee)]</th>
+                        <th>@localizer[Html.DisplayNameFor(model => model.PersonId)]</th>
+                        <th>@localizer[Html.DisplayNameFor(model => model.ModuleRoleKeyId)]</th>
+                    </tr>
+                </thead>
+            }
+        </table>
+    </div>
+
+    <div class="table-responsive" id="tblModuleUserRoleLogs" style="display:none">
+        <table id="tbModuleUserRoleLogs" class="table table-striped table-bordered table-responsive-lg">
+            @if ((bool)@Context.Items["isMobile"] == false)
+            {
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Role)</th>
+                        <th>@Html.DisplayNameFor(model => model.Employee)</th>
+                        <th>@Html.DisplayNameFor(model => model.Status)</th>
+                        <th>@Html.DisplayNameFor(model => model.ModifiedBy)</th>
+                        <th>@Html.DisplayNameFor(model => model.ModifiedOn)</th>
+                    </tr>
+                </thead>
+            }
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        function localScript() {
+            initSelect2();
+        };
+
+    </script>
+}
+
+

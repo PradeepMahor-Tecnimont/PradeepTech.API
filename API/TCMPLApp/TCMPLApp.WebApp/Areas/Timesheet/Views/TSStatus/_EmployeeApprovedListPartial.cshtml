@@ -1,0 +1,68 @@
+﻿@model TCMPLApp.Domain.Models.Timesheet.TSStatusDataTableList
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{  
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<div class="d-flex flex-row">
+    <label class="control-label f-w-700">Actual working hours: </label> <span class="text-dark-green f-w-700">@ViewBag.WrkHours</span>
+    <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+       href="#"
+       id="xlsEmployeeApproved"
+       data-jqueryselector="binarydownload"
+       data-url="@(Url.Action("TimesheetStatusDownload", "TSStatus", new { Area = "Timesheet" }))"
+       data-id="@ViewBag.Yyyymm@Html.Raw("!-!Approved!-!")">
+        <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+    </a>
+</div>
+<div class="vertical-space-10"></div>
+<div class="input-group pt-1 pl-1 pr-1 ">
+    <input type="text" class="form-control form-control-sm border" id="TimesheetApprovedSearch" name="GenericSearch"
+           onkeypress="genericSearchKeypress('TimesheetApprovedSearch')" placeholder="Search...">
+    <div class="input-group-append">
+        <button class="btn btn-sm btn-outline-info" type="button" id="buttonTimesheetApprovedSearch" onclick="genericSearchOnClick('TimesheetApprovedSearch')">
+            <i class="fa fa-search"></i>
+        </button>
+    </div>
+</div>
+<div class="vertical-space-10"></div>
+<div class="card-table">
+    <div class="table-responsive">
+        <table id="tbTimesheetApprovedGrid" class="table table-striped table-bordered table-responsive-lg">
+            @if ((bool)@Context.Items["isMobile"] == false)
+            {
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.Empno)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.Empname)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.Emptype)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.Parent)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.Assign)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.Hours)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.OtHours)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.CcHours)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.CcOtHours)]</th>
+                        <th class="text-center">@localizer[Html.DisplayNameFor(model => model.TsApproved)]</th>
+                        <th class="text-center">@localizer["View"]</th>
+                        <th class="text-center">@localizer["Download"]</th>
+                        <th class="text-center">@localizer["Project(s)"]</th>
+                    </tr>
+                </thead>
+            }
+        </table>
+    </div>
+</div>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_CommonDataTableColumnstPartial");
+    }
+
+    <script src="~/js/TimesheetDetails.js" asp-append-version="true"></script>
+        
+}

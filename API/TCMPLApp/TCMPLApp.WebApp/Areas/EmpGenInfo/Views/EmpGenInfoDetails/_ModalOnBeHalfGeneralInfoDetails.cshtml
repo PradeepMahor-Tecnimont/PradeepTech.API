@@ -1,0 +1,48 @@
+﻿@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="formOnBeHalfGeneralInfoDetails"
+      asp-area="EmpGenInfo"
+      asp-controller="EmpGenInfoDetails"
+      asp-action="OnBeHalfGeneralInfoDetails">
+
+    
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["OnBeHalf General Information"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["OnBeHalf General Information"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+               @* @if (CurrentUserIdentity.ProfileActions.Any
+                (p => p.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleManagerHoDOnBeHalf
+                || p.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleAttendanceAdmin
+                || p.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleManagerHoD
+                )
+                )
+                {*@
+                    <div class="form-group">
+                        <label id="Empno" class="control-label"></label>
+                        <select id="Empno" name="Empno" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.EmpList">
+                            <option selected></option>
+                        </select>
+                    </div>
+               @* }*@
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

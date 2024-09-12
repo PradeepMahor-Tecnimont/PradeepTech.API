@@ -1,0 +1,95 @@
+﻿@model TCMPLApp.WebApp.Models.EmpGenInfoGTLIDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<input type="hidden" asp-for="Empno" />
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-body" style="min-height: 450px;">
+            <div class="app-h4 app-card-header mb-2">
+
+                <p>Employee Details</p>
+
+            </div>
+
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-6">
+                    <div class="card-body">
+                        <div class="row p-2">
+                            <div class="form-group dd-met col-mb-6 col-xl-12">
+                                Employee Name as it would appear on Nomination Form
+                            </div>
+
+                            <div class="col-mb-6 col-xl-12 form-group ">
+                                @Html.DisplayNameFor(model=> model.FirstName) +
+                                @Html.DisplayNameFor(model=> model.FatherName) +
+                                @Html.DisplayNameFor(model=> model.Surname)
+
+                            </div>
+                            <div class="form-group dd-met col-mb-6 col-xl-12">
+                                @($@"{Model.FirstName} {Model.FatherName} {Model.Surname}")
+                                @*@(Model.EmpName + Model.EmpLastName + Model.Surname)*@
+                                @*@(Model.PrimaryDetails.Name)*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow col-md-12 col-xl-6">
+                    <div class="card-body">
+                        <div class="row p-2">
+
+                            <div class="form-group dd-met col-mb-6 col-xl-12">
+                                Address as it would appear on Nomination Form
+                            </div>
+                            <div class="col-xl-12 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        (Permanent Address: Address + PinCode)
+
+                                    </div>
+                                    <div class="dd-met">
+                                        @Html.DisplayFor(model => model.Address)
+                                        @Html.DisplayFor(model => model.Pincode)
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-12">
+                    <div class="app-h4 app-card-header p-2">@localizer["Group Term Life Insurance"]</div>
+                    <div class="card-body">
+                        <table id="tbGTLIGrid" class="table table-striped table-bordered table-responsive-lg ">
+                            <thead class="bg-info text-white">
+                                <tr>
+                                    <th>Nominee Name</th>
+                                    <th>Relation</th>
+                                    <th>Birth Date</th>
+                                    <th>Share (%)</th>
+                                    <th>Guardian Name</th>
+                                    <th>Relation with Minor</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-deck float-right" style="margin-top: 20px; margin-right: 20px">
+                <div class="form-group">
+                    <a class="btn btn-success f-right"
+                       href='@Url.Action("DownloadGTLI", "Report", new { Area = "EmpGenInfo", id = Model.Empno })'>
+                        @localizer["Print"]
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

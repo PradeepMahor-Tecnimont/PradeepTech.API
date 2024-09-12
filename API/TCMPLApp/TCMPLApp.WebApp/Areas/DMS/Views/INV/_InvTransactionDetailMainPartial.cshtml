@@ -1,0 +1,160 @@
+﻿@model TCMPLApp.WebApp.Models.InvTransactionDetailViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+
+<div class="app-h4 app-card-header mb-2">
+    <p>Transactions - Issue to employee detail (@Html.DisplayFor(model => model.InvTransactionDetails.PTransDate))</p>
+</div>
+
+<div class="d-flex flex-row">
+    <a title="New transaction" id="newtransaction"
+       class="btn btn-outline-primary btn-sm border border-white hidden "
+       href="#"
+       data-jqueryselector="openmodal"
+       data-modalcontainer="modalcontainer"
+       data-modalpopupwidth="rightw35"
+       data-url='@Url.Action("InvTransactionCreate", "INV", new { Area = "DMS" })'
+       data-id=""
+       data-modaltitle="New transaction"
+       data-modalheader="New transaction">
+        <i class="fas fa-plus"></i> Create reserve
+    </a>
+
+    @if (Model.InvTransactionDetails?.PTransTypeDesc == "RESERVE" || Model.InvTransactionDetails?.PTransTypeDesc == "INCOMPLETE RETURN")
+    {
+        <a title="Edit transaction" class="btn btn-outline-primary btn-sm border border-white" href="#"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("InvTransactionEdit", "INV", new { Area = "DMS" })'
+           data-id="@Model.TransId"
+           data-statichtmlsourcedivid=""
+           data-modaltitle="Edit transaction"
+           data-modalheader="Edit transaction">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+
+
+    }
+    @if (Model.InvTransactionDetails?.PTransTypeDesc == "RESERVE")
+    {
+        <a class="btn btn-outline-success btn-sm border border-white" id="idIssueTransaction" onclick="showDeleteConfirmationPopup(event,this);"
+           data-jqueryselector="showconfirmationmodal"
+           data-url='@Url.Action("InvTransactionIssue", "INV", new { Area = "DMS" })'
+           data-redirecturl='@Url.Action("InvTransactionDetailIndex", "INV", new { Area = "DMS",Id = Model.TransId })'
+           data-id="@Model.TransId"
+           data-modaltitle="Please Confirm!"
+           data-confirmationtext="Do you want to issue ?"
+           data-confirmationtype="warning"
+           data-confirmbuttontext="Issue transaction">
+            <i class="fas fa-user-tag green-color" aria-hidden="true"></i> Issue
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-none float-right" id="idIssueTransaction" onclick="showDeleteConfirmationPopup(event,this);"
+           data-jqueryselector="showconfirmationmodal"
+           data-url='@Url.Action("InvTransactionDelete", "INV", new { Area = "DMS" })'
+           data-redirecturl='@Url.Action("InvTransactionIndex", "INV", new { Area = "DMS" })'
+           data-id="@Model.TransId"
+           data-modaltitle="Please Confirm!"
+           data-confirmationtext="Do you want to delete ?"
+           data-confirmationtype="warning"
+           data-confirmbuttontext="Delete transaction">
+            <i class="fas fa-trash" aria-hidden="true"></i> Delete
+        </a>
+    }
+    @if (Model.InvTransactionDetails?.PTransTypeDesc == "INCOMPLETE RETURN")
+    {
+        <a class="btn btn-outline-success btn-sm border border-white" id="idReceiveTransaction" onclick="showDeleteConfirmationPopup(event,this);"
+           data-jqueryselector="showconfirmationmodal"
+           data-url='@Url.Action("InvTransactionReceive", "INV", new { Area = "DMS" })'
+           data-redirecturl='@Url.Action("InvTransactionDetailIndex", "INV", new { Area = "DMS" })'
+           data-id="@Model.TransId"
+           data-modaltitle="Please Confirm!"
+           data-confirmationtext="Do you want to receive ?"
+           data-confirmationtype="warning"
+           data-confirmbuttontext="Receive transaction">
+            <i class="fas fa-user-tag green-color" aria-hidden="true"></i> Receive
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-none float-right" id="idIssueTransaction" onclick="showDeleteConfirmationPopup(event,this);"
+           data-jqueryselector="showconfirmationmodal"
+           data-url='@Url.Action("InvTransactionReserveReturnDelete", "INV", new { Area = "DMS" })'
+           data-redirecturl='@Url.Action("InvTransactionIndex", "INV", new { Area = "DMS" })'
+           data-id="@Model.TransId"
+           data-modaltitle="Please Confirm!"
+           data-confirmationtext="Do you want to delete ?"
+           data-confirmationtype="warning"
+           data-confirmbuttontext="Delete transaction">
+            <i class="fas fa-trash" aria-hidden="true"></i> Delete
+        </a>
+    }
+    @if (Model.InvTransactionDetails?.PTransTypeDesc == "ISSUED")
+    {
+        <a class="btn btn-outline-primary btn-sm border border-white"
+           href='@Url.Action("InvTransactionGatePassGenerate", "INV", new { Area = "DMS", id = Model.TransId })'>
+            <i class="fas fa-file-word"></i>&nbsp;Generate Gate pass - @Model.InvTransactionDetails.PGatePassRefNo
+        </a>
+    }
+</div>
+<hr />
+<div class="card-block">
+    <div class="form-group">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.InvTransactionDetails.PEmpno)</div>
+            <div class="dd-met">@Html.DisplayFor(model => model.InvTransactionDetails.PEmpno) @Html.DisplayFor(model => model.InvTransactionDetails.PEmpName)</div>
+        </div>
+        <div class="col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.InvTransactionDetails.PParent)</div>
+            <div class="dd-met">@Html.DisplayFor(model => model.InvTransactionDetails.PParent) @Html.DisplayFor(model => model.InvTransactionDetails.PParentName)</div>
+        </div>
+        <div class="col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.InvTransactionDetails.PAssign)</div>
+            <div class="dd-met">@Html.DisplayFor(model => model.InvTransactionDetails.PAssign) @Html.DisplayFor(model => model.InvTransactionDetails.PAssignName)</div>
+        </div>
+    </div>
+</div>
+    <div class="form-group">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.InvTransactionDetails.PRemarks)</div>
+            <div class="dd-met">
+                @if (Model.InvTransactionDetails?.PRemarks != null)
+                    @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.InvTransactionDetails.PRemarks).Replace("\n", "<br/>"))
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<hr />
+<div class="m-1"></div>
+<div class="d-flex flex-row">
+    @if (Model.InvTransactionDetails?.PTransTypeDesc == "RESERVE")
+    {
+        <a title="Create transaction" class="btn btn-outline-primary btn-sm border border-white" href="#"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("InvTransactionAdd", "INV", new { Area = "DMS" })'
+           data-id="@Model.TransId"
+           data-statichtmlsourcedivid=""
+           data-modaltitle="Create transaction"
+           data-modalheader="Create transaction">
+            <i class="fas fa-plus"></i> Create
+        </a>
+    }
+    @if (Model.InvTransactionDetails?.PTransTypeDesc == "INCOMPLETE RETURN")
+    {
+        <a title="Create transaction" class="btn btn-outline-primary btn-sm border border-white" href="#"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("InvTransactionReturnAdd", "INV", new { Area = "DMS" })'
+           data-id="@Model.InvTransactionDetails.PEmpno"
+           data-parameter="@Model.TransId"
+           data-statichtmlsourcedivid=""
+           data-modaltitle="Create transaction"
+           data-modalheader="Create transaction">
+            <i class="fas fa-plus"></i> Create
+        </a>
+    }
+</div>

@@ -1,0 +1,61 @@
+﻿@model TCMPLApp.WebApp.Models.OscHoursOrigEditViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Transactions"
+      asp-action="OscHoursOrigEdit"
+      id="formOscHoursOrigEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="loadCostcodeDataTable(null); loadHoursDataTable(null); localScript();"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.OscdId" />       
+    <input type="hidden" asp-for="@Model.OschId" />       
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit hours</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>    
+    <div class="modal-body">
+        <div class="card">      
+            <div class="card-header">
+                <h6>Project / PO / Vendor : @ViewData["Projno5PoVendor"]</h6>
+                <h6>Cost code : @ViewData["Costcode"]</h6>
+            </div>
+            <div class="card-block">                
+                <div class="form-group">
+                    <div class="row">
+                         <div class="col-md-12 ">
+                            <label asp-for="Yyyymm" class="control-label"></label>
+                            <input asp-for="Yyyymm" class="form-control" readonly required />
+                       </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="OrigEstHrs" class="control-label"></label>
+                            <input asp-for="OrigEstHrs" class="form-control" type="number" required />
+                            <span asp-validation-for="OrigEstHrs" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

@@ -1,0 +1,244 @@
+﻿@model TCMPLApp.WebApp.Models.ResignedEmployeeCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="HRMIS"
+      asp-action="ResignedEmployeeCreate"
+      id="formResignedEmployee"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.DateOfRelieving" />
+    <input type="hidden" asp-for="@Model.EmpResignDate" />
+    <input type="hidden" asp-for="@Model.HrReceiptDate" />
+    <input type="hidden" asp-for="@Model.ActualLastDateInOffice" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Add Resigned Employee"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add Resigned Employee</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Empno" class="control-label"></label>
+                            <select asp-for="Empno" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmployeeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Empno" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                @*hidden*@
+                <div id="empDetails" class="hidden">
+                    <div class="row p-2">
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Doj)
+                                </div>
+                                <div class="dd-met">
+                                    <label id="Doj" name="Doj" class="control-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Grade)
+                                </div>
+                                <div class="dd-met">
+                                    <label id="Grade" name="Grade" class="control-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Designation)
+                                </div>
+                                <div class="dd-met">
+                                    <label id="Designation" name="Designation" class="control-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Department)
+                                </div>
+                                <div class="dd-met">
+                                    <label id="Department" name="Department" class="control-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="p-1 m-1" />
+                <div class="row">
+                    <div class="col-xl-4 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="EmpResignDate" class="control-label"></label>
+                            <input id="empResignDate" class="form-control datepicker" value="@Model.EmpResignDate?.ToString("dd/MMM/yyyy")" required />
+                            <span asp-validation-for="EmpResignDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="HrReceiptDate" class="control-label"></label>
+                            <input id="hrReceiptDate" class="form-control datepicker" value="@Model.HrReceiptDate?.ToString("dd/MMM/yyyy")" required />
+                            <span asp-validation-for="HrReceiptDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="DateOfRelieving" class="control-label"></label>
+                            <input id="dateOfRelieving" class="form-control datepicker" value="@Model.DateOfRelieving?.ToString("dd/MMM/yyyy")" required />
+                            <span asp-validation-for="DateOfRelieving" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="PrimaryReason" class="control-label"></label>
+                            <select asp-for="PrimaryReason" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.PrimaryReasonTypeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="PrimaryReason" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="SecondaryReason" class="control-label"></label>
+                            <select asp-for="SecondaryReason" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.SecondaryReasonTypeList">
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="SecondaryReason" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="EmpResignReason" class="control-label"></label>
+                            <textarea asp-for="EmpResignReason" class="form-control" rows="2" required></textarea>
+                            <span asp-validation-for="EmpResignReason" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="AdditionalFeedback" class="control-label"></label>
+                            <textarea asp-for="AdditionalFeedback" class="form-control" rows="2" required></textarea>
+                            <span asp-validation-for="AdditionalFeedback" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ExitInterviewComplete" class="control-label"></label>
+                            <select asp-for="ExitInterviewComplete" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.YesNoList" required>
+                                <option selected></option>
+                                <option value="OK">Yes</option>
+                                <option value="KO">No</option>
+                            </select>
+                            <span asp-validation-for="ExitInterviewComplete" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="PercentIncrease" class="control-label"></label>
+                            <input asp-for="PercentIncrease" class="form-control" />
+                            <span asp-validation-for="PercentIncrease" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="MovingToLocation" class="control-label"></label>
+                            <input asp-for="MovingToLocation" class="form-control" />
+                            <span asp-validation-for="MovingToLocation" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="CurrentLocation" class="control-label"></label>
+                            <select asp-for="CurrentLocation" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.CurrResidentialLocationList">
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="CurrentLocation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ResignStatusCode" class="control-label"></label>
+                            <select asp-for="ResignStatusCode" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.ResignStatusList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ResignStatusCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ActualLastDateInOffice" class="control-label"></label>
+                            <input id="actualLastDateInOffice" class="form-control datepicker" value="@Model.ActualLastDateInOffice?.ToString("dd/MMM/yyyy")" />
+                            <span asp-validation-for="ActualLastDateInOffice" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="CommitmentOnRollback" class="control-label"></label>
+                            <textarea asp-for="CommitmentOnRollback" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="CommitmentOnRollback" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsEmailSent" class="control-label"></label>
+                            <select asp-for="IsEmailSent" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.YesNoIsEmailSentList" required>
+                                <option selected></option>
+                                <option value="OK">Yes</option>
+                                <option value="KO">No</option>
+                            </select>
+                            <span asp-validation-for="IsEmailSent" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

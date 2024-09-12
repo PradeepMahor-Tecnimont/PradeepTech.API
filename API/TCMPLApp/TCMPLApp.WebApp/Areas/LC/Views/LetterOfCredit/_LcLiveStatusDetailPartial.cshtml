@@ -1,0 +1,68 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.LC.LcLiveStatusDataTableList>
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+            <div class="">
+                <div class="bg-gray-active rounded ">
+                    <table id="tbGridLcLiveStatus" class="table table-striped table-bordered table-responsive-lg">
+                        <thead class="bg-info text-white">
+                            <tr role="row">
+
+                                <th class="hidden">@localizer["AppId"]</th>
+                                <th class="hidden">@localizer["LcId"]</th>
+                                <th>@localizer["LC Live Status"]</th>
+                                <th>@localizer["Update date"]</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var items in Model)
+                            {
+                                <tr>
+
+                                    <td class="hidden">@items.ApplicationId</td>
+                                    <td class="hidden">@items.LcKeyId</td>
+                                    <td>@items.LiveStatus</td>
+                                    <td>@items.ModifiedOn</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="result"></div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+     $(document).ready(function () {
+
+       intDataTabletbLcLiveStatus();
+
+    });
+
+    function intDataTabletbLcLiveStatus(){
+          $("#tbGridLcLiveStatus").DataTable({
+            destroy: true,
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [5,10],
+            processing: true,
+            serverSide: false,
+            stateSave: false,
+            info: true,
+            filter: true,
+            aaSorting: [[1, 'asc']], // start to sort data in second column
+            aaSorting: [[1, 'asc']], // start to sort data in second column
+            pagingType:'full'
+       });
+    }
+</script>
+

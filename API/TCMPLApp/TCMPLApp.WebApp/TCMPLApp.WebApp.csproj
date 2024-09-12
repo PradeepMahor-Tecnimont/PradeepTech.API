@@ -1,0 +1,184 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup Label="Globals">
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+		<UserSecretsId>823f99e4-1c39-4611-a41e-cbad07bd8fa5</UserSecretsId>
+		<StartupObject>TCMPLApp.Program</StartupObject>
+    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Areas\BG\**" />
+		<Compile Remove="Areas\ExcelTemplate\**" />
+		<Compile Remove="Areas\LC\**" />
+		<Compile Remove="Areas\Logs\**" />
+		<Compile Remove="Areas\RapReporting\Controllers\Reports\**" />
+		<Compile Remove="Areas\RapReporting\Models\**" />
+		<Content Remove="Areas\BG\**" />
+		<Content Remove="Areas\ExcelTemplate\**" />
+		<Content Remove="Areas\LC\**" />
+		<Content Remove="Areas\Logs\**" />
+		<Content Remove="Areas\RapReporting\Controllers\Reports\**" />
+		<Content Remove="Areas\RapReporting\Models\**" />
+		<EmbeddedResource Remove="Areas\BG\**" />
+		<EmbeddedResource Remove="Areas\ExcelTemplate\**" />
+		<EmbeddedResource Remove="Areas\LC\**" />
+		<EmbeddedResource Remove="Areas\Logs\**" />
+		<EmbeddedResource Remove="Areas\RapReporting\Controllers\Reports\**" />
+		<EmbeddedResource Remove="Areas\RapReporting\Models\**" />
+		<None Remove="Areas\BG\**" />
+		<None Remove="Areas\ExcelTemplate\**" />
+		<None Remove="Areas\LC\**" />
+		<None Remove="Areas\Logs\**" />
+		<None Remove="Areas\RapReporting\Controllers\Reports\**" />
+		<None Remove="Areas\RapReporting\Models\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Areas\CoreSettings\Views\UserAccess\2xsu3z5d.kfg~" />
+		<None Remove="Areas\DigiForm\Controllers\teiicdck.esr~" />
+		<None Remove="Areas\DigiForm\Views\HRDigiForm\esizc0b2.jsb~" />
+		<None Remove="Areas\EmpGenInfo\Views\EmpGenInfoDetails\0xm1lifm.odm~" />
+		<None Remove="Areas\EmpGenInfo\Views\EmpGenInfoDetails\dkegaele.oal~" />
+		<None Remove="Areas\HRMasters\Controllers\dytxybml.t2l~" />
+		<None Remove="Areas\RapReporting\Controllers\HomeController.cs~RFfc300f.TMP" />
+		<None Remove="Areas\RapReporting\Views\Home\NavIndex.cshtml~RF5265318b.TMP" />
+	</ItemGroup>
+
+
+
+	<ItemGroup>
+		<Compile Include="Areas\RapReporting\Models\ActivityCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ActivityMasterViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ActivityUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsCurrentJobsCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsCurrentJobsUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscActualHoursBookedDataTableExcel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscHoursCurEditViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscHoursOrigEditViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscHoursOrigCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscHoursViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscDetailDetailViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscHoursCurCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscDetailCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscMasterUpdateCurViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscMasterUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscMasterDetailViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscDetailViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscMasterCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscSesCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscSesDataTableExcel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscSesUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscMasterViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscActualHoursBookedViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OscSesViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OTUpdateCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OTUpdateEditViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OvertimeUpdateCreateBulkModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OvertimeUpdateCreateModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OvertimeUpdateIndexModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\OvertimeUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsExpectedJobsCreateBulkModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsCurrentJobsCreateBulkModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsExpectedJobsDetailModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsExpectedJobsCreateModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsCurrentJobsCreateModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsCurrentJobsDetailModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ExpectedJobsIndexModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsExpectedJobsProjectModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsExpectedJobsViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsExpectedJobsIndexModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsCurrentJobsProjectModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsCurrentJobsIndexModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ManhoursProjectionsCurrentJobsViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ActivityViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ProjactCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ProjactMasterViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ProjactUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\RapHoursCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\RapHoursUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\RapNavIndexViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ShiftingManhoursViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\SiteMapFilterFieldsViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ReportProcessingViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\TLPCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\TLPUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\TlpViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\RapHoursViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ProjectActivityViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\MovemastViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ProcessingMonthViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\ReportStatusModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\TsConfigViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\TSPostedHoursDataTableExcel.cs" />
+		<Compile Include="Areas\RapReporting\Models\TSPostedHoursViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\WrkHoursCreateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\WrkHoursUpdateViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\WrkHoursViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\RapViewModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\PostReturnModel.cs" />
+		<Compile Include="Areas\RapReporting\Models\UpdateNumberOfEmployeeViewModel.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ClosedXML.Report" Version="0.2.8" />
+		<PackageReference Include="EPPlus" Version="4.5.3.3" />
+		<PackageReference Include="jquery.jstree" Version="3.3.11" />
+		<PackageReference Include="MediaTypeMap.Core" Version="2.3.3" />
+		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+		<PackageReference Include="System.DirectoryServices.AccountManagement" Version="8.0.0" />
+		<PackageReference Include="TCMPLApp.Library.Excel.Template" Version="1.0.93" />
+		<PackageReference Include="TCMPLApp.Library.Excel.Writer" Version="1.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!--<ProjectReference Include="..\TCMPLApp.BaseRoleProvider\TCMPLApp.BaseRoleProvider.csproj"></ProjectReference>-->
+		<ProjectReference Include="..\TCMPLApp.DataAccess\TCMPLApp.DataAccess.csproj"></ProjectReference>
+		<ProjectReference Include="..\TCMPLApp.Domain\TCMPLApp.Domain.csproj"></ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="wwwroot\asset\SmartWorkingPolicyTCMPL.pdf" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="Areas\DMS\Views\INV\InvTransactionDetailIndex.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Areas\DMS\Views\INV\_ModalInvTransactionCreatePartial.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Areas\Timesheet\Views\TSStatus\_ModalEmployeeProjectlistPartial.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+</Project>

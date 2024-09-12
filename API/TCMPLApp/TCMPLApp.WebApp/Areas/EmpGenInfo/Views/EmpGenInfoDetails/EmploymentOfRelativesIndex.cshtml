@@ -1,0 +1,318 @@
+﻿@model TCMPLApp.WebApp.Models.EmploymentOfRelativesViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Employment of relatives";
+
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Employment of relatives</li>
+    </ol>
+}
+<div class="container-fluid m-auto col-xl-11 p-2">
+    <div class="col-12">
+        <div class="card bg-gray-active border rounded shadow m-auto">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Employment of relatives
+                </h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="card shadow border">
+                            <div class="card-header ">
+                                <h5 class="card-title">
+                                    Declaration of Relatives employed with TCMPL
+                                </h5>
+                            </div>
+                            <div class="card-body scrollbar-cyan " style="max-height:500px!important;position: relative;overflow-y: scroll">
+                                <div class="card-block">
+                                    <div class="form-group">
+                                        <div class="row p-2">
+                                            @await Html.PartialAsync("_htmlcontentpartial")
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow border">
+                            <form id="formEmployeeRelative"
+                                  asp-area="EmpGenInfo"
+                                  asp-controller="EmpGenInfoDetails"
+                                  asp-action="RelativeConfirmationSubmitToHR">
+
+                                <div class="card-header ">
+                                    <h5 class="card-title">
+                                        Employment of relatives - Confirmation
+                                    </h5>
+
+
+                                    @if (Model.IsRelativeInOffice != "Confirmed")
+                                    {
+                                        <button title="Submit To HR" id="SubmitToHR" class="btn btn-success border-none text-nowrap f-right mx-2"
+                                                style="width:auto;">
+                                            <i class="fas fa-user"></i> &nbsp;Submit To HR
+                                        </button>
+
+                                    }
+
+                                </div>
+                                <div class="card-body" style="height:500px!important;position: relative;">
+                                    <div class="card-block">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                @if (Model.IsRelativeInOffice != "Confirmed")
+                                                {
+                                                    <div class="col-xl-3 col-md-6">
+
+                                                        <label asp-for="IsRelativeInOffice" class="control-label"></label>
+                                                        <select asp-for="IsRelativeInOffice" class="form-control Select2" required>
+                                                            <option value="" selected>Please select...</option>
+                                                            <option value="OK">Yes</option>
+                                                            <option value="KO">No</option>
+                                                        </select>
+                                                        <span asp-validation-for="IsRelativeInOffice" class="text-danger"></span>
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-xl-6 col-md-6">
+                                                        <div class="row justify-content-center p-t-5 p-b-5 text-green" style="font-weight: bold;">
+                                                            @Html.Raw("Employment of relatives - Confirmation send to HR")
+
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </div>
+
+                                        <div class="RelativeYes" style="display:none">
+                                            <hr class="p-1 m-1" />
+                                            <div class="row ">
+
+                                                <div class="col-12">
+                                                    @if (Model.IsRelativeInOffice != "Confirmed")
+                                                    {
+                                                        <a class="btn btn-outline-primary btn-sm border-white "
+                                                           data-jqueryselector="openmodal"
+                                                           data-modalcontainer="modalcontainer"
+                                                           data-modalpopupwidth="rightw35"
+                                                           data-url='@Url.Action("EmploymentOfRelativesAdd", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })'
+                                                           data-modaltitle="Add Employment Offfice Relatives"
+                                                           data-modalheader="Add Employment Offfice Relatives">
+                                                            <i class="fas fa-plus"></i>&nbsp;@localizer["Add Relative"]
+                                                        </a>
+                                                    }
+
+                                                </div>
+                                                <div class="col-12">
+                                                    @if (Model.RelativeCount > 0 || Model.IsRelativeInOffice != "Confirmed")
+                                                    {
+                                                        <table id="tbEmployeeRelative" class=" table table-bordered mt-1 table-hover  w-100 "
+                                                               style="width:100%!important">
+                                                            <thead class="bg-info text-white">
+                                                                <tr role="row">
+                                                                    <th>@localizer["Relative - Relation"]</th>
+                                                                    <th>@localizer["Department"]</th>
+                                                                    <th>@localizer["Office Location"]</th>
+                                                                    @if (Model.IsRelativeInOffice != "Confirmed")
+                                                                    {
+                                                                        <th>&nbsp;</th>
+                                                                    }
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            if ($("#IsRelativeInOffice").val() == "OK") {
+                $(".RelativeYes").show();
+                $("#AddRelative").show();
+                loadEmployeeRelativeRequestsDataTable();
+
+            }
+            else {
+                $(".RelativeYes").hide();
+
+            }
+
+            if (@(Model.IsRelativeInOffice == "Confirmed" ? "true" : "false")) {
+                $(".RelativeYes").show();
+                loadEmployeeRelativeConfirmRequestsDataTable();
+            }
+
+            $("#IsRelativeInOffice").change(function () {
+                if ($("#IsRelativeInOffice").val() == "OK") {
+                    $(".RelativeYes").show();
+                    $("a[data-jqueryselector=openmodal]").trigger("click");
+                    loadEmployeeRelativeRequestsDataTable();
+                }
+                else {
+                    $(".RelativeYes").hide();
+
+                }
+            });
+        });
+        function localScript() {
+            initSelect2();
+
+            $('#RelativeNotFound').on('click', function () {
+                $(".NoRelative").show();
+                $(".YesRelative").hide();
+                $('.NoRelative input').prop('required', true);
+                $('.NoRelative select').prop('required', true);
+
+                $('.YesRelative select').prop('required', false);
+            });
+
+            $('#RelativeFound').on('click', function () {
+                $(".NoRelative").hide();
+                $(".YesRelative").show();
+                $('.NoRelative input').prop('required', false);
+                $('.NoRelative select').prop('required', false);
+
+                $('.YesRelative select').prop('required', true);
+
+            });
+        }
+
+        let vVUloadEmployeeRelativeDataTableList = "@Url.Action("GetListsEmployeeRelativeList", "EmpGenInfoDetails")";
+
+        function loadEmployeeRelativeRequestsDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbEmployeeRelative",
+                pColumns: datatableEmployeeRelativeColumns,
+                pUrl: vVUloadEmployeeRelativeDataTableList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+
+        };
+        function loadEmployeeRelativeConfirmRequestsDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbEmployeeRelative",
+                pColumns: datatableEmployeeConfirmRelativeColumns,
+                pUrl: vVUloadEmployeeRelativeDataTableList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+
+        };
+        let datatableEmployeeRelativeColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.colleagueName + " - " + data.colleagueRelationText
+                },
+            },
+            { 'data': "colleagueDept" },
+            { 'data': "colleagueLocation" },
+            {
+                'data': null,
+                render: function (data, type, row) {
+                    return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                        ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-jqueryselector = "showconfirmationmodal" ' +
+                        ' data-url="@Url.Action("EmployeeRelativeDelete", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })"' +
+                        ' data-name="' + data.colleagueName + '"' +
+                        ' data-PostDeleteReLoadDataTables="OK" ' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                        ' data-confirmationtext="Do you want to Delete Relative of ' + data.empName + ' " ' +
+                        ' data-confirmationtype="warning" ' +
+                        ' title="Delete Employee relative" ' +
+                        ' data-confirmbuttontext="Delete Employee relative" > ' +
+                        ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                        ' </button>';
+
+                },
+                'className': "td-icon text-center  align-middle",
+            }
+
+        ];
+
+        let datatableEmployeeConfirmRelativeColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.colleagueName + " - " + data.colleagueRelationText
+                },
+            },
+            { 'data': "colleagueDept" },
+            { 'data': "colleagueLocation" },
+
+        ];
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadEmployeeRelativeRequestsDataTable();
+                notify('success', data.response, 'Success');
+
+            }
+        };
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadEmployeeRelativeRequestsDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+
+
+    </script>
+}

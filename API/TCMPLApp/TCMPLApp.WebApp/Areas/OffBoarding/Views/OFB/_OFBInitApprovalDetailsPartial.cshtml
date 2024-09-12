@@ -1,0 +1,175 @@
+﻿@model TCMPLApp.WebApp.Models.OFBApprovalUpdateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@Html.AntiForgeryToken()
+
+<form asp-action="OFBApprovalUpdate"
+      asp-controller="OFB"
+      asp-area="OffBoarding"
+      id="OFBApproval"
+      method="post"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.RelievingDate" />
+    <input type="hidden" asp-for="@Model.ResignationDate" />
+    <input type="hidden" asp-for="@Model.Doj" />
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.ApprovalType" />
+    <input type="hidden" asp-for="@Model.ApprovalActionId" />
+
+    <div class="card-block ">
+        <div class="card-deck">
+            <div class="col-md-12 col-xl-12">
+                <div class="card-body">
+                    <div class="row p-2">
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Empno" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Empno + " - " + Model.EmployeeName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="PersonId" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.PersonId)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-xl-3 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Grade" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Grade)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Doj" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Doj.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Address)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Parent" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Parent)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="InitiatorRemarks" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.InitiatorRemarks)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="EmailId" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmailId)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="MobilePrimary" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.MobilePrimary)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="AlternateNumber" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.AlternateNumber)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row p-2">
+                        <div class="col-xl-3 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="RelievingDate" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.RelievingDate.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="ResignationDate" class="control-label"></label>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ResignationDate.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Remarks" class="control-label"></label>
+                                <textarea rows="2" class="form-control" asp-for="Remarks" required></textarea>
+                                <span asp-validation-for="Remarks" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="submit" id="btnHold" onclick="setApprovalType()"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Hold"]">
+            @localizer["Hold"]
+        </button>
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Approve"]">
+            <i class="fas fa-user-check"></i>&nbsp;@localizer["Approve"]
+        </button>
+        <a class="btn btn-secondary" asp-controller="OFB" asp-action="OFBApprovalsIndex" title="@localizer["Cancel"]">
+            @localizer["Cancel"]
+        </a>
+    </div>
+</form>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+        };
+
+    </script>
+}

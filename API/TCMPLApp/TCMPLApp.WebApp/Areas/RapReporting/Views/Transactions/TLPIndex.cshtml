@@ -1,0 +1,202 @@
+﻿@model TCMPLApp.WebApp.Areas.RapReporting.TLPViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "TLP master";
+    var isRAPAdmin = CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionRAPAdmin);
+}
+
+@Html.AntiForgeryToken()
+
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+        <li class="breadcrumb-item "><a asp-action="TransactionsIndex" asp-controller="Transactions" asp-area="RapReporting">Transactions</a></li>
+        <li class="breadcrumb-item "><a asp-action="MasterIndex" asp-controller="Transactions" asp-area="RapReporting">Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">TLP master</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>TLP master</p>
+    </div>
+     <div class="card-block">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-8"></div>                
+            </div>
+        </div>
+    </div>     
+    <div class="m-1"></div>
+    <div class="d-flex flex-row">
+        @* @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionRAPAdmin))
+        { *@
+            <a title="New TLP code" id="tlpcodecreate" class="btn btn-outline-primary btn-sm border border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("TLPCreate", "Transactions", new { Area = "RAPReporting" })'
+               data-statichtmlsourcedivid=""
+               data-modaltitle="New TLP code"
+               data-modalheader="New TLP code">
+                <i class="fas fa-plus"></i> Create
+            </a>
+        @* } *@                       
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>                   
+                   <th class="text-center">@Html.DisplayNameFor(model => model.Costcode)</th>       
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Tlpcode)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Name)</th>                   
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result">
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var dataTable;
+        $(document).ready(function () {
+            localScript(); 
+            loadDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        function loadDataTable() {
+            dataTable = $('#tbGrid').DataTable({
+                 drawCallback: function (settings) {
+                    loadScript();
+                },
+                'destroy': true,
+                'aaSorting': [[1, 'asc']],
+                'ordering': false,
+                'responsive': true,
+                'autoWidth': false,
+                'processing': true,
+                'serverSide': true,
+                'stateSave': false,
+                'info': false,
+                'filter': false,
+                'pageLength': 25,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                'columnDefs': [
+                    { orderable: false, targets: 0 }
+                ],
+                'ajax': {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                     url: '@Url.Action("GetTLPDataTableList", "Transactions")', 
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    data: function (d) {                        
+                        d.genericSearch = $('#GenericSearch').val();                         
+                        // return { "paramJson": JSON.stringify(d) };
+                    },
+                    error: function (request, status, error) {
+                        toastr.error('error', request.responseText, 'danger');
+                    }
+                },
+                'columns': [                   
+                    { 'data': "costcode", 'className': "text-center"},        
+                    { 'data': "tlpcode", 'className': "text-center" },        
+                    { 'data': "name", 'className': "text-left" }, 
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+                            // if (@isRAPAdmin.ToString().ToLower() == 'true') {
+                                return '<button class="btn btn-outline-info btn-sm border-none" ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" ' +
+                                    ' data-url="@Url.Action("TLPUpdate", "Transactions", new { Area = "RAPReporting" })"' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.costcode + '"' +
+                                    ' data-tplcode="' + data.tlpcode + '"' +
+                                    ' data-modaltitle="Edit TLP code" ' +
+                                    ' data-modalheader="Edit TLP code" >' +
+                                    ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                    ' </button>';
+                            // }
+                            // else {
+                            //     return ' ';
+                            // }
+                                                           
+                        },
+                        'className': "td-icon",
+                    }
+                 ]
+            });
+        };        
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+         });
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+        // function postSaveReLoadDataTable(success) {
+        //     if (success) {
+        //         $("#modalcontainer").modal('hide');
+        //         loadDataTable();
+        //         hideLoader();               
+        //         notify('success','', 'Success');
+        //     }
+        // }
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+
+    </script>
+}

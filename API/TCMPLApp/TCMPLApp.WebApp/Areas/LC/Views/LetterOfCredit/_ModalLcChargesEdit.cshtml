@@ -1,0 +1,120 @@
+﻿@model TCMPLApp.WebApp.Models.LcChargesEditViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form id="lcChargesEdit"
+      asp-controller="LetterOfCredit"
+      asp-action="LcChargesEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('lcCharges');intDataTabletbLcCharges(null);PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div style="display:none">
+        @Html.HiddenFor(m => m.ApplicationId)
+        @Html.HiddenFor(m => m.LcKeyId)
+        @Html.HiddenFor(m => m.ClintFileName)
+        @Html.HiddenFor(m => m.ServerFileName)
+
+    </div>
+
+    <div class="modal-header">
+        <h5 class="modal-title">LC charges </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Edit LC charges"]</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="BasicCharges" class="control-label"></label>
+                            <input asp-for="BasicCharges" class="form-control" type="number" placeholder="" required />
+                            <span asp-validation-for="BasicCharges" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="OtherCharges" class="control-label"></label>
+                            <input asp-for="OtherCharges" class="form-control" type="number" placeholder="" required />
+                            <span asp-validation-for="OtherCharges" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="Tax" class="control-label"></label>
+                            <input asp-for="Tax" class="form-control" type="number" placeholder="" required />
+                            <span asp-validation-for="Tax" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="LcChargesStatus" class="control-label"></label>
+                            <select asp-for="LcChargesStatus" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.ChargesStatus" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="LcChargesStatus" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="CommissionRate" class="control-label"></label>
+                            <input asp-for="CommissionRate" class="form-control" type="number" placeholder=""  />
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="Days" class="control-label"></label>
+                            <input asp-for="Days" class="form-control" type="number" placeholder=""  />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-md-12 ">
+                            <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                                <div class="dz-details">
+                                    <div class="dz-filename"><span data-dz-name></span></div>
+                                    <div class="dz-size" data-dz-size></div>
+                                    <img data-dz-thumbnail />
+                                    <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                                </div>
+                                <div class="dz-default dz-message" data=""><span>Drop file here to upload</span></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnLcChargesEditSubmit"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

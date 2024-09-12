@@ -1,0 +1,218 @@
+﻿@model TCMPLApp.WebApp.Models.ResignedEmployeeDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="HRMIS"
+      asp-action=""
+      id="formResignedEmployee"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.KeyId" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Resigned Employee Details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Resigned Employee Details</h5>
+            </div>
+            <div class="card-block p-4">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.EmployeeName)
+                            </div>
+                            <div class="dd-met">
+                                @Model.Empno : @Model.EmployeeName
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.Doj)
+                            </div>
+                            <div class="dd-met">
+                                @Model.Doj?.ToString("dd-MMM-yyyy")
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.Grade)
+                            </div>
+                            <div class="dd-met">
+                                @Model.Grade
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.Designation)
+                            </div>
+                            <div class="dd-met">
+                                @Model.Designation
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.Department)
+                            </div>
+                            <div class="dd-met">
+                                @Model.Department
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <hr class="p-1 m-1" />
+                <div class="row">
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.EmpResignDate)
+                            </div>
+                            <div class="dd-met">
+                                @Model.EmpResignDate?.ToString("dd-MMM-yyyy")
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.HrReceiptDate)
+                            </div>
+                            <div class="dd-met">
+                                @Model.HrReceiptDate?.ToString("dd-MMM-yyyy")
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.DateOfRelieving)
+                            </div>
+                            <div class="dd-met">
+                                @Model.DateOfRelieving?.ToString("dd-MMM-yyyy")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.PrimaryReason)
+                            </div>
+                            <div class="dd-met">
+                                @(Model.PrimaryReason + " - " + Model.PrimaryReasonDesc)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.EmpResignReason)
+                            </div>
+                            <div class="dd-met">
+                                @Model.EmpResignReason
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.AdditionalFeedback)
+                            </div>
+                            <div class="dd-met">
+                                @Model.AdditionalFeedback
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.ExitInterviewComplete)
+                            </div>
+                            <div class="dd-met">
+                                @Model.ExitInterviewComplete
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.PercentIncrease)
+                            </div>
+                            <div class="dd-met">
+                                @Model.PercentIncrease
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.ResignStatusCode)
+                            </div>
+                            <div class="dd-met">
+                                @(Model.ResignStatusCode + " - " + Model.ResignStatusDesc)
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.ActualLastDateInOffice)
+                            </div>
+                            <div class="dd-met">
+                                @Model.ActualLastDateInOffice?.ToString("dd-MMM-yyyy")
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model=> model.CommitmentOnRollback)
+                            </div>
+                            <div class="dd-met">
+                                @Model.CommitmentOnRollback
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

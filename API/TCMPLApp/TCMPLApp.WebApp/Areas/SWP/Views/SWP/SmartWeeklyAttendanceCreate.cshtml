@@ -1,0 +1,886 @@
+﻿@model TCMPLApp.WebApp.Models.SmartAttendanceCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWP">Smart work planning</a></li>
+        <li class="breadcrumb-item"><a asp-action="SmartAttendancePlanning" asp-controller="SWP" asp-area="SWP">Weekly Attendance</a></li>
+        <li class="breadcrumb-item active">Planning</li>
+    </ol>
+}
+
+    @section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+    @{
+    ViewData["Title"] = "Smart workspace";
+}
+
+<form id="FormSmartWeeklyAttendanceCreate" name="FormSmartWeeklyAttendanceCreate"
+      asp-action="SmartWeeklyAttendanceCreate" asp-area="SWP" asp-controller="SWP">
+
+    <div class="col-sm-12">
+        <div class="bg-gray-active rounded ">
+
+            <input type="hidden" asp-for="@Model.Empno" />
+            <input type="hidden" asp-for="@Model.EmployeeName" />
+            <input type="hidden" asp-for="@Model.Emptype" />
+            <input type="hidden" asp-for="@Model.EmpGrade" />
+            <input type="hidden" asp-for="@Model.Parent" />
+            <input type="hidden" asp-for="@Model.FkSwpAssignworkspace" />
+            <input type="hidden" asp-for="@Model.AtndDate" />
+
+            <input type="hidden" asp-for="@Model.DeskMon" />
+            <input type="hidden" asp-for="@Model.DeskTue" />
+            <input type="hidden" asp-for="@Model.DeskWed" />
+            <input type="hidden" asp-for="@Model.DeskThu" />
+            <input type="hidden" asp-for="@Model.DeskFri" />
+
+            <div class="modal-body p-2 m-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>@localizer[" Planning of week days "]@Html.Raw(" ( " + Model.WeekStartDate.ToString("dd-MMM-yyyy") + " - " + Model.WeekEndDate.ToString("dd-MMM-yyyy") + " ) ")</h5>
+                    </div>
+                    <div class="card-block ">
+                        <div class="form-group">
+                            <div class="row  p-2">
+                                <div class="col-md-6 ">
+                                    <div class="dd-met">
+                                        @Html.Raw("[ " + Model.Empno + " ] " + Model.EmployeeName)
+                                    </div>
+                                </div>
+                                <div class="col-md-3 ">
+                                    <div class="dd-met">@localizer["Employee type : "] @Model.Emptype</div>
+                                </div>
+                                <div class="col-md-3 ">
+                                    <div class="dd-met">@localizer["Grade : "] @Model.EmpGrade</div>
+                                </div>
+                            </div>
+                            <div class="row  p-2">
+
+                                <div class="col-sm-12 col-md-6 ">
+                                    <div class="dd-met">
+                                        @localizer["Parent : "] @Html.Raw("[ " + Model.Parent + " ] " + Model.ParentDesc)
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 ">
+                                    <div class="dd-met">@localizer["Assign : "] @Html.Raw("[ " + Model.Assign + " ] " + Model.AssignDesc)</div>
+                                </div>
+                            </div>
+                            <div class="row  p-2">
+
+                                <div class="col-sm-12 col-md-6 ">
+                                    <div class="dd-met">@localizer["Employee work area : "] @Html.Raw(" " + Model.EmpWorkArea + "  ")</div>
+                                </div>
+                            </div>
+                            @*                            <div class="row ml-1 mr-1 card-block border  rounded-sm  theme-light-cyan">
+
+                            <div class="col-md-12  text-center ">
+                            <div class="dd-met">
+                            @Html.Raw(" " + Model.Note + "  ")</div>
+                            </div>
+                            </div>
+                            *@
+                        </div>
+                        <table class="table  w-100" style="width:100%!important">
+                            <thead class="bg-light">
+                                <tr>
+                                    <td>Date</td>
+                                    <td>Day</td>
+                                    <td>Attendance</td>
+                                    <td>Desk</td>
+                                    <td> &nbsp; </td>
+                                    <td> &nbsp; </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @{
+                                    if (@Model.DayDeskCount >= @Model.MaxAttandanceDay && @Model.DayDeskCount >= @Model.MaxAttandanceDay)
+                                    {
+                                        @for (int i = 0; i < Model.SmartWorkSpaceDataTableList.ToList().Count; i++)
+                                        {
+                                            @if (@Model.SmartWorkSpaceDataTableList.ToList()[i].IsHoliday.GetValueOrDefault() == 1) { continue; }
+
+                                            @if (!string.IsNullOrEmpty(@Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid))
+                                            {
+                                                <tr>
+                                                    <td class="align-middle">
+                                                        <label class="control-label m-t-10 ">@Html.Raw(Model.SmartWorkSpaceDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy"))</label>
+                                                        @Html.TextBoxFor(model => model.SmartWorkSpaceDataTableList.ToList()[i].DDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <label class="control-label ">@Html.Raw(Model.SmartWorkSpaceDataTableList.ToList()[i].DDay)</label>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        @Html.CheckBoxFor(m => m.SmartWorkSpaceDataTableList.ToList()[i].IsPlanned, new { @class = "attendanceCheckBox" })
+
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <label id="lblDeskId">@Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid</label>
+                                                        @Html.HiddenFor(m => m.SmartWorkSpaceDataTableList.ToList()[i].Deskid)
+
+                                                    </td>
+
+                                                    <td class="align-middle">
+                                                        <a class="btn btn-sm-icon " id="btnDesk" data-jqueryselector="openmodal" onclick='btnClick();'
+                                               data-modalcontainer="modalcontainer"
+                                               data-url="@Url.Action("SmartWorkAreas", "SWP", new { Area = "SWP" })"
+                                               data-modalpopupwidth="rightw50"
+                                               data-empno="@Model.Empno"
+                                               data-date="@Model.SmartWorkSpaceDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy")"
+                                               data-modaltitle="Smart work area"
+                                               data-modalheader="Smart work area">
+                                                            <i class="far fa-list-alt" aria-hidden="true"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td class="align-middle">
+
+                                                        @if (!string.IsNullOrEmpty(@Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid))
+                                                        {
+
+                                                            <button class="btn btn-outline-danger btn-sm border-none" id="deskDelete"
+                                                    onclick="showDeleteConfirmationPopup(event,this);"
+                                                    data-url="@Url.Action("AjaxSmartWorkAreasPostDeskDelete", "SWP", new { Area = "SWP" ,  Empno = Model.Empno ,  Date = Model.SmartWorkSpaceDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy") ,Deskid = @Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid})"
+                                                    data-redirecturl="SmartWeeklyAttendanceCreate?empno=@Model.Empno"
+                                                    data-applicationid="' + data.keyid + '"
+                                                    data-modaltitle="Please Confirm!"
+                                                    data-confirmationtext="Delete desk   @Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid on date  @Model.SmartWorkSpaceDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy") ?"
+                                                    data-confirmationtype="warning" data-confirmbuttontext="Delete desk">
+                                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                                            </button>
+                                                        }
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                    else if (@Model.DayDeskCount <= @Model.MaxAttandanceDay || @Model.DayDeskCount > @Model.MaxAttandanceDay)
+                                    {
+                                        @for (int i = 0; i < Model.SmartWorkSpaceDataTableList.ToList().Count; i++)
+                                        {
+                                            @if (@Model.SmartWorkSpaceDataTableList.ToList()[i].IsHoliday.GetValueOrDefault() == 1) { continue; }
+
+                                            <tr>
+                                                <td class="align-middle">
+                                                    <label class="control-label m-t-10 ">@Html.Raw(Model.SmartWorkSpaceDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy"))</label>
+                                                    @Html.TextBoxFor(model => model.SmartWorkSpaceDataTableList.ToList()[i].DDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+                                                </td>
+                                                <td class="align-middle">
+                                                    <label class="control-label ">@Html.Raw(Model.SmartWorkSpaceDataTableList.ToList()[i].DDay)</label>
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.CheckBoxFor(m => m.SmartWorkSpaceDataTableList.ToList()[i].IsPlanned, new { @class = "attendanceCheckBox" })
+
+                                                </td>
+                                                <td class="align-middle">
+                                                    <label id="lblDeskId">@Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid</label>
+                                                    @Html.HiddenFor(m => m.SmartWorkSpaceDataTableList.ToList()[i].Deskid)
+
+                                                </td>
+
+                                                <td class="align-middle">
+                                                    <a class="btn btn-sm-icon " id="btnDesk" data-jqueryselector="openmodal" onclick='btnClick();'
+                                               data-modalcontainer="modalcontainer"
+                                               data-url="@Url.Action("SmartWorkAreas", "SWP", new { Area = "SWP" })"
+                                               data-modalpopupwidth="rightw50"
+                                               data-empno="@Model.Empno"
+                                               data-date="@Model.SmartWorkSpaceDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy")"
+                                               data-modaltitle="Smart work area"
+                                               data-modalheader="Smart work area">
+                                                        <i class="far fa-list-alt" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+                                                <td class="align-middle">
+
+                                                    @if (!string.IsNullOrEmpty(@Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid))
+                                                    {
+
+                                                        <button class="btn btn-outline-danger btn-sm border-none" id="deskDelete"
+                                                    onclick="showDeleteConfirmationPopup(event,this);"
+                                                    data-url="@Url.Action("AjaxSmartWorkAreasPostDeskDelete", "SWP", new { Area = "SWP" ,  Empno = Model.Empno ,  Date = Model.SmartWorkSpaceDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy") ,Deskid = @Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid})"
+                                                    data-postdeletereloaddatatables="OK"
+                                                    data-applicationid="' + data.keyid + '"
+                                                    data-modaltitle="Please Confirm!"
+                                                    data-confirmationtext="Delete desk   @Model.SmartWorkSpaceDataTableList.ToList()[i].Deskid on date  @Model.SmartWorkSpaceDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy") ?"
+                                                    data-confirmationtype="warning" data-confirmbuttontext="Delete desk">
+                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                        </button>
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+
+
+                            </tbody>
+                        </table>
+
+                        <div class="modal-footer">
+                            <a href="@Url.Action("SmartAttendancePlanning", "SWP", new { Area = "SWP" })" title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                                <i class="fas fa-undo"></i>
+                                @localizer["Back"]
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        var datatableFlag = "NA";
+
+        function localScript() {
+
+            initSelect2();
+
+
+
+            if (datatableFlag == "Reserved") {
+
+                onClickChangeAreaType('Reserved');
+            }
+
+            if (datatableFlag == "General") {
+
+                onClickChangeAreaType('General');
+            }
+
+        }
+
+        $(document).ready(function() {
+            initCheckBoxListner();
+        });
+        function PostDeleteReLoadDataTables() {
+            location.reload();
+        }
+        function initCheckBoxListner() {
+            $('.attendanceCheckBox:checkbox').off('click').on('click', function() {
+                let tr = $(this).closest("tr");
+                if (this.checked) {
+                    $(this).prop("checked", false);
+                    $($(tr).find("#btnDesk")).click();
+
+                }
+                else {
+                    $(this).prop("checked", true);
+                    $($(tr).find("#deskDelete")).click();
+                }
+            });
+        }
+        function initWorkAreaListners() {
+
+            $('*[data-workareaselector=showworkareadesks]').off('click').on('click', function() {
+                event.preventDefault();
+                event.stopPropagation();
+                console.log($(this).data('office'));
+                var workArea = $(this).data('workarea');
+                var areaCategory = $(this).data('areacategory');
+                var floor = $(this).data('floor');
+                var office = $(this).data('office');
+                var workAreaDesc = $(this).data('workareadesc');
+                var wing = $(this).data('wing');
+                var office = $(this).data('office');
+                var floor = $(this).data('floor');
+                var startDate = $(this).data('date');
+
+                var areatype = $(this).data('areatype');
+
+
+                datatableFlag = areatype;
+
+                $("#formSmartWorkAreas input[id=WorkArea]").val(workArea);
+                $("#formSmartWorkAreas input[id=AreaCategory]").val(areaCategory);
+                $("#formSmartWorkAreas input[id=StartDate]").val(startDate);
+
+                $("#formSmartWorkAreas input[id=WorkAreaDesc]").val(workAreaDesc);
+                $("#formSmartWorkAreas input[id=Floor]").val(floor);
+                $("#formSmartWorkAreas input[id=Office]").val(office);
+                $("#formSmartWorkAreas input[id=Wing]").val(wing);
+                //$("#formSmartWorkAreas input[id=AreaType]").val(areatype);
+
+                $("#formSmartWorkAreas").submit();
+
+            });
+        }
+
+        function initWorkAreaDesksListners() {
+
+            $('button[id=btnbacktoworkareas]').off('click').on('click', function() {
+                event.preventDefault();
+                event.stopPropagation();
+
+                $('#formSmartWorkSpaceWorkAreaDesks').attr('action', "@Url.Action("SmartWorkAreasPostBack", "SWP" )").submit();
+
+            });
+        }
+
+        function initWorkAreaDeskSelectListners() {
+            $('*[data-workareaselector=selectworkareadesk]').off('click').on('click', function() {
+                event.preventDefault();
+                event.stopPropagation();
+
+                var workArea = $(this).data('workarea');
+                var areaCategory = $(this).data('areacategory');
+                var startDate = $(this).data('date');
+                var deskid = $(this).data('deskid');
+
+                var workAreaDesc = $(this).data('workareadesc');
+                var wing = $(this).data('wing');
+                /*
+                $("input[id$=DDate]").each(function () {
+                    if ($(this).val() == startDate) {
+                        let tr = $(this).closest("tr");
+                        $(tr).find("#lblDeskId").text(deskid);
+                        $(tr).find("input[id$='Deskid']").val(deskid);
+                        $(tr).find(".attendanceCheckBox").prop("checked", true);
+                    }
+                });
+                */
+                $("#formSmartWorkSpaceWorkAreaDesks input[id=Deskid]").val(deskid);
+                $("#formSmartWorkSpaceWorkAreaDesks input[id=AreaCategory]").val(areaCategory);
+                console.log(areaCategory);
+                var empno = $("#formSmartWorkSpaceWorkAreaDesks input[id=Empno]").val();
+
+
+                $.ajax({
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("AjaxSmartWorkAreasPostDesk", "SWP", new {Area = "SWP" })',
+                    type: 'POST',
+                    data: {
+                        Empno: empno,
+                        Date: startDate,
+                        Deskid: deskid
+                    },
+                    beforeSend: function() {
+                        showLoader();
+                    },
+                    success: function(data) {
+                        hideLoader();
+                        if (data.success) {
+
+                            notify("success", data.response, "Success");
+                            $("#modalcontainer").modal('hide');
+                            location.reload();
+
+                        }
+                        else {
+                            notify("error", data.response, "Error");
+                            localLoadDataTableForWorkAreasDesk();
+                        }
+
+                    },
+                    error: function(result) {
+                        hideLoader();
+                        errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                        notify("error", errorText, 'Error');
+                    }
+                });
+                //$("#formSmartWorkSpaceWorkAreaDesks").submit();
+                //$("#modalcontainer").modal('hide');
+
+            });
+        }
+
+        function localLoadDataTableForWorkAreas(vstartDate) {
+
+            $('#tbDataGridModel').DataTable().destroy();
+
+            $('#tbDataGridModel tbody').empty();
+
+            var table = $('#tbDataGridModel').DataTable({
+                drawCallback: function(settings) {
+                    loadScript();
+                    initWorkAreaListners();
+                },
+                order: [[3, "desc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "workArea", class: "hidden" },
+                    { data: "areaDesc", width: "10.0rem" },
+                    { data: "office" },
+                    { data: "floor" },
+                    { data: "wing" },
+                    { data: "totalCount" },
+                    { data: "occupiedCount" },
+                    { data: "availableCount" },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+
+                            if (data.deskid == null || data.deskid == "") {
+                                if (data.availableCount > 0) {
+                                    return '<a class="btn btn-sm-icon  " ' +
+                                ' data-workareaselector=showworkareadesks' +
+                                ' data-date="' + ($('#StartDate').val()) + '"' +
+                                ' data-workareadesc="' + data.areaDesc + '"' +
+                                ' data-office="' + data.office + '"' +
+                                ' data-floor="' + data.floor + '"' +
+                                ' data-wing="' + data.wing + '"' +
+                                ' data-workarea=' + data.workArea +
+                                ' data-areacategory=' + data.areaCategory +
+                                ' > ' +
+                                        ' <i class="far fa-list-alt" aria-hidden="true"></i> ' +
+                                        ' </a>'
+                                } else {
+                                    return '';
+                                }
+                            } else {
+                                return '';
+                            }
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            var item = '<div class="card"> ';
+                            item += '<div class="card-mobiledatatable"> ';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                            item += ' </div> </div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListSmartWorkAreas", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function(d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.startDate = ($('#StartDate').val());
+                    d.assign = ($('#FilterDataModel_Assign').val());
+                },
+                error: function(request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                      });
+
+                                  }
+
+        function localLoadDataTableForWorkAreasDesk() {
+            $('#tbDataGridDeskModel').DataTable().destroy();
+            $('#tbDataGridDeskModel tbody').empty();
+            var table = $('#tbDataGridDeskModel').DataTable({
+                drawCallback: function(settings) {
+                    loadScript();
+                    initWorkAreaDesksListners();
+                    initWorkAreaDeskSelectListners();
+                },
+                ordering: false,
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "office" },
+                    { data: "floor" },
+                    { data: "seatNo" },
+                    { data: "wing" },
+                    { data: "assetCode" },
+                    { data: "bay" },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+
+                            return '<button class="btn btn-outline-primary btn-sm border-none  font-weight-bold" type="button" ' +
+                        ' data-workareaselector=selectworkareadesk' +
+                        ' data-empno="' + $('#Empno').val() + '"' +
+                        ' data-workarea="' + $('#WorkArea').val() + '" ' +
+                        ' data-deskid=' + data.deskid +
+                        ' data-date="' + $('#StartDate').val() + '" ' +
+                        ' data-office=' + data.office +
+                        ' data-floor=' + data.floor +
+                        ' data-areacategory=' + data.areaCategory +
+                        '  > ' + data.deskid +
+                                ' </button>';
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            var item = '<div class="card"> ';
+                            item += '<div class="card-mobiledatatable"> ';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                            item += ' </div> </div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListWorkAreaDesksForSmartWorkspace", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function(d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.workArea = ($('#WorkArea').val());
+                    d.office = ($('#Office').val());
+                    d.floor = ($('#Floor').val());
+                    d.wing = ($('#Wing').val());
+                    d.areaCategory = ($('#AreaCategory').val());
+                    d.startDate = ($('#StartDate').val());
+                    d.assign = ($('#FilterDataModel_Assign').val());
+                },
+                error: function(request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                          });
+
+                                      }
+
+        function btnClick() {
+            datatableFlag = "Reserved";
+            return false;
+        }
+
+
+
+        function localLoadDataTableForReservedWorkAreas() {
+            $('#tbDataGridModel').DataTable().destroy();
+
+            $('#tbDataGridModel tbody').empty();
+
+            var table = $('#tbDataGridModel').DataTable({
+                drawCallback: function(settings) {
+                    loadScript();
+                    initWorkAreaListners();
+                },
+                //ordering: false,
+                order: [[3, "desc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "workArea", class: "hidden" },
+                    { data: "areaDesc", width: "10.0rem" },
+                    { data: "office" },
+                    { data: "floor" },
+                    { data: "wing" },
+                    { data: "totalCount" },
+                    { data: "occupiedCount" },
+                    { data: "availableCount" },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+
+                            if (data.deskid == null || data.deskid == "") {
+                                if (data.availableCount > 0) {
+                                    return '<a class="btn btn-sm-icon  " ' +
+                                ' data-workareaselector=showworkareadesks' +
+                                ' data-date="' + ($('#StartDate').val()) + '"' +
+                                ' data-workareadesc="' + data.areaDesc + '"' +
+                                ' data-areatype="Reserved"' +
+                                ' data-office="' + data.office + '"' +
+                                ' data-floor="' + data.floor + '"' +
+                                ' data-wing="' + data.wing + '"' +
+                                ' data-workarea=' + data.workArea +
+                                ' data-office=' + data.office +
+                                ' data-floor=' + data.floor +
+                                ' data-areacategory=' + data.areaCategory +
+                                ' > ' +
+                                        ' <i class="far fa-list-alt" aria-hidden="true"></i> ' +
+                                        ' </a>'
+                                } else {
+                                    return '';
+                                }
+                            } else {
+                                return '';
+                            }
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            var item = '<div class="card"> ';
+                            item += '<div class="card-mobiledatatable"> ';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                            item += ' </div> </div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListReservedWorkAreasForSmartWorkspace", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function(d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.startDate = ($('#StartDate').val());
+                    d.empno =($('#Empno').val());
+                    d.assign = ($('#FilterDataModel_Assign').val());
+                },
+                error: function(request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                      });
+
+                                  }
+
+        function localLoadDataTableForGeneralWorkAreas() {
+            $('#tbDataGridModel').DataTable().destroy();
+
+            $('#tbDataGridModel tbody').empty();
+
+            var table = $('#tbDataGridModel').DataTable({
+                drawCallback: function(settings) {
+                    loadScript();
+                    initWorkAreaListners();
+                },
+                order: [[3, "desc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "workArea", class: "hidden" },
+                    { data: "areaDesc", width: "10.0rem" },
+                    { data: "office" },
+                    { data: "floor" },
+                    { data: "wing" },
+                    { data: "totalCount" },
+                    { data: "occupiedCount" },
+                    { data: "availableCount" },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+
+                            if (data.deskid == null || data.deskid == "") {
+                                if (data.availableCount > 0) {
+                                    return '<a class="btn btn-sm-icon  " ' +
+                                ' data-workareaselector=showworkareadesks' +
+                                ' data-date="' + ($('#StartDate').val()) + '"' +
+                                ' data-areatype="General"' +
+                                ' data-workareadesc="' + data.areaDesc + '"' +
+                                ' data-office="' + data.office + '"' +
+                                ' data-floor="' + data.floor + '"' +
+                                ' data-wing="' + data.wing + '"' +
+                                ' data-workarea=' + data.workArea +
+                                ' data-office=' + data.office +
+                                ' data-floor=' + data.floor +
+                                ' data-areacategory=' + data.areaCategory +
+                                ' > ' +
+                                        ' <i class="far fa-list-alt" aria-hidden="true"></i> ' +
+                                        ' </a>'
+                                } else {
+                                    return '';
+                                }
+                            } else {
+                                return '';
+                            }
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            var item = '<div class="card"> ';
+                            item += '<div class="card-mobiledatatable"> ';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                            item += ' </div> </div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListGeneralWorkAreasForSmartWorkspace", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function(d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.startDate = ($('#StartDate').val());
+                    d.empno = ($('#Empno').val());
+                    d.assign = ($('#FilterDataModel_Assign').val());
+                },
+                error: function(request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                      });
+
+                                  }
+
+        function onClickChangeAreaType(type) {
+
+            $("#btnReserved").removeClass("active valid nav-link");
+            $("#btnGeneral").removeClass("active valid nav-link");
+
+            if (type == "Reserved") {
+
+                localLoadDataTableForReservedWorkAreas();
+
+                $("#btnGeneral").addClass("nav-link bg-white");
+                $("#btnReserved").addClass("nav-link active");
+
+            }
+            if (type == "General") {
+
+                localLoadDataTableForGeneralWorkAreas();
+
+                $("#btnReserved").addClass("nav-link bg-white");
+                $("#btnGeneral").addClass("nav-link active");
+            }
+
+        }
+
+    </script>
+}

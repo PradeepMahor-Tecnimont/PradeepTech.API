@@ -1,0 +1,64 @@
+﻿@model TCMPLApp.Domain.Models.HRMasters.EmployeeMasterAddress
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+            @if (Model.Status == 1)
+            {
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditEmplmast))
+                {
+                    <div class="row">
+                        <a title="Edit employee address" class="btn btn-outline-primary btn-sm border-none" href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw35"
+                           data-url='@Url.Action("AddressEdit", "Employee", new { Area = "HRMasters" })'
+                           data-statichtmlsourcedivid=""
+                           data-id="@Model.Empno"
+                           data-modaltitle="Edit employee address"
+                           data-modalheader="Edit employee address">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                    <hr />
+                }
+            }
+
+            <div class="row">
+                <div class="col-xl-6 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Add1)</div>
+                        <div class="dd-met">@(Model.Add1 == null ? "-NA-" : Model.Add1)</div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Add2)</div>
+                        <div class="dd-met">@(Model.Add2 == null ? "-NA-" : Model.Add2)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Add3)</div>
+                        <div class="dd-met">@(Model.Add3 == null ? "-NA-" : Model.Add3)</div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Add4)</div>
+                        <div class="dd-met">@(Model.Add4 == null ? "-NA-" : Model.Add4)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Pincode)</div>
+                        <div class="dd-met">@(Model.Pincode == null ? "-NA-" : Model.Pincode)</div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>

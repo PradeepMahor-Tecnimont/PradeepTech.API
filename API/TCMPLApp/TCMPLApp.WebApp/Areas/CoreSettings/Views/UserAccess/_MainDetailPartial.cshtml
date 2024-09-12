@@ -1,0 +1,32 @@
+﻿@model TCMPLApp.WebApp.Models.ModuleRolesViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+<div class="bg-gray-active rounded ">
+    <div class="input-group pt-1 pl-1 pr-1 ">
+        <input type="text" class="form-control form-control-sm border" id="ModuleRoleSearch" name="GenericSearch"
+               onkeypress="genericSearchKeypress('ModuleRoleSearch')" placeholder="Search...">
+        <div class="input-group-append">
+            <button class="btn btn-sm btn-outline-info" type="button" id="buttonModuleRoleSearch"
+                    onclick="genericSearchOnClick('ModuleRoleSearch')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-table">
+
+        <div class="table-responsive">
+            <table id="tbModulesModuleRoles" class="table table-striped table-bordered table-responsive-lg">
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th>@localizer[Html.DisplayNameFor(model => model.RoleId)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.RoleName)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.RoleDesc)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.ModuleRoleKeyId)]</th>
+                        </tr>
+                    </thead>
+                }
+            </table>
+        </div>
+    </div>
+</div>

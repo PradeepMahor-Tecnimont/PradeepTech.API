@@ -1,0 +1,153 @@
+﻿@model TCMPLApp.WebApp.Models.HRVppConfigProcessDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="VppConfigProcess"
+      asp-action="VppConfigProcessDeactivate"
+      id="formVppConfigProcessDeactive"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.EndDate" />
+    <input type="hidden" asp-for="@Model.KeyId" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Deactive Configuration Process"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Deactive Configuration Process</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.StartDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.StartDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EndDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EndDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.IsDraftText)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.IsDraftText)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmpJoiningDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmpJoiningDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.IsInitiateConfigText)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.IsInitiateConfigText)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CreatedBy)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CreatedOn)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CreatedOn?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ModifiedBy)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ModifiedBy)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ModifiedOn)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ModifiedOn?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div><hr />
+                <div class="row">
+                    
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group ">
+                            <label asp-for="EndDate" class="control-label"></label>
+                            <input id="endDateFilter" class="form-control datepickerFilter" placeholder="End date" required/>
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfim"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

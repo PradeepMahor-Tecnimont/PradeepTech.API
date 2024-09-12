@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Desk master";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>        
+        <li class="breadcrumb-item active" aria-current="page">Masters</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />    
+}
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Desk master</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("DeskMasterIndex", "DMS")">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify desk details</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-cog f-20 text-white theme-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+</div>

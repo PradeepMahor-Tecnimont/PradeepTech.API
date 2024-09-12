@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "SelfService - Home";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item active" aria-current="page">HoD Approvals</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Leave (CL/PL/CO)</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HoDApprovalLeaveIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Leave pending requests</h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-share-square f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Sick Leave (SL)</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HoDApprovalLeaveSLIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Leave pending requests</h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-share-square f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Extra hours </h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HoDApprovalExtraHoursIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Extra hours pending requests</h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas far fa-clock f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>On duty</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HoDApprovalOnDutyIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center  stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> OnDuty pending requests</h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-clock f-20 text-white theme-dark-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Leave calendar</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("LeaveCalendarHODIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Leave calendar</h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="far fa-calendar-alt f-20 text-white  theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

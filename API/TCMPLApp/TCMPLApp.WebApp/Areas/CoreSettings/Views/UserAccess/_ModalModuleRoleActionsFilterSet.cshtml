@@ -1,0 +1,67 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel
+@{
+    string ModuleName = ViewBag.ModuleName;
+    string urlFilter = ModuleName == null ? ("PostFilterReLoadDataTable(data)") : ("genericFilterReloadDatatabe(data,'" + ModuleName + "');");
+    string Module = ViewBag.Module;
+
+    string styletag = Module == null ? null : "disabled";
+}
+<form class="form-filter-datetime"
+      id="formModuleRoleActionsFilterSet"
+      asp-area="CoreSettings"
+      asp-controller="UserAccess"
+      asp-action="ModuleRoleActionsFilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success=@urlFilter
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">Filter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Filters setup @Model.ModuleId</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <label asp-for="ModuleId" class="control-label"></label>
+                    <select asp-for="ModuleId" class="form-control chosen-select"  disabled="@styletag" data-placeholder="Please select..." asp-items="ViewBag.ModuleIdList">
+                        <option selected></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RoleId" class="control-label"></label>
+                    <select asp-for="RoleId" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.RoleIdList">
+                        <option selected></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ActionId" class="control-label"></label>
+                    <select asp-for="ActionId" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.ActionIdList">
+                        <option selected></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>

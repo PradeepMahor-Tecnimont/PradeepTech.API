@@ -1,0 +1,318 @@
+﻿@model TCMPLApp.WebApp.Areas.ERS.Models.VacanciesIndexViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Vacancies list";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="ERS">Employee Referral Program</a></li>         
+        <li class="breadcrumb-item active" aria-current="page">Vacancies list</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/lib/dropzone/dropzone.css")" rel="stylesheet" asp-append-version="true" />
+    <link href="@Url.Content("~/lib/dropzone/basic.css")" rel="stylesheet" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Vacancies list</p>
+    </div>    
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>                    
+                    <th>@Html.DisplayNameFor(model => model.JobReferenceCode)</th>
+                    <th>@Html.DisplayNameFor(model => model.ShortDesc)</th>
+                    <th>@Html.DisplayNameFor(model => model.JobType)</th>                   
+                    <th>@Html.DisplayNameFor(model => model.JobLocation)</th>
+                    <th>@Html.DisplayNameFor(model => model.UploadedCvs)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script>
+        var dataTable;        
+
+        $(document).ready(function () {            
+            localScript();                       
+        });
+
+        function localScript() {
+            initSelect2();
+            initDropZone();
+            loadDataTable();
+        };
+
+        function loadDataTable() {
+            dataTable = $('#tbGrid').DataTable({
+                 drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                order: [[1, "asc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                sort: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                'columnDefs': [
+                    { sortable: false, targets: [0, 6] }
+                ],
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                    columns: [
+                        {
+                            'data': null,
+                            render: function (data, type, row) {
+                            return '<button title="Detail" class="btn btn-sm-icon" ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" '+
+                                    ' data-url="@Url.Action("VacancyDetail", "User", new { Area = "ERS" })"' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.jobKeyId + '"' +
+                                    ' data-modaltitle="Vacancy details" ' +
+                                    ' data-modalheader="Vacancy details" >' +                                   
+                                    ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                    ' </button>';                                                             
+                            },
+                            'className': "td-icon",
+                        },                        
+                        {   'data': "jobReferenceCode" },   
+                        {   'data': "shortDesc" },                   
+                        {   'data': "jobType"  },
+                        {   'data': "jobLocation" },                        
+                        {
+                            'data': null,
+                            render: function (data, type, row) {
+                                if (data.uploadedCvs > 0) {
+                                    return ' <a href="~/ERS/User/UploadedCVIndex"> ' + data.uploadedCvs + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },                            
+                            'className': "td-icon text-center",                            
+                        },                        
+                        {
+                            'data': null,
+                            render: function (data, type, row) {
+                                return '<button title="Refer" class="btn btn-outline-success btn-sm border-none" ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" '+
+                                    ' data-url="@Url.Action("VacancyRefer", "User", new { Area = "ERS" })"' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.jobKeyId + '"' +
+                                    ' data-modaltitle="Refer candidate" ' +
+                                    ' data-modalheader="Refer candidate" > ' +                                    
+                                    ' Refer ' +
+                                    ' </button>';                                                             
+                            },                            
+                            'className': "td-icon",
+                        }
+                    ],
+                    </text>
+                }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetVacanciesList", "User")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;                   
+                    d.genericSearch = $('#GenericSearch').val();                    
+                   },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+
+            //dataTable.find('thead th').css('width', 'auto');
+        };
+
+        Dropzone.autoDiscover = false;
+
+        function initDropZone() {
+
+            detachDropZone();
+
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");            
+
+             $('#btnReferConfirm').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                if ($("#formVacancyRefer").length == 0) {
+                    return;
+                }
+
+                var formElementById = document.getElementById("formVacancyRefer");
+
+                if (!formElementById.checkValidity()) {
+                    notify("error", "Form contains errors.", "Error");
+                    return;
+                }
+
+                if ($("div#iddropzone2").length == 1) {
+                    oDropZone2 = Dropzone.forElement("div#iddropzone2");
+
+                    if (oDropZone2.files.length == 1) {
+                    oDropZone2.processQueue();
+                    return;
+                    }
+
+                }
+                $("#formVacancyRefer").submit();
+
+
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("TrainingFileUpload", "EmployeeTraining", new {Area = "SWPVaccine"})',
+                autoProcessQueue: false,
+                uploadMultiple: false   ,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize:5,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles:".pdf",
+                init: function () {
+                    var myDropzone = this;
+
+                    this.on("processing", function (file) {
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+
+                        if (data.success) {
+                            onSuccess();
+                            loadDataTable();                         
+                            $('#modalcontainer').modal('hide');
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+
+                        if (data.success) {
+                            onSuccess();
+                            loadDataTable();
+                            $('#modalcontainer').modal('hide');
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+                    });
+                },
+                error: function (request, status, error) {                    
+                    notify('error', status, 'danger');
+                    this.removeAllFiles(true);
+                }
+            });
+        }
+          
+        function detachDropZone() {
+            $("#dropZoneWrapper").hide();
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+        }
+
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+        
+    </script>
+}
+
+

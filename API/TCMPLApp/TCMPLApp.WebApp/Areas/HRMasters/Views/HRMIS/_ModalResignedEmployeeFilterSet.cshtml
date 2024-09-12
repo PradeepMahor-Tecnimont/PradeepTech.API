@@ -1,0 +1,72 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel
+
+<form class="form-filter-datetime"
+      id="formResignedEmployeeFilterSet"
+      asp-area="HRMasters"
+      asp-controller="HRMIS"
+      asp-action="ResignedEmployeeFilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">Resigned Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Filters setup</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+                <h5>Date of Relieving Between</h5>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="StartDate" class="control-label"></label>
+                            <input id="startDateFilter" class="form-control datepickerFilter" placeholder="Start date" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group ">
+                            <label asp-for="EndDate" class="control-label"></label>
+                            <input id="endDateFilter" class="form-control datepickerFilter" placeholder="End date" />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group ">
+                            <label asp-for="ResignStatusCode" class="control-label"></label>
+                            <select asp-for="ResignStatusCode" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.ResignStatusCodeList" >
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ResignStatusCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>

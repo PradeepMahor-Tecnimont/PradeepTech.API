@@ -1,0 +1,46 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.OffBoarding.OffBoardingFilesUploaded>
+
+<div class="  bg-gray-active border rounded ">
+    <table id="tbOffBoardingExits" class="table table-striped table-bordered table-responsive-lg ">
+        <thead class="bg-info text-white">
+            <tr>
+                <th>FileName</th>
+                <th>Upload by</th>
+                <th>Upload Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td><a href="#" onclick="ofbfileDownload(event, this);"
+                           data-url='@Url.Action("DownloadFile", "Exits", new { Area = "OffBoarding" })'
+                           data-keyid="@m.KeyId"
+                           data-clientfilename="@m.ClientFileName"> @m.ClientFileName</a>
+                    </td>
+                    <td>@(m.UploadByEmpno + " - " + m.UploadByEmployeeName)</td>
+                    <td>@m.UploadDate.ToString("dd-MMM-yyyyy HH:mm")</td>
+                    <td>
+                        @if (ViewBag.GroupName == m.UploadByGroup)
+                        {
+                        <button class="btn btn-outline-danger " onclick="showDeleteConfirmationPopup(event,this);"
+                                data-jqueryselector="showconfirmationmodal"
+                                data-url='@Url.Action("RemoveUploadedFile", "Exits", new { Area = "OffBoarding" })'
+                                data-empno="@m.Empno"
+                                data-keyid="@m.KeyId"
+                                data-modaltitle="Please Confirm!"
+                                data-confirmationtext="Remove file @m.ClientFileName ?"
+                                data-confirmationtype="warning"
+                                data-redirecturl='@Url.Action("Index", "EmployeePolicy", new { Area = "SWPVaccine" })'
+                                data-confirmbuttontext="Remove file">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="result"></div>
+</div>

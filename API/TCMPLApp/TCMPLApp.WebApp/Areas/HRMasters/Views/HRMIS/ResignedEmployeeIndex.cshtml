@@ -1,0 +1,480 @@
+﻿@Html.AntiForgeryToken()
+
+@model TCMPLApp.WebApp.Models.ResignedEmployeeViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    ViewData["Title"] = "Resigned Employee";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Resigned Employee</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.StartDate" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.EndDate" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.ResignStatusCode" />
+<div class="row p-2 m-2">
+    <div class="container-fluid bg-white border rounded shadow m-auto col-xl-12 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Resigned Employee</p>
+        </div>
+        <div class="d-flex flex-row">
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISResignedUpdate))
+            {
+                <a title="New Resigned Employee" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw50"
+                   data-url='@Url.Action("ResignedEmployeeCreate", "HRMIS", new { Area = "HRMasters" })'
+                   data-statichtmlsourcedivid=""
+                   data-modaltitle="New Resigned Employee"
+                   data-modalheader="New Resigned Employee">
+                    <i class="fas fa-plus"></i> Create
+                </a>
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISResignedReadAll))
+            {
+                <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw35"
+                   data-url='@Url.Action("ResignedEmployeeFilterGet", "HRMIS", new { Area = "HRMasters" })'
+                   data-modaltitle="Filters - Resigned Employee"
+                   data-modalheader="Filters - Resigned Employee">
+                    <i class="fas fa-filter"></i>&nbsp;Filters
+                </a>
+                <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+                   data-actionid="ResignedEmployeeIndex"
+                   data-url='@Url.Action("ResetFilter", "HRMIS", new { Area = "HRMasters" })'
+                   href="#"
+                   onclick="resetFilter(event, this);"
+                   style="display: none;">
+                    <i class="fas fa-filter"></i> Reset
+                </a>
+            }
+            <a style="float:right"
+               class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+               href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("HRMISExcelDownload", "HRMIS", new { typeId = @ViewBag.XLDownloadType })'>
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+
+        </div>
+        <div class="m-1"></div>
+        <div class="bg-gray-active rounded ">
+            <div class="input-group pt-1 pl-1 pr-1 ">
+                <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+
+            <table id="tbResignedEmp" class="table table-striped table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr>
+
+                        <th>&nbsp;</th>
+                        <th>@Html.DisplayNameFor(model => model.EmployeeName)</th>
+                        <th>@Html.DisplayNameFor(model => model.Department)</th>
+                        <th>@Html.DisplayNameFor(model => model.Grade)</th>
+                        <th>@Html.DisplayNameFor(model => model.Designation)</th>
+                        <th>@Html.DisplayNameFor(model => model.Doj)</th>
+                        <th>@Html.DisplayNameFor(model => model.HrReceiptDate)</th>
+                        <th>@Html.DisplayNameFor(model => model.EmpResignDate)</th>
+                        <th>@Html.DisplayNameFor(model => model.DateOfRelieving)</th>
+                        <th>@Html.DisplayNameFor(model => model.ResignSt)</th>
+                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISResignedUpdate))
+                        {
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        }
+                    </tr>
+                </thead>
+            </table>
+
+            <div id="result"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/HRMasters.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            loadResignedEmployeeDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+            $('#btnExportExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                var url = '@Url.Action("HRMISExcelDownload", "HRMIS", new {Area = "HRMasters" })';
+                exportExcel(url);
+            });
+
+            $("#Empno").change(function (e) {
+                var selected = $('#Empno').find(':selected');
+                //var vempno = selected[0].label;
+                var vempno = selected[0].value;
+                if(vempno  ==  null || vempno ==""){
+
+                    $("#empDetails").hide();
+                    $("#Doj").text("");
+                    $("#Department").text("");
+                    $("#Department").text("");
+                    $("#Designation").text("");
+                    $("#Grade").text("");
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("EmployeeInfo", "HRMIS", new {Area = "HRMasters" })',
+                    data: {
+                        empno: vempno
+                    },
+                    type: 'POST',
+                    dataType: "json",
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data) {
+
+                        if(data.success){
+                            //$("#formResignedEmployee select[id=Doj]").val(data.Doj);
+                            //$("#formResignedEmployee select[id=Department]").val(data.Department);
+                            $("#empDetails").show();
+                            $("#Doj").text(data.doj);
+                            $("#Department").text(data.department);
+                            $("#Department").text(data.department);
+                            $("#Designation").text(data.designation);
+                            $("#Grade").text(data.grade);
+                        }
+                        else{
+                            $("#empDetails").hide();
+                            //notify("Error", data.response, "danger");
+                        }
+
+                        hideLoader();
+                    },
+                    error: function (result) {
+                        hideLoader();
+                        notify($.i18n('Error'), result.responseText, 'danger');
+                    }
+                });
+
+            });
+
+        };
+
+        let vVUloadResignedEmployeeList = "@Url.Action("GetListsResignedEmployee", "HRMIS")";
+
+        function loadResignedEmployeeDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbResignedEmp",
+                pColumns: datatableColumns,
+                pUrl: vVUloadResignedEmployeeList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    startDate: $('#FilterDataModel_StartDate').val() ? $('#FilterDataModel_StartDate').val() : null,
+                    endDate: $('#FilterDataModel_EndDate').val() ? $('#FilterDataModel_EndDate').val() : null,
+                    resignStatusCode: $('#FilterDataModel_ResignStatusCode').val() ? $('#FilterDataModel_ResignStatusCode').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("ResignedEmployeeDetail", "HRMIS", new { Area = "HRMasters" })"' +
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-id="' + data.keyId + '"' +
+                                ' data-modaltitle="Resigned Employee Detail" ' +
+                                ' data-modalheader="Resigned Employee Detail" ' +
+                                ' > ' +
+                                ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon",
+                    },
+                    { data: "employeeName" },
+                    { data: "department" },
+                    { data: "grade" },
+                    { data: "designation" },
+                    {
+                        data: "doj",
+                        width: '6.0rem',
+                        render: function (data, type, row) {
+                            if (data)
+                                return moment(data).format("DD-MMM-YYYY");
+                            else
+                                return '';
+                        }
+                    },
+                    {
+                        data: "hrReceiptDate",
+                        width: '6.0rem',
+                        render: function (data, type, row) {
+                            if (data)
+                                return moment(data).format("DD-MMM-YYYY");
+                            else
+                                return '';
+                        }
+                    },
+                    {
+                        data: "empResignDate",
+                        width: '6.0rem',
+                        render: function (data, type, row) {
+                            if (data)
+                                return moment(data).format("DD-MMM-YYYY");
+                            else
+                                return '';
+                        }
+                    },
+                    {
+                        data: "dateOfRelieving",
+                        width: '6.0rem',
+                        render: function (data, type, row) {
+                            if (data)
+                                return moment(data).format("DD-MMM-YYYY");
+                            else
+                                return '';
+                        }
+                    },
+                    { data: "resignSt" }
+                ];
+
+            </text>
+        };
+
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISResignedUpdate))
+        {
+            <text>
+                datatableColumns.push(
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("ResignedEmployeeEdit", "HRMIS", new { Area = "HRMasters" })" ' +
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-id="' + row.keyId + '"' +
+                                ' data-modaltitle="Edit Resigned Employee" ' +
+                                ' data-modalheader="Edit Resigned Employee"> ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>'
+
+                        },
+                        className: "td-icon",
+                    },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+
+                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("ResignedEmployeeDelete", "HRMIS", new { Area = "HRMasters" })"' +
+                                ' data-id="' + data.keyId + '"' +
+                                ' data-PostDeleteReLoadDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to Delete Resigned Employee \n' + data.employeeName + ' " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Delete Resigned Employee" ' +
+                                ' data-confirmbuttontext="Delete Resigned Employee" > ' +
+                                ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                ' </button>';
+
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                );
+            </text>
+        };
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadResignedEmployeeDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadResignedEmployeeDataTable();
+            }
+        });
+        function initDatePicker() {
+
+
+
+            $('.datepicker2').bootstrapMaterialDatePicker({
+                format: 'MMM-YYYY',
+                startView: 'year',
+                minViewMode: 'month',
+                changeMonth: true,
+                changeYear: true,
+                time: false
+            }).on('change', function (e, date) {
+                let fvDate = $(this).val();
+                $("#MonthDate").val(moment(fvDate, 'MMMM-YYYY').format("YYYYMM"));
+                $(this).datepicker('hide');
+            });
+
+            if ($("#MonthDate").val()) {
+                $('#monthDate').val(moment($("#MonthDate").val()).format('MMMM-YYYY'));
+            }
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true
+            });
+
+            $('#empResignDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EmpResignDate").val(date.format('DD-MMM-YYYY'));
+            });
+            $('#hrReceiptDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#HrReceiptDate").val(date.format('DD-MMM-YYYY'));
+            });
+            $('#dateOfRelieving').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#DateOfRelieving").val(date.format('DD-MMM-YYYY'));
+
+                if ($('#ActualLastDateInOffice').val() == null || $('#ActualLastDateInOffice').val() == '') {
+                    $('#ActualLastDateInOffice').val($("#DateOfRelieving").val());
+                    $('#actualLastDateInOffice').val($("#DateOfRelieving").val());
+                    $('#actualLastDateInOffice').bootstrapMaterialDatePicker('setDate', new Date($("#DateOfRelieving").val()));
+                }
+
+                $("#DateOfRelieving").val(date.format('DD-MMM-YYYY'));
+            });
+            $('#actualLastDateInOffice').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#ActualLastDateInOffice").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#startDateXl').datepicker({
+                format: "dd-MM-yyyy",
+                autoclose: true
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val();
+
+                $("#StartDate").val(fvDate);
+
+                $(this).datepicker('hide')
+            });
+
+            $('#endDateXl').datepicker({
+                format: "dd-MM-yyyy",
+                autoclose: true
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val()
+                $("#EndDate").val(fvDate);
+
+                $(this).datepicker('hide')
+
+            });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+                var vStartDate = moment(date);
+                var futureMonthEnd = moment(vStartDate).endOf('month');
+
+                $('#endDateFilter').bootstrapMaterialDatePicker('setDate', futureMonthEnd);
+                $('#endDateFilter').val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+                $("#EndDate").val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+
+            });
+
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+        }
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+
+            $("#FilterDataModel_StartDate").val(data.startDate);
+            $("#FilterDataModel_EndDate").val(data.endDate);
+            $("#FilterDataModel_ResignStatusCode").val(data.resignStatusCode);
+
+            loadResignedEmployeeDataTable();
+            hideLoader();
+        }
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadResignedEmployeeDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadResignedEmployeeDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+
+    </script>
+}

@@ -1,0 +1,244 @@
+﻿<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        html {
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: rgb(204,204,204);   
+            height: 100%;
+        }
+
+        .page:last-of-type {            
+            margin-bottom: -2px;
+        }
+
+        page {
+            background: white;
+            display: block;
+            margin: 0 Auto;
+            margin-bottom: 0.5cm;
+        }
+
+            page[size="A4"] {
+                width: 21cm;
+                height: 29.7cm;
+                padding: 25px 50px 0px 100px;
+            }
+
+        #parentdiv, table {
+            font-size: 12px;
+            font-style: normal;
+        }
+
+        .title {
+            font-size: 16px;
+        }
+
+        .tabDetails {
+            border-collapse: collapse;
+            border: 1px solid #000;
+        }
+
+            .tabDetails td {
+                padding: 5px;
+                border: 1px solid #000;
+            }
+
+        @@media print {
+            table:last-of-type {
+                page-break-after: auto;
+            }
+
+            html, body {
+                height: 100%;
+            }
+            
+            #buttonArea {
+                display: none;
+            }
+
+            page {
+                background: white;
+                display: block;
+                margin: 0;
+                margin-bottom: 0.5cm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <page size="A4">
+    <div id="parentdiv" style="padding:5px">
+        <table style="border-collapse: collapse; width: 100%;" border="0">
+            <tbody>
+                <tr>
+                    <td style="width:70%">
+                        <img src="tcmpl_logo_large.png" alt="Tecnimont Pvt Ltd" /><br />
+                        <p style="margin-top: -10px; margin-left: 10px; font-size: 11px; color: #0066CC; font-family:Verdana; font-weight: 600">Tecnimont Private Limited</p>
+                    </td>                
+                    <td style="width:30%;text-align: right;vertical-align:top;">
+                        <span>0181-040-01</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p class="title" style="text-align: center;">
+            <strong>Midterm Progress Evaluation of Trainees</strong> 
+        </p>
+        <p style="text-align: center;">           
+            <i>(Graduate Engineer Trainees (GETs) / Trainee Designer / Trainee D'men)</i><br/>
+            <i>(After 3 months of commencement of Training / On the Job training)</i><br />
+        </p>
+        <hr/>
+        <p style="text-align: left;">
+            <strong>1.0  &emsp; &emsp; General Information:</strong>
+        </p>
+        <table style="border-collapse: collapse; width: 100%; height: 75px;">
+            <tbody>
+                <tr>
+                    <td style="width: 60%;">Name: Mr./ Ms. <strong>!~!EmployeeName</strong></td>
+                    <td style="width: 40%;">Emp. No.: <strong>!~!EmployeeNo</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 60%;">Designation: <strong>!~!Designation</strong></td>
+                    <td style="width: 40%;">Department: <strong>!~!Department</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 60%;">Dt. of Joining: <strong>!~!Doj</strong></td>
+                    <td style="width: 40%;">Attendance: <strong>!~!Attendance</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 60%;">Location: <strong>!~!Location</strong></td>
+                    <td style="width: 40%;"></td>
+                </tr>
+            </tbody>
+         </table>
+         <hr/>
+        <p style="text-align: left;"><strong>(Please put a &#x2713; in the appropriate column)</strong></p>
+        <table class="tabDetails" style="border-collapse: collapse; width: 100%">                      
+            <tbody>
+                <tr>
+                    <td style="width: 5%;text-align: center;vertical-align: top"><strong>Sr. No.</strong></td>
+                    <td style="width: 35%;text-align: center;vertical-align: top"><strong>Competencies</strong></td>
+                    <td style="width: 7%;text-align: center;vertical-align: top"><strong>Very Good<br />(4)</strong></td>
+                    <td style="width: 7%;text-align: center;vertical-align: top"><strong>Good <br />(3)</strong></td>
+                    <td style="width: 6%;text-align: center;vertical-align: top"><strong>Avg. <br />(2)</strong></td>
+                    <td style="width: 8%;text-align: center;vertical-align: top"><strong>Below <br />Avg. (1)</strong></td>
+                    <td style="width: 30%;text-align: center;vertical-align: top"><strong>Remarks/ Action plan for improvement</strong></td>
+                </tr>
+                <tr>
+                    <td rowspan="5" style="text-align: center; vertical-align: top">1.</td>
+                    <td style="text-align: left;">Skill: !~!SkillText1</td>
+                    <td style="text-align: center;">!~!Skill1_VG</td>
+                    <td style="text-align: center;">!~!Skill1_G</td>
+                    <td style="text-align: center;">!~!Skill1_A</td>
+                    <td style="text-align: center;">!~!Skill1_BA</td>
+                    <td style="text-align: left;">!~!Skill1_Remarks</td>
+                </tr>
+                <tr>                    
+                    <td style="text-align: left;">Skill: !~!SkillText2</td>
+                    <td style="text-align: center;">!~!Skill2_VG</td>
+                    <td style="text-align: center;">!~!Skill2_G</td>
+                    <td style="text-align: center;">!~!Skill2_A</td>
+                    <td style="text-align: center;">!~!Skill2_BA</td>
+                    <td style="text-align: left;">!~!Skill2_Remarks</td>
+                </tr> 
+                <tr>
+                    <td style="text-align: left;">Skill: !~!SkillText3</td>
+                    <td style="text-align: center;">!~!Skill3_VG</td>
+                    <td style="text-align: center;">!~!Skill3_G</td>
+                    <td style="text-align: center;">!~!Skill3_A</td>
+                    <td style="text-align: center;">!~!Skill3_BA</td>
+                    <td style="text-align: left;">!~!Skill3_Remarks</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">Skill: !~!SkillText4</td>
+                    <td style="text-align: center;">!~!Skill4_VG</td>
+                    <td style="text-align: center;">!~!Skill4_G</td>
+                    <td style="text-align: center;">!~!Skill4_A</td>
+                    <td style="text-align: center;">!~!Skill4_BA</td>
+                    <td style="text-align: left;">!~!Skill4_Remarks</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">Skill: !~!SkillText5</td>
+                    <td style="text-align: center;">!~!Skill5_VG</td>
+                    <td style="text-align: center;">!~!Skill5_G</td>
+                    <td style="text-align: center;">!~!Skill5_A</td>
+                    <td style="text-align: center;">!~!Skill5_BA</td>
+                    <td style="text-align: left;">!~!Skill5_Remarks</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">2.</td>
+                    <td style="text-align: left;">Quest for enhancing knowledge and its application</td>
+                    <td style="text-align: center;">!~!Que2_VG</td>
+                    <td style="text-align: center;">!~!Que2_G</td>
+                    <td style="text-align: center;">!~!Que2_A</td>
+                    <td style="text-align: center;">!~!Que2_BA</td>
+                    <td style="text-align: left;">!~!Que2_Remarks</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">3.</td>
+                    <td style="text-align: left;">Initiative & Involvement in work</td>
+                    <td style="text-align: center;">!~!Que3_VG</td>
+                    <td style="text-align: center;">!~!Que3_G</td>
+                    <td style="text-align: center;">!~!Que3_A</td>
+                    <td style="text-align: center;">!~!Que3_BA</td>
+                    <td style="text-align: left;">!~!Que3_Remarks</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">4.</td>
+                    <td style="text-align: left;">Interpersonal & Communication Skills</td>
+                    <td style="text-align: center;">!~!Que4_VG</td>
+                    <td style="text-align: center;">!~!Que4_G</td>
+                    <td style="text-align: center;">!~!Que4_A</td>
+                    <td style="text-align: center;">!~!Que4_BA</td>
+                    <td style="text-align: left;">!~!Que4_Remarks</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">5.</td>
+                    <td style="text-align: left;">Attitude & behavior / approach towards Superior/Colleagues</td>
+                    <td style="text-align: center;">!~!Que5_VG</td>
+                    <td style="text-align: center;">!~!Que5_G</td>
+                    <td style="text-align: center;">!~!Que5_A</td>
+                    <td style="text-align: center;">!~!Que5_BA</td>
+                    <td style="text-align: left;">!~!Que5_Remarks</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">6.</td>
+                    <td style="text-align: left;">Discipline</td>
+                    <td style="text-align: center;">!~!Que6_VG</td>
+                    <td style="text-align: center;">!~!Que6_G</td>
+                    <td style="text-align: center;">!~!Que6_A</td>
+                    <td style="text-align: center;">!~!Que6_BA</td>
+                    <td style="text-align: left;">!~!Que6_Remarks</td>
+                </tr>
+            </tbody>
+        </table>
+        <br/>
+        <p style="text-align: left;"><strong>Observations / Comments</strong></p>
+        <p style="text-align: justify;">!~!Observations</p>
+        <br /> <br />        
+        <table style="border-collapse: collapse; width: 100%;" border="0">
+            <tbody>
+                <tr>
+                    <td style="width:50%;text-align: left;">
+                        Date: !~!FormDate
+                    </td>
+                    <td style="width:50%;text-align: right;">
+                        Signature of HOD
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <p style="text-align: justify;">(After evaluation form to be sent to HRMA)</p>
+    </div>    
+</page>
+</body>
+</html>

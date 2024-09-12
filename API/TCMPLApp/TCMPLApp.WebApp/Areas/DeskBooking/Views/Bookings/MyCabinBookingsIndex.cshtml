@@ -1,0 +1,156 @@
+﻿@model TCMPLApp.WebApp.Models.DeskBookCabinBookingViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "My Cabin Bookings";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DeskBooking">Desk Booking</a></li>
+        <li class="breadcrumb-item active" aria-current="page">My Cabin Bookings</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>My Cabin Bookings </p>
+    </div>
+    <div class="d-flex flex-row">
+        <a href='@Url.Action("DeskBookCabinBookingIndex", "Bookings", new { Area = "DeskBooking" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+            <i class="fas fa-undo"></i>
+            @localizer["Back"]
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("MyCabinBookingsExcelDownload", "Bookings", new { Area = "DeskBooking" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbMyBookings" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+
+                    <th>@Html.DisplayNameFor(m => m.Deskid)</th>
+                    <th>@Html.DisplayNameFor(m => m.AttendanceDate)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadMyCabinBookingDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let vVUloadMyCabinBookingList = "@Url.Action("GetListsMyCabinBookings", "Bookings")";
+
+        function loadMyCabinBookingDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbMyBookings",
+                pColumns: datatableMyCabinBookingColumns,
+                pUrl: vVUloadMyCabinBookingList,
+                PStateSave: false,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+        var bookingDatesList = @Html.Raw(Json.Serialize(ViewData["BookingDatesList"]));
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableMyCabinBookingColumns = [
+                    { 'data': "deskid" },
+                    {
+                        'data': "attendanceDate",
+                        'render': function (data) {
+                            return moment(data).format('DD-MMM-YYYY');
+                        }
+                    },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+                            var formattedDate = moment(data.attendanceDate).format('YYYYMMDD');
+                            var matchFound = bookingDatesList.some(function (item) {
+                                return item.dataValueField === formattedDate;
+                            });
+                           
+                            if (matchFound) {
+                                return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                    ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                    ' data-jqueryselector = "showconfirmationmodal" ' +
+                                    ' data-url="@Url.Action("CabinBookingDelete", "Bookings", new { Area = "DeskBooking" })"' +
+                                    ' data-id="' + data.keyId + '"' +
+                                    ' data-PostDeleteReLoadDataTables="OK" ' +
+                                    ' data-modaltitle="Please Confirm!" ' +
+                                    ' data-confirmationtext="Do you want to delete my cabin booking of ' + data.deskid + ' " ' +
+                                    ' data-confirmationtype="warning" ' +
+                                    ' title="Delete my cabin bookings" ' +
+                                    ' data-confirmbuttontext="Delete my cabin bookings" > ' +
+                                    ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                    ' </button>';
+                            }
+                            else { 
+                            return ''}
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                ];
+
+            </text>
+        }
+
+            $("#GenericSearch").keypress(function (event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearch").length) {
+                        loadMyCabinBookingDataTable();
+                    }
+                }
+            });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadMyCabinBookingDataTable();
+            }
+        });
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadMyCabinBookingDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+    </script>
+}

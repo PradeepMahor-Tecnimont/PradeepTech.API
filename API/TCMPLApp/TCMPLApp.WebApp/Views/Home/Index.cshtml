@@ -1,0 +1,304 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+</ol>
+}
+
+@section Styles {
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+<style>
+    #tbGrid.table td, #tbGrid.table th {
+        padding: 0.2rem !important;
+    }
+</style>
+}
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Self vaccine details</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("Index", "VaccinationSelf", new { Area = "SWPVaccine" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h3 class="mb-2 f-w-300"> </h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clinic-medical f-20 text-white theme-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Smart Work Policy</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("Index", "EmployeePolicy", new { Area = "SWPVaccine" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h3 class="mb-2 f-w-300"> </h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-invoice f-20 text-white theme-blue"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>TCMPL Vaccination Drive</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("Index", "VaccinationOffice", new { Area = "SWPVaccine" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h3 class="mb-2 f-w-300"> </h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-truck-monster f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+            <div class="card-header">
+            <h5>TCMPL SWP</h5>
+            </div>
+            <div class="card-block card-tile">
+            <a href="@Url.Action("PrimaryWorkSpacePlanning", "SWP", new { Area = "SWP" })">
+            <div class="row align-items-center justify-content-center stretched-link">
+            <div class="col">
+            <h3 class="mb-2 f-w-300"> </h3>
+            </div>
+            <div class="col-auto">
+            <i class="fas fa-file-alt	f-20 text-white theme-brown"></i>
+            </div>
+            </div>
+            </a>
+            </div>
+            </div>
+            </div>*@
+    </div>
+    <hr />
+    <div class="row">
+        @*@if (ViewBag.IsDMSUser)
+        {
+             <div class="col-md-4 col-xl-3">
+
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk Management</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="http://ticbapps.ticb.comp/dms/winUID/ss_getwinuidnew.asp" target="_blank">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-link text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div> 
+        }*@
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Travel Management</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="http://tplapps01.ticb.comp/TravelNExpense/TravelIndex.aspx" target="_blank">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h3 class="mb-2 f-w-300"> </h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-link text-white theme-light-teal"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        @if (ViewBag.IsHealthUser)
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Health Checkup</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="http://tplapps01.ticb.comp/HealthCheckup/default.aspx" target="_blank">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-link text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+       @*  <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl" style="min-height: 120px !important;">
+                <div class="card-header header-flex">
+                    <h5>Navratri RSVP</h5>
+                    <span>
+                        <a href="@Url.Action("Index", "Home", new { Area = "RSVP" })">
+                            <img src="~/img/rsvp_navratri_icon.png" alt="Navratri icon" />
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div> *@
+
+        <!--<div class="col-xl-3 col-md-4 col-sm-6">
+            <div class="card statistial-visit" style="height: 200px">
+                <div class="card-header theme-green">
+                    <h5 class="text-white">My actions</h5>
+                    <i class="fas fa-user-cog f-20 text-white f-right"></i>
+                </div>
+                <div class="card-block">
+                    <div class="row lnk-bgcolor">
+                        <a class="col-12 p-t-5 p-b-5" href="@Url.Action("Index", "VaccinationSelf", new { Area = "SWPVaccine" })">
+                            <span class="mb-2 f-14">Self vaccine details</span>
+                        </a>
+                        <a class="col-12 p-t-5 p-b-5" href="@Url.Action("Index", "EmployeePolicy", new { Area = "SWPVaccine" })">
+                            <span class="mb-2 f-14">Smart Work Policy</span>
+                        </a>
+                        <a class="col-12 p-t-5 p-b-5" href="@Url.Action("Index", "VaccinationOffice", new { Area = "SWPVaccine" })">
+                            <span class="mb-2 f-14">TCMPL Vaccination Drive</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-4 col-sm-6">
+            <div class="card statistial-visit" style="height: 200px">
+                <div class="card-header theme-light-teal">
+                    <h5 class="text-white">Other applications</h5>
+                    <i class="fas fa-link f-20 text-white f-right"></i>
+                </div>
+                <div class="card-block">
+                    <div class="row lnk-bgcolor">
+        @if (ViewBag.IsDMSUser)
+        {
+                                            <a class="col-12 p-t-5 p-b-5" href="http://ticbapps.ticb.comp/dms/winUID/ss_getwinuidnew.asp" target="_blank">
+                                                <span class="mb-2 f-14">Desk Management</span>
+                                            </a>
+        }
+                        <a class="col-12 p-t-5 p-b-5" href="http://ticbapps.ticb.comp/HealthCheckup/default.aspx" target="_blank">
+                            <span class="mb-2 f-14">Health Checkup</span>
+                            <i class="fas fa-sun text-red f-25"></i>
+                        </a>
+                        <a class="col-12 p-t-5 p-b-5" href="http://ticbapps.ticb.comp/TravelNExpense/TravelIndex.aspx" target="_blank">
+                            <span class="mb-2 f-14">Travel Management</span>-->
+        @*<i class="far fa-flag text-red f-25"></i>*@
+        <!--</a>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-12">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade show active" id="tabs-swpInfo" role="tabpanel" aria-labelledby="tabs-swpInfo-tab">
+                <environment exclude="">
+
+                    <div id="pw-swpInfo">
+
+                        <div id="pv-empswpdetails">
+                        </div>
+                    </div>
+                </environment>
+
+                </div>
+            </div>
+        </div>
+
+   @*<environment exclude="Production">
+    </environment>*@
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var empno = null;
+
+            loadEmployeeWorkspacedetails(empno);
+
+        });
+
+        function loadEmployeeWorkspacedetails(empno)
+        {
+            if($("#pv-empswpdetails").length)
+            {
+                var divid = $("#pv-empswpdetails");
+                $("#div-empswpdetails").addClass("active");
+
+                $.ajax({
+                    url: '@Url.Action("SWPEmployeeWorkspaceDetails", "Home")',
+                    //data: {
+                    //    'employeeNo': empno
+                    //},
+                    //type: 'POST',
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data) {
+                        divid.html(data);
+                        //loadScript();
+                        hideLoader();
+                    },
+                    error: function (result) {
+                        console.log(result);
+                        hideLoader();
+                        errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                        notify("error", errorText, 'Error');
+                    }
+                });
+            }
+        }
+
+    </script>
+}

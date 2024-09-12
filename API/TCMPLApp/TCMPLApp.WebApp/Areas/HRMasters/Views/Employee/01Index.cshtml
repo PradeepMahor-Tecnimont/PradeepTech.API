@@ -1,0 +1,86 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.HRMasters.EmployeeMasterMain>
+
+@{
+    ViewData["Title"] = "Employee master";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Employees</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-gray-active border rounded shadow m-auto col-xl-11 p-1 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee Master</p>
+    </div>
+    <div class="d-flex flex-row">
+        <a title="New employee" class="btn btn-outline-primary btn-sm border border-transparent" href="#"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw65"
+           data-url='@Url.Action("EmployeeCreate", "Employee", new { Area = "HRMasters" })'
+           data-statichtmlsourcedivid=""
+           data-modaltitle="New employee"
+           data-modalheader="New employee">
+            <i class="fas fa-plus"></i> Create
+        </a>
+        <button name="ExcelDownload" id="idExcelDownload" title="Excel Download" class=" btn btn-sm btn-success mx-2 ml-auto">
+            <i class="far fa-file-excel green-color "></i>
+        </button>
+    </div>
+    <hr class="m-1" />
+    @*@await Html.PartialAsync("_LoaderPartial")*@
+    <div class="  bg-gray-active border rounded ">
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Empno</th>
+                    <th>Name</th>
+                    <th>Parent</th>
+                    <th>Email</th>
+                    <th>EmpType</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Model)
+                {
+                    <tr>
+                        <td class="text-center "><a class="btn btn-sm-icon" href="@("Employee/Detail/" + m.Empno)" title="Detail"><i class="far fa-list-alt"></i></a></td>
+                        <td>@m.Empno</td>
+                        <td>@m.Name</td>
+                        <td>@m.Parent</td>
+                        <td>@m.Email</td>
+                        <td>@m.Emptype</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $("#tbGrid").DataTable({
+                'aaSorting': [[1, 'asc']],//, // start to sort data in first column
+                'pagingType': 'full',
+                'columnDefs': [
+                    { orderable: false, targets: 0 }
+                ]
+            });
+        });
+    </script>
+}
+
+

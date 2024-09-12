@@ -1,0 +1,51 @@
+﻿@model TCMPLApp.WebApp.Models.Batch2FamilyCreateViewModel
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="VaccinationOffice"
+      asp-action="RegisterForBatch2FamilyCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-success="loadFamilyDetails(null);"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">Register Family Member</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+
+    <div class="modal-body">
+        <div class="card bg-light border-0">
+
+            <div class="card-header app-h4 app-card-header">
+                <p id="modalheader">Register Family Member</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.FamilyMemberName)
+                    <input class="form-control" asp-for="FamilyMemberName" />
+                    <span asp-validation-for="FamilyMemberName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.Relation)
+                    <select id="idSelRelations" class="form-control Select2 " asp-for="Relation" asp-items="ViewBag.SelectListRelations">
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Relation" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.YearOfBirth)
+                    <input class="form-control" asp-for="YearOfBirth" />
+                    <span asp-validation-for="YearOfBirth" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" id="btnconfirm">
+                    Confirm
+                </button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>

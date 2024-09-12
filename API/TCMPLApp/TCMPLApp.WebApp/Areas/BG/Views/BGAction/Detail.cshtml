@@ -1,0 +1,428 @@
+﻿@model TCMPLApp.WebApp.Models.BGDetailViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{   
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section styles
+{
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Bank guarantee detail";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">       
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="BG">BG</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a asp-action="BankGuaranteeActionIndex" asp-controller="BGAction" asp-area="BG">Bank guarantees</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Bank guarantee detail</li>
+    </ol>
+} 
+
+<div style="display:none">
+    <input type="hidden" id="refnum" value="@ViewBag.Refnum" />    
+    <input type="hidden" id="bgnum" value="@Model.BGMaster.PBgnum"/>
+    <input type="hidden" id="projnum" value="@Model.BGMaster.PProjnum" />
+    <input type="hidden" id="compid" value="@Model.BGMaster.PCompid" />
+</div>
+
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["Bank guarantee detail"] [ @Html.DisplayFor(model => model.BGMaster.PBgnum) ]</h5>
+        </div>      
+        <div class="card-toolbar">
+            <div role="toolbar">
+                 @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.BG.BGHelper.ActionBGApprover))
+                {   
+                     <button class="btn btn-outline-primary btn-sm border-white"                    
+                        data-url="@Url.Action("BGAction", "BGAction", new { Area = "BG" })"                     
+                        data-jqueryselector="openmodal"
+                        data-modalcontainer="modalcontainer"
+                        data-modalpopupwidth="rightw35"
+                        data-id="@Model.Refnum"
+                        data-modaltitle="BG action"  
+                        data-modalheader="BG action"
+                        title="BG action">
+                        <i class="fas fa-tools"></i>
+                        @localizer["Action"]
+                     </button>
+                }
+            </div>
+        </div>    
+        <div class="card-pill">
+            <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tab-home-tab" data-toggle="pill" href="#tab-home" role="tab" aria-controls="tab-home" aria-selected="true">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-amendment-tab" data-toggle="pill" href="#tabs-amendment" role="tab" aria-controls="tabs-amendment" aria-selected="false"
+                        data-url="@Url.Action("AmendmentIndex", "BGAction", new { Area = "BG" })"
+                        data-id="@Model.Refnum"                       
+                        data-divid="pw-amendment"
+                        data-area="BG"
+                        data-controller="BGAction"
+                        data-action="AmendmentIndex">@localizer["Amendments"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-recipients-tab" data-toggle="pill" href="#tabs-recipients" role="tab" aria-controls="tabs-recipients" aria-selected="false"
+                       data-url="@Url.Action("RecipientsIndex", "BGAction", new { Area = "BG" })"
+                       data-id="@Model.Refnum"
+                       data-divid="pw-recipients"
+                       data-area="BG"
+                       data-controller="BGAction"
+                       data-action="RecipientsIndex">@localizer["Recipients"]</a>
+                    </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade show active" id="tab-home" role="tabpanel" aria-labelledby="tab-home-tab">
+                    <div class="card-deck">
+                        <div class="card shadow col-md-6 col-xl-8">
+                            <div class="card-block">                               
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PBgdate)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PBgdate)</div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PBgtype)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PBgtype)</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PCompdesc)</div>
+                                        <div class="dd-met">@(Model.BGMaster.PCompdesc + " [ " + Model.BGMaster.PCompid + " ] ") </div>
+                                    </div>
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PPonum)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PPonum)</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PProjname)</div>
+                                        <div class="dd-met">@(Model.BGMaster.PProjname + " [ " + Model.BGMaster.PProjnum + " ] ") </div>
+                                    </div>
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PIssuebyname)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PIssuebyname)</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PIssuetoname)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PIssuetoname)</div>
+                                    </div>
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PBankname)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PBankname)</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PBgvaldt)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PBgvaldt)</div>
+                                    </div>
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PBgclmdt)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PBgclmdt)</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-12">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PRemarks)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PRemarks)</div>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PReldt)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PReldt)</div>
+                                    </div>
+                                    <div class="form-group col-mb-12 col-xl-6">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGMaster.PReldetails)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGMaster.PReldetails)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow col-md-6 col-xl-4">
+                            <div class="card-block">
+                               <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-12">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGAmendment.PAmendmentnum)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGAmendment.PAmendmentnum)</div>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-12">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGAmendment.PBgrecdt)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGAmendment.PBgrecdt)</div>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-12">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGAmendment.PBgamt)</div>
+                                        <div class="dd-met">@(Model.BGAmendment.PCurrid + " " + Model.BGAmendment.PBgamt) </div>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-12">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGAmendment.PConvrate)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGAmendment.PConvrate)</div>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-12">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGAmendment.PBgaccept)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGAmendment.PBgaccept)</div>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-12">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGAmendment.PDocurl)</div>
+                                        <div class="dd-met">
+                                            <a target="_blank" href="@Model.BGAmendment.PDocurl" class="outline-info-style">
+                                                @localizer["View"] &nbsp;
+                                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-mb-12 col-xl-12">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.BGAmendment.PBgacceptrmk)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.BGAmendment.PBgacceptrmk)</div>
+                                    </div>                                    
+                                </div>                                 
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="tab-pane fade" id="tabs-amendment" role="tabpanel" aria-labelledby="tabs-amendment-tab">
+                    <div id="pw-amendment">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-recipients" role="tabpanel" aria-labelledby="tabs-recipients-tab">
+                    <div id="pw-recipients">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        var dataTable;
+
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {           
+            localLoadDataTableAmendments();
+            localLoadDataTableRecipients();
+
+            $("#GenericSearch").keypress(function (event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearch").length) {
+                        dataTable
+                            .search($('#GenericSearch').val())
+                            .draw();
+                    } else {
+                        dataTable
+                            .search($('#genericSearch').val())
+                            .draw();
+                    }
+                }
+            });
+
+            $('#buttonSearch').on('click', function () {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            });
+        }
+
+        function localLoadDataTableAmendments() {
+
+            dataTable = $('#dataTableAmendments').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                //lengthMenu: [25, 50],
+                lengthChange: false,
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                dom: 'rt<"row"<"col-1"l><"col"p>><"clear">',
+                ordering: false,
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+
+                            return '<button class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("AmendmentDetail", "BGAction", new { Area = "BG" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.refnum + '!-!' + data.amendmentnum.toString() + '"' +
+                                ' data-modaltitle="Detail amendment" ' +
+                                ' data-modalheader="Detail amendment"> ' +
+                                ' <i class="fas fa-eye" aria-hidden="true"</i> ' +
+                                ' </button>'
+
+                        },
+                        'className': "td-icon",
+                    },
+                    { data: "amendmentnum" },
+                    { data: "bgaccept" },
+                    { data: "currid" },
+                    { data: "bgamt" },
+                    { data: "convrate" },                       
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            const sharepointDocUri = @Json.Serialize(@Configuration.GetSection("AFCBGSharePointBaseUri").Value);
+                            var bgnum = $("#bgnum").val();
+
+                            if (data.rowNumber == 1) {
+                                return '<a target="_blank" class="outline-info-style" href="' + sharepointDocUri + bgnum + '" > ' +
+                                    '@localizer["View"]&nbsp;' +
+                                    '<i class="fas fa-external-link-alt" aria-hidden="true" > </i> </a>';                                
+                            }
+                            else {
+                                return '';
+                            }
+                        }
+                    },
+                    { data: "status" }
+                ],
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsAmedments", "BGAction")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.refnum = $('#refnum').val();
+                        d.genericSearch = $('#GenericSearch').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });         
+        }
+
+        function localLoadDataTableRecipients() {
+
+            var table = $('#dataTableRecipients').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                //lengthMenu: [25, 50],
+                lengthChange: false,
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                dom: 'rt<"row"<"col-1"l><"col"p>><"clear">',                
+                ordering: false,
+                columns: [                    
+                    { data: "grpname" },                            
+                    { data: "empno" },
+                    { data: "name" },
+                    { data: "email" }                    
+                ],  
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsRecipients", "BGAction")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.projno = $('#projnum').val();
+                        d.companyCode = $('#compid').val();                     
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+
+            //dataTableSearch();
+        }
+
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function getAmendmentDetail(id) {
+            var divContainer = $('#pw-amendment');
+            $.ajax({
+                url: "@Url.Action("AmendmentDetail", "BGAction", new { Area = "BG" })",
+                type: "GET",
+                cache: false,
+                data: {
+                    id: id
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divContainer.html(data);
+                    $('#divModalAmendmentDetailPartial .card-header').hide();
+                    $('#divModalAmendmentDetailPartial .modal-header').hide();
+                    $('#divModalAmendmentDetailPartial .modal-footer').hide();
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+    </script>
+}  

@@ -1,0 +1,79 @@
+﻿@model TCMPLApp.WebApp.Models.RegionDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="HRMaster"
+      asp-action=""
+      id="formRegionDetail"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.RegionCode" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Region Details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Region Details</h5>
+            </div>
+            <div class="card-block p-4">
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.RegionCode)
+                            </div>
+                            <div class="dd-met">
+                                @Model.RegionCode
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.RegionName)
+                            </div>
+                            <div class="dd-met">
+                                @Model.RegionName
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.ModifiedOn)
+                            </div>
+                            <div class="dd-met">
+                                @Model.ModifiedOn?.ToString("dd-MMM-yyyy")
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.ModifiedBy)
+                            </div>
+                            <div class="dd-met">
+                                @Model.ModifiedBy
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.OffBoarding.OffBoardingEmployeeExitApprovals>
+<div class="  bg-gray-active  rounded ">
+    <table id="tbOffBoardingExits" class="table table-striped table-bordered table-responsive-lg ">
+        <thead class="bg-info text-white">
+            <tr>
+                <th>Action</th>
+                <th>Remarks</th>
+                <th>Approval Status</th>
+                <th>ApprovalDate</th>
+                <th>Approver</th>
+                @if (ViewBag.IsPayrollUser && !ViewBag.IsOffBoardingApproved)
+                {
+                <th>Action</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+            <tr>
+                @*<td>@m.Empno</td>
+                    <td>@m.EmpName</td>*@
+                <td>@(m.ActionDesc)</td>
+                <td>@m.Remarks</td>
+                <td>@m.IsApprovedDesc</td>
+                <td>@m.ApprovalDate?.ToString("dd-MMM-yyyy")</td>
+                <td>@((string.IsNullOrEmpty( m.ApprovedBy) ? m.ApproverName : m.ApprovedBy + " - " + m.ApproverName)) </td>
+                @if (ViewBag.IsPayrollUser && !ViewBag.IsOffBoardingApproved)
+                {
+                    <td>
+                        @if (!Model.Any(mod => mod.RoleId == "R06" && mod.IsApproved == "OK"))
+                        {
+                        <button class="btn btn-outline-danger " id="idResetApproval" onclick="showDeleteConfirmationPopup(event,this);"
+                                data-jqueryselector="showconfirmationmodal"
+                                data-url='@Url.Action("ResetApproval", "Exits", new { Area = "OffBoarding" })'
+                                data-empno="@m.Empno"
+                                data-actionid="@m.ActionId"
+                                data-modaltitle="Please Confirm!"
+                                data-confirmationtext="Reset approval for @m.ActionDesc ?"
+                                data-confirmationtype="warning"
+                                data-confirmbuttontext="Reset Approval">
+                            <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Reset
+                        </button>
+                        }
+                    </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

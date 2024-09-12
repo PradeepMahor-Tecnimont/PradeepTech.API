@@ -1,0 +1,70 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.CostCenterHoDCreateViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Cost center edit";
+}
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<form asp-controller="CostCenter"
+      asp-action="HoDTabEdit"
+      id="idHoDTabEditCostCenter"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="POST"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('hod');PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.CostCodeId)
+    @Html.HiddenFor(m => m.CostCode)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Cost center - @Model.CostCode</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-8">
+                            <label asp-for="DyHoD" class="control-label"></label>
+                            <select asp-for="DyHoD" class="form-control Select2" asp-items="ViewBag.DyHoDId">
+                                <option selected></option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 col-xl-4">
+                            <label asp-for="ChangedNemps" class="control-label"></label>
+                            <input asp-for="ChangedNemps" class="form-control" placeholder="ChangedNemps" required />
+                            <span asp-validation-for="ChangedNemps" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

@@ -1,0 +1,141 @@
+﻿@model TCMPLApp.WebApp.Models.CostcodeChangeRequestEditViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="HRDigiForm"
+      asp-action="CostcodeChangeRequestEdit"
+      id="formCostcodeChangeRequest"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.TransferDate" />
+    <input type="hidden" asp-for="@Model.TransferEndDate" />
+    <input type="hidden" asp-for="@Model.KeyId" />
+    <input type="hidden" asp-for="@Model.BtnName" id="BtnName" />
+    <input type="hidden" asp-for="@Model.CurrentCostcode" id="CurrentCostcode" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Edit Costcode Change Request"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Edit Costcode Change Request</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="TransferType" class="control-label"></label>
+                            <select asp-for="TransferType" class="form-control Select2" required>
+                                <option value="0">Permanent</option>
+                                <option value="1">Temporary-Site</option>
+                            </select>
+                            <span asp-validation-for="TransferType" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="EmpNo" class="control-label"></label>
+                            <select asp-for="EmpNo" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmployeeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="EmpNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="CurrentCostcode" class="control-label"></label>
+                            <input asp-for="CurrentCostcodeName" id="CurrentCostcodeName" name="CurrentCostcodeName" class="form-control" required disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="TargetCostcode" class="control-label"></label>
+                            <select asp-for="TargetCostcode" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.CostCodeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="TargetCostcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="TransferDate" class="control-label"></label>
+                            <input id="transferDate" class="form-control datepicker" placeholder="@localizer["dd-MM-yyyy"]"
+                                value="@Model.TransferDate?.ToString("dd-MMM-yyyy")" required />
+                            <span asp-validation-for="TransferDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.TransferType == 1)
+                {
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="TransferEndDate" class="control-label"></label>
+                                <input id="transferEndDate" class="form-control datepicker" placeholder="@localizer["dd-Mon-yyyy"]"
+                                    value="@Model.TransferEndDate?.ToString("dd-MMM-yyyy")" required />
+                                <span asp-validation-for="TransferEndDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="SiteCode" class="control-label"></label>
+                                <select asp-for="SiteCode" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.SiteList" required>
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="SiteCode" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" placeholder="@localizer["Remarks"]" rows="2" required></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Save Draft"]">
+            @localizer["Save Draft"]
+        </button>
+        <button class="btn btn-success"
+                type="button"
+                id="submitForApproval"
+                onclick="SubmitForApproval()"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Submit For Approval"]">
+            @localizer["Submit For Approval"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

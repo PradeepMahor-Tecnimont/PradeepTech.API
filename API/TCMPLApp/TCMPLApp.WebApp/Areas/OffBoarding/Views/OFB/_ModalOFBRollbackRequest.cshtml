@@ -1,0 +1,201 @@
+﻿@model TCMPLApp.WebApp.Models.OFBRollbackRequestViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="OFB"
+      asp-action="OFBRollback"
+      id="formOFBRollback"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["OffBoarding Rollback"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>OffBoarding Rollback</h5>
+            </div>
+            <div class="card-block m-1">
+                <div class="form-group">
+                    <div class="row ">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmployeeName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Empno + " : " + Model.EmployeeName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmailId)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmailId)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-mb-3 col-xl-3">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmpType)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmpType)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-mb-3 col-xl-3">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Grade)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Grade)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.DesgName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.DesgCode +" - "+ Model.DesgName)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CostName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.DesgCode+" : "+Model.CostName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.HodName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw( Model.Hod +" : "+ Model.HodName)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+
+                        <div class="col-mb-3 col-xl-3">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Doj)
+                                </div>
+                                <div class="dd-met">                                    
+                                     @Html.Raw(Model.Doj?.ToString("dd-MMM-yyyy"))                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-mb-3 col-xl-3">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EndByDate)
+                                </div>
+                                <div class="dd-met">                                    
+                                        @Html.Raw(Model.EndByDate?.ToString("dd-MMM-yyyy"))                                   
+                                </div>
+                            </div>
+                        </div>
+                       <div class="col-mb-3 col-xl-3">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.RelievingDate)
+                                </div>
+                                <div class="dd-met ">                                    
+                                        @Html.Raw(Model.RelievingDate?.ToString("dd-MMM-yyyy"))                                    
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-mb-3 col-xl-3">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ResignationDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ResignationDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row ">
+
+                       
+                    </div>
+                    <div class="row ">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Remarks)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Remarks)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+@*                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.HrNote)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.HrNote)
+                                </div>
+*@                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <hr class="p-1 m-0" />
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="RollbackRemarks" class="control-label"></label>
+                                <textarea rows="2" asp-for="RollbackRemarks" class="form-control" required></textarea>
+                                <span asp-validation-for="RollbackRemarks" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+    </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

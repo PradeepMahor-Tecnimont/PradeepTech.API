@@ -1,0 +1,375 @@
+﻿@model TCMPLApp.WebApp.Models.AnnualEvaluationDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "HR - Mid term evaluation Details";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DigiForm">Digi forms</a></li>
+        <li class="breadcrumb-item">
+            <a asp-action="HRAnnualEvaluationActionPendingIndex" asp-controller="HRDigiForm" asp-area="DigiForm">
+                HR - Annual Pending Evaluation
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Evaluation Details</li>
+
+    </ol>
+}
+@section styles
+{
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        @@media (-webkit-min-device-pixel-ratio: 1.25) {
+            .openbal .col-xl-1, .closebal .col-xl-1 {
+                flex: 0 0 12% !important;
+                max-width: 12% !important;
+            }
+        }
+    </style>
+}
+@Html.AntiForgeryToken()
+<form asp-action="AnnualEvaluationSendToHOD"
+      asp-controller="HRDigiForm"
+      asp-area="DigiForm"
+      id="HRAnnualEvaluationDetails"
+      method="post"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.KeyId" />
+    <input type="hidden" asp-for="@Model.Empno" />
+
+    <div class="m-auto py-2 col-xl-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header">
+                <h5 class="card-title">
+                    HR - Annual Evaluation Details
+                </h5>
+            </div>
+            <div class="card-block ">
+
+                <div class="card-deck">
+                    <div class="card col-md-12 col-xl-12">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmployeeName" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @(Model.Empno + " - " + Model.EmployeeName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CostName" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.CostName)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="DesgCode" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.DesgName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Location" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Location)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Doj" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Doj?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EvaluationPeriod" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Model.Doj?.ToString("dd-MMM-yyyy")  to  @Model.EvaluationPeriod
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Attendance" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Attendance)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="card-deck " style="margin-top: 20px">
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-6">
+                        <div class="app-h4 app-card-header p-2">
+                            @localizer["Training"]
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training1" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Training1)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training2" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Training2)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training3" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Training3)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training4" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Training4)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training5" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Training5)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-6  ">
+                        <div class="app-h4 app-card-header p-2">
+                            @localizer["Feedback"]
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Strengths:</label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Feedback1)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Specific achievement during the Training period :  </label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Feedback2)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Areas of improvements & Action plan for improvement :  </label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Feedback3)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">General Behavior OR Approach towards:</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Superior:</label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Feedback4)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Colleagues:</label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Feedback5)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Recommendation for Confirmation/Extension of Training Period and Remark (If any):  :
+                                        </label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Feedback6)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-deck" style="margin-top: 20px">
+                    <div class="card shadow col-md-12 col-xl">
+                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.RoleDGAnnulEvalHR))
+                        {
+                            @if (Model.HrApproval == NotOk && Model.HodApproval == IsOk)
+                            {
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 col-md-12">
+                                            <div class="form-group">
+                                                <label asp-for="CommentOfHr" class="control-label"></label>
+                                                <textarea asp-for="CommentOfHr" class="form-control" placeholder="@localizer["Comment of HR"]" rows="2" required></textarea>
+                                                <span asp-validation-for="CommentOfHr" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success" type="submit" id="btnConfirm" onclick="SubmitHrComment()"
+                                            data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                                            data-text="@localizer["Save"]">
+                                        @localizer["Save"]
+                                    </button>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="CommentOfHr" class="control-label"></label>
+                                                <div class="dd-met">
+                                                    @Html.Raw(Model.CommentOfHr)
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*  @if (Model.CommentOfHr != null)
+                {
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionProgEvalPrint))
+                {
+
+                <button class="btn btn-outline-primary f-right" type="button" id="btnprint"
+                data-jqueryselector="binarydownload"
+                data-id="@Model.KeyId"
+                data-url="@(Url.Action("AnnualTermEvaluationPrint", "HRDigiForm", new { Area = "DigiForm" }))">
+                <i class="fas fa-file-pdf red-color"></i>
+
+                @localizer["Print"]
+                </button>
+                }
+
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionProgEvalSendToHod))
+                {
+                <button class="btn btn-warning"
+                type="button"
+                id="passModelButton"
+                onclick="SendBackToHOD()"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Send Back HOD"]">
+                @localizer["Send Back HOD"]
+                </button>
+                }
+                } *@
+                <a class="btn btn-secondary" asp-controller="HRDigiForm" asp-action="HRAnnualEvaluationActionPendingIndex" title="@localizer["Cancel"]">
+                    @localizer["Cancel"]
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+
+        };
+
+        function SendBackToHOD() {
+
+            var frm = $('#HRAnnualEvaluationDetails');
+            frm.submit();
+
+        }
+        function SubmitHrComment() {
+            var formAction = "AnnualEvaluationSaveHrComment";
+            $("#HRAnnualEvaluationDetails").attr("action", formAction);
+
+            var frm = $('#HRAnnualEvaluationDetails');
+            if (frm[0].checkValidity()) {
+                frm.submit();
+            }
+            // if (form.valid()) { // Check if the form is valid
+            //     form.submit(); // Submit the form if it's valid
+            // }
+
+        }
+    </script>
+}

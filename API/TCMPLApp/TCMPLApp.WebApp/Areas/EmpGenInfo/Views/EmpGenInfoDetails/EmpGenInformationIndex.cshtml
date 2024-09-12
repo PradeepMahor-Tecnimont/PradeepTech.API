@@ -1,0 +1,481 @@
+﻿@model TCMPLApp.WebApp.Models.EmpGenInfoPrimaryDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Employee General Information";
+
+}
+@section styles
+    {
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+    <style>
+        @@media (-webkit-min-device-pixel-ratio: 1.25) {
+            .openbal .col-xl-1, .closebal .col-xl-1 {
+                flex: 0 0 12% !important;
+                max-width: 12% !important;
+            }
+        }
+    </style>
+}
+<input type="hidden" asp-for="Empno" />
+
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Employee General Information</li>
+    </ol>
+}
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-block ">
+
+            <div class="card-deck">
+                <div class="card col-md-12 col-xl-12">
+                    <div class="card-body">
+                        <div id="divPrimaryDetails">
+                            <div class="row p-2">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.Name)</div>
+                                        <div class="dd-met">
+                                            @(Model.PrimaryDetails.Empno + " - " + Model.PrimaryDetails.Name)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.CostName)</div>
+                                        <div class="dd-met">
+                                            @(Model.PrimaryDetails.Parent + " - " + Model.PrimaryDetails.CostName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.Assign)</div>
+                                        <div class="dd-met">
+                                            @(Model.PrimaryDetails.Assign + " - " + Model.PrimaryDetails.AssignName)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.DesgName)</div>
+                                        <div class="dd-met">
+                                            @(Model.PrimaryDetails.DesgCode + " - " + Model.PrimaryDetails.DesgName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.HoDName)</div>
+                                        <div class="dd-met">
+                                            @(Model.PrimaryDetails.HoD + " - " + Model.PrimaryDetails.HoDName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-1 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.Grade)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.PrimaryDetails.Grade)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-1 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.EmpType)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.PrimaryDetails.EmpType)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-1 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.Gender)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.PrimaryDetails.Gender)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.Dob)</div>
+                                        <div class="dd-met">
+                                            @(Model.PrimaryDetails.Dob)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.PrimaryDetails.Doj)</div>
+                                        <div class="dd-met">
+                                            @if (Model.PrimaryDetails.Doj != null)
+                                            {
+                                                @(Model.PrimaryDetails.Doj.Value.ToString("dd-MMM-yyyy"))
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw("-")
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <a class="btn btn-outline-primary btn-sm  border-none" 
+                                            href="#" 
+                                            onclick="downloadInstructions()" 
+                                            title="Download Aadhaar form"><i class="fas fa-download"></i> Instructions
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-pill" style="margin-top: 20px">
+                <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-EmployeePrimaryDetails-tab" data-toggle="pill" href="#tabs-EmployeePrimaryDetails" role="tab" aria-controls="tabs-EmployeePrimaryDetails" aria-selected="true"
+                           data-url="@Url.Action("EmployeePrimaryDetailIndex", "EmpGenInfoDetails", new { empno = Model.PrimaryDetails.Empno })"
+                           data-empno="@Model.PrimaryDetails.Empno"
+                           data-divid="pw-EmployeePrimaryDetails"
+                           data-callback="validateTabs()"
+                           data-area="EmpGenInfo"
+                           data-controller="EmpGenInfoDetails"
+                           data-action="EmployeePrimaryDetailIndex">
+                            Primary Details
+                            <i id="imgDescriptionPrimaryStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-SecondaryDetails-tab" data-toggle="pill" href="#tabs-SecondaryDetails" role="tab" aria-controls="tabs-SecondaryDetails" aria-selected="false"
+                           data-url="@Url.Action("EmployeeSecondaryDetails", "EmpGenInfoDetails", new { empno = Model.PrimaryDetails.Empno })"
+                           data-empno="@Model.PrimaryDetails.Empno"
+                           data-divid="pw-SecondaryDetails"
+                           data-callback="validateTabs()"
+                           data-area="EmpGenInfo"
+                           data-controller="EmpGenInfoDetails"
+                           data-action="EmployeeSecondaryDetailsEdit">
+                            Secondary Details
+                            <i id="imgDescriptionSecondaryStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-NominationDetails-tab" data-toggle="pill" href="#tabs-NominationDetails" role="tab" aria-controls="tabs-NominationDetails" aria-selected="false"
+                           data-url="@Url.Action("EmpGenInfoNominationDetailsIndex", "EmpGenInfoDetails", new { empno = Model.PrimaryDetails.Empno })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-NominationDetails"
+                           data-area="EmpGenInfo"
+                           data-controller="EmpGenInfoDetails"
+                           data-callback="activateGratuityTab();"
+                           data-action="EmpGenInfoNominationDetailsIndex">
+                            Nomination Details
+                            <i id="imgDescriptionNominationStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-MediclaimDetails-tab" data-toggle="pill" href="#tabs-MediclaimDetails" role="tab" aria-controls="tabs-MediclaimDetails" aria-selected="false"
+                           data-url="@Url.Action("EmpGenInfoMediclaimDetailsIndex",  "EmpGenInfoDetails", new { empno = Model.PrimaryDetails.Empno })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-MediclaimDetails"
+                           data-area="EmpGenInfo"
+                           data-controller="EmpGenInfoDetails"
+                           data-callback="loadEmpMediclaimListDataTable();"
+                           data-action="EmpGenInfoMediclaimDetailsIndex">
+                            Mediclaim Details
+                            <i id="imgDescriptionMediclaimStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-PassportDetails-tab" data-toggle="pill" href="#tabs-PassportDetails" role="tab" aria-controls="tabs-PassportDetails" aria-selected="false"
+                           data-url="@Url.Action("EmpPassportDetails",  "EmpGenInfoDetails", new { empno = Model.PrimaryDetails.Empno })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-PassportDetails"
+                           data-callback="validateTabs()"
+                           data-area="EmpGenInfo"
+                           data-controller="EmpGenInfoDetails"
+                           data-action="EmployeePassportDetails">
+                            Passport Details
+                            <i id="imgDescriptionPpAaStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-AadhaarDetails-tab" data-toggle="pill" href="#tabs-AadhaarDetails" role="tab" aria-controls="tabs-AadhaarDetails" aria-selected="false"
+                           data-url="@Url.Action("EmpAadhaarDetails",  "EmpGenInfoDetails", new { empno = Model.PrimaryDetails.Empno })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-AadhaarDetails"
+                           data-callback="validateTabs()"
+                           data-area="EmpGenInfo"
+                           data-controller="EmpGenInfoDetails"
+                           data-action="EmployeeAadhaarDetails">
+                            Aadhaar Details
+                            <i id="imgDescriptionAaStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-GTLIDetails-tab" data-toggle="pill" href="#tabs-GTLIDetails" role="tab" aria-controls="tabs-GTLIDetails" aria-selected="false"
+                           data-url="@Url.Action("EmpGenInfoGTLIDetailsIndex", "EmpGenInfoDetails", new { empno = Model.PrimaryDetails.Empno })"
+                           data-id="@Model.PrimaryDetails.Empno"
+                           data-divid="pw-GTLIDetails"
+                           data-area="EmpGenInfo"
+                           data-controller="EmpGenInfoDetails"
+                           data-callback="loadGTLIListDataTable();"
+                           data-action="EmpGenInfoGTLIDetailsIndex">
+                            GTLI Details
+                            <i id="imgDescriptionGtliStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                        @await Html.PartialAsync("_LoaderPartial")
+                   
+
+                    <div class="tab-pane fade show active" id="tabs-EmployeePrimaryDetails" role="tabpanel" aria-labelledby="tabs-EmployeePrimaryDetails-tab">
+                        <div id="pw-EmployeePrimaryDetails">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-SecondaryDetails" role="tabpanel" aria-labelledby="tabs-SecondaryDetails-tab">
+                        <div id="pw-SecondaryDetails">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-NominationDetails" role="tabpanel" aria-labelledby="tabs-NominationDetails-tab">
+                        <div id="pw-NominationDetails">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-MediclaimDetails" role="tabpanel" aria-labelledby="tabs-MediclaimDetails-tab">
+                        <div id="pw-MediclaimDetails">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-PassportDetails" role="tabpanel" aria-labelledby="tabs-PassportDetails-tab">
+                        <div id="pw-PassportDetails">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-AadhaarDetails" role="tabpanel" aria-labelledby="tabs-AadhaarDetails-tab">
+                        <div id="pw-AadhaarDetails">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-PassportAndAadhaarDetails" role="tabpanel" aria-labelledby="tabs-PassportAndAadhaarDetails-tab">
+                        <div id="pw-PassportAndAadhaarDetails">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-GTLIDetails" role="tabpanel" aria-labelledby="tabs-GTLIDetails-tab">
+                        <div id="pw-GTLIDetails">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_EmpGenInfoDataTableColumnsPartial", Model.LockStatusDetailViewModel, new ViewDataDictionary(ViewData) { { "IsOnBehalf", NotOk } });
+
+    }
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+    <script src="~/js/EmployeeGenInfo.js" asp-append-version="true"></script>
+
+    <script>
+
+
+
+        function flagUnflagTabsCallback(jsonData) {
+            flagUnflagTabs(jsonData.headerData);
+        }
+
+        function flagUnflagTabs(data) {
+            if (data.primaryStatus == 'KO') {
+                $('#imgDescriptionPrimaryStatus').show();
+                $('#imgDescriptionSecondaryStatus').show();
+                $("#imgDescriptionPrimaryStatus").attr("title", data.primaryText);
+                $("#imgDescriptionSecondaryStatus").attr("title", data.primaryText);
+                $("#spanDescriptionPrimaryStatus").text(data.primaryText);
+                $("#spanDescriptionSecondaryStatus").text(data.primaryText);
+            }
+            else {
+                $('#imgDescriptionPrimaryStatus').hide();
+                $('#imgDescriptionSecondaryStatus').hide();
+                $('#spanDescriptionPrimaryStatus').hide();
+                $('#spanDescriptionSecondaryStatus').hide();
+            }
+
+            if (data.nominationStatus == 'KO') {
+                $('#imgDescriptionNominationStatus').show();
+                $("#imgDescriptionNominationStatus").attr("title", data.nominationText);
+                $("#spanDescriptionGratuityStatus").text(data.nominationText);
+            }
+            else {
+                $('#imgDescriptionNominationStatus').hide();
+                $('#spanDescriptionGratuityStatus').hide();
+            }
+
+            if (data.mediclaimStatus == 'KO') {
+                $('#imgDescriptionMediclaimStatus').show();
+                $("#imgDescriptionMediclaimStatus").attr("title", data.mediclaimText);
+                $("#spanDescriptionMediclaimStatus").text(data.mediclaimText);
+            }
+            else {
+                $('#imgDescriptionMediclaimStatus').hide();
+                $('#spanDescriptionMediclaimStatus').hide();
+            }
+
+            if (data.ppAaStatus == 'KO') {
+                $('#imgDescriptionPpAaStatus').show();
+                $("#imgDescriptionPpAaStatus").attr("title", data.ppAaText);
+                $("#spanDescriptionPpAaStatus").text(data.ppAaText);
+            }
+            else {
+                $('#imgDescriptionPpAaStatus').hide();
+                $('#spanDescriptionPpAaStatus').hide();
+            }
+
+            if (data.aaStatus == 'KO') {
+                $('#imgDescriptionAaStatus').show();
+                $("#imgDescriptionAaStatus").attr("title", data.aaText);
+                $("#spanDescriptionAaStatus").text(data.aaText);
+            }
+            else {
+                $('#imgDescriptionAaStatus').hide();
+                $('#spanDescriptionAaStatus').hide();
+            }
+
+            if (data.gtliStatus == 'KO') {
+                $('#imgDescriptionGtliStatus').show();
+                $("#imgDescriptionGtliStatus").attr("title", data.gtliText);
+                $("#spanDescriptionGtliStatus").text(data.gtliText);
+            }
+            else {
+                $('#imgDescriptionGtliStatus').hide();
+                $('#spanDescriptionGtliStatus').hide();
+            }
+
+            if (data.gratuityStatus == 'KO') {
+                $('#imgDescriptionGratuityStatus').show();
+                $("#imgDescriptionGratuityStatus").attr("title", data.gratuityText);
+                $("#spanDescriptionGratuityStatus").text(data.gratuityText);
+            }
+            else {
+                $('#imgDescriptionGratuityStatus').hide();
+                $('#spanDescriptionGratuityStatus').hide();
+            }
+
+            if (data.supAnnuStatus == 'KO') {
+                $('#imgDescriptionSupStatus').show();
+                $("#imgDescriptionSupStatus").attr("title", data.supAnnuText);
+                $("#spanDescriptionSupStatus").text(data.supAnnuText);
+            }
+            else {
+                $('#imgDescriptionSupStatus').hide();
+                $('#spanDescriptionSupStatus').hide();
+            }
+
+            if (data.epfStatus == 'KO') {
+                $('#imgDescriptionEpfStatus').show();
+                $("#imgDescriptionEpfStatus").attr("title", data.epfText);
+                $("#spanDescriptionEpfStatus").text(data.epfText);
+            }
+            else {
+                $('#imgDescriptionEpfStatus').hide();
+                $('#spanDescriptionEpfStatus').hide();
+            }
+            if (data.epsaStatus == 'KO') {
+                $('#imgDescriptionEpsaStatus').show();
+                $("#imgDescriptionEpsaStatus").attr("title", data.epsaText);
+                $("#spanDescriptionEpsaStatus").text(data.epsaText);
+            }
+            else {
+                $('#imgDescriptionEpsaStatus').hide();
+                $('#spanDescriptionEpsaStatus').hide();
+            }
+            if (data.epsmStatus == 'KO') {
+                $('#imgDescriptionEpsmStatus').show();
+                $("#imgDescriptionEpsmStatus").attr("title", data.epsmText);
+                $("#spanDescriptionEpsmStatus").text(data.epsmText);
+            }
+            else {
+                $('#imgDescriptionEpsmStatus').hide();
+                $('#spanDescriptionEpsmStatus').hide();
+            }
+        }
+
+        function downloadInstructions() {
+
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("DownloadEGIInstructions", "EmpGenInfoDetails", new {Area = "EmpGenInfo" })',
+                type: "POST",
+                data: {
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    toastr.success("File downloaded successfully.");
+                    hideLoader();
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        }
+
+        function UpdateSelfRecord() {
+
+            var formAction = "UpdateSelfRecord";
+            $("#formMediclaimDetails").attr("action", formAction);
+
+            var frm = $('#formMediclaimDetails');
+            frm.submit();
+
+        }
+    </script>
+    }

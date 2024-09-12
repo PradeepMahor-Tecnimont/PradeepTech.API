@@ -1,0 +1,287 @@
+﻿@model TCMPLApp.WebApp.Models.AppUserMasterViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    ViewData["Title"] = "Email Process Status";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="CoreSettings">Core Settings</a></li>
+        <li class="breadcrumb-item active">App User Master</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>App User Master</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <a class="btn btn-outline-primary btn-sm border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("EmployeeUpload", "Home", new { Area = "CoreSettings" })'
+               data-modaltitle="Upload Employee"
+               data-modalheader="Upload Employee">
+                <i class="fa fa-upload"></i>&nbsp;Upload Employee
+            </a>
+            <button class=" btn btn-outline-primary btn-sm border-white" type="button" id="btnActiveSubmit"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Confirm"]">
+                @localizer["Active"]
+            </button>
+            <button class=" btn btn-outline-primary btn-sm border-white" type="button" id="btnDeactiveSubmit"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Confirm"]">
+                @localizer["Deactive"]
+            </button>
+            <button class=" btn btn-outline-primary btn-sm border-white" type="button" onclick="btnSendMail('GetAccess')"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Send mail for access"]">
+                @localizer["Send mail for Access"]
+            </button>
+            <button class=" btn btn-outline-primary btn-sm border-white" type="button" onclick="btnSendMail('RemoveAccess')"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Send mail for remove access"]">
+                @localizer["Send mail for remove access"]
+            </button>
+        </div>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbUserMaster" class="table table-striped table-bordered table-responsive-lg">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th style="text-align:center">
+                        <input type="checkbox" class="" name="selectAll" id="selectAll">
+                    </th>
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.Status)</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            loadUserMasterDataTable();
+
+        });
+        $("#selectAll").change(function () {
+            var isChecked = this.checked;
+            $('#tbUserMaster td input:checkbox').prop('checked', isChecked);
+        });
+        function localScript() {
+            initSelect2();
+        };
+
+        let vVUloadUserMasterDataTableList = "@Url.Action("GetUserMasterList", "Home")";
+
+        function loadUserMasterDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbUserMaster",
+                pColumns: datatableColumns,
+                pUrl: vVUloadUserMasterDataTableList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    let datatableColumns = [
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+                            if(data.checkboxFlag == "OK")
+                            {
+                                return '<div class="checkboxlabel"> <input type="checkbox" name="' + data.empno + '" id="' + data.empno + '" class="checkBox-Blue" value="' + data.empno + '" /></div>';
+                            }
+                            else
+                            {
+                                return '';
+                            }
+                        },
+                        'className': "td-icon text-center  align-middle ",
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.empno + " - " + data.name
+                        }
+                    },
+                    { data: "status" }
+                    ];
+            </text>
+        };
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadUserMasterDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                loadUserMasterDataTable();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.messageType == "KO") {
+                var blob = convertToBlob(data.messageFileContent.fileContents, data.messageFileContent.contentType);
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = data.messageFileContent.fileDownloadName;
+                link.click();
+                loadUserMasterDataTable();
+                notify("error", data.messageText, 'Error');
+            }
+            else {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadUserMasterDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+
+
+        $('#btnActiveSubmit').on('click', function () {
+
+            var selectedValues = [];
+
+            $('.checkBox-Blue:checked').each(function () {
+                selectedValues.push($(this).val());
+            });
+
+            if (selectedValues.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("ActiveEmployee", "Home")',
+                    type: 'POST',
+                    data: { selectedRecords: selectedValues },
+                    beforeSend: function () {
+                        showModalLoader();
+                    },
+                    success: function (data) {
+                        hideModalLoader();
+                        $('#selectAll').prop('checked', false);
+                        loadUserMasterDataTable();
+                        
+                        notify('success', data.response, 'Success');
+                    },
+                    error: function (result) {
+
+                        hideModalLoader();
+                        showError(result);
+                    }
+                });
+            } else {
+                notify("error", "Please select at least one record", 'Error');
+            }
+
+        });
+
+        $('#btnDeactiveSubmit').on('click', function () {
+
+            var selectedValues = [];
+
+            $('.checkBox-Blue:checked').each(function () {
+                selectedValues.push($(this).val());
+            });
+
+            if (selectedValues.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("DeActiveEmployee", "Home")',
+                    type: 'POST',
+                    data: { selectedRecords: selectedValues },
+                    beforeSend: function () {
+                        showModalLoader();
+                    },
+                    success: function (data) {
+                        hideModalLoader();
+                        loadUserMasterDataTable();
+                        $('#selectAll').prop('checked', false);
+                        notify('success', data.response, 'Success');
+                    },
+                    error: function (result) {
+
+                        hideModalLoader();
+                        showError(result);
+                    }
+                });
+            } else {
+                notify("error", "Please select at least one record", 'Error');
+            }
+
+        });
+
+        function btnSendMail(statusName) {
+            if (statusName == '' || statusName == null) {
+                return;
+            }
+
+            var processName = '';
+            var subject = '';
+
+            switch (statusName.toUpperCase()) {
+                case 'GETACCESS':
+                    processName = 'GETACCESS';
+                    break;
+                case 'REMOVEACCESS':
+                    processName = 'REMOVEACCESS';
+                    break;
+            }
+
+            var email = 'd.bhavsar@tecnimont.in';
+            if (processName == "GETACCESS")
+                subject = 'Get access of Quality environment';
+            else
+                subject = 'Remove access of Quality environment';
+
+            var emailBody = '';
+
+            emailBody = 'Dear Sir/Madam,' + '%0D%0A' + '%0D%0A';
+            if (processName == "GETACCESS")
+                emailBody += 'This is to inform you that i need to get access of the following employee in quality environment  ' + '%0D%0A' + '%0D%0A';
+            else
+                emailBody += 'This is to inform you that i need to remove access of the following employee in quality environment  ' + '%0D%0A' + '%0D%0A';
+            emailBody += 'Empno is : ' + '%0D%0A' + '%0D%0A';
+            emailBody += 'Do the needful at the earliest.' + '%0D%0A' + '%0D%0A';
+            emailBody += 'Thanks,' + '%0D%0A';
+            emailBody += 'This is an system generated automated TCMPL Mail, do not reply.';
+
+            if (email.length > 5) {
+                window.location = 'mailto:' + '?to=' + email + ' &subject=' + subject + ' &body=' + emailBody;
+            }
+            else {
+                notify('error', 'No recepients found', 'danger');
+            }
+        }
+
+    </script>
+}

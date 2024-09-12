@@ -1,0 +1,61 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="formExEmployeeNomineeDetailsExcel"
+      asp-area="EmpGenInfo"
+      asp-controller="Report"
+      asp-action="Ex_EmployeeNomineeDetailsExcel"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+    <div style="display:none">
+
+        <input type="hidden" asp-for="@Model.IsFiltered" />
+        @Html.TextBoxFor(model => model.SelectYear, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    </div>
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Filter"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Filters setup"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Select Year</label>
+                            <input id="SelectYearFilter" class="form-control selectYearFilter"  data-date-format="yyyy" placeholder="@localizer["Select Year"]" value="@Model.SelectYear?.ToString("DD-MMM-YYYY")" />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Empno" class="control-label"></label>
+                            <textarea asp-for="Empno" class="form-control" rows="3" maxlength="4000" onkeypress="RegularExpressionValidationCheck(event)" onpaste="validatePaste(this, event)"></textarea>
+                            <span asp-validation-for="Empno" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnExportExEmployeeNomineeDetailsExcel"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <div id="ExEmployeeNomineeDetails_Loader" class="spinner-border text-info text-center hidden "
+             style="width: 2.5rem; height: 2.5rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

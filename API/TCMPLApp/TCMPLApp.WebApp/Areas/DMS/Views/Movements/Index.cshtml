@@ -1,0 +1,497 @@
+﻿@model TCMPLApp.WebApp.Models.MovementsIndexViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    ViewData["Title"] = "Bulk employee / taskforce movements";    
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Movements</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <!-- Upload file css -->
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<input class="hidden" id="SessionId" name="SessionId" value="@ViewBag.SessionId">
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Bulk employee / taskforce movements</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <a class="btn btn-outline-primary btn-sm border-white"               
+                asp-area="DMS" asp-controller="Movements" asp-action="Create" asp-route-id="@ViewBag.SessionId"
+                data-id="@ViewBag.SessionId"
+                title="Create movement request">
+                <i class="fas fa-plus"></i>
+                @localizer["Create"]
+            </a> 
+
+            <a title="Import movements" id="idImportMovements"
+               class="btn btn-outline-primary btn-sm border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ImportMovements", "Movements", new { Area = "DMS" })'
+               data-id="@ViewBag.SessionId"
+               data-modaltitle="Import movements"
+               data-modalheader="Import movements">
+                <i class="fas fa-arrow-alt-circle-up"></i>&nbsp; @localizer["Import"]
+            </a> 
+            
+            <a class="btn btn-outline-primary btn-sm border-white"               
+                asp-area="DMS" asp-controller="Movements" asp-action="FlexiToDMSIndex"
+                title="Convert desk from flexi to DMS">
+                <i class="fas fa-retweet"></i>
+                @localizer["Convert flexi desk to DMS"]
+            </a>             
+        </div>
+    </div>    
+    <div class="m-1 p-1"></div>
+    <div class="bg-gray-active rounded">
+        <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">                    
+                    <th>@Html.DisplayNameFor(model => model.Movereqnum)</th>
+                    <th>@Html.DisplayNameFor(model => model.Movereqdate)</th>
+                    <th>@Html.DisplayNameFor(model => model.ItApprl)</th>
+                    <th>@Html.DisplayNameFor(model => model.ItCordApprl)</th>
+                    <th>@localizer["Action"]</th>
+                    <th>@localizer["Delete"]</th>
+                </tr>                
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {           
+            localLoadDataTable();
+        });
+
+        function localScript() {
+            $("#dropZoneWrapper").hide();
+            initImportMovementsUpdateControls();
+        }                
+
+        function localLoadDataTable() {
+
+            var table = $('#tbDataGrid').DataTable({
+                    drawCallback: function (settings) {
+                        loadScript();
+                    },
+                    destroy: true,
+                    ordering: false,
+                    responsive: true,
+                    autoWidth: false,
+                    pageLength: 25,
+                    processing: true,
+                    serverSide: true,
+                    stateSave: true,
+                    bLengthChange: false,
+                    bInfo: false,
+                    filter: false,
+                layout: { topStart: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+                    columnDefs: [
+                        { orderable: false, targets: 0 }
+                    ],
+                    @if ((bool)@Context.Items["isMobile"] == false)
+                    {
+                        <text>
+                                ordering: false,
+                                columns: [                    
+                                { data: "movereqnum"},                   
+                                {
+                                    'data': "movereqdate",
+                                    'render': function (data) {
+                                        return moment(data).format('DD-MMM-YYYY');
+                                    }
+                                },                            
+                                {
+                                    data: null,
+                                    render: function (data, type, row) {                            
+                                        if(data.itApprl == 1)
+                                        {
+                                            return 'Approved';
+                                        }
+                                        else
+                                        {
+                                            return 'Pending';
+                                        }
+                                    }
+                                },
+                                {
+                                    data: null,
+                                    render: function (data, type, row) {                            
+                                        if(data.itApprl == 1 && data.itCordApprl == 1)
+                                        {
+                                            return 'Closed';
+                                        }
+                                        else
+                                        {
+                                            if(data.itApprl == 1)
+                                            {
+                                                return ' Pending';
+                                            }
+                                            else
+                                            {
+                                                return ' ';
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    data: null,
+                                    render: function (data, type, row) {                            
+                                        return '<a class="btn btn-outline-info btn-sm border-none" ' + 
+                                                ' href="@Url.Action("Edit", "Movements", new { Area = "DMS" })?id=' + data.movereqnum + '" title="Edit"> ' +
+                                                ' <i class="fas fa-edit" aria-hidden="true"></i></a>';
+                                    },
+                                    className: "td-icon text-center  align-middle",
+                                },
+                                {
+                                    'data': null,
+                                    render: function (data, type, row) {
+                                         if (data.itApprl == 0) {
+                                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                                ' data-url="@Url.Action("Delete", "Movements", new { Area = "DMS" })"' +
+                                                ' data-id="' + data.movereqnum + '"' +
+                                                ' data-redirecturl="@Url.Action("Index", "Movements", new { Area = "DMS" })"' +
+                                                ' data-modaltitle="Please Confirm!" ' +
+                                                ' data-confirmationtext="Do you want to delete (' + data.movereqnum + ') ?" ' +
+                                                ' data-confirmationtype="warning" ' +
+                                                ' title="Delete movement request" ' +
+                                                ' data-confirmbuttontext="Delete movement request" > ' +
+                                                ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                                ' </button>';
+                                        } else
+                                        {
+                                            return ' ';
+                                        }
+                                    },
+                                    'className': "td-icon text-center  align-middle",
+                                }
+                            ],
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                                ordering: false,
+                                columns: [
+                                {
+                                    data: null,
+                                    render: function (data, type, row) {
+                                        var item = '<div class="card">';
+                                        item += '<div class="card-mobiledatatable">';
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Movereqnum)' + '</dt><dd class="col-lg-8">' + data.movereqnum + '</dd></dl>';
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Movereqdate)' + '</dt><dd class="col-lg-8">' + data.movereqdate + '</dd></dl>';
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ItApprl)' + '</dt><dd class="col-lg-8">' + data.itApprl + '</dd></dl>';
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ItCordApprl)' + '</dt><dd class="col-lg-8">' + data.itCordApprl + '</dd></dl>';
+                                        item += '</div></div>';
+                                        return item
+                                    },
+                                    sortable: false,
+                                    searchable: false,
+                                    className: "datatable-td-mobile"
+                                }
+                            ],
+                        </text>
+                    }
+                    ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetLists", "Movements")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        function initImportMovementsUpdateControls() {
+            
+            if ($("#formMovementsXLUpload").length != 0) {
+                initDropZone(".xlsx");
+            }
+
+            $('#btnMovementsXLTemplate').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadMovementsXLTemplate();
+            });
+
+            $('#btnMovementsUpdateXL').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitMovementsUpdateXL();
+            });
+        }
+
+        Dropzone.autoDiscover = false;
+                
+        function initDropZone(fileTypeExtension) {
+            
+            $("#dropZoneWrapper").show();
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            $('div#iddropzone2').each(function () {
+
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    return;
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("TrainingFileUpload", "EmployeeTraining", new {Area = "SWPVaccine"})',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+
+                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    // of the sending event because uploadMultiple is set to true.
+                    this.on("processing", function (file) {
+                        
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                            if (data.fileContent != null) {
+                                var blob = b64toBlob(data.fileContent.fileContents, data.fileContent.contentType);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = data.fileContent.fileDownloadName;
+                                link.click();
+                            }
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+
+            const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, { type: contentType });
+                return blob;
+            };
+
+        }
+
+        function detachDropZone() {
+            $("#dropZoneWrapper").hide();
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+        }
+
+        function downloadMovementsXLTemplate() {
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formMovementsXLUpload input[name="__RequestVerificationToken"]').val() },
+                url: "@Url.Action("MovementsXLTemplateDownload", "Movements", new { Area = "DMS"})",
+                type: "GET",
+                data: {},
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        }
+
+        function submitMovementsUpdateXL() {
+
+            var formMovementsXLUpload = "#formMovementsXLUpload";
+            if ($(formMovementsXLUpload).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length != 0) {
+                oDropZone2.processQueue();
+                //notify("error", "No files selected.", "Error");
+                //return;
+            }
+            else {
+                $(formMovementsXLUpload).submit();
+            }
+            
+            
+            
+            
+            
+            
+            //var formMovementsXLUpload = "#formMovementsXLUpload";
+            //if ($(formMovementsXLUpload).length == 0) {
+            //    console.log("Form not found");
+            //    return;
+            //}
+
+            //oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            //if (oDropZone2.files.length == 0) {
+            //    notify("error", "No files selected.", "Error");
+            //    return;
+            //}
+            //oDropZone2.processQueue();
+        }
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function PostSaveReLoadDataTable(data) {           
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+    </script>
+}
+

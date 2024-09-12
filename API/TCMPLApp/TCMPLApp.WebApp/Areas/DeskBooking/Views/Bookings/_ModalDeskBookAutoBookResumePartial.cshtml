@@ -1,0 +1,62 @@
+﻿@model TCMPLApp.WebApp.Models.DeskBookingViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form class=""
+      id="formResumeDeskBooking"
+      asp-area="DeskBooking"
+      asp-controller="Bookings"
+      asp-action="AutoDeskBookingResume"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript();initToastrMessage();"
+      data-ajax-success="PostSaveReLoad(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div style="display:none">
+        @Html.TextBoxFor(model => model.FromDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden", @required = "required" })
+        @Html.TextBoxFor(model => model.ToDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden", @required = "required" })
+    </div>
+    <div class="modal-header">
+        <h5 class="modal-title">Resume Auto Desk</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Resume Auto Desk</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="FromDate" class="control-label"></label>
+                            <input id="startDateFilter" class="form-control datepickerFilter" placeholder="Start date" required />
+                            <span asp-validation-for="FromDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group ">
+                            <label asp-for="ToDate" class="control-label"></label>
+                            <input id="endDateFilter" class="form-control datepickerFilter" placeholder="End date" required />
+                            <span asp-validation-for="FromDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+    <div id="results" style="display:none">@TempData["Message"]</div>
+</form>

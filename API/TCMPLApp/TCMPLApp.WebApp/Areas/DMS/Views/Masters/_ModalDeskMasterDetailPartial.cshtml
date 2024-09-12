@@ -1,0 +1,125 @@
+﻿@model TCMPLApp.WebApp.Models.DeskMasterViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<div class="modal-header">
+    <h5 class="modal-title">@localizer["Desk detail"]</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>Desk detail</h5> - @Model.DeskId
+        </div>
+        <div class="card-block">
+            <div class="row">
+                <div class="col-xl-4 col-md-4">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Office)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Office)</div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Floor)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Floor)</div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.IsBlocked)</div>
+                        <div class="switch d-inline m-r-10">
+                            <input type="checkbox" readonly @if (Model.IsBlocked == 1)
+                            {
+                                @Html.Raw("checked")
+                            } />
+                            <label class="cr" style="top: 0px;"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-4 col-md-4">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.SeatNo)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.SeatNo)</div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Cabin)</div>
+                        <div class="switch d-inline m-r-10">
+                            <input type="checkbox" readonly @if (Model.Cabin == "Y")
+                            {
+                                @Html.Raw("checked")
+                            } />
+                            <label class="cr" style="top: 0px;"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.IsDeleted)</div>
+                        <div class="switch d-inline m-r-10">
+                            <input type="checkbox" readonly @if (Model.IsDeleted == 1)
+                            {
+                                @Html.Raw("checked")
+                            } />
+                            <label class="cr" style="top: 0px;"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-6 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Wing)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Wing)</div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Bay)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Bay)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.WorkAreaDesc)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.WorkArea  )</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-xl-6 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.DeskidOld)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.DeskidOld)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Remarks)</div>
+                        <div class="dd-met">
+                            @if (Model.Remarks != null)
+                                @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.Remarks).Replace("\n", "<br/>"))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+

@@ -1,0 +1,285 @@
+﻿@model TCMPLApp.WebApp.Areas.RapReporting.RapViewModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Home Page";
+    const string actionName = "Index";
+    const string controllerName = "Home";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Rap Reporting</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+
+<input id="Yyyy" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyy" />
+<input id="YearMode" readonly type="hidden" asp-for="@Model.FilterDataModel.YearMode" />
+<input id="Yyyymm" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+<input id="CostCode" readonly type="hidden" asp-for="@Model.FilterDataModel.CostCode" />
+<input id="Projno" readonly type="hidden" asp-for="@Model.FilterDataModel.Projno" />
+
+<div class="card-toolbar p-l-15 ">
+    <div role="toolbar">
+        <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("FilterGet", "Home", new { Area = "RapReporting" })'
+                data-modaltitle="Filter"
+                data-modalheader="Filter">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+            {
+                @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy)
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.YearMode))
+            {
+                @Html.Raw(localizer[", Year mode : "] + (Model.FilterDataModel.YearMode == "A" ? "April - March" : "January - December"))
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)))
+                ;
+            }
+
+        </button>
+        <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-20 divSitemap">
+            <a class="" style="margin-top:2px;" href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/RAP_Reporting_User_Manual.pdf" target="_blank" title="User manual">
+                <i class="fas fa-info-circle fa-2x"></i>
+            </a>&nbsp; &nbsp;
+            <a class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("ShowSitemap", "Home", new { Area = "RapReporting" })'
+                data-modaltitle="Sitemap"
+                data-modalheader="Sitemap"
+                title="Sitemap">
+            <i class="fas fa-sitemap fa-1x"></i></a>
+        </div>
+    </div>
+    
+</div>
+<div class="m-2"></div>
+<div class="col-sm-12">
+    <div class="row">        
+            @if (
+                (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsCostCode) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProjectManager) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProco) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsAFC) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsHR) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsMasters) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionRAPReports)))
+            {
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header header-flex">
+                    <h5>General reports</h5>
+                    <span class="f-14 f-w-700"> &#10148; </span>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("GeneralIndex", "Reports", new { Area = "RapReporting" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h3 class="mb-2 f-w-300"> </h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-pie f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        }
+        @if (
+                (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsCostCode) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProjectManager) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsProco) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsEnggMngr) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsNonEnggMngr) ||
+                CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsAFC)))
+        {
+        
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header header-flex">
+                    <h5>Analytical reports</h5>
+                    <span class="f-14 f-w-700"> &#10148; </span>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("AnalyticalIndex", "Reports", new { Area = "RapReporting" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> </h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-bar f-20 text-white theme-teal"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsTopMgmt))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>Management reports</h5>
+                        <span class="f-14 f-w-700"> &#10148; </span>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ManagementIndex", "Reports", new { Area = "RapReporting"})">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-landmark f-20 text-white theme-dark-orange"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>    
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionCostCodeEdit) ||
+            CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionHoDFormsEdit) ||
+            CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoMastersEdit) ||
+            CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoTrans))
+        {
+                <div class="col-md-4 col-xl-3">
+                    <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>Transactions</h5>
+                        <span class="f-14 f-w-700"> &#10148; </span> 
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("TransactionsIndex", "Transactions", new { Area = "RapReporting" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>   
+        }
+         @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoTrans))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>Manage</h5>
+                        <span class="f-14 f-w-700"> &#10148; </span>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ManageIndex", "Transactions", new { Area = "RapReporting"})">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="	fas fa-wrench f-20 text-white theme-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>    
+        }
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+    <script src="~/js/site-rap.js" asp-append-version="true"></script>
+    <script>
+
+        $(document).ready(function () {
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#YearMode').val() == null || $('#YearMode').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {                      
+                    $("#filterGet").click(); 
+            }
+        });
+
+        function localScript() {
+            initSelect2();
+
+            var yearMonthListUrl = "@Url.Action("GetYearMonthList", "Home", new {Area = "RapReporting"})";            
+            callRapReportingFilterListeners(yearMonthListUrl);
+
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#YearMode').val() == null || $('#YearMode').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {     
+                    hideFilterCancelButton('HIDE');
+            }
+            else {
+                hideFilterCancelButton('SHOW');
+            }                       
+
+            var cancelButtonRedirectUrl = "@Url.Action("RedirectPage", "Home", new {Area = "RapReporting",
+                                                                                    actionName = @actionName,
+                                                                                    controllerName = @controllerName})";
+            callCancelButtonListeners(cancelButtonRedirectUrl);
+
+            callFilterDefaultsListeners();
+        }
+
+        function filterSiteMap()
+        {            
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById('serachSiteMap');
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("sitemapUL");
+            li = ul.getElementsByTagName('li');
+
+            for (i = 0; i < li.length; i++) {
+                a = li[i];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+    </script>
+}

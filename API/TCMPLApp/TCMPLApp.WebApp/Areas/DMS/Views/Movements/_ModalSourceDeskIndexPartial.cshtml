@@ -1,0 +1,164 @@
+﻿@model TCMPLApp.WebApp.Models.SelectedDeskIndexViewModel
+
+@{
+    ViewData["Title"] = "Source desk list";
+}
+
+@Html.AntiForgeryToken()
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div style="display:none">
+    <input tyep="hidden" id="sourceRowsCount" name="sourceRowsCount" value="@Model.MovementsSelectedDeskDataTableLists.Count()" />
+</div>
+
+<div class="m-1"></div>
+<div class="bg-gray-active rounded ">
+    
+    <hr style="margin-top:-15px">
+    <div style="max-height:570px; overflow: auto">
+        <table id="tbSourceDesk" class="table table-hover table-bordered source-desk-table border">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>Desk no</th>
+                    <th>Desk : Asset/Employee</th>
+                    <th>Model / Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model.MovementsSelectedDeskDataTableLists.Any())
+                {
+                    @foreach (var sourcedesks in Model.MovementsSelectedDeskDataTableLists)
+                    {
+                        <tr>
+                            <td class="col-md-2">@sourcedesks.DeskId </td>
+                            <td class="col-md-3 @if(sourcedesks.Iconname == "fas fa-user") { @Html.Raw("text-dark-green") }">                                
+                                @sourcedesks.AssetId
+                                <i class="fas @sourcedesks.Iconname f-12 float-right m-t-5"></i>
+                            </td>
+                            <td class="col-md-6 @if(sourcedesks.Iconname == "fas fa-user") { @Html.Raw("text-dark-green") }">
+                                @sourcedesks.Name
+                            </td>
+                            <td class="col-md-1" style="text-align: right">
+                                @if (sourcedesks.AssetId?.ToString().Substring(0,2) != "IT")
+                                {
+                                    <a class="btn btn-outline-primary btn-sm border-none p-t-0 p-b-0"
+                                       onclick="functionPpenModalListner(this)"
+                                       data-modalcontainer="modalcontainer"
+                                       data-url="@Url.Action("AssetAssignmentCreate", "Movements", new { Area = "DMS" })"
+                                       data-modalpopupwidth="rightw35"
+                                       data-sid="@sourcedesks.Sid"
+                                       data-movetype="@sourcedesks.Category"
+                                       data-deskid="@sourcedesks.DeskId"
+                                       data-assetid="@sourcedesks.AssetId"
+                                       data-statichtmlsourcedivid=""
+                                       data-modaltitle="Asset / employee assignment"
+                                       data-modalheader="Asset / employee assignment">
+                                        <i class="fas fa-arrow-right f-12"></i>
+                                    </a>
+                                }                                
+                                @*<a class="btn btn-outline-primary btn-sm border-none"                                    
+                                    onclick="functionPpenModalListner(this)"
+                                    data-modalcontainer="modalcontainer"
+                                    data-url="@Url.Action("AssetAssignmentCreate", "Movements", new { Area = "DMS" })"
+                                    data-modalpopupwidth="rightw35" 
+                                    data-sid="@sourcedesks.Sid"
+                                    data-movetype="@sourcedesks.Category"
+                                    data-deskid="@sourcedesks.DeskId"
+                                    data-assetid="@sourcedesks.AssetId"
+                                    data-statichtmlsourcedivid=""
+                                    data-modaltitle="Asset / employee assignment" 
+                                    data-modalheader="Asset / employee assignment" > 
+                                    <i class="fas fa-arrow-right f-12"></i>
+                                </a> *@                                                                                           
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">No data found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    var sessionid = $("#SessionId").val();
+    var sourcerowscount = $("#sourceRowsCount").val();   
+    var groupColumn = 0;
+
+    if (sourcerowscount > 0) {
+        var table = $("#tbSourceDesk").DataTable({
+            destroy: true,
+            paging: false,
+            autoWidth: false,
+            sort: false,
+            processing: true,
+            serverSide: false,
+            stateSave: false,
+            info: false,
+            filter: false,
+            pagingType: 'full',
+            columnDefs: [{ visible: false, targets: groupColumn }],
+            order: [[groupColumn, 'asc']],
+            drawCallback: function (settings) {
+                var api = this.api();                                
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+                api.column(groupColumn, { page: 'current' })
+                    .data()
+                    .each(function (group, i) {                        
+                        var btn_delete = ' <a class="btn btn-outline-danger btn-sm border-none float-right p-t-0 p-b-0"  ' +
+                            ' onclick="functionPpenModalListner(this)"  ' +
+                            ' data-modalcontainer="modalcontainer"   ' +
+                            ' data-url="@Url.Action("SourceDeskDelete", "Movements", new { Area = "DMS" })"   ' +
+                            ' data-modalpopupwidth="rightw35" ' +
+                            ' data-id="' + sessionid + '!-!' + group + '" ' +
+                            ' data-statichtmlsourcedivid=""  ' +
+                            ' data-modaltitle="Delete source desk" ' +
+                            ' data-modalheader="Delete source desk">   ' +
+                            ' <i class="fas fa-trash f-12"></i></button></a>';
+                        var btn_assign = ' <a class="btn btn-outline-primary btn-sm border-none float-right p-t-0 p-b-0"  ' +
+                            ' onclick="functionPpenModalListner(this)"  ' +
+                            ' data-modalcontainer="modalcontainer"   ' +
+                            ' data-url="@Url.Action("DeskAssignmentCreate", "Movements", new { Area = "DMS" })"   ' +
+                            ' data-modalpopupwidth="rightw35"   ' +
+                            ' data-sid="' + sessionid + '" ' +
+                            ' data-currdeskid="' + group + '" ' +
+                            ' data-statichtmlsourcedivid="" ' +
+                            ' data-modaltitle="Desk assignment"  ' +
+                            ' data-modalheader="Desk assignment" >   ' +
+                            ' <i class="fas fa-arrow-right f-12"></i></button></a>';
+                       
+                        if (last !== group) {
+                            $(rows)
+                                .eq(i)
+                                .before('<tr class="group"><td colspan="3" style="background-color: lightgrey"><b>' + group + '</b> ' +
+                                    btn_assign + btn_delete +
+                                    '</td></tr>');
+
+                            last = group;
+                        }
+                        
+                    });
+
+            }
+        });
+
+    }
+
+</script>

@@ -1,0 +1,1233 @@
+﻿@model TCMPLApp.WebApp.Areas.RapReporting.RapViewModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;    
+    const string actionName = "AnalyticalNonEnggIndex";
+    const string controllerName = "Reports";
+}
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Non-Engineering reports";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+        <li class="breadcrumb-item "><a asp-action="AnalyticalIndex" asp-controller="Reports" asp-area="RapReporting">Analytical reports</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Non-Engineering reports</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<input id="Yyyy" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyy" />
+<input id="YearMode" readonly type="hidden" asp-for="@Model.FilterDataModel.YearMode" />
+<input id="Yyyymm" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+<input id="CostCode" readonly type="hidden" asp-for="@Model.FilterDataModel.CostCode" />
+<input id="Projno" readonly type="hidden" asp-for="@Model.FilterDataModel.Projno" />
+<input id="Simul" readonly type="hidden" asp-for="@Model.FilterDataModel.Simul" />
+
+<div class="card-toolbar p-l-15">
+    <div role="toolbar">
+        <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("FilterGet", "Home", new { Area = "RapReporting" })'
+                data-actionName="AnalyticalNonEnggIndex"
+                data-controllerName="Reports"
+                data-modaltitle="Filter"
+                data-modalheader="Filter">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+            {
+                @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy);
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.YearMode))
+            {
+                @Html.Raw(localizer[", Year mode : "] + (Model.FilterDataModel.YearMode == "A" ? "April - March" : "January - December"));
+            }            
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                            : "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)));
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Simul))
+            {
+                @Html.Raw(localizer[", Simulation : "] + Model.FilterDataModel.Simul);
+            }
+        </button>
+        <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-20 divSitemap">           
+            <a class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("ShowSitemap", "Home", new { Area = "RapReporting" })'
+                data-modaltitle="Sitemap"
+                data-modalheader="Sitemap"
+                title="Sitemap">
+            <i class="fas fa-sitemap"></i></a>
+        </div>
+    </div>
+</div>
+<div class="m-2"></div>
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"><b>Non-Engineering reports</b></h5>
+        </div>
+        <div class="card-block">
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionReportsNonEnggMngr) ||
+                 CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionRAPReports))
+        {
+            <div class="card-pill">
+                <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-general-tab" data-toggle="pill" href="#tabs-general" role="tab"
+                           aria-controls="tabs-general" aria-selected="true">General</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-procurement-tab" data-toggle="pill" href="#tabs-procurement" role="tab"
+                           aria-controls="tabs-procurement">Procurement</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-proco-tab" data-toggle="pill" href="#tabs-proco" role="tab"
+                           aria-controls="tabs-proco">Proco</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="tab-tabContent">
+                    <div class="tab-pane fade show active" id="tabs-general" role="tabpanel" aria-labelledby="tabs-general-tab">
+                        <div id="pw-general">
+                            @if (!CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.RoleNonEnggProcurement))
+                            {
+                                <div class="row">
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Non Engineering : Mumbai</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   data-processitemid="@("CHA1ExptNonEnggMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggMumbai"
+                                                   data-jqueryselector="binarydownload"
+                                                   data-actiontype="download"
+                                                   data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptNonEnggMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggMumbai"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showerror"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                   data-processitemid="@("CHA1ExptNonEnggMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggMumbai"
+                                                   data-jqueryselector="batchprocessgenerate"
+                                                   data-actiontype="doprocess"
+                                                   data-yyyy=@Model.FilterDataModel.Yyyy
+                                                   data-yearmode=@Model.FilterDataModel.YearMode
+                                                   data-yymm=@Model.FilterDataModel.Yyyymm
+                                                   data-category="NM"
+                                                   data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptNonEnggMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggMumbai"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showprogress"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptNonEnggMumbai_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptNonEnggMumbai_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptNonEnggMumbaiIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>                                                       
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Non Engineering : Delhi</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   data-processitemid="@("CHA1ExptNonEnggDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggDelhi"
+                                                   data-jqueryselector="binarydownload"
+                                                   data-actiontype="download"
+                                                   data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptNonEnggDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggDelhi"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showerror"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                   data-processitemid="@("CHA1ExptNonEnggDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggDelhi"
+                                                   data-jqueryselector="batchprocessgenerate"
+                                                   data-actiontype="doprocess"
+                                                   data-yyyy=@Model.FilterDataModel.Yyyy
+                                                   data-yearmode=@Model.FilterDataModel.YearMode
+                                                   data-yymm=@Model.FilterDataModel.Yyyymm
+                                                   data-category="ND"
+                                                   data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptNonEnggDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggDelhi"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showprogress"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptNonEnggDelhi_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptNonEnggDelhi_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptNonEnggDelhiIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Non Engineering : Combined</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                    style="right:80px"
+                                                    data-processitemid="@("CHA1ExptNonEngg" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEngg"
+                                                    data-jqueryselector="binarydownload"
+                                                    data-actiontype="download"
+                                                    data-url="@Url.Action("DownloadFileZip", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                    style="right:80px"
+                                                    href='#'
+                                                    data-processitemid="@("CHA1ExptNonEngg" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEngg"
+                                                    data-jqueryselector="batchprocessgenerate;openmodal"
+                                                    data-actiontype="showerror"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw50"
+                                                    data-url="@Url.Action("ViewProcessLogs", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                    data-processitemid="@("CHA1ExptNonEngg" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEngg"
+                                                    data-jqueryselector="batchprocessgenerate"
+                                                    data-actiontype="doprocess"
+                                                    data-yyyy=@Model.FilterDataModel.Yyyy
+                                                    data-yearmode=@Model.FilterDataModel.YearMode
+                                                    data-yymm=@Model.FilterDataModel.Yyyymm
+                                                    data-category="N"
+                                                    data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                    href='#'
+                                                    data-processitemid="@("CHA1ExptNonEngg" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEngg"
+                                                    data-jqueryselector="batchprocessgenerate;openmodal"
+                                                    data-actiontype="showprogress"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw50"
+                                                    data-url="@Url.Action("ViewProcessLogs", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptNonEngg_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptNonEngg_Loader" class="spinner-border text-info text-center hidden "
+                                                                    style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptNonEnggIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Non Engineering (Simul) : Mumbai</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                    style="right:80px"
+                                                    data-processitemid="@("CHA1ExptNonEnggMumbaiS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggMumbaiS"
+                                                    data-jqueryselector="binarydownload"
+                                                    data-actiontype="download"
+                                                    data-url="@Url.Action("DownloadFileZip", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                    style="right:80px"
+                                                    href='#'
+                                                    data-processitemid="@("CHA1ExptNonEnggMumbaiS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggMumbaiS"
+                                                    data-jqueryselector="batchprocessgenerate;openmodal"
+                                                    data-actiontype="showerror"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw50"
+                                                    data-url="@Url.Action("ViewProcessLogs", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                    data-processitemid="@("CHA1ExptNonEnggMumbaiS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggMumbaiS"
+                                                    data-jqueryselector="batchprocessgenerate"
+                                                    data-actiontype="doprocess"
+                                                    data-yyyy=@Model.FilterDataModel.Yyyy
+                                                    data-yearmode=@Model.FilterDataModel.YearMode
+                                                    data-yymm=@Model.FilterDataModel.Yyyymm
+                                                    data-category="NM"
+                                                    data-simul=@Model.FilterDataModel.Simul
+                                                    data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEnggSim", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                    href='#'
+                                                    data-processitemid="@("CHA1ExptNonEnggMumbaiS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggMumbaiS"
+                                                    data-jqueryselector="batchprocessgenerate;openmodal"
+                                                    data-actiontype="showprogress"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw50"
+                                                    data-url="@Url.Action("ViewProcessLogs", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptNonEnggMumbaiS_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptNonEnggMumbaiS_Loader" class="spinner-border text-info text-center hidden "
+                                                                    style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptNonEnggMumbaiSIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Non Engineering (Simul) : Delhi</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   data-processitemid="@("CHA1ExptNonEnggDelhiS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggDelhiS"
+                                                   data-jqueryselector="binarydownload"
+                                                   data-actiontype="download"
+                                                   data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptNonEnggDelhiS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggDelhiS"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showerror"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                   data-processitemid="@("CHA1ExptNonEnggDelhiS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggDelhiS"
+                                                   data-jqueryselector="batchprocessgenerate"
+                                                   data-actiontype="doprocess"
+                                                   data-yyyy=@Model.FilterDataModel.Yyyy
+                                                   data-yearmode=@Model.FilterDataModel.YearMode
+                                                   data-yymm=@Model.FilterDataModel.Yyyymm
+                                                   data-category="ND"
+                                                   data-simul=@Model.FilterDataModel.Simul
+                                                   data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEnggSim", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptNonEnggDelhiS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptNonEnggDelhiS"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showprogress"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptNonEnggDelhiS_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptNonEnggDelhiS_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptNonEnggDelhiSIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Non Engineering (Simul) : Combined</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                    style="right:80px"
+                                                    data-processitemid="@("CHA1ExptNonEnggS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggS"
+                                                    data-jqueryselector="binarydownload"
+                                                    data-actiontype="download"
+                                                    data-url="@Url.Action("DownloadFileZip", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                    style="right:80px"
+                                                    href='#'
+                                                    data-processitemid="@("CHA1ExptNonEnggS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggS"
+                                                    data-jqueryselector="batchprocessgenerate;openmodal"
+                                                    data-actiontype="showerror"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw50"
+                                                    data-url="@Url.Action("ViewProcessLogs", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                    data-processitemid="@("CHA1ExptNonEnggS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggS"
+                                                    data-jqueryselector="batchprocessgenerate"
+                                                    data-actiontype="doprocess"
+                                                    data-yyyy=@Model.FilterDataModel.Yyyy
+                                                    data-yearmode=@Model.FilterDataModel.YearMode
+                                                    data-yymm=@Model.FilterDataModel.Yyyymm
+                                                    data-category="N"
+                                                    data-simul=@Model.FilterDataModel.Simul
+                                                    data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEnggSim", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                    href='#'
+                                                    data-processitemid="@("CHA1ExptNonEnggS" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggS"
+                                                    data-jqueryselector="batchprocessgenerate;openmodal"
+                                                    data-actiontype="showprogress"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw50"
+                                                    data-url="@Url.Action("ViewProcessLogs", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptNonEnggS_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptNonEnggS_Loader" class="spinner-border text-info text-center hidden "
+                                                                    style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptNonEnggSIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Non Engineering : Consolidated</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                    style="right:80px"
+                                                    data-processitemid="@("CHA1ExptNonEnggC" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggC"
+                                                    data-jqueryselector="binarydownload"
+                                                    data-actiontype="download"
+                                                    data-url="@Url.Action("DownloadFileZip", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                    style="right:80px"
+                                                    href='#'
+                                                    data-processitemid="@("CHA1ExptNonEnggC" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggC"
+                                                    data-jqueryselector="batchprocessgenerate;openmodal"
+                                                    data-actiontype="showerror"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw50"
+                                                    data-url="@Url.Action("ViewProcessLogs", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                    data-processitemid="@("CHA1ExptNonEnggC" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggC"
+                                                    data-jqueryselector="batchprocessgenerate"
+                                                    data-actiontype="doprocess"
+                                                    data-yyyy=@Model.FilterDataModel.Yyyy
+                                                    data-yearmode=@Model.FilterDataModel.YearMode
+                                                    data-yymm=@Model.FilterDataModel.Yyyymm
+                                                    data-category="N"
+                                                    data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                    href='#'
+                                                    data-processitemid="@("CHA1ExptNonEnggC" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                    data-processid="CHA1ExptNonEnggC"
+                                                    data-jqueryselector="batchprocessgenerate;openmodal"
+                                                    data-actiontype="showprogress"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw50"
+                                                    data-url="@Url.Action("ViewProcessLogs", "Reports", new { Area = "RapReporting" })"
+                                                    title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptNonEngg_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptNonEngg_Loader" class="spinner-border text-info text-center hidden "
+                                                                    style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptNonEnggIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                
+                    <div class="tab-pane fade" id="tabs-procurement" role="tabpanel" aria-labelledby="tabs-procurement-tab">
+                            <div id="pw-procurement">
+                                <div class="row">
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Procurement : Combined</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   data-processitemid="@("CHA1ExptProcurement" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurement"
+                                                   data-jqueryselector="binarydownload"
+                                                   data-actiontype="download"
+                                                   data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptProcurement" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurement"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showerror"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                   data-processitemid="@("CHA1ExptProcurement" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurement"
+                                                   data-jqueryselector="batchprocessgenerate"
+                                                   data-actiontype="doprocess"
+                                                   data-yyyy=@Model.FilterDataModel.Yyyy
+                                                   data-yearmode=@Model.FilterDataModel.YearMode
+                                                   data-yymm=@Model.FilterDataModel.Yyyymm
+                                                   data-category="PROCUREMENT"
+                                                   data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptProcurement" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurement"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showprogress"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptProcurement_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptProcurement_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptProcurementIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Procurement : Mumbai</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   data-processitemid="@("CHA1ExptProcurementMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurementMumbai"
+                                                   data-jqueryselector="binarydownload"
+                                                   data-actiontype="download"
+                                                   data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptProcurementMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurementMumbai"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showerror"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                   data-processitemid="@("CHA1ExptProcurementMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurementMumbai"
+                                                   data-jqueryselector="batchprocessgenerate"
+                                                   data-actiontype="doprocess"
+                                                   data-yyyy=@Model.FilterDataModel.Yyyy
+                                                   data-yearmode=@Model.FilterDataModel.YearMode
+                                                   data-yymm=@Model.FilterDataModel.Yyyymm
+                                                   data-category="PROCUREMENT_MUMBAI"
+                                                   data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptProcurementMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurementMumbai"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showprogress"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptProcurementMumbai_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptProcurementMumbai_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptProcurementMumbaiIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Procurement : Delhi</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   data-processitemid="@("CHA1ExptProcurementDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurementDelhi"
+                                                   data-jqueryselector="binarydownload"
+                                                   data-actiontype="download"
+                                                   data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                   style="right:80px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptProcurementDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurementDelhi"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showerror"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                   data-processitemid="@("CHA1ExptProcurementDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurementDelhi"
+                                                   data-jqueryselector="batchprocessgenerate"
+                                                   data-actiontype="doprocess"
+                                                   data-yyyy=@Model.FilterDataModel.Yyyy
+                                                   data-yearmode=@Model.FilterDataModel.YearMode
+                                                   data-yymm=@Model.FilterDataModel.Yyyymm
+                                                   data-category="PROCUREMENT_DELHI"
+                                                   data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                   href='#'
+                                                   data-processitemid="@("CHA1ExptProcurementDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                   data-processid="CHA1ExptProcurementDelhi"
+                                                   data-jqueryselector="batchprocessgenerate;openmodal"
+                                                   data-actiontype="showprogress"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw50"
+                                                   data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                   title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptProcurementDelhi_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptProcurementDelhi_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptProcurementDelhiIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="tab-pane fade" id="tabs-proco" role="tabpanel" aria-labelledby="tabs-proco-tab">
+                        <div id="pw-proco">
+                            @if (!CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.RoleNonEnggProcurement))
+                            {
+                                <div class="row">
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Proco : Combined</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                style="right:80px"
+                                                data-processitemid="@("CHA1ExptProco" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProco"
+                                                data-jqueryselector="binarydownload"
+                                                data-actiontype="download"
+                                                data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                style="right:80px"
+                                                href='#'
+                                                data-processitemid="@("CHA1ExptProco" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProco"
+                                                data-jqueryselector="batchprocessgenerate;openmodal"
+                                                data-actiontype="showerror"
+                                                data-modalcontainer="modalcontainer"
+                                                data-modalpopupwidth="rightw50"
+                                                data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                data-processitemid="@("CHA1ExptProco" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProco"
+                                                data-jqueryselector="batchprocessgenerate"
+                                                data-actiontype="doprocess"
+                                                data-yyyy=@Model.FilterDataModel.Yyyy
+                                                data-yearmode=@Model.FilterDataModel.YearMode
+                                                data-yymm=@Model.FilterDataModel.Yyyymm
+                                                data-category="PROCO"
+                                                data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                href='#'
+                                                data-processitemid="@("CHA1ExptProco" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProco"
+                                                data-jqueryselector="batchprocessgenerate;openmodal"
+                                                data-actiontype="showprogress"
+                                                data-modalcontainer="modalcontainer"
+                                                data-modalpopupwidth="rightw50"
+                                                data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptProco_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptProco_Loader" class="spinner-border text-info text-center hidden "
+                                                            style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptProcoIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Proco : Mumbai</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                style="right:80px"
+                                                data-processitemid="@("CHA1ExptProcoMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProcoMumbai"
+                                                data-jqueryselector="binarydownload"
+                                                data-actiontype="download"
+                                                data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                style="right:80px"
+                                                href='#'
+                                                data-processitemid="@("CHA1ExptProcoMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProcoMumbai"
+                                                data-jqueryselector="batchprocessgenerate;openmodal"
+                                                data-actiontype="showerror"
+                                                data-modalcontainer="modalcontainer"
+                                                data-modalpopupwidth="rightw50"
+                                                data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                data-processitemid="@("CHA1ExptProcoMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProcoMumbai"
+                                                data-jqueryselector="batchprocessgenerate"
+                                                data-actiontype="doprocess"
+                                                data-yyyy=@Model.FilterDataModel.Yyyy
+                                                data-yearmode=@Model.FilterDataModel.YearMode
+                                                data-yymm=@Model.FilterDataModel.Yyyymm
+                                                data-category="PROCO_MUMBAI"
+                                                data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                href='#'
+                                                data-processitemid="@("CHA1ExptProcoMumbai" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProcoMumbai"
+                                                data-jqueryselector="batchprocessgenerate;openmodal"
+                                                data-actiontype="showprogress"
+                                                data-modalcontainer="modalcontainer"
+                                                data-modalpopupwidth="rightw50"
+                                                data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptProcoMumbai_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptProcoMumbai_Loader" class="spinner-border text-info text-center hidden "
+                                                            style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptProcoMumbaiIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-xl-4">
+                                        <div class="card card-tpl">
+                                            <div class="card-header header-flex" id="Tile1">
+                                                <h5>CHA1 Expt - Proco : Delhi</h5>
+                                                <span class="text-blue f-14 f-w-700 spanid" style="right:20px">
+                                                </span>
+
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden"
+                                                style="right:80px"
+                                                data-processitemid="@("CHA1ExptProcoDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProcoDelhi"
+                                                data-jqueryselector="binarydownload"
+                                                data-actiontype="download"
+                                                data-url="@Url.Action("DownloadFileZip", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Download"]">
+                                                    @localizer["Download"]
+                                                </a>
+                                                <a class="text-red f-14 f-w-700 card-button-style hidden"
+                                                style="right:80px"
+                                                href='#'
+                                                data-processitemid="@("CHA1ExptProcoDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProcoDelhi"
+                                                data-jqueryselector="batchprocessgenerate;openmodal"
+                                                data-actiontype="showerror"
+                                                data-modalcontainer="modalcontainer"
+                                                data-modalpopupwidth="rightw50"
+                                                data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Error"]">
+                                                    @localizer["Error"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style" style="right:20px"
+                                                data-processitemid="@("CHA1ExptProcoDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProcoDelhi"
+                                                data-jqueryselector="batchprocessgenerate"
+                                                data-actiontype="doprocess"
+                                                data-yyyy=@Model.FilterDataModel.Yyyy
+                                                data-yearmode=@Model.FilterDataModel.YearMode
+                                                data-yymm=@Model.FilterDataModel.Yyyymm
+                                                data-category="PROCO_DELHI"
+                                                data-url="@Url.Action("AnalyticalNonEngineeringCHA1NonEngg", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Process"]">
+                                                    @localizer["Process"]
+                                                </a>
+                                                <a class="text-blue f-14 f-w-700 card-button-style hidden" style="right:20px"
+                                                href='#'
+                                                data-processitemid="@("CHA1ExptProcoDelhi" + Model.FilterDataModel.Yyyy + Model.FilterDataModel.YearMode + Model.FilterDataModel.Yyyymm)"
+                                                data-processid="CHA1ExptProcoDelhi"
+                                                data-jqueryselector="batchprocessgenerate;openmodal"
+                                                data-actiontype="showprogress"
+                                                data-modalcontainer="modalcontainer"
+                                                data-modalpopupwidth="rightw50"
+                                                data-url="@Url.Action("ViewProcessLogs", "Reports", new {Area = "RapReporting"})"
+                                                title="@localizer["Processing..."]">
+                                                    @localizer["Processing..."]
+                                                </a>
+                                            </div>
+                                            <div class="card-block card-tile">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 id="lCHA1ExptProcoDelhi_Bulk_ProcessQueue_Download_Text" class="mb-2 f-w-300">
+                                                            Report takes longer time to generate, user will be
+                                                            intimated via email once download is ready
+                                                        </h7>
+                                                        <div class="text-center">
+                                                            <div id="lCHA1ExptProcoDelhi_Loader" class="spinner-border text-info text-center hidden "
+                                                            style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        &#160;
+                                                    </div>
+                                                    <div id="lCHA1ExptProcoDelhiIcon" class="col-auto">
+                                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/site-rap.js" asp-append-version="true"></script>
+    <script>
+
+        $(document).ready(function () {
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#YearMode').val() == null || $('#YearMode').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '' ||
+                $('#Simul').val() == null || $('#Simul').val() == '') {
+                $("#filterGet").click();
+            }
+            else {
+                setBatchProcessStatus();
+            }
+        });
+
+        function localScript() {
+            initSelect2();
+            batchProcessListner();
+            var vVUloadProcessLogList = "@Url.Action("GetListsProcessLog", "Reports", new {Area = "RapReporting"})";
+            loadProcessLogDataTable(vVUloadProcessLogList);
+
+            var yearMonthListUrl = "@Url.Action("GetYearMonthList", "Home", new {Area = "RapReporting"})";
+            callRapReportingFilterListeners(yearMonthListUrl);
+
+            var cancelButtonRedirectUrl = "@Url.Action("RedirectPage", "Home", new {Area = "RapReporting",
+                                                                                    actionName = @actionName,
+                                                                                    controllerName = @controllerName})";
+            callCancelButtonListeners(cancelButtonRedirectUrl);
+        }
+
+        function setBatchProcessStatus() {
+            var processUrl = "@Url.Action("GetProcessQueueList", "Reports", new {Area = "RapReporting"})";
+            GetProcessQueueList(processUrl);
+        }
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumns = [
+                    { data: "stepNo" },
+                    { data: "processLogType" },
+                    { data: "processLog" },
+                    { data: "createdOn" }
+                ];
+            </text>
+        }
+
+    </script>
+}

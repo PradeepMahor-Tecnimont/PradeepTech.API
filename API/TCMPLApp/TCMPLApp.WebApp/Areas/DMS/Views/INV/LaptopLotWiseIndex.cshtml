@@ -1,0 +1,193 @@
+﻿@model TCMPLApp.WebApp.Models.LaptopLotWiseViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    ViewData["Title"] = "Laptop Lot wise";
+}
+
+@Html.AntiForgeryToken()
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="INV" asp-area="DMS">Inventory</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Laptop Lot wise</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Lot" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Status" />
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Laptop Lot wise</p>
+    </div>
+    <div class="d-flex flex-row">
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("LaptopLotWiseFilterGet", "INV", new { Area = "DMS" })'
+           data-modaltitle="Filters - Laptop Lot Wise"
+           data-modalheader="Filters - Laptop Lot Wise">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="LaptopLotWiseIndex"
+           data-url='@Url.Action("ResetFilter", "INV", new { Area = "DMS" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("LaptopLotWiseIssuedExcelDownload", "INV", new { Area = "DMS" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Issued
+        </a>
+        <a class="btn btn-outline-success btn-sm border border-white"
+           href="#"
+           data-jqueryselector="binarydownload" style="width:100px;"
+           data-url="@(Url.Action("LaptopLotWisePendingExcelDownload", "INV", new { Area = "DMS" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Pending
+        </a>
+       <a class="btn btn-outline-success btn-sm border border-white"
+           href="#"
+           data-jqueryselector="binarydownload" style="width:100px;"
+           data-url="@(Url.Action("LaptopLotWiseAllExcelDownload", "INV", new { Area = "DMS" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export All
+        </a>
+
+    </div>
+
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbLaptopLotWise" class="table table-striped table-bordered table-responsive-lg table-hover ">
+            <thead class="bg-info text-white">
+                <tr>
+                    @*<th>@Html.DisplayNameFor(model => model.LotId)</th>*@
+                    <th>@Html.DisplayNameFor(model => model.LotDesc)</th>
+                    <th>@Html.DisplayNameFor(model => model.AmsAssetId)</th>
+                    <th>@Html.DisplayNameFor(model => model.SapAssetCode)</th>
+                    <th>@Html.DisplayNameFor(model => model.NbName)</th>
+                    <th>@Html.DisplayNameFor(model => model.NbSerialnum)</th>
+                    <th>@Html.DisplayNameFor(model => model.DsId)</th>
+                    <th>@Html.DisplayNameFor(model => model.DsSerialnum)</th>
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Parent)</th>
+                    <th>@Html.DisplayNameFor(model => model.Assign)</th>
+                    <th>@Html.DisplayNameFor(model => model.Grade)</th>
+                    <th>@Html.DisplayNameFor(model => model.Emptype)</th>
+                    @*<th>@Html.DisplayNameFor(model => model.Email)</th>*@
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/site-rap.js" asp-append-version="true"></script>
+    <script>
+
+        $(document).ready(function () {
+            loadLaptopLotWiseDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+
+        };
+
+        let vVUloadLaptopLotWiseDetails = "@Url.Action("GetLaptopLotWiseList", "INV")";
+
+        function loadLaptopLotWiseDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbLaptopLotWise",
+                pColumns: datatableColumns,
+                pUrl: vVUloadLaptopLotWiseDetails,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    lot: $('#FilterDataModel_Lot').val() ? $('#FilterDataModel_Lot').val() : null,
+                    status: $('#FilterDataModel_Status').val() ? $('#FilterDataModel_Status').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    //{ data: "lotId" },
+                    { data: "lotDesc" },
+                    { data: "amsAssetId" },
+                    { data: "sapAssetCode" },
+                    { data: "nbName" },
+                    { data: "nbSerialnum" },
+                    { data: "dsId" },
+                    { data: "dsSerialnum" },
+                    { data: "empno" },
+                    { data: "name" },
+                    { data: "parent" },
+                    { data: "assign" },
+                    { data: "grade" },
+                    { data: "emptype" },
+                    //{ data: "email" },
+                ];
+            </text>
+        };
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadLaptopLotWiseDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadLaptopLotWiseDataTable();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadLaptopLotWiseDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+            $("#FilterDataModel_Lot").val(data.lot);
+            $("#FilterDataModel_Status").val(data.status);
+            loadLaptopLotWiseDataTable();
+            hideLoader();
+        }
+    </script>
+}

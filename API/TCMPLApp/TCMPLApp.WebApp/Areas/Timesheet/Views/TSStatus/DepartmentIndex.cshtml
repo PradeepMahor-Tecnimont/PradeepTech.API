@@ -1,0 +1,727 @@
+﻿@model TCMPLApp.WebApp.Models.TimesheetDepartmentIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    const string actionName = "DepartmentIndex";
+    const string controllerName = "TSStatus";
+
+    var filledPendingCount = Model.PTotalCount - Model.PFilled;
+    var lockingPendingCount = Model.PFilled - Model.PLocked;
+    var approvalPendingCount = Model.PLocked - Model.PApproved;
+    var postingPendingCount = Model.PApproved - Model.PPosted;
+
+    var sendMailModeFilled = "hidden";
+    var sendMailModeLocked = "hidden";
+    var sendMailModePosted = "hidden";
+    var sendMailModeApproved = "hidden";
+        
+    if (filledPendingCount > 0)
+        sendMailModeFilled = "";
+    
+    if (lockingPendingCount > 0)
+        sendMailModeLocked = "";    
+    
+    if (approvalPendingCount > 0)
+        sendMailModeApproved = "";
+    
+    if (postingPendingCount > 0)
+        sendMailModePosted = "";
+
+    ViewData["Title"] = "Department wise timesheet status";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="Timesheet">TimeSheet</a></li>        
+        <li class="breadcrumb-item active" aria-current="page">Department wise timesheet  status</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+
+<div style="display:none">
+    <input id="Yyyy" name="Yyyy" type="hidden" value="@Model.FilterDataModel.Yyyy" />
+    <input id="Yyyymm" name="Yyyymm" type="hidden" value="@Model.FilterDataModel.Yyyymm" />    
+    <input id="Costcode" name="Costcode" type="hidden" value="@ViewBag.DefaultCostcode" />
+    <input id="Statusstring" name="Statusstring" type="hidden" value="Filled" />  
+    <input id="MonYear" name="MonYear" type="hidden" value="@ViewBag.MonthYear" />
+    <input id="ProcMnthView" name="ProcMnthView" type="hidden" value="@ViewBag.ProcMnthStatus" />
+</div>
+
+<div class="card-toolbar p-l-15 ">
+    <div role="toolbar">
+         <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("FilterGet", "Home", new { Area = "Timesheet" })'
+                data-actionName=@actionName
+                data-controllerName=@controllerName
+                data-modaltitle="Filter"
+                data-modalheader="Filter">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+            {
+                @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy)
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                                                        :                                                        "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)));
+            }
+
+        </button> 
+    </div>
+</div>
+<div class="m-5"></div> 
+<div class="d-flex">
+    <div class="col-xl-9 col-md-9 col-sm-6">
+        <div class="row">
+            <div class="col-xl-6 col-md-9">
+                <div class="form-group">
+                    <label for="selCostcode" class="control-label f-w-700">Costcode</label>
+                    <select id="selCostcode" class="form-control chosen-select" data-placeholder=" Please select costcode..." asp-items="ViewBag.Costcodes" required>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-3">
+                <div class="form-group">             
+                    <label for="actualHours" class="control-label f-w-700">Actual working hours</label>
+                    <input id="actualHours" class="form-control f-w-700 border-none text-dark-green w-25" value="@Model.PWrkHours" readonly/>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="m-3"></div>
+<div class="col-sm-12">
+    <div class="row"> 
+        <div class="col-sm-4 col-md-3 col-xl-3">
+            <div class="card ">
+                <div class="card-header header-flex theme-green">
+                    <h5>Employees (numbers)</h5>                    
+                    <span class="f-14 f-w-700">
+                        <i class="fas fa-users f-20"></i>
+                    </span>
+                </div>
+                <div class="card-block card-tile theme-light-green">
+                    <a href="#!"
+                       id="modelEmployee"  
+                       onclick="setAction('EmployeeCount')"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("EmployeeCountPartialIndex", "TSStatus", new { Area = "Timesheet" })'
+                       data-id="" 
+                       data-parameter="@Model.PWrkHours"
+                       data-modaltitle="Employee count breakup"
+                       data-modalheader="Employee count breakup">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Normal timesheet employee</div>
+                                    <div class="col-4 text-right">@(Model.PSubmitCount != 0 ? Model.PSubmitCount : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Odd timesheet employee</div>
+                                    <div class="col-4 text-right">@(Model.POddCount != 0 ? Model.POddCount : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Outsource agencies</div>
+                                    <div class="col-4 text-right">@(Model.POutsourceCount != 0 ? Model.POutsourceCount : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>                               
+                                <hr/>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black f-w-700">Total no. of employees</div>
+                                    <div class="col-4 text-right f-w-700">
+                                        @if(Model.POutsourceCount != 0)
+                                        {
+                                            @Model.PTotalCount @Html.Raw(" + ") @Model.POutsourceCount
+                                        }
+                                        else
+                                        {
+                                            @Model.PTotalCount;
+                                        }
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+                            </div>                          
+                        </div>  
+                    </a>
+                </div>         
+                
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-md-3 col-xl-3">
+            <div class="card">
+                <div class="card-header header-flex theme-capri">
+                    <h5>Timesheet details (hours)</h5>                    
+                    <span class="f-14 f-w-700">
+                        <i class="fas fa-hourglass-half f-20"></i>
+                    </span>
+                </div>
+                <div class="card-block card-tile theme-light-blue">
+                    <div class="row align-items-center justify-content-center stretched-link">
+                        <div class="col">
+                            <div class="row align-items-center justify-content-center stretched-link p-1">
+                                <div class="col-7 text-black">Normal hours</div>
+                                <div class="col-4 text-right">@(Model.PFilledNhr != 0 ? Model.PFilledNhr : Html.Raw("-"))</div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row align-items-center justify-content-center stretched-link p-1">
+                                <div class="col-7 text-black">Overtime (OT) hours</div>
+                                <div class="col-4 text-right">@(Model.PFilledOhr != 0 ? Model.PFilledOhr : Html.Raw("-"))</div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row align-items-center justify-content-center stretched-link p-1">
+                                <div class="col-7 text-black">Outsource agency hours</div>
+                                <div class="col-4 text-right">@(Model.PFilledOuthr != 0 ? Model.PFilledOuthr : Html.Raw("-"))</div>
+                                <div class="col-1"></div>
+                            </div>                            
+                            <hr/>
+                            <div class="row align-items-center justify-content-center stretched-link p-1">
+                                <div class="col-7 text-black f-w-700">Total no. of hours</div>
+                                <div class="col-4 text-right f-w-700">@(Model.PFilledThr != 0 ? Model.PFilledThr : Html.Raw("-"))</div>
+                                <div class="col-1"></div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-sm-4 col-md-3 col-xl-3">
+            <div class="card">
+                <div class="card-header header-flex theme-dark-grey">
+                    <h5>
+                        <i class="fas fa-file-alt f-20 text-capri p-r-5"></i>
+                        Filled [ @Model.PFilled ]
+                    </h5>                    
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#!"
+                       id="modelFilled"
+                       onclick="setAction('Filled')"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("FilledPartialIndex", "TSStatus", new { Area = "Timesheet" })'
+                       data-id=""
+                       data-parameter="@Model.PWrkHours"
+                       data-modaltitle="Timesheet filled employee list"
+                       data-modalheader="Timesheet filled employee list">
+                        <div class="row align-items-center justify-content-center ">
+                            <div class="col">
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Normal hours</div>
+                                    <div class="col-4 text-right">@(Model.PFilledNhr != 0 ? Model.PFilledNhr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Overtime (OT) hours</div>
+                                    <div class="col-4 text-right">@(Model.PFilledOhr != 0 ? Model.PFilledOhr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Outsource agency hours</div>
+                                    <div class="col-4 text-right">@(Model.PFilledOuthr != 0 ? Model.PFilledOuthr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <hr />
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black f-w-700">Total no. of filled hours</div>
+                                    <div class="col-4 text-right f-w-700">@(Model.PFilledThr != 0 ? Model.PFilledThr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <br />
+                    <div class="row p-10">
+                        @if (ViewBag.ProcMnthStatus == "IsVisible")
+                        {
+                            <a href="#!"
+                               id="emailFilled"
+                               class="btn btn-outline-primary btn-sm border-none @sendMailModeFilled"
+                               onclick="FormulateEmail('Filled')"
+                               data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw50"
+                               data-id="FILLED"
+                               data-url='@Url.Action("EmailReminderPartialIndex", "TSStatus", new { Area = "Timesheet" })'                               
+                               data-modaltitle="Formulate reminder for timesheet not FILLED"
+                               data-modalheader="Formulate reminder for timesheet not FILLED">
+                                Formulate reminder to @filledPendingCount Employee(s) for FILLING
+                            </a> 
+                            // <a href="#!"
+                            //    onclick="createNewEmail('Filled')"
+                            //    class="btn btn-outline-primary btn-sm border-none @sendMailModeFilled"
+                            //    title="Send reminder to employee to FILL timesheet">
+                            //     Send reminder to @filledPendingCount Employee(s) for FILLING
+                            // </a>
+                            @if (sendMailModeFilled == "hidden")
+                            {
+                                <span class="p-b-10">&#160</span>
+                            }
+                        }                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-md-3 col-xl-3">
+            <div class="card">
+                <div class="card-header header-flex theme-dark-grey">
+                    <h5>
+                        <i class="fas fa-lock f-20 text-red p-r-5"></i>
+                        Locked [ @Model.PLocked ]
+                    </h5>
+                </div>
+                <div class="card-block card-tile"> 
+                    <a href="#!"
+                       id="modelLocked"
+                       onclick="setAction('Locked')"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("LockedPartialIndex", "TSStatus", new { Area = "Timesheet" })'
+                       data-id=""
+                       data-parameter="@Model.PWrkHours"
+                       data-modaltitle="Timesheet filled employee list"
+                       data-modalheader="Timesheet filled employee list">
+                        <div class="row align-items-center justify-content-center ">                        
+                            <div class="col">
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Normal hours</div>
+                                    <div class="col-4 text-right">@(Model.PLockedNhr != 0 ? Model.PLockedNhr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Overtime (OT) hours</div>
+                                    <div class="col-4 text-right">@(Model.PLockedOhr != 0 ? Model.PLockedOhr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Outsource agency hours</div>
+                                    <div class="col-4 text-right">@(Model.PLockedOuthr != 0 ? Model.PLockedOuthr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>                               
+                                <hr />
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black f-w-700">Total no. of locked hours</div>
+                                    <div class="col-4 text-right f-w-700">@(Model.PLockedThr != 0 ? Model.PLockedThr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <br />
+                    <div class="row p-10">
+                    @if (ViewBag.ProcMnthStatus == "IsVisible")
+                    {
+                            <a href="#!"
+                               id="emailFilled"
+                               class="btn btn-outline-primary btn-sm border-none @sendMailModeLocked"
+                               onclick="FormulateEmail('Locked')"
+                               data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw50"
+                               data-id="LOCKED"
+                               data-url='@Url.Action("EmailReminderPartialIndex", "TSStatus", new { Area = "Timesheet" })'
+                               data-modaltitle="Formulate reminder for timesheet not LOCKED"
+                               data-modalheader="Formulate reminder for timesheet not LOCKED">
+                                Formulate reminder to @lockingPendingCount Employee(s) for LOCKING
+                            </a>
+                        // <a href="#!"
+                        //     onclick="createNewEmail('Locked')"
+                        //     class="btn btn-outline-primary btn-sm border-none @sendMailModeLocked"
+                        //     title="Send reminder to employee to LOCK timesheet">
+                        //         Send reminder to @lockingPendingCount Employee(s) for LOCKING
+                        // </a>
+                        @if (sendMailModeLocked == "hidden")
+                        {
+                            <span class="p-b-10">&#160</span>
+                        }
+                    }
+                    </div>                        
+                </div> 
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-md-3 col-xl-3">
+            <div class="card">
+                <div class="card-header header-flex theme-dark-grey">
+                    <h5>
+                        <i class="fas fa-user-check f-20 text-blue p-r-5"></i>
+                        Approved [ @Model.PApproved ]
+                    </h5> 
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#!"
+                       id="modelApproved"
+                       onclick="setAction('Approved')"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("ApprovedPartialIndex", "TSStatus", new { Area = "Timesheet" })'
+                       data-id=""
+                       data-parameter="@Model.PWrkHours"
+                       data-modaltitle="Timesheet approve employee list"
+                       data-modalheader="Timesheet approve employee list">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col">
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Normal hours</div>
+                                    <div class="col-4 text-right">@(Model.PApprovedNhr != 0 ? Model.PApprovedNhr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7">Overtime (OT) hours</div>
+                                    <div class="col-4 text-right">@(Model.PApprovedOhr != 0 ? Model.PApprovedOhr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7">Outsource agency hours</div>
+                                    <div class="col-4 text-right">@(Model.PApprovedOuthr != 0 ? Model.PApprovedOuthr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>                               
+                                <hr />
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black f-w-700">Total no. of approved hours</div>
+                                    <div class="col-4 text-right f-w-700">@(Model.PApprovedThr != 0 ? Model.PApprovedThr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <br />
+                    <div class="row p-10">
+                        @if (ViewBag.ProcMnthStatus == "IsVisible")
+                        {
+                            <a href="#!"
+                               onclick="FormulateEmail('Approve')"
+                               class="btn btn-outline-primary btn-sm border-none @sendMailModeApproved"
+                               title="Send reminder to HoD to APPROVE timesheet">
+                                Formulate reminder to HoD for APPROVAL
+                            </a>
+                            @if (sendMailModeApproved == "hidden")
+                            {
+                                <span class="p-b-10">&#160</span>
+                            }
+                        }                       
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-sm-4 col-md-3 col-xl-3">
+            <div class="card">
+                <div class="card-header header-flex theme-dark-grey">
+                    <h5>
+                        <i class="fas fa-check f-20 text-green p-r-5"></i>
+                        Posted [ @Model.PPosted ]
+                    </h5>                   
+                    @*<span class="f-16 f-w-700">
+                        <i class="fas fa-check f-20 text-green"></i>
+                    </span>*@
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#!"
+                       id="modelPosted"
+                       onclick="setAction('Posted')"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("PostedPartialIndex", "TSStatus", new { Area = "Timesheet" })'
+                       data-id=""
+                       data-parameter="@Model.PWrkHours"
+                       data-modaltitle="Timesheet post employee list"
+                       data-modalheader="Timesheet post employee list">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col">
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Normal hours</div>
+                                    <div class="col-4 text-right">@(Model.PPostedNhr != 0 ? Model.PPostedNhr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Overtime (OT) hours</div>
+                                    <div class="col-4 text-right">@(Model.PPostedOhr != 0 ? Model.PPostedOhr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black">Outsource agency hours</div>
+                                    <div class="col-4 text-right">@(Model.PPostedOuthr != 0 ? Model.PPostedOuthr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div>                                
+                                <hr/>
+                                <div class="row align-items-center justify-content-center stretched-link p-1">
+                                    <div class="col-7 text-black f-w-700">Total no. of posted hours</div>
+                                    <div class="col-4 text-right f-w-700">@(Model.PPostedThr != 0 ? Model.PPostedThr : Html.Raw("-"))</div>
+                                    <div class="col-1"></div>
+                                </div> 
+                            </div>                            
+                        </div>
+                    </a>
+                    <br />
+                    <div class="row p-10">
+                        @if (ViewBag.ProcMnthStatus == "IsVisible")
+                        {
+                            <a href="#!"
+                               onclick="FormulateEmail('Post')"
+                               class="btn btn-outline-primary btn-sm border-none @sendMailModePosted"
+                               title="Send reminder to employee to POST timesheet">
+                                Formulate reminder to HoD for POSTING
+                            </a>
+                            @if (sendMailModePosted == "hidden")
+                            {
+                                <span class="p-b-10">&#160</span>
+                            }
+                        }                                               
+                    </div>                    
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_CommonDataTableColumnstPartial");
+    }
+
+    <script src="~/js/TimesheetDetails.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                $("#filterGet").click();
+            }
+            else {                
+                localScript();
+                setCostcodeInUrl();                
+            }
+        });
+
+        function localScript() {
+            var statusName = $("#Statusstring").val();
+            
+            initSelect2();
+
+            if (statusName == 'EmployeeCount') {
+                loadEmployeeCountPartialDataTable();
+            }
+            if (statusName == 'Filled') {
+                loadTimesheetFilledPartialDataTable();
+            }
+            if(statusName == 'Locked') {
+                loadTimesheetLockedPartialDataTable();
+            }
+            if (statusName == 'Approved') {
+                loadTimesheetApprovedPartialDataTable();                
+            }
+            if (statusName == 'Posted') {
+                loadTimesheetPostedPartialDataTable();
+            }
+
+            var cancelButtonRedirectUrl = "@Url.Action("RedirectPage", "Home", new {Area = "Timesheet",
+                                                        actionName = @actionName,
+                                                        controllerName = @controllerName})";
+            callCancelButtonListeners(cancelButtonRedirectUrl);
+        }
+
+        function setAction(actionvalue) { 
+            $("#Statusstring").val(actionvalue);
+        }
+
+        function FormulateEmail(statusName)
+        {
+            if (statusName == '' || statusName == null) {
+                return;
+            }
+
+            var yymm = $("#Yyyymm").val();
+            var costcode = $("#Costcode").val();
+            var monthYear = $("#MonYear").val();
+
+            $.ajax({
+                url: '@Url.Action("SendReminder", "TSStatus", new {Area = "Timesheet"})',
+                data: {
+                    'id': yymm + '!-!' + costcode + '!-!' + statusName,
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    var email = '';
+                    var processName = '';
+                    var subject = '';
+                    var emailBody = '';
+
+                    switch (statusName.toUpperCase()) {
+                        case 'FILLED':
+                            subject = 'TIMESHEET for the month ' + monthYear + ' not yet ' + statusName.toUpperCase();
+                            processName = 'Filling';
+                            break;
+                        case 'LOCKED':
+                            subject = 'TIMESHEET for the month ' + monthYear + ' not yet ' + statusName.toUpperCase();
+                            processName = 'Locking';
+                            break;
+                        case 'APPROVE':
+                            subject = 'Pending APPROVAL of TIMESHEET for the month ' + monthYear;
+                            processName = 'APPROVAL';
+                            break;
+                        case 'POST':
+                            subject = 'Pending POSTING of TIMESHEET for the month ' + monthYear;
+                            processName = 'POSTING';
+                            break;                        
+                    } 
+                    
+                    $(data).each(function () {                        
+                        if (email.length > 0) {
+                            email += ';';
+                        }                           
+                        email += this.recepientMail;
+                    });
+
+                    if (statusName.toUpperCase() == 'FILLED' || statusName.toUpperCase() == 'LOCKED') 
+                    {
+                        emailBody = 'Dear Sir/Madam,' + '%0D%0A' + '%0D%0A';
+                        emailBody += 'This is to inform you that TIMESHEET has not been ' + statusName.toUpperCase() + ' by you for month ' + monthYear + '%0D%0A' + '%0D%0A';
+                        emailBody += 'Do the needful at the earliest.' + '%0D%0A' + '%0D%0A';
+                        emailBody += 'Waiting for ' + processName + ' of TIMESHEET for the month ' + monthYear + '.' + '%0D%0A' + '%0D%0A';
+                        emailBody += 'Please ignore this mail if on Long Term Deputation etc.' + '%0D%0A' + '%0D%0A';
+                        emailBody += 'Thanks,' + '%0D%0A';
+                        emailBody += 'Timesheet application' + '%0D%0A' + '%0D%0A' + '%0D%0A';
+                        emailBody += 'This is an system generated automated TCMPL Mail, do not reply.';
+
+                        setTimeout(function () {
+                            $('#EmailRecepientList').text(email);
+                            $('#Mailsubject').val(subject);
+                            $('#MailBody').val(emailBody);
+                        }, 500);
+                    }
+
+                    if (statusName.toUpperCase() == 'APPROVE' || statusName.toUpperCase() == 'POST') {
+                        emailBody = 'Dear Sir/Madam,' + '%0D%0A' + '%0D%0A';
+                        emailBody += 'This is to inform you that TIMESHEET are pending for ' + processName + ' by you for month ' + monthYear + '%0D%0A' + '%0D%0A';
+                        emailBody += 'Do the needful at the earliest.' + '%0D%0A' + '%0D%0A';
+                        emailBody += 'Thanks,' + '%0D%0A';
+                        emailBody += 'Timesheet application' + '%0D%0A' + '%0D%0A' + '%0D%0A';
+                        emailBody += 'This is an system generated automated TCMPL Mail, do not reply.';
+
+                        if (email.length > 5) {                            
+                            window.location = 'mailto:' + '?bcc=' + email + ' &subject=' + subject + ' &body=' + emailBody;
+                        }
+                        else 
+                        {
+                            notify($.i18n('Error'), 'No recepients found', 'danger');
+                        }
+                    }                 
+                    
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+        function generateReminderEmail() {                                   
+            var subject = $('#Mailsubject').val();
+            var emailBody = $('#MailBody').val();            
+            window.location = 'mailto:' + '?subject=' + subject + ' &body=' + emailBody;
+        }
+
+        function setCostcodeInUrl()
+        {
+            var cc = $('#selCostcode').val();
+            var yymm = $('#Yyyymm').val();
+            var procmnthview = $('#ProcMnthView').val();
+            
+            if (cc != "") {
+                $('#downloadDepartmentStatus').attr('data-id', yymm + '!-!' + cc + '!-!Filled!-!');
+                $('#modelEmployee').attr('data-id', yymm + '!-!' + cc);
+                $('#modelFilled').attr('data-id', yymm + '!-!' + cc + '!-!' + procmnthview);
+                $('#modelLocked').attr('data-id', yymm + '!-!' + cc + '!-!' + procmnthview);
+                $('#modelApproved').attr('data-id', yymm + '!-!' + cc + '!-!' + procmnthview);
+                $('#modelPosted').attr('data-id', yymm + '!-!' + cc + '!-!' + procmnthview);
+            }
+        }
+
+        $('#selCostcode').on('select2:clear', function (e) {
+            $('#selCostcode').val('');
+            var cc = $('#selCostcode').val();
+            var yymm = $('#Yyyymm').val();
+
+            $('#downloadDepartmentStatus').attr('data-id', yymm + '!-!' + cc + '!-!Filled!-!');
+            $('#modelEmployee').attr('data-id', yymm + '!-!' + cc);
+            $('#modelFilled').attr('data-id', yymm + '!-!' + cc + '!-!' + procmnthview);
+            $('#modelLocked').attr('data-id', yymm + '!-!' + cc + '!-!' + procmnthview);
+            $('#modelApproved').attr('data-id', yymm + '!-!' + cc + '!-!' + procmnthview);
+            $('#modelPosted').attr('data-id', yymm + '!-!' + cc + '!-!' + procmnthview);
+        });
+
+        $('#selCostcode').on("select2:select", function (e) {            
+            $('#selCostcode').trigger('change');
+        });
+
+        $("#selCostcode").change(function (e) {
+            var cc = $('#selCostcode').val();                  
+            $('#Costcode').val(cc);
+
+            setCostcodeInUrl();
+
+            var url = "@Url.Action("DepartmentIndex", "TSStatus", new { Area = "Timesheet", costcode = "!!cc!!" })";            
+            location.replace(url.replace("!!cc!!", cc));            
+        });
+
+        function PostSaveReLoad(data) {            
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                window.location.reload();
+            }
+        }
+
+    </script>
+}

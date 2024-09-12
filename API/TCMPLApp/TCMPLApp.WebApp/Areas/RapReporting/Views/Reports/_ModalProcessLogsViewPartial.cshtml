@@ -1,0 +1,43 @@
+﻿@model TCMPLApp.WebApp.Models.ReportProcessingViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form id="formProgressDetail"
+      name="formProgressDetail"
+      asp-controller=""
+      asp-action=""
+      data-ajax="true"
+      data-ajax-update=""
+      accept-charset="UTF-8">
+
+    <input type="hidden" id="KeyId" name="KeyId" value="@Model.KeyId" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Process Logs</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Process Logs</h5>
+            </div>
+            <div class="card-block">
+                <div class="bg-gray-active rounded ">
+                    <table id="tbGridDetail" class="table table-striped table-bordered table-responsive-lg ">
+                        <thead class="bg-info text-white">
+                            <tr>
+                                <th>@Html.DisplayNameFor(m => m.StepNo)</th>
+                                <th>@Html.DisplayNameFor(m => m.ProcessLogType)</th>
+                                <th>@Html.DisplayNameFor(m => m.ProcessLog)</th>
+                                <th>@Html.DisplayNameFor(m => m.CreatedOn )</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

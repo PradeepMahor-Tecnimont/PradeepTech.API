@@ -1,0 +1,160 @@
+﻿@model TCMPLApp.WebApp.Models.ApprovalDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="OFB"
+      asp-action="GetAllApprovalsStatus"
+      id="formGetAllApprovalsDetails"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);doTest();localscript();"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.KeyId" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Approval Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5><b> @Html.Raw(Model.TransferType) </b></h5>
+            </div>
+
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-8 col-mb-8 col-xl-8">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Empno)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Empno)
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Grade)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Grade)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-mb-12 col-xl-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentDesignation)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentDesignation)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-mb-12 col-xl-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentJobTitle)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentJobTitle)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-mb-4 col-xl-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TransferType)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TransferType)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-mb-4 col-xl-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentCostCode)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentCostCode)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-mb-4 col-xl-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TargetCostCode)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TargetCostCode)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TransferDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TransferDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.TransferType != "Return From Site")
+                        {
+                        <div class="col-sm-6 col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TransferEndDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TransferEndDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        <div class="col-sm-6 col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EffectiveTransferDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EffectiveTransferDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div style="overflow:auto">
+                    <table id="tbApprovalDetails" class="table table-bordered  table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr>
+                                <th>@localizer[Html.DisplayNameFor(model => model.ApprovalStatus)]</th>
+                                <th>@localizer[Html.DisplayNameFor(model => model.ModifiedOn)]</th>
+                                <th>@localizer[Html.DisplayNameFor(model => model.ModifiedBy)]</th>
+                                <th>@localizer[Html.DisplayNameFor(model => model.ApprovalBy)]</th>
+
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

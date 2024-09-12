@@ -1,0 +1,140 @@
+﻿@model TCMPLApp.Domain.Models.HSE.HSEQuizViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    Html.AntiForgeryToken();
+    ViewData["Title"] = "HSE Quiz";
+    var questionNumber = 1;
+    string isdisabled=null;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="HSE">HSE</a></li>
+        <li class="breadcrumb-item active" aria-current="page">HSE Quiz</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+}
+
+<form asp-action="HSEQuizAnsSubmit"
+      asp-controller="HSEQuiz"
+      asp-area="HSE"
+      id="idSubmitHseQuiz"
+      method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="QuizId" />
+
+    <div class="container-fluid bg-white border rounded shadow m-auto py-2 col-xl-9">
+        <div class="app-h4 app-card-header mb-2">
+            <p>@ViewBag.QuizTitle</p>
+        </div>
+
+        @foreach (var item in Model.Result)
+        {
+            string questionId = "QuestionId" + questionNumber;
+            string answerId = "AnswerId" + questionNumber;
+
+            <div class="row m-1 p-1">
+                <div class="col-xl-8 col-md-12 col-12">
+                    <div class="form-group">
+                        <label asp-for="QuestionName">@questionNumber)  @item.QuestionName</label>
+                    </div>
+                </div>
+                <div class="col-xl-2 col-md-12 col-12">
+                    <div class="form-group text-right">
+                        @if (@item.CorrectAnswerText != null)
+                        {
+                            @if (@item.CorrectAnswerText == @item.AnswerIdText)
+                            {
+                                
+                                <i class="fa fa-check f-20 text-green"></i>
+                                
+                            }
+                            else
+                            {
+                                <label name="@answerId" class="text-red ">Correct Answer : @item.CorrectAnswerText</label>
+                                
+                            }
+                            isdisabled = "disabled";
+                        }
+
+                    </div>
+                </div>
+                <div class="col-xl-2 col-md-12 col-12">
+                    <div class="form-group">
+                        <select asp-for="@item.AnswerId" id="@answerId" name="@answerId" class="form-control Select2 " placeholder="Please select" required disabled="@isdisabled">
+                            <option selected></option>
+                            <option value="1">True</option>
+                            <option value="2">False</option>
+                        </select>
+                        <span asp-validation-for="@answerId" class="text-danger" data-valmsg-for="@answerId"></span>
+                        
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="@questionId" value="@item.QuestionId" hidden />
+                    </div>
+                </div>
+                
+            </div>
+            <hr class="p-0 m-0"/>
+            questionNumber++;
+        }
+
+        <div class="modal-footer">
+            @if(isdisabled != "disabled")
+            {
+                <button class="btn btn-primary" type="submit" id="btnConfirm"
+                        data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                        data-text="@localizer["Confirm"]">
+                    @localizer["Confirm"]
+                </button>
+            }
+                
+            
+            <a class="btn btn-secondary" asp-controller="Home" asp-action="Index" title="@localizer["Cancel"]">
+                @localizer["Cancel"]
+            </a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+
+        });
+        function localScript() {
+            initSelect2();
+
+        };
+
+        function PostSave(data) {
+            if (data.success) {
+                notify('success', data.response, 'Success');
+            }
+            else {
+                notify('error', data.response, 'danger');
+            }
+
+        };
+    </script>
+}
+
+

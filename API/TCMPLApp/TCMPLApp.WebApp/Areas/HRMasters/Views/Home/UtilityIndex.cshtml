@@ -1,0 +1,362 @@
+﻿@{
+    ViewData["Title"] = "HR Masters - Utilities";
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@Html.AntiForgeryToken()
+
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Utilities</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<div class="col-sm-12">
+    <div class="row">        
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditHRMasters))
+        {
+            
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Bulk HoD/Manager change</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw35"
+                           data-url='@Url.Action("BulkHoDMngrChange", "HRUtilities", new { Area = "HRMasters" })'
+                           data-modaltitle="Bulk HoD / Manager change"
+                           data-modalheader="Bulk HoD / Manager change">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                     <i class="fas fa-sync f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee delete</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/HRMasters/HRUtilities/EmployeeDeleteIndex">                          
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"> 
+                                        Delete employee from HR Masters
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-times f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            @*<environment exclude="Production">  *@              
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Bulk employee details import</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="#"
+                                data-jqueryselector="openmodal"
+                                data-modalcontainer="modalcontainer"
+                                data-modalpopupwidth="rightw35"
+                                data-url='@Url.Action("CustomImport", "HRUtilities", new { Area = "HRMasters" })'
+                                data-modaltitle="Custom bulk import"
+                                data-modalheader="Custom bulk import">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300"> 
+                                            Update employee (existing) details using excel file 
+                                        </h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users-cog f-20 text-white theme-capri"></i>
+                                    </div>
+                                </div>
+                            </a>                        
+                        </div>
+                    </div>
+                </div>                
+            @*</environment>*@
+        }        
+    </div>
+</div>
+
+@section Scripts{
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script>
+
+        Dropzone.autoDiscover = false;
+
+        //$(document).ready(function () {
+        //    localScript();
+        //});
+
+        function localScript() {
+            initSelect2(); 
+            initImportCustomControls();
+        }
+
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');                
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        /* Custom download file */
+
+        function startLoader() {
+            $('#btnExcelDownload').text('Wait...');
+            $('#btnExcelDownload').attr('disabled', true);
+        }
+
+        function stopLoader() {
+            $('#btnExcelDownload').text('Export');
+            $('#btnExcelDownload').attr('disabled', false);
+        }
+
+        function downloadCustomXLTemplate() {            
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formLeaveClaimsUpload input[name="__RequestVerificationToken"]').val() },
+                url: "@Url.Action("CustomXLTemplateDownload", "HRUtilities", new { Area = "HRMasters" })",
+                type: "GET",
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        }
+                        
+        function initDropZone(fileTypeExtension) {
+            $("#dropZoneWrapper").show();
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            $('div#iddropzone2').each(function () {
+
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    return;
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("TrainingFileUpload", "EmployeeTraining", new {Area = "SWPVaccine"})',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+
+                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    // of the sending event because uploadMultiple is set to true.
+                    this.on("processing", function (file) {
+                        //console.log($(formId).attr("action"));
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                            if (data.fileContent != null) {
+                                var blob = b64toBlob(data.fileContent.fileContents, data.fileContent.contentType);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = data.fileContent.fileDownloadName;
+                                link.click();
+                            }
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+
+            const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, { type: contentType });
+                return blob;
+            };
+
+        }
+
+        function initImportCustomControls() {            
+
+            if ($("#formCustomXLUpload").length != 0) {
+                initDropZone(".xlsx");
+            }
+
+            $('#btnCustomBulkXLTemplate').on('click', function () {
+                //console.log('btnCustomBulkXLTemplate');
+                event.preventDefault();
+                event.stopPropagation();
+                downloadCustomXLTemplate();
+            });
+
+            $('#btnImportCustomXL').on('click', function () {
+                //console.log('btnImportCustomXL');
+                event.preventDefault();
+                event.stopPropagation();
+                submitCustomXL();
+            });
+        } 
+
+        function detachDropZone() {
+
+            $("#dropZoneWrapper").hide();
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+        }
+        
+        function submitCustomXL(){
+
+            var formXLUpload = "#formCustomXLUpload";
+            if ($(formXLUpload).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length == 0) {
+                notify("error", "No files selected.", "Error");
+                return;
+            }
+            oDropZone2.processQueue();
+        }
+
+    </script>
+}
+

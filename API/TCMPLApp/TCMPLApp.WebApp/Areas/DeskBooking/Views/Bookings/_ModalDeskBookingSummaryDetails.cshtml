@@ -1,0 +1,48 @@
+﻿@model TCMPLApp.WebApp.Models.BookingSummaryViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Bookings"
+      asp-action="GetListsBookingSummaryDetails"
+      id="formBookingSummaryDetailsIndex"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="null"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Summary Details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Summary Details</h5>
+            </div>
+            <div class="card-block p-4">
+
+                <div style="overflow:auto">
+                    <table id="tblBookingSummaryDetails" class="table table-bordered  table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr class="font-weight-bold">
+                                <th>@Html.DisplayNameFor(model => model.Office)</th>
+                                <th>@Html.DisplayNameFor(model => model.AreaDesc)</th>
+                                <th>@Html.DisplayNameFor(model => model.DeskCount)</th>
+                                <th>@Html.DisplayNameFor(model => model.BookedDesks)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

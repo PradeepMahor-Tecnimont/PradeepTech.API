@@ -1,0 +1,53 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="filterSetTimesheet"
+      asp-area="Timesheet"
+      asp-controller="Home"
+      asp-action="FilterSet"
+      data-ajax-method="post">
+
+    <input type="hidden" asp-for="ActionName" />
+    <input type="hidden" asp-for="ControllerName" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Filter"]</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Filter setup"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+
+            </div>
+            <div class="card-block">
+                
+                <div class="form-group">
+                    <label asp-for="Yyyy" class="control-label"></label>
+                    <select id="filterSetTimesheet_yyyy" asp-for="Yyyy" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Years" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="Yyyy" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Yyyymm" class="control-label"></label>
+                    <select id="filterSetTimesheet_yyyymm" asp-for="Yyyymm" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Yyyymms" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="Yyyymm" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button id="btnTimesheetCancel" type="button" class="btn btn-secondary">
+            @localizer["Cancel"]
+        </button>
+    </div>
+</form>

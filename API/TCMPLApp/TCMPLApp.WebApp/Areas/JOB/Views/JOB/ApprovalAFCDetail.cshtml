@@ -1,0 +1,224 @@
+﻿@model TCMPLApp.WebApp.Models.JobmasterMainDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Approval AFC Details";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="JOB">Job form</a></li>
+        <li class="breadcrumb-item"><a asp-action="ApprovalAFCIndex" asp-controller="JOB" asp-area="JOB">Jobs Approval AFC</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Approval AFC Details</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+<input type="hidden" id="MonthDate" />
+<input type="hidden" asp-for="Projno" />
+<input type="hidden" id="OpeningMonth" value="@ViewBag.YYYYMM" />
+<input type="hidden" id="IsExport" />
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-header">
+            <h5 class="card-title">
+                Job name : <b>@Model.ShortDesc [ @Model.Projno ] </b>
+            </h5>
+            <a href='@Url.Action("ApprovalAFCIndex", "JOB", new { Area = "JOB" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                <i class="fas fa-undo"></i>
+                Back
+            </a>
+            @*@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobApprovalAfc))
+            { *@               
+                @*<button class="btn btn-sm btn-primary f-w-600 m-l-30 btn-glow-blink"
+                    onclick="showDeleteConfirmationPopup(event,this);"
+                    data-jqueryselector="showconfirmationmodal"
+                    data-url='@Url.Action("ApprovalAFC", "JOB", new { Area = "JOB", id = Model.Projno })'                    d
+                    data-actionmode="redirect"
+                    data-redirecturl="@Url.Action("ApprovalAFCIndex", "JOB", new { Area = "JOB" })"
+                    data-modaltitle="Please Confirm!"
+                    data-confirmationtext="@("Do you want to approve job " + @Model.Projno  + " ?")"
+                    data-confirmationtype="warning"
+                    data-confirmbuttontext="Approve job"
+                    title="Approve job">
+                    <i class="fas fa-thumbs-up" aria-hidden="true"></i> &nbsp; 
+                    @localizer["Approve job"]
+                </button>*@
+
+            @if (string.IsNullOrEmpty(Model.ActualCloseDate))
+            {
+                <a title="Approve job" id="idEditAFC"
+                    class="btn btn-sm btn-primary f-w-600 m-l-30 btn-glow-blink" href="#"
+                    data-jqueryselector="openmodal"
+                    data-modalcontainer="modalcontainer"
+                    data-modalpopupwidth="rightw35"
+                    data-url='@Url.Action("EditAFC", "JOB", new { Area = "JOB" })'
+                    data-id="@Model.Projno"
+                    data-clientName=""
+                    data-modaltitle="Approve job"
+                    data-modalheader="Approve job"
+                    data-callback="openModalListner">
+                    <i class="fas fa-thumbs-up" aria-hidden="true"></i> &nbsp;
+                    @localizer["Approve job"]
+                </a>
+            }
+            else
+            {
+                <button class="btn btn-sm btn-primary f-w-600 m-l-30 btn-glow-blink"
+                    onclick="showDeleteConfirmationPopup(event,this);"
+                    data-jqueryselector="showconfirmationmodal"
+                    data-url='@Url.Action("ApprovalAFC", "JOB", new { Area = "JOB", id = Model.Projno })'
+                    data-redirecturl="@Url.Action("ApprovalAFCIndex", "JOB", new { Area = "JOB" })"
+                    data-modaltitle="Please Confirm!"
+                    data-confirmationtext="@("Do you want to approve job " + @Model.Projno + " ?")"
+                    data-confirmationtype="warning"
+                    data-confirmbuttontext="Approve job"
+                    title="Approve job">
+                    <i class="fas fa-thumbs-up" aria-hidden="true"></i> &nbsp;
+                    @localizer["Approve job closure"]
+                </button>
+            }
+           @* }*@
+        </div>
+        <div class="card-block">
+            @await Html.PartialAsync("_ApproverStatusPartial.cshtml", Model.ApprovalStatus)
+            <div class="card-pill">
+                <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">@localizer["Job details"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-notes-tab" data-toggle="pill" href="#tabs-notes" role="tab" aria-controls="tabs-notes" aria-selected="false"
+                           data-url="@Url.Action("NotesIndex", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-notes"
+                           data-callback=""
+                           data-area="JOB"
+                           data-controller="JOB"
+                           data-action="NoteIndex">@localizer["Description & notes"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-phases-tab" data-toggle="pill" href="#tabs-phases" role="tab" aria-controls="tabs-phases" aria-selected="false"
+                           data-url="@Url.Action("PhaseIndex", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-phases"
+                           data-callback="loadJobPhaseDataTable()"
+                           data-area="JOB"
+                           data-controller="JOB"
+                           data-action="PhaseIndex">@localizer["Job phases"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-maillist-tab" data-toggle="pill" href="#tabs-maillist" role="tab" aria-controls="tabs-maillist" aria-selected="false"
+                           data-url="@Url.Action("MailListIndex", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-maillist"
+                           data-callback="loadMailListDataTable()"
+                           data-area="JOB"
+                           data-controller="JOB"
+                           data-action="MailListIndex">@localizer["Mailing List"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-responsible-approvers-tab" data-toggle="pill" href="#tabs-responsible-approvers" role="tab" aria-controls="tabs-responsible-approvers" aria-selected="false"
+                           data-url="@Url.Action("ResponsibleApproversIndex", "JobResponsibleApprovers", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-responsible-approvers"
+                           data-callback="loadJobResponsibleApproversDataTable()"
+                           data-area="JOB"
+                           data-controller="JobResponsibleApprovers"
+                           data-action="ResponsibleApproversIndex">@localizer["Responsible"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-budget-tab" data-toggle="pill" href="#tabs-budget" role="tab" aria-controls="tabs-budget" aria-selected="false"
+                           data-url="@Url.Action("BudgetIndex", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-budget"
+                           data-callback="loadBudgetDataTable()"
+                           data-area="JOB"
+                           data-controller="JOB"
+                           data-action="BudgetIndex">@localizer["Budget"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-erpPhases-tab" data-toggle="pill" href="#tabs-erpPhases" role="tab" aria-controls="tabs-erpPhases" aria-selected="false"
+                           data-url="@Url.Action("JobErpPhasesFileDetailPartial", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-erpPhases"
+                           data-area="JOB"
+                           data-controller="JOB">@localizer["ERP Phases"]</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    @await Html.PartialAsync("_LoaderPartial")
+                    <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                        @await Html.PartialAsync("_MainDetailPartial.cshtml", Model)
+                    </div>
+                    <div class="tab-pane fade" id="tabs-notes" role="tabpanel" aria-labelledby="tabs-notes-tab">
+                        <div id="pw-notes">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-phases" role="tabpanel" aria-labelledby="tabs-phases-tab">
+                        <div id="pw-phases">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-maillist" role="tabpanel" aria-labelledby="tabs-maillist-tab">
+                        <div id="pw-maillist">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-responsible-approvers" role="tabpanel" aria-labelledby="tabs-responsible-approvers-tab">
+                        <div id="pw-responsible-approvers">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-budget" role="tabpanel" aria-labelledby="tabs-budget-tab">
+                        <div id="pw-budget">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-erpPhases" role="tabpanel" aria-labelledby="tabs-erpPhases-tab">
+                        <div id="pw-erpPhases">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_MainDetailDataTableColumnsPartial",Model.ProjectActions);
+    }
+    <script src="~/js/JobFormDetail.js" asp-append-version="true"></script>
+
+
+    <script>
+
+        $(document).ready(function () {
+            localScript();
+        });
+
+
+        function localScript() {
+            initSelect2();
+            initJobBudgetExport();            
+        };
+
+        function flagUnflagTabsCallback(jsonData) {
+            null;
+        }
+
+        function notifySuccess(msg) {
+            notify('success', msg, 'Success');
+        }
+
+    </script>
+}

@@ -1,0 +1,494 @@
+﻿@model TCMPLApp.Domain.Models.EmpGenInfo.IcardConsentDetails
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Icard photo consent";
+    string photoWidth = "210 px";
+    string photoHeight = "230 px";
+    string photoExists = ViewBag.PhotoExists;
+    string photoWidthSample = "230 px";
+    string photoHeightSample = "350 px";
+    string executeCode = "KO";
+}
+
+@section styles
+    {
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+<input type="hidden" asp-for="PEmployee" />
+<input id="isConsent" type="hidden" asp-for="PIsConsent" />
+<input id="newImgUploaded" type="hidden" asp-for="PNewImgUploaded" />
+<input id="modifiedOn" type="hidden" asp-for="PModifiedOn" />
+<input id="photoExists" type="hidden" value="@ViewBag.PhotoExists" />
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ICard photo consent</li>
+    </ol>
+}
+<div class="container-fluid m-auto col-xl-11 p-2">
+    <div class="col-12">
+        <div class="card bg-gray-active border rounded shadow m-auto">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Icard photo consent [ @Model.PEmployee ]
+                </h5>
+            </div>
+            <form class="form-filter-datetime"
+                  id="formIcardConsent"
+                  asp-area="EmpGenInfo"
+                  asp-controller="ICardConsent"
+                  asp-action="ConsentSave"
+                  accept-charset="UTF-8">
+
+                <div style="display: none">
+                    <input type="hidden" id="Empno" name="Empno" value="@ViewBag.Emnpno" />
+                    <input type="hidden" id="IsConsent" name="IsConsent" value="" />
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-5" id="photoConsentdiv1">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="row justify-content-center">
+                                            @localizer["My photo"]
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center p-t-10 p-b-20" id="empImg">
+                                        <img id="imgEmployee" name="imgEmployee" href="@(ViewBag.PhotoPathUrl)" src="" width="@photoWidth" height="@photoHeight" />
+                                    </div>
+                                    @if (executeCode == IsOk)
+                                    {
+                                        <div id="divNewPhotoUploadNotOk" class="row justify-content-center" style="display:none">
+                                            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+                                            data-jqueryselector="openmodal"
+                                            data-modalcontainer="modalcontainer"
+                                            data-modalpopupwidth="rightw35"
+                                            data-url='@Url.Action("ICardConsentPhotoUpload", "IcardConsent", new { Area = "EmpGenInfo" })'
+                                            data-modaltitle="New photo upload"
+                                            data-modalheader="New photo upload">
+                                                @localizer["Upload new photo"]
+                                            </a>
+                                        </div>
+                                        <div class="justify-content-center p-t-10 p-b-20" id="consentDesc">
+                                            <div class="theme-light-grey p-10">
+                                                <div class="row justify-content-center">
+                                                    <span style="font-weight:bold;font-size:1rem;">@localizer["Photo Consent"]</span>
+                                                </div>
+                                                <ul style="line-height:1.6;">
+                                                    <p style="font-size:1rem">
+                                                        I authorise Maire Tecnimont S.p.A. and all of its Group subsidiaries and branches to utilise his/her own private photo, for potential publications and/or any other business use.
+                                                        The above-mentioned photo might be utilised in corporate internal documentation, corporate applications/tools or within the corporate global address book.
+                                                    </p>
+                                                </ul>
+                                                <div id="divConsentOk" class="row justify-content-center p-t-5 p-b-5 text-red" style="display:none">
+                                                    @if (Model.PModifiedOn.HasValue)
+                                                    {
+                                                        @Html.Raw("Already registered your consent on " + @Model.PModifiedOn.Value.ToString("d"))
+                                                        ;
+                                                    }
+                                                </div>
+                                                <div id="divConsentNotOk" class="row col-12" style=" display:none;">
+                                                    <div class="col-6 p-0 text-right">
+                                                        <input type="checkbox" id="chkConsent" />
+                                                        <label class="cr" style="top: 0px;"></label>
+                                                    </div>
+                                                    <div class="col-6" style="padding-bottom:10px;">
+                                                        <span style="color:#0047ab; font-size:1rem;font-weight:bold;">I agree</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer" style="padding-bottom:0px">
+                                                    <button class="btn btn-primary" type="submit" id="btnconfirm" style="display:none"
+                                                    data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Wait...'
+                                                    data-text="Confirm">
+                                                        Confirm
+                                                    </button>
+                                                    <button class="btn btn-info" id="btnCancel"
+                                                    asp-area="EmpGenInfo"
+                                                    asp-controller="Home"
+                                                    asp-action="Index"
+                                                    data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Wait...'
+                                                    data-text="Confirm">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7" id="photoConsentdiv2">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="row justify-content-center">
+                                            @localizer["New ICard sample"]
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center p-t-10">
+                                        <img id="imgSample" class="border" name="imgSample" width="@photoWidthSample" height="@photoHeightSample" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="row justify-content-center">
+                                            @localizer["Sample Photo For ICard"]
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center p-t-10">
+                                        <img id="ICardSamplePhoto" name="ICardSamplePhoto" src="~/img/SamplePhotoICard.jpg" width="230px" height="250px" style="border: 2px solid;" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-6 col-sm-12" id="IcardConsent" style="padding-top:10px">
+                                    <div class="row justify-content-center p-t-10 p-b-20">
+                                        <div class="col-11 theme-light-grey p-10">
+                                            <ul style="line-height:1.6;font-size:1rem;">
+                                                <li>Image should be in .jpg format only.</li>
+                                                <li>Image file size should not be more than 3MB.</li>
+                                                <li>Image resolution should 3000px by 4000px or higher.</li>
+                                                <li>Image should have white background.</li>
+                                                <li>Adequate white space should be available above head area.</li>
+                                                <li>Face should cover 70% or higher of the image(refer "Sample Photo for ICard" displayed alongside).</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script>
+        Dropzone.autoDiscover = false;
+
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {
+            initIcardConsentPhotoUploadControls();
+
+            getEmployeePhoto();
+            getSampleICard();
+            redirectToEnableConsentConfirm();
+
+            $('#chkConsent').on('click', function () {
+                if ($("#chkConsent").is(':checked'))
+                    $("#IsConsent").val('OK');
+                else
+                    $("#IsConsent").val('KO');
+            });
+
+            if (screen.width == 1360 && screen.height == 768) {
+                $('#photoConsentdiv1').attr("class", "col-lg-6");
+                $('#photoConsentdiv2').attr("class", "col-lg-6");
+                $('.card-header').hide();
+                $('.card .card-body').css("padding", "5px 5px");
+                $('.modal-footer').css("padding", "3px");
+                $('.breadcrumb ').css("padding", "8px 13px");
+                $('.form-group').css("margin-bottom", "0rem");
+                $('#imgSample').css("height", "260px");
+                $('#imgSample').css("width", "180px");
+                $('#imgEmployee').css("height", "170px");
+                $('#imgEmployee').css("width", "150px");
+                $('#consentDesc').attr("style", "padding-bottom: 5px;");
+                $('ul').css("font-size", "0.8rem");
+                $('p').css("font-size", "0.8rem");
+                $('span').css("font-size", "0.8rem");
+                $('#empImg').attr("class", "row justify-content-center p-t-10");
+                $('#ICardSamplePhoto').width("150px");
+                $('#ICardSamplePhoto').height("170px");
+                $('#IcardConsent').css("padding-top","10px");
+            }
+        };
+
+        function getEmployeePhoto() {
+            var empno = $('#Empno').val();
+
+            $.ajax({
+                url: '@Url.Action("GetEmployeePhoto", "IcardConsent")',
+                data: {
+                    "id": empno,
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    $('#imgEmployee').attr('src', data);
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+        function getSampleICard() {
+            $.ajax({
+                url: '@Url.Action("GetSampleICard", "IcardConsent")',
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    $('#imgSample').attr('src', data);
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+        function initDropZone(fileTypeExtension) {
+            detachDropZone();
+
+            $("#dropZoneWrapper").show();
+
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            $('div#iddropzone2').each(function () {
+
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    return;
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("ICardConsentPhotoUpload", "IcardConsent", new {Area = "EmpGenInfo"})',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 3,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    this.on("processing", function (file) {
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+                        onBegin($('#btnIcardContentPhotoUpload'));
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        if (data.success) {
+                            PostSave(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        if (data.success) {
+                            PostSave(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                            if (data.fileContent != null) {
+                                var blob = b64toBlob(data.fileContent.fileContents, data.fileContent.contentType);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = data.fileContent.fileDownloadName;
+                                link.click();
+                            }
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                    this.on("complete", function (files, data) {
+                        onComplete($('#btnIcardContentPhotoUpload'));
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+                    });
+
+                },
+                error: function (request, status, error) {
+                    notify('error', status, 'danger');
+                    this.removeAllFiles(true);
+                }
+            });
+
+            const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, { type: contentType });
+                return blob;
+            };
+        }
+
+        function initIcardConsentPhotoUploadControls() {
+            if ($("#formIcardConsentPhotoUpload").length != 0) {
+                initDropZone(".jpg");
+            }
+
+            $('#btnIcardContentPhotoUpload').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitformIcardConsentPhotoUpload();
+            });
+        }
+
+        function detachDropZone() {
+            $("#dropZoneWrapper").hide();
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+        }
+
+        function submitformIcardConsentPhotoUpload() {
+            var formIcardConsentPhotoUpload = "#formIcardConsentPhotoUpload";
+            if ($(formIcardConsentPhotoUpload).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length == 0) {
+                notify("error", "No files selected.", "Error");
+                return;
+            }
+            oDropZone2.processQueue();
+        }
+
+        function PostSave(data) {
+            detachDropZone();
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+                getEmployeePhoto();
+                redirectToEnableConsentConfirm();
+            }
+        }
+
+        function redirectToEnableConsentConfirm() {
+            var empno = $('#Empno').val();
+
+            $.ajax({
+                url: '@Url.Action("EnableConsentConfirm", "IcardConsent")',
+                data: {
+                    "id": empno,
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    $('#isConsent').val(data.pIsConsent);
+                    $('#newImgUploaded').val(data.pNewImgUploaded);
+                    $('#modifiedOn').val(data.pModifiedOn);
+                    showHide();
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+        function showHide() {
+            if ($('#isConsent').val() == 'OK') {
+                //$('#divNewPhotoUploadOk').show();
+                $('#divNewPhotoUploadNotOk').hide();
+                $('#divConsentOk').show();
+                $('#divConsentNotOk').hide();
+                $('#btnconfirm').hide();
+                $('#consentDesc').css("margin-top", "2rem");
+            }
+            else if ($('#newImgUploaded').val() == 'OK') {
+                //$('#divNewPhotoUploadOk').show();
+                $('#divNewPhotoUploadNotOk').show();
+                $('#divConsentNotOk').show();
+                $('#btnconfirm').show();
+                $('#consentDesc').css("margin-top", "0rem");
+
+                if (!($('#modifiedOn').val() == '' || $('#modifiedOn').val() == null || $('#modifiedOn').val() == 'undefined')) {
+                    let date = new Date($('#modifiedOn').val());
+                    var day = date.getDate();
+                    var month = date.getMonth() + 1;
+                    var year = date.getFullYear();
+                    $('#spanNewPhotoUploadOn').text('New photo uploaded on ' + day + '-' + month + '-' + year);
+                }
+            }
+            else if ($('#photoExists').val() == 'OK') {
+                $('#divNewPhotoUploadNotOk').show();
+                $('#divConsentNotOk').show();
+                $('#btnconfirm').show();
+            }
+            else {
+                $('#divNewPhotoUploadNotOk').show();
+                $('#consentDesc').css("margin-top", "2rem");
+            }
+        }
+
+    </script>
+}

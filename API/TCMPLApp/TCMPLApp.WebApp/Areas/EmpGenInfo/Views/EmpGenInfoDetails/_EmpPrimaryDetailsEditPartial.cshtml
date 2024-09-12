@@ -1,0 +1,286 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeePrimaryDetailsEditViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlPrimaryDetailsEdit = isOnBehalf == IsOk ? ("OnBehalfEmployeePrimaryDetailsEdit") : ("EmployeePrimaryDetailsEdit");
+}
+@Html.AntiForgeryToken()
+<input type="hidden" asp-for="@Model.NoDadHusbInName" />
+
+<form asp-controller="EmpGenInfoDetails"
+      asp-action=@urlPrimaryDetailsEdit
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#pw-EmployeePrimaryDetails"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript();initToastrMessage();"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" id="getNoDadHusbInName" value="@Model.NoDadHusbInName.ToString()" />
+    <input type="hidden" asp-for="@Model.Empno" />
+
+    <div class="col-sm-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+
+            <div class="card-body" style="min-height: 450px;">
+                <div class="app-h4 app-card-header p-2">
+                    @if (isOnBehalf == IsOk)
+                    {
+                        @localizer["Employee Details (On BeHalf)"]
+                    }
+                    else
+                    {
+                        @localizer["Employee Details"]
+                    }
+
+                </div>
+                <span id="spanDescriptionPrimaryStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+                <div class="card-deck " style="margin-top: 20px">
+
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-4">
+                        <div class="app-h4 app-card-header p-2">
+                            @localizer["Name on nomination form"]
+                        </div>
+                        <div class="card-body">
+                            <div class="row p-0">
+                                <div class="col-xl-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            <div class="checkboxlabel">
+                                                <input type="checkbox" class="locked checkBox-Blue" id="check" asp-for="NoDadHusbInName" checked="@Model.NoDadHusbInName" />
+                                                <label for="check">
+                                                    <span>@Html.DisplayNameFor(model => model.NoDadHusbInName)</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-12 col-md-12 col-sm-12 p-0">
+                                    @*alert alert-info*@
+                                    <div class="form-group dd-met col-mb-6 col-xl-12 ">
+                                        Employee Name as it would appear on Nomination Form
+                                    </div>
+                                    <div class="col-xl-12 col-md-6 ">
+                                        <div class="form-group">
+                                            <div class="dt-met" id="NoDadHusbInNameLabel">
+
+                                                @Html.DisplayNameFor(model=> model.FirstName) +
+                                                @Html.DisplayNameFor(model=> model.FatherName) +
+                                                @Html.DisplayNameFor(model=> model.Surname)
+                                            </div>
+                                            <div class="dt-met" id="YesNoDadHusbInNameLabel">
+
+                                                @Html.DisplayNameFor(model=> model.FirstName) +
+                                                @Html.DisplayNameFor(model=> model.Surname)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 col-md-6 ">
+                                        <div class="form-group">
+
+                                            <div class="dd-met" id="NoDadHusbInNameCheck">
+                                                @($@"{Model.FirstName} {Model.FatherName} {Model.Surname}"
+                                                    )
+                                            </div>
+
+                                            <div class="dd-met" id="YesNoDadHusbInNameCheck">
+
+                                                @(
+                                                    $@"{Model.FirstName} {Model.Surname}"
+                                                    )
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-12 col-md-12 col-sm-12 ">
+                                    <div class="form-group">
+                                        <label asp-for="FirstName" class="control-label"></label>
+                                        <input asp-for="FirstName" class="form-control text-uppercase" placeholder="First Name" required />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-md-12 col-sm-12 ">
+                                    <div class="form-group">
+                                        <label asp-for="Surname" class="control-label"></label>
+                                        <input asp-for="Surname" class="form-control text-uppercase" placeholder="Surname" required />
+                                        <span asp-validation-for="Surname" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-md-12 col-sm-12 ">
+                                    <div class="form-group">
+                                        <label asp-for="FatherName" class="control-label"></label>
+                                        <input asp-for="FatherName" class="form-control text-uppercase" placeholder="LastName" required />
+                                        <span asp-validation-for="FatherName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-8  ">
+                        <div class="app-h4 app-card-header p-2">@localizer["Permanent Address"]</div>
+                        <div class="card-body">
+                            <div class="row ">
+                                <div class="col-xl-12 col-md-12 ">
+                                    <div class="form-group">
+                                        <div class="dt-met"> Address as it would appear on Nomination Form</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            (Permanent Address: Address + PinCode)
+
+                                        </div>
+                                        <div class="dd-met">
+                                            @Html.DisplayFor(model => model.PAdd1)
+                                            @Html.DisplayFor(model => model.PPincode)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="PAdd1" class="control-label"></label>
+                                        <textarea asp-for="PAdd1" class="form-control text-uppercase" rows="2" maxlength="200" required></textarea>
+                                        <span asp-validation-for="PAdd1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="PHouseNo" class="control-label"></label>
+                                        <input asp-for="PHouseNo" class="form-control text-uppercase" placeholder="House No" />
+                                        <span asp-validation-for="PHouseNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="PCity" class="control-label"></label>
+                                        <input asp-for="PCity" class="form-control text-uppercase" placeholder="City" />
+                                        <span asp-validation-for="PCity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="PDistrict" class="control-label"></label>
+                                        <input asp-for="PDistrict" class="form-control text-uppercase" placeholder="District" />
+                                        <span asp-validation-for="PDistrict" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="PPincode" class="control-label"></label>
+                                        <input asp-for="PPincode" class="form-control" placeholder="Pincode"
+                                               onkeypress="return AllowNumbersOnly(event);" required />
+                                        <span asp-validation-for="PPincode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="PState" class="control-label"></label>
+                                        <input asp-for="PState" class="form-control text-uppercase" placeholder="State" />
+                                        <span asp-validation-for="PState" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="PCountry" class="control-label"></label>
+                                        <input asp-for="PCountry" class="form-control text-uppercase" placeholder="Country" />
+                                        <span asp-validation-for="PCountry" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-deck" style="margin-top: 20px">
+
+                    <div class="card shadow col-md-12 col-xl">
+                        <div class="app-h4 app-card-header p-2">@localizer["Additional Information"]</div>
+                        <div class="card-body">
+                            <div class="row p-2">
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PlaceOfBirth" class="control-label"></label>
+                                        <input asp-for="PlaceOfBirth" class="form-control text-uppercase" placeholder="Place Of Birth" required />
+                                        <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CountryOfBirth" class="control-label"></label>
+                                        <select asp-for="CountryOfBirth" class="form-control chosen-select text-uppercase" data-placeholder=" Please select..." asp-items="ViewBag.CountriesList" required>
+                                            <option selected></option>
+                                        </select>
+                                        <span asp-validation-for="CountryOfBirth" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Nationality" class="control-label"></label>
+                                        <input asp-for="Nationality" class="form-control text-uppercase" placeholder="Nationality" required />
+                                        <span asp-validation-for="Nationality" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PPhone" class="control-label"></label>
+                                        <input asp-for="PPhone" class="form-control" placeholder="Phone No1"
+                                               onkeypress="return RestrictAlphabets(event);" maxlength="50" />
+                                        <span asp-validation-for="PPhone" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PMobile" class="control-label"></label>
+                                        <input asp-for="PMobile" class="form-control" placeholder="Mobile No"
+                                               onkeypress="return RestrictAlphabets(event);" maxlength="15" />
+                                        <span asp-validation-for="PMobile" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PersonalEmail" class="control-label"></label>
+                                        <input asp-for="PersonalEmail" class="form-control text-lowercase" placeholder="Personal Email" />
+                                        <span asp-validation-for="PersonalEmail" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="NoOfChild" class="control-label"></label>
+                                        <input asp-for="NoOfChild" class="form-control"
+                                               onkeypress="return AllowDecimalNumbersOnly(event);" placeholder="No Of Children" required />
+                                        <span asp-validation-for="NoOfChild" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-deck float-right" style="margin-top: 20px; margin-right: 20px">
+                    <div class="form-group">
+                        <a class="btn btn-secondary f-right" asp-controller="Home" asp-action="Index" title="@localizer["Cancel"]">
+                            @localizer["Cancel"]
+                        </a>
+                        <span class="f-right">&nbsp; &nbsp;</span>
+                        <button class="btn btn-primary f-right" type="submit" id="btnconfirm"
+                                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                data-text="@localizer["Save"]">
+                            @localizer["Save"]
+                        </button>
+                        <div id="results" style="display:none">@TempData["Message"]</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,79 @@
+﻿@model TCMPLApp.Domain.Models.JOB.View.JobApproverStatus
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">       
+
+            <div class="col-3 col-md-3 col-sm-4">
+                <div class="card card-tile m-0">
+                    <div class="card-block border rounded-sm theme-light-yellow">
+                        <div class="row align-items-center">
+                            <div class="col m-0 p-r-3 p-l-3">
+                                <div class="header-flex">
+                                    <h4 class="mb-1 font-weight-bold">PM</h4>
+                                    <h6 class="text-muted mb-0 text-right f-w-600">&nbsp;</h6>
+                                </div>
+                                <h6 class="text-muted mb-0 text-left f-w-600" style=" margin-top: 20px;">@(Model.PPmName ?? "")</h6>                              
+                                <h6 class="text-muted mb-0 text-right f-w-600" style=" margin-top: 20px;">&nbsp;</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3 col-md-3 col-sm-4">
+                <div class="card card-tile m-0">
+                    <div class="card-block border rounded-sm theme-light-yellow">
+                        <div class="row align-items-center">
+                            <div class="col m-0 p-r-3 p-l-3">
+                                <div class="header-flex">
+                                    <h4 class="mb-1 font-weight-bold">JS</h4>
+                                    <h6 class="mb-0 text-right f-w-600 @if(Model.PJsStatus == "Approved") @Html.Raw("text-dark-green") @if(Model.PMdStatus == "Pending") @Html.Raw("text-red")" style="right: 10px; top: 10px;">&nbsp;@Model.PJsStatus</h6>
+                                </div>
+                                <h6 class="text-muted mb-0 text-left f-w-600" style=" margin-top: 20px;">&nbsp;@(Model.PJsName ?? "")</h6>
+                                <h6 class="text-muted mb-0 text-right f-w-600" style=" margin-top: 20px;">&nbsp;@Model.PJsApprlDate?.ToString("dd-MMM-yyyy")</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3 col-md-3 col-sm-4">
+                <div class="card card-tile m-0">
+                    <div class="card-block border rounded-sm theme-light-yellow">
+                        <div class="row align-items-center">
+                            <div class="col m-0 p-r-3 p-l-3">
+                                <div class="header-flex">
+                                    <h4 class="mb-1 font-weight-bold">MD</h4>
+                                    <h6 class="mb-0 text-right f-w-600 @if(Model.PMdStatus == "Approved") @Html.Raw("text-dark-green") @if(Model.PMdStatus == "Pending") @Html.Raw("text-red")" style="right: 10px; top: 10px;">&nbsp;@Model.PMdStatus</h6>
+                                </div>                                
+                                <h6 class="text-muted mb-0 text-left f-w-600" style=" margin-top: 20px;">&nbsp;@(Model.PMdName?? "")</h6>                                
+                                <h6 class="text-muted mb-0 text-right f-w-600" style=" margin-top: 20px;">&nbsp;@Model.PMdApprlDate?.ToString("dd-MMM-yyyy")</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3 col-md-3 col-sm-4">
+                <div class="card card-tile m-0">
+                    <div class="card-block border rounded-sm theme-light-yellow">
+                        <div class="row align-items-center">
+                            <div class="col m-0 p-r-3 p-l-3">
+                                <div class="header-flex">
+                                    <h4 class="mb-1 font-weight-bold">AFC</h4>
+                                    <h6 class="mb-0 text-right f-w-600 @if(Model.PAfcStatus == "Approved") @Html.Raw("text-dark-green") @if(Model.PAfcStatus == "Pending") @Html.Raw("text-red")" style="right: 10px; top: 10px;">&nbsp;@Model.PAfcStatus</h6>
+                                </div>                                 
+                                <h6 class="text-muted mb-0 text-left f-w-600" style=" margin-top: 20px;">&nbsp;@(Model.PAfcName ?? "")</h6>                                
+                                <h6 class="text-muted mb-0 text-right f-w-600" style=" margin-top: 20px;">&nbsp;@Model.PAfcApprlDate?.ToString("dd-MMM-yyyy")</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

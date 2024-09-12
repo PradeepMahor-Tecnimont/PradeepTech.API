@@ -1,0 +1,240 @@
+﻿@model TCMPLApp.WebApp.Models.BGProjectDriViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section styles
+    {
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+    @{
+    ViewData["Title"] = "ProjectDri";
+
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="BG">BG</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Masters" asp-area="BG">Masters</a></li>
+        <li class="breadcrumb-item active">ProjectDri</li>
+    </ol>
+}
+
+    <div style="display:none">
+    </div>
+
+    <div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Project director list</p>
+        </div>
+        <div class="card-toolbar">
+            <div role="toolbar">
+
+                <a class="btn btn-outline-primary btn-sm border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ProjectDriCreate", "Masters", new { Area = "BG" })'
+               data-modaltitle="ProjectDriCreate"
+               data-modalheader="ProjectDriCreate">
+                    <i class="fas fa-plus"></i>&nbsp;@localizer["Create"]
+                </a>
+            </div>
+        </div>
+        <div class="m-1"></div>
+        <div class="bg-gray-active rounded ">
+
+            <table id="tbGrid" class="table table-striped table-bordered table-responsive ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        <th>@Html.DisplayNameFor(model => model.ApplicationId)</th>
+                        <th>@Html.DisplayNameFor(model => model.Employee)</th>
+                         <th>@Html.DisplayNameFor(model => model.CompDesc)</th>
+                         <th>@Html.DisplayNameFor(model => model.IsVisible)</th>
+                        <th>@Html.DisplayNameFor(model => model.IsDeleted)</th>
+                        <th>@Html.DisplayNameFor(model => model.ModifiedBy)</th>
+                        <th>@Html.DisplayNameFor(model => model.ModifiedOn)</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        function localScript() {
+            initSelect2();
+        }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+        });
+        function localLoadDataTable() {
+
+            var table = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                responsive: true,
+                autoWidth: false,
+                lengthMenu: [25, 50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                dom: 'rt<"row"<"col-1"l><"col"p>><"clear">',
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "applicationId" },
+                    { data: "employee" },
+                    { data: "compDesc" },
+
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.isVisible == 1 || data.isVisible == "1") {
+                                return 'Yes';
+                            }
+                            else {
+                                return 'No';
+                            }
+                        }
+                    }, {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.isDeleted == 1 || data.isDeleted == "1") {
+                                return 'Yes';
+                            }
+                            else {
+                                return 'No';
+                            }
+                        }
+                    },
+                    { data: "modifiedBy" },
+                    { data: "modifiedOn" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.isDeleted != 1 || data.isDeleted != "1") {
+                            return '<button class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("ProjectDriUpdate", "Masters", new { Area = "BG" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                            ' data-id="' + data.applicationId + '"' +
+                        ' data-modaltitle="Edit details" ' +
+                        ' data-modalheader="Edit details" ' +
+                        ' > ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>'
+                            } else {
+                                return '';
+                            }
+                        },
+                        'className': "td-icon",
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.isDeleted != 1 || data.isDeleted != "1") {
+                            return ' <button class="btn btn-outline-danger btn-sm border-none"  ' +
+                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-url="@Url.Action("ProjectDriDelete", "Masters", new { Area = "BG" })" ' +
+                        ' data-redirecturl="" ' +
+                        ' data-PostSaveReLoadDataTable="OK" ' +
+                        ' data-id="' + data.applicationId + '"' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                            ' data-confirmationtext="Delete record - ' + data.applicationId + ' ?" ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Delete"> ' +
+                                ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                ' </button> ';
+                            } else {
+                                return '';
+                            }
+                        },
+                        'className': "td-icon",
+                    }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListsProjectDri", "Masters")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                    d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                    d.startDateTime = null; // $('#FilterDataModel_StartDateTime').val();
+                    d.endDateTime = null; // $('#FilterDataModel_EndDateTime').val();
+                    d.statusTypeId = null; // $('#FilterDataModel_StatusTypeId').val();
+                    //d.isActive = $('#FilterDataModel_IsActive').val();
+                    //d.endDate = $('#FilterDataModel_EndDate').val();
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+            });
+            //dataTableSearch();
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+            localLoadDataTable();
+            hideLoader();
+        }
+
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+    </script>
+}

@@ -1,0 +1,147 @@
+﻿@model TCMPLApp.Domain.Models.Common.EmployeeDetails
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PName)
+            <input id="empno" class="form-control" readonly value="@(Model.PForEmpno + " - " + Model.PName)">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PGrade)
+            <input id="grade" readonly class="form-control" value="@(Model.PGrade)">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PDesgCode)
+            <input class="form-control" readonly value="@(Model.PDesgCode + " - " + Model.PDesgName)">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PEmpType)
+            <input class="form-control" readonly value="@(Model.PEmpType)">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PParent)
+            <input class="form-control" readonly value="@(Model.PParent + " - " + Model.PCostName)">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PAssign)
+            <input class="form-control" readonly value="@(Model.PAssign+ " - " + Model.PAssignName)">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PSapcc)
+            <input class="form-control" readonly value="@(Model.PSapcc)">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PSapccassign)
+            <input class="form-control" readonly value="@(Model.PSapccassign)">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PHoD)
+            <input class="form-control" readonly value="@(Model.PHoD + " - " + Model.PHoDName)">
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.PSecretary)
+            <input class="form-control" readonly value="@(Model.PSecretary + " - " + Model.PSecName)">
+        </div>
+    </div>
+</div>
+@if (@Model.PShowAllDetails == IsOk)
+{
+<hr />
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PEmpPersonId)
+                    <input class="form-control" readonly value="@(Model.PEmpPersonId)">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PEmpMetaId)
+                    <input class="form-control" readonly value="@(Model.PEmpMetaId)">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PCardRFID)
+                    <input class="form-control" readonly value="@(Model.PCardRFID)">
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PHexaCardRFID)
+                    <input class="form-control" readonly value="@(Model.PHexaCardRFID)">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PTodaysFirstPunchOffice)
+                    <input class="form-control" readonly value="@(Model.PTodaysFirstPunchOffice)">
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PBaseOffice)
+                    <input class="form-control" readonly value="@(Model.PBaseOffice)">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PCurrentOfficeLocation)
+                    <input class="form-control" readonly value="@(Model.PCurrentOfficeLocation)">
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PPrimaryWorkspace)
+                    <input class="form-control" readonly value="@(Model.PPrimaryWorkspace)">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PDeskId)
+                    <input class="form-control" readonly value="@(Model.PDeskId)">
+                </div>
+            </div>
+        </div>
+
+    </div>
+}

@@ -1,0 +1,378 @@
+﻿
+@model TCMPLApp.WebApp.Models.HolidayApprovalViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreHolidayCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+    <li class="breadcrumb-item"><a asp-action="ActionsHRIndex" asp-controller="Home" asp-area="SelfService">HR actions</a></li>
+    <li class="breadcrumb-item active">Holiday attendance pending approvals</li>
+</ol>
+}
+
+@section styles
+{
+
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+<!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+<!-- Material Datepicker css -->
+    @*<link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />*@
+}
+
+@{
+    ViewData["Title"] = "Holiday attendance pending approvals";
+
+}
+
+@*<input type="hidden" asp-for="@Model.FilterDataModel.BusinessEntityId" />
+    <input type="hidden" id="FilterDataModel_StartDateTime" name="FilterDataModel_StartDateTime" value="@Model.FilterDataModel.StartDateTimeString" />
+    <input type="hidden" id="FilterDataModel_EndDateTime" name="FilterDataModel_EndDateTime" value="@Model.FilterDataModel.EndDateTimeString" />
+    <input type="hidden" asp-for="@Model.FilterDataModel.StatusTypeId" />*@
+
+<form asp-action="HRApprovalHoliday" asp-area="SelfService" asp-controller="Attendance" method="post"
+      id="HRApprovalHolidayIndex" name="HRApprovalHolidayIndex">
+
+    <div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Holiday attendance pending approvals</p>
+        </div>
+        <div class="d-flex flex-row" style="justify-content:flex-end;">
+            <button name="Confirm" id="Confirm" type="button"
+                    class="btn btn-md btn-primary" onclick="onSave()">
+                @localizer["Confirm"]
+            </button>
+        </div>
+        <div class="m-1"></div>
+        <div class="bg-gray-active rounded ">
+            @*<div class="input-group pt-1 pl-1 pr-1 ">
+                <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+                <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                </div>
+                </div>*@
+            <input type="text" class="hidden" id="ApprlHodRemarks" name="ApprlHodRemarks" placeholder="">
+            <input type="text" class="hidden" id="ApprlApprovals" name="ApprlApprovals" placeholder="">
+
+            <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        <th rowspan="2"></th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.ApplicationDate)</th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.AttendanceDate)</th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.Office)</th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.EmpName)</th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.Parent)</th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.LeadName)</th>
+                        <th rowspan="2">@Html.DisplayNameFor(model => model.HrRemarks)</th>
+                        <th colspan="3" class="text-center">
+                            Approval
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.ApproveYes)
+                            <hr class=" m-1 text-light " />
+                            <div class=" form-group d-inline radio ">
+                                <input type="radio" name="selectAll" id="ApproveYes_selectAll">
+                                <label for="ApproveYes_selectAll" class="cr margin-top-5"></label>
+                            </div>
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.ApproveNo)
+                            <hr class=" m-1 text-light " />
+                            <div class=" form-group d-inline radio d-inline">
+                                <input type="radio" name="selectAll" id="ApproveNo_selectAll">
+                                <label for="ApproveNo_selectAll" class="cr margin-top-5"></label>
+                            </div>
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.ApprovePending)
+                            <hr class=" m-1  " />
+                            <div class=" form-group d-inline radio radio d-inline">
+                                <input type="radio" name="selectAll" id="ApprovePend_selectAll">
+                                <label for="ApprovePend_selectAll" class="cr margin-top-5"></label>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script type="text/javascript">
+      function localScript() {
+
+          initSelect2();
+
+      }
+
+      function localLoadDataTable() {
+          $('#tbDataGrid').DataTable().destroy();
+
+          $('#tbDataGrid tbody').empty();
+
+          var table = $('#tbDataGrid').DataTable({
+              drawCallback: function (settings) {
+                  loadScript();
+              },
+              aaSorting: [[1, 'asc']],
+              ordering: false,
+              responsive: true,
+              autoWidth: false,
+              pageLength: 25,
+              lengthMenu: [25,50],
+              processing: true,
+              serverSide: true,
+              stateSave: true,
+              info: false,
+              filter: false,
+              layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+              columnDefs: [
+                  { orderable: false, targets: 0 }
+              ],
+            @if ((bool)@Context.Items["isMobile"] == false)
+            {
+                  <text>
+                      ordering: false,
+                      columns: [
+                          {
+                            data: null,
+                            render: function (data, type, row) {
+                                return '<button type="button" class="btn btn-outline-info btn-sm border-none" ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("HolidayAttendanceDetails", "Attendance", new { Area = "SelfService" })"' +
+                            ' data-modalpopupwidth="rightw35" ' +
+                            ' data-applicationid="' + data.applicationId + '"' +
+                            ' data-modaltitle="Holiday attendance details" ' +
+                            ' data-modalheader="Holiday attendance details" ' +
+                            ' > ' +
+                            ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                            ' </button>'
+                            },
+                            'className': "td-icon",
+                            },
+                          { data: "applicationDate", width:'4.0rem' },
+                          { data: "attendanceDate", width: '8.0rem'},
+                          { data: "office", width: '2.0rem'},
+                          { data: "empName", width: '10.0rem'},
+                          { data: "parent", width: '2.0rem'},
+                          { data: "leadName", width: '7.0rem'  },
+                          {
+                              data: null,
+                              width:'15.0rem',
+                              render: function (data, type, row) {
+                                  return '  <input class="form-control remarks"  ' +
+                                      ' id="remarks"  name="' + data.applicationId + '"  value="' + (data.hrRemarks ?? '')  + '" '  +
+                                      ' maxlength="60" name="Reason" />' +
+                                      ' ';
+                                  ;
+                              },
+                          },
+                          {
+                              data: null,
+                              width: '3.0rem',
+                              render: function (data, type, row) {
+                                  return ' <div class="radio d-inline text-center "> ' +
+                                      ' <input type="radio" class="rdoapproval" ' +
+                                      ' id="approveYes_' + data.applicationId + '"  name="' + data.applicationId + '"   ' +
+                                      ' value="1"  >  ' +
+                                      ' <label for="approveYes_' + data.applicationId +'" class="cr margin-top-5"></label>' +
+                                      ' </div>';
+                              },
+                              class: ' text-center  align-middle'
+
+                          },
+                          {
+                              data: null,
+                              width: '3.0rem',
+                              render: function (data, type, row) {
+                                  return ' <div class="radio d-inline "> ' +
+                                      ' <input type="radio"  class="rdoapproval" ' +
+                                      ' id="approveNo_' + data.applicationId + '" name="' + data.applicationId + '"' +
+                                      ' value="-1" >  ' +
+                                      ' <label for="approveNo_' + data.applicationId + '" name="approveNo_" class="cr margin-top-5"></label>' +
+                                      ' </div>';
+                              },
+                              class: ' text-center  align-middle'
+                          },
+                          {
+                              data: null,
+                              width: '3.0rem',
+                              render: function (data, type, row) {
+                                  return ' <div class="radio d-inline text-center "> ' +
+                                      ' <input type="radio"  class="rdoapproval" ' +
+                                      ' id="approvePend_' + data.applicationId + '" name="' + data.applicationId + '"   ' +
+                                      '  value="0" checked = "true"    >  ' +
+                                      ' <label for="approvePend_' + data.applicationId + '" class="cr margin-top-5"></label>' +
+                                      ' </div>';
+                              },
+                              class: ' text-center  align-middle'
+
+                          },
+                      ],
+                  </text>
+              }
+              else
+              {
+                  <text>
+                      ordering: false,
+                      columns: [
+                          {
+                              data: null,
+                              render: function (data, type, row) {
+                                  var item = '<div class="card">';
+                                  item += '<div class="card-mobiledatatable">';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApplicationDate)' + '</dt><dd class="col-lg-8">' + moment(data.applicationDate).format('L') + '</dd></dl>';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Office)' + '</dt><dd class="col-lg-8">' + data.office + '</dd></dl>';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmpName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.LeadName)' + '</dt><dd class="col-lg-8">' + data.leadName + '</dd></dl>';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.HrRemarks)' + '</dt><dd class="col-lg-8">' + data.hrRemarks + '</dd></dl>';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApproveYes)' + '</dt><dd class="col-lg-8">' + data.approveYes + '</dd></dl>';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApproveNo)' + '</dt><dd class="col-lg-8">' + data.approveNo + '</dd></dl>';
+                                  item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApprovePending)' + '</dt><dd class="col-lg-8">' + data.approvePending + '</dd></dl>';
+                                  item += '</div></div>';
+                                  return item
+                              },
+                              sortable: false,
+                              searchable: false,
+                              className: "datatable-td-mobile"
+                          }
+                      ],
+                  </text>
+              }
+              ajax: {
+                  headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                  url: '@Url.Action("GetListsHRApprovalHoliday", "Attendance")',
+                  type: 'GET',
+                  cache: true,
+                  dataType: "json",
+                  data: function (d) {
+                      d.columns = null;
+                      d.order = null;
+                      d.search = null;
+                      d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                      d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                      d.startDateTime = null; // $('#FilterDataModel_StartDateTime').val();
+                      d.endDateTime = null; // $('#FilterDataModel_EndDateTime').val();
+                      d.statusTypeId = null; // $('#FilterDataModel_StatusTypeId').val();
+                      },
+                      error: function (request, status, error) {
+                          notify('error', request.responseText, 'danger');
+                      }
+                  }
+          });
+
+      }
+
+      $(document).ready(function () {
+          localLoadDataTable();
+
+          $("#ApprovePend_selectAll").prop("checked", true).trigger("click");
+
+      });
+
+    function onSave() {
+
+          var table = $('#tbDataGrid').DataTable();
+          var data = table.rows().data();
+
+          var paramsRemarks = table.$('input.remarks').serializeArray();
+          var paramsApprovals = table.$('input.rdoapproval').serializeArray();
+
+          objRemarks = [];
+          objApprovals = [];
+
+          $.each(paramsRemarks, function (i, field) {
+              itemRemark = {}
+              itemRemark["appId"] = field.name;
+              itemRemark["remarkVal"] = field.value.replace(/[^a-z0-9\s]/gi, ' ').replace(/[_\s]/g, ' ');
+
+              objRemarks.push(itemRemark);
+
+            });
+
+          $.each(paramsApprovals, function (i, field) {
+              itemApprl = {}
+              itemApprl["appId"] = field.name;
+              itemApprl["apprlVal"] = field.value ;
+
+              objApprovals.push(itemApprl);
+            });
+
+             $.ajax({
+              headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+              url: '@Url.Action("HRApprovalHoliday", "Attendance", new {Area = "SelfService"})',
+              type: 'POST',
+              data: {
+                  apprlRemarks: objRemarks,
+                  approvalApprlVals: objApprovals
+              },
+              beforeSend: function () {
+                  showLoader();
+              },
+              success: function (data) {
+                  hideLoader();
+                  if (data.success) {
+                      notify("success", data.response, "Success");
+                      localLoadDataTable();
+                  }
+                  else {
+                      notify("error", data.response, "Error");
+                  }
+
+              },
+              error: function (result) {
+                  hideLoader();
+                  errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                  notify("error", errorText, 'Error');
+               }
+          });
+
+          return false;
+      }
+
+      $("#ApproveYes_selectAll").change(function () {
+          var isChecked = this.checked;
+          $('#tbDataGrid td input:radio[id^="approveYes_"]').prop('checked', isChecked);
+      });
+
+      $("#ApproveNo_selectAll").change(function () {
+          var isChecked = this.checked;
+          $('#tbDataGrid td input:radio[id^="approveNo_"]').prop('checked', isChecked);
+          $('#ApprlVals').prop('checked', isChecked);
+      });
+
+      $("#ApprovePend_selectAll").change(function () {
+          var isChecked = this.checked;
+          $('#tbDataGrid td input:radio[id^="approvePend_"]').prop('checked', isChecked);
+      });
+
+      function PostSaveReLoadDataTable(data) {
+          if (data.success) {
+              $("#modalcontainer").modal('hide');
+              localLoadDataTable();
+              hideLoader();
+              notify('success', data.response, 'Success');
+          }
+      }
+</script>
+}

@@ -1,0 +1,176 @@
+﻿@{
+    ViewData["Title"] = "Job Masters";
+
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item " aria-current="page"><a asp-action="Index" asp-controller="Home" asp-area="JOB">Job form</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Masters</li>
+    </ol>
+}
+
+    @section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>TMA Groups</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("TMAGroupsIndex", "Masters", new { Area = "JOB" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify TMA Groups Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Business Lines</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("BusinessLinesIndex", "Masters", new { Area = "JOB" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify Business Lines Details</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-blue"></i>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Job company master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                    <a href="@Url.Action("JobCoMasterIndex", "Masters", new { Area = "JOB" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify Business Lines Details</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Sub Business Lines</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("SubBusinessLinesIndex", "Masters", new { Area = "JOB" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Sub Business Lines Details</h7>
+                            </div>
+                            <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Segments</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("SegmentsIndex", "Masters", new { Area = "JOB" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify Segments Details</h7>
+                            </div>
+                            <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-green"></i>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Scope Of Work</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ScopeOfWorkIndex", "Masters", new { Area = "JOB" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Scope Of Work details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-dark-orange"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Plant Types</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("PlantTypesIndex", "Masters", new { Area = "JOB" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify Plant Type details</h7>
+                            </div>
+                            <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-teal"></i>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Project Types</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ProjectTypesIndex", "Masters", new { Area = "JOB" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify Project Types details</h7>
+                            </div>
+                            <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-dark-green"></i>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+

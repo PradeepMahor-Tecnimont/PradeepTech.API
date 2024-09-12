@@ -1,0 +1,227 @@
+﻿@model TCMPLApp.WebApp.Models.VaccinationOfficeCreateViewModel
+@{
+    ViewData["Title"] = "TCMPL Vaccination Drive";
+    Html.AntiForgeryToken();
+}
+
+<div class="container col-xl-5 col-md-8">
+    <div class="card bg-light mb-4 shadow-3">
+        <div class="card-header app-h4 app-card-header">
+            TCMPL Vaccination Drive - Registration
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                @if (Model.SelfJab1Date.HasValue)
+                {
+
+
+                    <div class="row mb-2 border-bottom border-1">
+                        <div class="col-6 ">
+                            <label class="control-label required" asp-for="SelfVaccineType"></label>
+                        </div>
+                        <div class="col-6 mb-2">
+
+                            <span class="text-info font-weight-bold">@Model.SelfVaccineType</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 border-bottom border-1">
+                        <div class="col-6 ">
+                            <label class="control-label required" asp-for="SelfJab1Date"></label>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <span class="text-info font-weight-bold"> @Html.DisplayFor( m => m.SelfJab1Date) </span>
+                        </div>
+                    </div>
+                    <div class="row mb-2 border-bottom border-1">
+                        <div class="col-6 ">
+                            <label class="control-label required" asp-for="SelfJab2Date"></label>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <span class="text-info font-weight-bold">@(Model.SelfJab2Date)</span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(m => m.SelfJab1Date)
+                    @Html.HiddenFor(m => m.SelfJab2Date)
+                    @Html.HiddenFor(m => m.SelfVaccineType)
+                }
+                <div class="row mb-2 border-bottom border-1">
+                    <div class="col-6 ">
+                        <label class="control-label required" asp-for="JabNumber"></label>
+                    </div>
+                    <div class="col-6">
+                        @Html.HiddenFor(m => m.JabNumber)
+
+                        <span class="text-info font-weight-bold">@(Html.DisplayFor(m => m.JabNumber))</span>
+
+                        <span asp-validation-for="JabNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-2 border-bottom border-1">
+                    <div class="col-6 ">
+                        <label class="control-label required" asp-for="CowinRegistered"></label>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="custom-control custom-radio col-3">
+                                <input type="radio" value="true" class="custom-control-input" id="cowinRegisteredYes" asp-for="CowinRegistered">
+                                <label class="custom-control-label text-primary" for="cowinRegisteredYes">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio col-3">
+                                <input type="radio" value="false" id="cowinRegisteredNo" class="custom-control-input" asp-for="CowinRegistered">
+                                <label class="custom-control-label text-primary" for="cowinRegisteredNo">No</label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="CowinRegistered" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-2 border-bottom border-1">
+                    <div class="col-6 ">
+                        <label>Mobile No (Regtrd on Cowin APP / Primary)</label>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <input class="form-control " placeholder="Mobile No" asp-for="CowinRegisteredMobile">
+                        <span asp-validation-for="CowinRegisteredMobile" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2 border-bottom border-1">
+                    <div class="col-6 ">
+                        <label class="control-label" asp-for="CompanyBus"></label>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="row">
+                            <div class="custom-control custom-radio col-4">
+                                <input type="radio" value="true" class="custom-control-input" id="companyBusYes" asp-for="CompanyBus">
+                                <label class="custom-control-label text-primary" for="companyBusYes">Office Bus</label>
+                            </div>
+                            <div class="custom-control custom-radio col-6">
+                                <input type="radio" value="false" id="companyBusNo" class="custom-control-input" asp-for="CompanyBus">
+                                <label class="custom-control-label text-primary" for="companyBusNo">Own Arrangements</label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="CompanyBus" class="text-danger"></span>
+                    </div>
+                </div>
+                <div id="idCompanyBusRoute" class="row mb-2 border-bottom border-1 d-none">
+                    <div class="col-6 ">
+                        <label class="control-label" asp-for="CompanyBusRoute"></label>
+                    </div>
+
+                    <div class="col-6 input-group mb-2">
+                        <input type="text" class="form-control" readonly placeholder="Bus Route" asp-for="CompanyBusRoute" id="companyBusRoute" aria-label="Bus Route" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary " type="button" id="button-addon2"
+                                    data-jqueryselector="openmodal"
+                                    data-modalcontainer="modalcontainer"
+                                    data-modalpopupwidth="rightw35"
+                                    data-url='@Url.Action("GetBusRoutesList","VaccinationOffice")'
+                                    data-statichtmlsourcedivid=""
+                                    data-modaltitle=""
+                                    data-modalheader=""
+                                    data-parameter="">
+                                <i class="fas fa-glasses"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="CompanyBusRoute" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2 border-bottom border-1">
+                    <div class="col-6 ">
+                        <label class="control-label" asp-for="IsAttendingForJab"></label>
+                        <label class="text-danger font-weight-bold" >on Sunday 5-Sep-2021</label>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="custom-control custom-radio col-3">
+                                <input type="radio" value="true" class="custom-control-input" id="outOfMMMRYes" asp-for="IsAttendingForJab">
+                                <label class="custom-control-label text-primary" for="outOfMMMRYes">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio col-3 ">
+                                <input type="radio" value="false" id="outOfMMMRNo" class="custom-control-input" asp-for="IsAttendingForJab">
+                                <label class="custom-control-label text-primary" for="outOfMMMRNo">No</label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="IsAttendingForJab" class="text-danger"></span>
+                    </div>
+                </div>
+                <div id="idReasonForNotAttendingJab" class="row mb-2 border-bottom border-1 d-none">
+
+                    <div class="col-6 ">
+                        <label class="control-label" asp-for="ReasonForNotAttendingJab"></label>
+                    </div>
+                    <div class="col-6 ">
+                        <input class="form-control" asp-for="ReasonForNotAttendingJab" />
+                        <span asp-validation-for="ReasonForNotAttendingJab" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="float-right">
+                    @*<button type="button" id="btnReset" class="btn btn-sm btn-secondary">Reset</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*@
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            showHideBusRoute();
+            showHidReason();
+            $('input[type=radio][name=IsAttendingForJab]').change(function () {
+                showHidReason();
+            });
+            $('input[type=radio][name=CompanyBus]').change(function () {
+                showHideBusRoute()
+            });
+        });
+
+        function showHideBusRoute() {
+            var selectedVal = $('input[type=radio][name=CompanyBus]:checked').val();
+            
+            if (selectedVal == "true") {
+                $("#idCompanyBusRoute").removeClass("d-none");
+            }
+            else {
+                $("#idCompanyBusRoute").addClass("d-none");
+                $('input[type=text][name=CompanyBusRoute]').val("");
+            }
+        }
+
+        function showHidReason() {
+
+            var selectedVal = $('input[type=radio][name=IsAttendingForJab]:checked').val();
+
+            if (selectedVal == "false") {
+                $("#idReasonForNotAttendingJab").removeClass("d-none");
+            }
+            else {
+                $("#idReasonForNotAttendingJab").addClass("d-none");
+                $('input[type=text][name=ReasonForNotAttendingJab]').val("");
+            }
+        }
+
+        function localScript() {
+            $("#busRoutes").DataTable({
+                paging: false,
+                ordering: false,
+                info: false
+            });
+
+
+            $(".busRouteId").off('click').on('click', function () {
+                 $("#companyBusRoute").val($(this).text());
+                $("#modalcontainer").modal('toggle');
+            });
+        }
+    </script>
+}

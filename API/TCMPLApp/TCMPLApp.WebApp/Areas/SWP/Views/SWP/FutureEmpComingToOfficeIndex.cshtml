@@ -1,0 +1,556 @@
+﻿@model TCMPLApp.WebApp.Models.FutureEmpComingToOfficeViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWP">Smart work planning</a></li>
+        <li class="breadcrumb-item active">Future employee coming to office list</li>
+    </ol>
+}
+
+@section styles
+{
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+    <!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+    <!-- Material Datepicker css -->
+    <link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />
+
+}
+
+    @{
+    ViewData["Title"] = "Future employee coming to office";
+
+}
+<div style="display:none">
+    @Html.TextBoxFor(model => model.FilterDataModel.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Empno" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Assign" />
+
+
+</div>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Future employee coming to office (<label id="showDate" name="showDate"></label>)  </p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white "
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("FutureEmpComingToOfficeImport", "SWP", new { Area = "SWP" })'
+               data-modaltitle="Import"
+               data-modalheader="Import">
+                <i class="fas fa-plus"></i>&nbsp;Import
+            </a>
+
+          @*  <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="FutureEmpComingToOfficeIndex"
+               data-url='@Url.Action("ResetFilter", "SWP", new { Area = "SWP" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+*@
+
+            <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+               href='@Url.Action("ExcelDownloadFutureEmpComingToOffice", "SWP", new { Area = "SWP" })'>
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+
+
+        </div>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+
+        @*        <div class="input-group pt-1 pl-1 pr-1 ">
+        <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+        <div class="input-group-append">
+        <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+        </div>
+        </div>
+        *@
+        <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.EmployeeName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Assign)</th>
+                    <th>@Html.DisplayNameFor(model => model.Parent)</th>
+                    <th>@Html.DisplayNameFor(model => model.CurrPwsDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.CurrPws)</th>
+                    <th>@Html.DisplayNameFor(model => model.CurrDesk)</th>
+                    <th>@Html.DisplayNameFor(model => model.FuturePws)</th>
+                    <th>@Html.DisplayNameFor(model => model.FuturePwsDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeskId)</th>
+                    <th> </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js" asp-append-version="true"></script>
+    <script src="~/js/site-rap.js" asp-append-version="true"></script>
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+
+        function localScript() {
+
+            initImportFutureEmpComingToOfficeControls();
+
+
+            //initFilter();
+
+        }
+
+
+        function initFilter() {
+
+            var d = new Date();
+
+            var currYear = moment().year();
+            var curYearLastDate = new Date(currYear, 11, 31);
+            var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                //maxDate: d,
+                time: false
+            }).on('change', function(e, date) {
+
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+            });
+
+            if ($('#StartDate').val()) {
+                $('#startDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#StartDate").val()));
+            }
+
+        }
+
+
+        function localLoadDataTable() {
+
+
+            $('#tbDataGrid').DataTable().destroy();
+
+            $('#tbDataGrid tbody').empty();
+
+            var table = $('#tbDataGrid').DataTable({
+                drawCallback: function(settings) {
+                    loadScript();
+                },
+                order: [[2, 'desc']],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                //layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                columnDefs: [
+                    //{ orderable: false, targets: [0,1,2,3,4,5,6,7,8,9,10,11] }
+                    { orderable: false, targets: '_all' }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    columns: [
+                    { data: "empno", width: '3.0rem' },
+                    { data: "employeeName", width: '10.0rem' },
+                    { data: "assign", width: '1.0rem' },
+                    { data: "parent", width: '1.0rem' },
+                    { data: "currPwsDate", width: '1.0rem' },
+                    { data: "currPws", width: '1.0rem' },
+                    { data: "currDesk", width: '1.0rem' },
+                    { data: "futurePws", width: '1.0rem' },
+                    { data: "futurePwsDate", width: '1.0rem' },
+                    { data: "deskId", width: '3.0rem' },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            if (data.deskId != null) {
+                                return ' <button class="btn btn-outline-danger btn-sm border-none"  ' +
+                                    ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                    ' data-url="@Url.Action("FutureEmpComingToOfficeDelete", "SWP", new { Area = "SWP" })" ' +
+                                    ' data-redirecturl="" ' +
+                                    ' data-PostSaveReLoadDataTable="OK" ' +
+                                    ' data-empno="' + data.empno + '" ' +
+                                    ' data-modaltitle="Please Confirm!" ' +
+                                    ' data-confirmationtext="Delete record ' + data.employeeName + ' ?" ' +
+                                    ' data-confirmationtype="warning" data-confirmbuttontext="Delete"> ' +
+                                    ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                    ' </button> ';
+                            } else {
+                                return '';
+                            }
+
+
+                        },
+                        'className': "td-icon",
+                    }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.employeeName + '</dd></dl>';
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListFutureEmpComingToOffice", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function(d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.startDate = ($('#FilterDataModel_StartDate').val());
+                    d.genericSearch = $('#GenericSearch').val();
+                },
+                error: function(request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                });
+            }
+
+        $(document).ready(function() {
+            ShowDate();
+            localLoadDataTable();
+
+
+        });
+
+          function initImportFutureEmpComingToOfficeControls() {
+
+            if ($("#formFutureEmpComingToOfficeXLUpload").length != 0) {
+                initDropZone(".xlsx");
+            }
+            $('#btnFutureEmpComingToOfficeXLTemplate').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadFutureEmpComingToOfficeXLTemplate();
+            });
+
+            $('#btnFutureEmpComingToOfficeXL').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitFutureEmpComingToOfficeXL();
+            });
+        }
+
+
+         function initDropZone(fileTypeExtension) {
+            $("#dropZoneWrapper").show();
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    return;
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("xxx", "xxx", new {Area = "xxx"})',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+
+                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    // of the sending event because uploadMultiple is set to true.
+                    this.on("processing", function (file) {
+                        //console.log($(formId).attr("action"));
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else
+                        {
+                            notify("error", data.response, "File upload failed.");
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else
+                        {
+                            notify("error", data.response, "File upload failed.");
+                            if (data.fileContent != null) {
+                                var blob = b64toBlob(data.fileContent.fileContents, data.fileContent.contentType);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = data.fileContent.fileDownloadName;
+                                link.click();
+                            }
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+
+            const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, { type: contentType });
+                return blob;
+            };
+        }
+
+        function downloadFutureEmpComingToOfficeXLTemplate() {
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formFutureEmpComingToOfficeXLUpload input[name="__RequestVerificationToken"]').val() },
+                url: "@Url.Action("FutureEmpComingToOfficeXLTemplate", "SWP", new { Area = "SWP"})",
+                type: "GET",
+                data: {
+
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        }
+
+        function submitFutureEmpComingToOfficeXL(){
+            var formFutureEmpComingToOfficeXLUpload = "#formFutureEmpComingToOfficeXLUpload";
+            if ($(formFutureEmpComingToOfficeXLUpload).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length == 0) {
+                notify("error", "No files selected.", "Error");
+                return;
+            }
+            oDropZone2.processQueue();
+        }
+
+        function ShowDate() {
+
+
+            var dateVar = moment(new Date());
+            var newDateVar = dateVar.utc().format('DD-MMM-YYYY');
+
+            $('#showDate').text(newDateVar);
+
+            if ($('#FilterDataModel_StartDate').val()) {
+                var ndate = new Date($('#FilterDataModel_StartDate').val());
+                ndate.setDate(ndate.getDate() + 1);
+                dateVar = moment(new Date(ndate));
+                newDateVar = dateVar.utc().format('DD-MMM-YYYY');
+                $('#showDate').text(newDateVar);
+
+            };
+
+        };
+
+        function PostSaveReLoadDataTable(data) {
+
+             if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                 hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                localLoadDataTable();
+                 hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            console.log(data);
+            $("#modalcontainer").modal('hide');
+            $("#FilterDataModel_StartDate").val(data.startDate);
+            $("#FilterDataModel_Empno").val(data.empno);
+            $("#FilterDataModel_Assign").val(data.assign);
+
+            $("#FilterDataModel_GradeList").val(data.gradeList);
+            $("#FilterDataModel_EmployeeTypeList").val(data.employeeTypeList);
+            $("#FilterDataModel_LaptopUser").val(data.laptopUser);
+            $("#FilterDataModel_EligibleForSWP").val(data.eligibleForSWP);
+            $("#FilterDataModel_PrimaryWorkspaceList").val(data.primaryWorkspaceList);
+
+            localLoadDataTable();
+            ShowDate();
+            hideLoader();
+        }
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                var dataTable = $('#tbDataGrid').DataTable();
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function() {
+            var dataTable = $('#tbDataGrid').DataTable();
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+    </script>
+}

@@ -1,0 +1,167 @@
+﻿@model TCMPLApp.WebApp.Areas.ERS.HRCVActionUpdateViewModel;
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@*@Html.AntiForgeryToken()*@
+<form asp-controller="HR"
+      asp-action="CVAction"
+      id="formCVAction"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="onDataTableReloadSuccess(null);PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+    
+    <input type="hidden" asp-for="JobKeyId" />
+    <input type="hidden" asp-for="CandidateEmail" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">CV action</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.JobReferenceCode - @ViewBag.ShortDesc</h5>
+            </div>
+       
+        <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@localizer["Open date"]</div>
+                            <div class="dd-met">@ViewBag.JobOpenDate.ToString("dd-MMM-yyyy")</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@localizer["Job type"]</div>
+                            <div class="dd-met">@ViewBag.JobType</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">@localizer["Job location"]</div>
+                            <div class="dd-met">@ViewBag.JobLocation</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">@localizer["Job description 01"]</div>
+                            <div class="dd-met">@ViewBag.JobDesc01</div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="card-pill">
+                <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">Main</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-vacancy-tab" data-toggle="pill" href="#tabs-vacancy" role="tab" aria-controls="tabs-vacancy" aria-selected="false"
+                               onclick="getVacancyDetail('@Model.JobKeyId');">Vacancy
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-referred-tab" data-toggle="pill" href="#tabs-referred" role="tab" aria-controls="tabs-referred" aria-selected="false"
+                               onclick="getReferralEmployeeDetail('@Model.JobKeyId','@Model.CandidateEmail');">Referred by
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    @await Html.PartialAsync("_LoaderPartial")
+                    <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.hRCVDetailViewModel.CandidateName)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.hRCVDetailViewModel.CandidateName)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.CandidateEmail)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.CandidateEmail)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.hRCVDetailViewModel.CandidateMobile)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.hRCVDetailViewModel.CandidateMobile)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.hRCVDetailViewModel.Pan)</div>
+                                        <div class="dd-met">@Html.DisplayFor(model => model.hRCVDetailViewModel.Pan)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xl-12">
+                                    <div class="form-group">                                        
+                                        @*@if (Model.hRCVDetailViewModel.CvStatus != 1 && Model.hRCVDetailViewModel.CvStatus != -1)
+                                        {*@
+                                            <label asp-for="CvStatus" class="control-label"></label>
+                                            <select asp-for="CvStatus" class="form-control Select2" asp-items="ViewBag.StatusList" data-placeholder="Please select..." required>
+                                            </select>
+                                            <span asp-validation-for="CvStatus" class="text-danger"></span>
+                                        @*}
+                                        else 
+                                        {
+                                            <div class="dt-met">@Html.DisplayNameFor(model => model.hRCVDetailViewModel.CvStatus)</div>
+                                            <div class="dd-met">@Html.DisplayFor(model => model.hRCVDetailViewModel.CvStatusDesc)</div>
+                                        }*@
+                                    </div>
+                                </div>
+                            </div>
+                            @*@if (Model.hRCVDetailViewModel.CvStatus != 1 && Model.hRCVDetailViewModel.CvStatus != -1)
+                            {*@
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12">
+                                        <div class="form-group">                                                                                            
+                                            <label asp-for="ChangeJobReference" class="control-label"></label>
+                                            <select asp-for="ChangeJobReference" class="form-control Select2" asp-items="ViewBag.ChangeJobReferenceList" data-placeholder="Change job reference">
+                                                <option selected></option>
+                                            </select>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            @*}*@
+                        </div>
+                    <div class="tab-pane fade" id="tabs-vacancy" role="tabpanel" aria-labelledby="tabs-vacancy-tab">
+                        <div id="pw-vacancy">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-referred" role="tabpanel" aria-labelledby="tabs-referred-tab">
+                        <div id="pw-referred">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">        
+        @*@if (Model.hRCVDetailViewModel.CvStatus != 1 && Model.hRCVDetailViewModel.CvStatus != -1)
+        {*@
+            <button class="btn btn-primary" type="submit" id="btnReferConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+                @localizer["Confirm"]
+            </button>   
+        @*}*@
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

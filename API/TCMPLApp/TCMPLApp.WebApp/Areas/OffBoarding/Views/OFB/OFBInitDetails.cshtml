@@ -1,0 +1,247 @@
+﻿@model TCMPLApp.WebApp.Models.OFBInitDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Approval Details";
+    var OfbUrlActionName = "";
+    if (Model.ViewName == "HistoryIndex")
+    {
+        OfbUrlActionName = "OFBApprovalsHistoryDetailsIndex";
+    }
+    else
+    {
+        OfbUrlActionName = "OFBApprovalsDetailsIndex";
+    }
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="OFBIndex" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+
+        @if (Model.ViewName == "OFBApprovalIndex")
+        {
+            <li class="breadcrumb-item "><a asp-action="OFBApprovalsIndex" asp-controller="OFB" asp-area="OffBoarding">Approvals</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Approve</li>
+        }
+        else if (Model.ViewName == "OFBApprovedHistoryIndex")
+        {
+            <li class="breadcrumb-item "><a asp-action="OFBApprovalsIndex" asp-controller="OFB" asp-area="OffBoarding">Approvals</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Details</li>
+        }
+        else if (Model.ViewName == "OFBInitIndex")
+        {
+            <li class="breadcrumb-item "><a asp-action="OFBInitIndex" asp-controller="OFB" asp-area="OffBoarding">Init Off-Boarding</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Init Details</li>
+        }
+        else
+        {
+            <li class="breadcrumb-item "><a asp-action="OFBHistoryIndex" asp-controller="OFB" asp-area="OffBoarding">History</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Details</li>
+        }
+
+
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<input type="hidden" asp-for="Empno" />
+<input type="hidden" asp-for="ViewName" />
+
+<div class="card bg-gray-active border rounded shadow m-auto col-xl-11 p-2">
+
+    <div class="card-header" style="padding:10px 18px;">
+            <h5 class="card-title" >
+                @localizer["Off-Boarding Details"]
+            </h5>
+            @if (Model.ViewName == "OFBInitIndex")
+            {
+                <a href='@Url.Action("OFBInitIndex", "OFB", new { Area = "OffBoarding" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                    <i class="fas fa-undo"></i>
+                    @localizer["Back"]
+                </a>
+            }
+            else if (Model.ViewName == "OFBApprovedHistoryIndex")
+            {
+                <a href='@Url.Action("OFBApprovalsIndex", "OFB", new { Area = "OffBoarding" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                    <i class="fas fa-undo"></i>
+                    @localizer["Back"]
+                </a>
+                @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionPrintExitForm))
+                {
+                <a href='@Url.Action("OFBPrintForm", "OFB", new { Area = "OffBoarding" ,empno = Model.Empno })' target="_blank" title="Back" class="btn btn-outline-primary btn-sm border-none float-right">
+                    <i class="fas fa-print"></i>
+                @localizer["Print"]
+                </a>
+                }
+            }
+            else if (Model.ViewName == "HistoryIndex")
+            {
+                <a href='@Url.Action("OFBHistoryIndex", "OFB", new { Area = "OffBoarding" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                    <i class="fas fa-undo"></i>
+                    @localizer["Back"]
+                </a>
+
+            @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionPrintExitForm))
+            {
+                <a href='@Url.Action("OFBPrintForm", "OFB", new { Area = "OffBoarding" ,empno = Model.Empno })' target="_blank" title="Back" class="btn btn-outline-primary btn-sm border-none float-right">
+                    <i class="fas fa-print"></i>
+                    @localizer["Print"]
+                </a>
+            }
+            }
+        </div>
+        <div class="card-block">
+            <div class="card-pill">
+                <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">@localizer["Details"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-details-tab" data-toggle="pill" href="#tabs-details" role="tab" aria-controls="tabs-details" aria-selected="false"
+                           data-url="@Url.Action(OfbUrlActionName, "OFB", new { Area = "OffBoarding" })"
+                           data-id="@Model.Empno"
+                           data-callback="loadOFBApprovalsDetailsDataTable()"
+                           data-divid="pw-details"
+                           data-area="OffBoarding"
+                           data-controller="OFB"
+                           data-action="OFBApprovalsDetailsIndex">
+                            @localizer["Approval Status"]
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    @await Html.PartialAsync("_LoaderPartial")
+                    <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                        @await Html.PartialAsync("_OFBInitDetailsPartial.cshtml", Model)
+
+                    </div>
+                    <div class="tab-pane fade" id="tabs-details" role="tabpanel" aria-labelledby="tabs-details-tab">
+                        <div id="pw-details">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</div>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let pvvUrlOFBApprovalDetailsList = '@Url.Action("GetListsOFBApprovalsDetails", "OFB")';
+
+        let canReset = "";
+        if ($('#ViewName').val() == "HistoryIndex") {
+            canReset = @((CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionResetApprovals)) ? "true" : "false");
+        }
+        else {
+            canReset = false;
+        }
+
+        function loadOFBApprovalsDetailsDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbOFBApprovalDetails",
+                pColumns: canReset ? datatableColumnsOFBApprovalsDetailsEdit : datatableColumnsOFBApprovalsDetails,
+                pUrl: pvvUrlOFBApprovalDetailsList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    empno: $('#Empno').val() ? $('#Empno').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                pPagination: false,
+            });
+        }
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumnsOFBApprovalsDetails = [
+                    { 'data': "actionDesc" },
+                    { 'data': "remarks" },
+                    { 'data': "approvalStatus" },
+                    {
+                        'data': "approvalDate",
+                        'render': function (data) {
+                            if (data)
+                                return moment(data).format('DD-MMM-YYYY');
+                            else
+                                return '';
+                        }
+                    },
+                    { 'data': "approverName" }
+
+                ];
+            let datatableColumnsOFBApprovalsDetailsEdit = [
+                { 'data': "actionDesc" },
+                { 'data': "remarks" },
+                { 'data': "approvalStatus" },
+                {
+                    'data': "approvalDate",
+                    'render': function (data) {
+                        if (data)
+                            return moment(data).format('DD-MMM-YYYY');
+                        else
+                            return '';
+                    }
+                },
+                { 'data': "approverName" },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+
+                        if (data.approvalStatus == "Approved") {
+                            return '<button title="Reset" class="btn btn-outline-primary btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("ResetApproval", "OFB", new { Area = "OffBoarding" })"' +
+                                ' data-id="' + data.empno + '" ' +
+                                ' data-actionid="' + data.apprlActionId + '" ' +
+                                ' data-PostDeleteReLoadDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to Reset Approval of ' + data.empno + ' " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Reset OFB Approval" ' +
+                                ' data-confirmbuttontext="Reset OFB Approval" > ' +
+                                ' <i class="fas fa-arrow-circle-left" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        }
+                        else
+                            return ''
+
+                    },
+                    className: "td-icon",
+                }
+
+            ];
+            </text>
+        }
+            function setApprovalType() {
+                $("#ApprovalType").val("HOLD");
+            };
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadOFBApprovalsDetailsDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        };
+    </script>
+}

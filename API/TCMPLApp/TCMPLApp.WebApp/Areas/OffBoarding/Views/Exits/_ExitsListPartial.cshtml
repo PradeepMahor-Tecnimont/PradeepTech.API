@@ -1,0 +1,52 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.OffBoarding.OffBoardingExit>
+
+<div class="  bg-gray-active border rounded ">
+    <table id="tbOffBoardingExits" class="table table-striped table-bordered table-responsive-lg ">
+        <thead class="bg-info text-white">
+            <tr>
+                <th>Empno</th>
+                <th>Name</th>
+                <th>Parent</th>
+                <th>Dept Name</th>
+                <th>Grade</th>
+                <th>RelievingDate</th>
+                <th>Remarks</th>
+                <th>Approval Status</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+            <tr>
+                <td>@m.Empno</td>
+                <td>@m.EmployeeName</td>
+                <td>@m.Parent</td>
+                <td>@m.DeptName</td>
+                <td>@m.Grade </td>
+                <td>@m.RelievingDate.ToString("dd-MMM-yyyy")</td>
+
+                <td>@m.InitiatorRemarks </td>
+                <td>
+                    <a name="DeptApprovalStatus" id="idDeptApprovalStatus" title="Dept approval status" class="btn-link" href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("GetAllApprovals", "Exits", new { Area = "OffBoarding" })'
+                       data-statichtmlsourcedivid=""
+                       data-offboardingempno="@m.Empno"
+                           data-empDetails="@m.Empno : @m.EmployeeName  [ @m.Parent : @m.DeptName ]</br> RelievingDate : @m.RelievingDate.ToString("dd-MMM-yyyy") "
+                       data-modaltitle="Off-Boarding"
+                       data-modalheader="Department Approvals">
+                        @(m.OverallApprovalStatus)
+                    </a>
+                </td>
+                <td>
+                    <a id="editExits" asp-action="EditForm" asp-controller="Exits" asp-area="OffBoarding" asp-route-empno="@m.Empno" title="Edit Exit form" >Edit</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <div id="result"></div>
+</div>

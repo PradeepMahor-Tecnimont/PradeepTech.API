@@ -1,0 +1,117 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.OffBoarding.OffBoardingEmployeeExitApprovals>
+
+<div id="buttonArea" style=" width:100%; text-align:center;margin-bottom:10px;"><button onclick="printExitForm();">Print</button> </div>
+<page size="A4">
+    <div id="parentdiv" style="padding:5px">
+        <table style="border-collapse: collapse; width: 100%;" border="0">
+            <tbody>
+                <tr>
+                    <td style="width: 25%;">
+                        <img src="~/img/tcmpl_logo_large.png" alt="Tecnimont Pvt Ltd" /><br />
+                        <p style="margin-top: -10px; margin-left: 10px; font-size: 11px; color: #0066CC; font-family:Verdana; font-weight: 600">Tecnimont Private Limited</p>
+                    </td>
+                    <td style="width: 50%;">&nbsp;</td>
+                    <td style="width: 25%; text-align: right; font-size: small;">0181-012-06</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:600; font-family:Verdana; text-align:center" colspan="3">Exit Form</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="text-align: justify;"><strong>The employee leaving the services of the Company should note that Finance Department will not make the payment of final settlement unless he/she obtains the clearance from the following Depts. Employee should obtain the clearance on this Form from respective Depts. on / before the day of leaving the services. Full &amp; Final settlement will beeffected only on receipt of duly completed Exit Form.</strong></p>
+        <p style="text-align: justify;">Employees leaving services of the Company should ensure that Time Sheet upto the date of their release is submitted.</p>
+        <hr />
+        <table style="border-collapse: collapse; width: 100%; height: 75px;">
+            <tbody>
+                <tr>
+                    <td style="width: 25%;">Name of Employee :- <strong>@ViewBag.EmployeeInfo.Name</strong></td>
+                    <td style="width: 50%;">Empno :- <strong>@ViewBag.EmployeeInfo.Empno</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 25%;">Meta Id :- <strong>@ViewBag.EmployeeInfo.MetaId</strong></td>
+                    <td style="width: 50%;">Person Id :- <strong>@ViewBag.EmployeeInfo.PersonId</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 50%;">Designation :- <strong>@ViewBag.EmployeeInfo.DesgName</strong></td>
+                    <td style="width: 50%;">Dept.:- <strong>@(ViewBag.EmployeeInfo.Parent + " - " + ViewBag.EmployeeInfo.CostName)</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 50%;">Date of Joining:- <strong>@(ViewBag.EmployeeInfo.Doj.ToString("dd-MMM-yyyy"))</strong></td>
+                    <td style="width: 50%;">Grade :- <strong>@ViewBag.EmployeeInfo.Grade</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 50%;">Personal EmailId :- <strong>@ViewBag.EmployeeExitDetails.EmailId</strong></td>
+                    <td style="width: 50%;">Date of Resignation :- <strong>@(ViewBag.EmployeeExitDetails.ResignationDate.ToString("dd-MMM-yyyy"))</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 50%;">&nbsp;</td>
+                    <td style="width: 50%;">Date of Relieving :- <strong>@ViewBag.EmployeeExitDetails.RelievingDate.ToString("dd-MMM-yyyy")</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 50%;">Primary Contact :-  <strong>@ViewBag.EmployeeExitDetails.MobilePrimary</strong></td>
+                    <td style="width: 50%;">Alternate Contact :- <strong>@ViewBag.EmployeeExitDetails.AlternateNumber</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="text-align: justify;">Department Clearance (Applicable to employee other than Site Staff)</p>
+        <table style="border-collapse: collapse; width: 100%;" border="1">
+            <tbody>
+                <tr>
+                    <th width="20%">GroupName</th>
+                    <th width="35%">Approver</th>
+                    <th width="20%">Approval Date</th>
+                    <th width="25%">Remark</th>
+                </tr>
+                @foreach (var m in Model)
+                {
+                    <tr>
+                        <td width="15%">@(m.GroupName == m.PrevGroupName ? "":m.GroupName)</td>
+                        <td style="font-size:12px;" width="25%">@(m.ApprovedBy + " - " + m.ApproverName )</td>
+                        <td width="15%">@m.ApprovalDate?.ToString("dd-MMM-yyyy : HH:mm")</td>
+                        <td style="font-size:12px;" width="45%">@m.Remarks</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</page>
+<style>
+    body {
+        background: rgb(204,204,204);
+    }
+
+    page {
+        background: white;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 0.5cm;
+    }
+
+        page[size="A4"] {
+            width: 21cm;
+            height: 29.7cm;
+        }
+
+    #parentdiv, table {
+        font-size: 14px;
+        font-style: normal;
+    }
+
+    @@media print {
+        #buttonArea {
+            display: none;
+        }
+
+        page {
+            background: white;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 0.5cm;
+        }
+    }
+</style>
+<script>
+    function printExitForm() {
+        window.print();
+    }
+</script>

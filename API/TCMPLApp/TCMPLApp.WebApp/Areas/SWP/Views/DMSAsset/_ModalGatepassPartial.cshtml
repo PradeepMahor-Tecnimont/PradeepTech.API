@@ -1,0 +1,114 @@
+﻿@model TCMPLApp.WebApp.Models.DMSAssetTakeHomeDetailViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<form asp-controller="DMSAsset"
+      id="formGatepass">
+    <input type="hidden" asp-for="@Model.Unqid" />
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.Deskid" />
+
+    <div class="modal-header">
+        <h5 class="modal-title"> @localizer["Gatepass"] </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>    
+    <div class="modal-body" id="divprint" >
+        <div class="card">            
+            <div class="card-block p-2">
+                <div class="row">                    
+                    <div class="logo-sm col-md-2 float-left">
+                        <img src="/img/tcmpl_logo_large.png" alt="Tecnimont">
+                    </div>
+                    <div class="col-md-8 f-8">
+                        &#9634; MOC 1 - Tecnimont House, Chincholi Bunder, 504, Link Road, Malad (W), Mumbai 400064 <br/>
+                        &#9634; MOC 2 - 702, Interface 11, Link Road, Malad (W), Mumbai 400064 <br/>
+                        &#9634; MOC 3 - 2101/102, Interface 11, Link Road, Malad (W), Mumbai 400064
+                    </div>
+                    <div class="col-md-2 text-a-r">
+                        182-025-02
+                    </div>
+                </div>
+            </div>
+            <div class="text-a-c">
+                <h6>Materials / Documents Gate Pass</h6>
+            </div>
+            <div class="card-block p-2">
+                <div class="row">
+                    <div class="col-md-8 text-a-l">
+                        To,<br/>
+                        Security Supervisor                        
+                    </div>
+                    <div class="col-md-4 text-a-r">
+                        Date: @DateTime.Now.ToShortDateString()
+                    </div>
+                </div>
+            </div>
+            <div class="card-block p-2">
+                <div class="row">
+                    <div class="col-md-12 text-a-l">
+                        Please allow the following materials / documents to go out of the premises.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-block p-2">
+                @*<div class="form-group">
+                    <div class="row p-2">
+                        <div class="col-md-12 ">
+                            <div class="dd-met">
+                                @Html.Raw(ViewBag.EmpName + " [ " + ViewBag.Empno + " ] ")
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                <div style="overflow:auto">
+                    <table id="tbGridGatePass" class="table table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr class="font-weight-bold">
+                                <td>@Html.DisplayNameFor(model => model.AssetType)</td>
+                                <td>@Html.DisplayNameFor(model => model.Assetid)</td>
+                                <td>@Html.DisplayNameFor(model => model.Description)</td>
+                                <td>Quantity</td>
+                            </tr>                           
+                        </thead>
+                    </table>                    
+                </div>
+            </div>
+             <div class="card-block p-2">
+                <div class="row">
+                    <div class="col-md-12 text-a-l">
+                        <span class="f-w-600">Returnable / Non-returnable</span> <br/><br/>
+                        <span class="f-w-600">Name of person carrying documents / materials: &nbsp; &nbsp;</span> @Html.Raw(ViewBag.EmpName + " [ " + ViewBag.Empno + " ] ") <br/>                      
+                        <span class="f-w-600">Destination:&nbsp; &nbsp;</span> Residence <br/>
+                        <span class="f-w-600">Purpose: &nbsp; &nbsp;</span> Work from home <br/>
+                    </div>
+                </div>
+            </div>
+             <div class="card-block p-4">
+                <div class="row">
+                    <div class="col-md-4 text-a-c">
+                        Signature of Employee
+                    </div>
+                    <div class="col-md-4 text-a-c">
+                        Receiver
+                    </div>
+                    <div class="col-md-4 text-a-c">
+                        Authorised Signatory
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" id="btnPrint" onclick="printcontent('divprint')"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Print"]">
+            @localizer["Print"]
+        </button>
+        &nbsp;&nbsp;&nbsp;
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

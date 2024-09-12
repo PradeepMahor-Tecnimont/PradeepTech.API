@@ -1,0 +1,83 @@
+﻿@model TCMPLApp.WebApp.Models.WrkHoursUpdateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Transactions"
+      asp-action="WrkHoursUpdate"     
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"      
+      data-ajax-success="onDataTableReloadSuccess;postSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Update work hours"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Work hours - edit"]</h5>
+            </div>
+             <div class="card-block">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="Yymm" class="control-label"></label>
+                            <input asp-for="Yymm" class="form-control" readonly type="number" value="@Model.Yymm" />
+                            <span asp-validation-for="Yymm" class="text-danger"></span>
+                        </div>                    
+                        <div class="col-md-6">
+                           <label asp-for="Office" class="control-label"></label>
+                           <input asp-for="Office" class="form-control" readonly type="text" value="@Model.Office" />
+                           <span asp-validation-for="Yymm" class="text-danger"></span>
+                           @*<select  asp-for="Office"  class="form-control chosen-select" data-placeholder=" Please select office..." asp-items="ViewBag.OfficeList" required>
+                                <option selected></option>
+                            </select> 
+                            <span asp-validation-for="Office" class="text-danger"></span> *@                          
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                           <label asp-for="WorkingHrs" class="control-label"></label>
+                           <input asp-for="WorkingHrs" class="form-control" type="number" placeholder="0"  />                           
+                        </div>                    
+                        <div class="col-md-6">
+                           <label asp-for="Apprby" class="control-label"></label>
+                           <input asp-for="Apprby" class="form-control" type="date" placeholder="dd-mm-yyyy"  />                           
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                           <label asp-for="Postby" class="control-label"></label>
+                           <input asp-for="Postby" class="form-control" type="date" placeholder="dd-mm-yyyy"  />                           
+                        </div>                   
+                        <div class="col-md-6">
+                           <label asp-for="Remarks" class="control-label"></label>
+                           <input asp-for="Remarks" class="form-control" placeholder="Remarks"  />                          
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+

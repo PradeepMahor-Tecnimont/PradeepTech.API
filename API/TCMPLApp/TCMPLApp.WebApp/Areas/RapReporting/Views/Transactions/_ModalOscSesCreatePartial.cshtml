@@ -1,0 +1,70 @@
+﻿@model TCMPLApp.WebApp.Models.OscSesCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="Transactions"
+      asp-action="OscSesCreate"
+      id="formOscSes"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.SesDate" />
+    <input type="hidden" asp-for="@Model.OscmId" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["SES create"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5> <b> @ViewBag.OscmDetails </b> </h5>
+            </div>
+            <div class="card-block">
+
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="SesNo" class="control-label"></label>
+                            <input asp-for="SesNo" class="form-control" required />
+                            <span asp-validation-for="SesNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="SesDate" class="control-label"></label>
+                            <input id="sesDate" class="form-control datepicker" placeholder="@localizer["Ses date"]" value="" required />
+                            <span asp-validation-for="SesDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="SesAmount" class="control-label"></label>
+                            <input asp-for="SesAmount" class="form-control" required />
+                            <span asp-validation-for="SesAmount" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

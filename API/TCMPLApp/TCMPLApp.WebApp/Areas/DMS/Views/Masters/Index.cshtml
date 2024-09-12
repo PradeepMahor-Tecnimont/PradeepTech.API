@@ -1,0 +1,308 @@
+﻿@{
+    ViewData["Title"] = "Desk master";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Masters</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITAdm))
+{
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk area category master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAreaCategoriesIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify desk details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk area master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAreaIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify desk details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-location-arrow f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk bay master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskBayIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify desk details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-tags f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskMasterIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify desk details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-tag f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Office</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("OfficeIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Office details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-tag f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk Area Office Map</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAreaOfficeMapIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Desk Area Office Map details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-tag f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <card-tag card-title="Area Type"
+                          sub-title="DMS - Area Type for desk booking"
+                          url="@Url.Action("DmAreaTypeIndex", "Masters", new { Area = "DMS" })"
+                          icon-style="fa fa-object-ungroup f-20 text-white theme-capri">
+                </card-tag>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk Area Department Mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAreaDepartmentMapIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Desk Area Department Map details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-tag f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk Area Project Mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAreaProjectMapIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Desk Area Project Map details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-tag f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee - Area mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAreaUserMapIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Desk Area User Map details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-tag f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee Desk Mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAreaEmployeeMapIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Desk Area Employee Map details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-tag f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3" style="display:none">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk Area Employee - AreaType Mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskAreaEmpAreaTypeMapIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Desk Area User Map details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-tag f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Tag Object Mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("TagObjectMappingIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-invoice f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee - Cross Desk Booked</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                           data-jqueryselector="binarydownload"
+                           data-url="@(Url.Action("CrossBookingSummaryDmsExcelDownload", "Bookings", new { Area = "DeskBooking" }))">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                    <div class="text-center tileLoader hidden ">
+                                        <div class="spinner-border text-info text-center  "
+                                             style="width: 2.5rem; height: 2.5rem;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users	f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Set Desks Zone</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DeskImportIndex", "Masters", new { Area = "DMS" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-invoice f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,76 @@
+﻿@model TCMPLApp.WebApp.Models.ModuleActionsCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="UserAccess"
+      asp-action="ModuleActionsCreate"
+      id="formAction"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Action create"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Action create</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ModuleId" class="control-label"></label>
+                            <select asp-for="ModuleId" class="form-control Select2" asp-items="ViewBag.ModuleIdList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ModuleId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ActionId" class="control-label"></label>
+                            <select asp-for="ActionId" class="form-control Select2" asp-items="ViewBag.ActionIdList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ActionId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ActionIsActive" class="control-label"></label>
+                            <select asp-for="ActionIsActive" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="OK">OK</option>
+                                <option value="KO">KO</option>
+                            </select>
+                            <span asp-validation-for="ActionIsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" Action="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

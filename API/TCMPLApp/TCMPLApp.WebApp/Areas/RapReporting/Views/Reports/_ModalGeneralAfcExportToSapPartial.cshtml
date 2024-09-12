@@ -1,0 +1,85 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+    <input id="Yyyy" readonly type="hidden" asp-for="@Model.Yyyy" />
+    <input id="YearMode" readonly type="hidden" asp-for="@Model.YearMode" />
+    <input id="Yyyymm" readonly type="hidden" asp-for="@Model.Yyyymm" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["General Reports - AFC"]</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Manhour export to SAP"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+
+            </div>
+            <div class="card-block">                             
+                @*<div class="form-group">
+                    <label asp-for="YyYYmm" class="control-label"></label>
+                    <select asp-for="YyYYmm" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Yyyymm">
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="Yymm" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <label asp-for="ReportType" class="control-label"></label>
+                    <select asp-for="ReportType" class="form-control Select2" data-placeholder="Please select..." required>
+                        <option selected value="A">All</option>
+                        <option value="C">Costcode</option>
+                        <option value="P">Project</option>                        
+                    </select>
+                    <span asp-validation-for="ReportType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CostCenter" class="control-label"></label>
+                    <select asp-for="CostCenter" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Costcodes" disabled>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="CostCenter" class="text-danger"></span>
+                </div>
+                <div class="form-group">                    
+                    <label asp-for="ProjectNo" class="control-label"></label>
+                    <select asp-for="ProjectNo" class="form-control Select2" data-placeholder=" Please select..." asp-items="ViewBag.Projects" disabled>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="ProjectNo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EmployeeTypeList" class="control-label"></label>
+                    <select asp-for="EmployeeTypeList" class="form-control Select2" data-placeholder=" Please select..." multiple="multiple" required>
+                        <option selected value="C">Consultant</option>
+                        <option selected value="F">FTC</option>
+                        <option selected value="R">Permanent</option>
+                        <option selected value="S">Subcontract</option>
+                    </select>
+                    <span asp-validation-for="EmployeeTypeList" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+    @{
+        var stringEmployeeType = string.Join(",", Model.EmployeeTypeList.ToArray());    
+    }
+    <a class="btn btn-primary" id="lafcsapReport" title="Manhour export to SAP report" href="#"
+            data-inprogress="0"
+            data-jqueryselector="generateReportPartial"
+            data-path="@Url.Action("ManhourExportToSAPReport", "Reports", new {Area ="RapReporting",
+                                                                                yymm = @Model.Yyyymm,
+                                                                                reporttype = "~!R!~",
+                                                                                costcenter = "~!C!~",
+                                                                                projno = "~!P!~",
+                                                                                employeetypelist = "~!E!~"
+                                                                            })"
+            data-url=""            
+            data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+            data-text="Download">
+            
+            @localizer["Download"]
+        </a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+

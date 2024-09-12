@@ -1,0 +1,412 @@
+﻿@model TCMPLApp.WebApp.Models.HRVoluntaryParentPolicyViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section styles
+    {
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "HR - Voluntary parents policy";
+
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active">HR - Voluntary Parents Policy</li>
+    </ol>
+}
+
+<div style="display:none">
+</div>
+
+<div role="toolbar">
+    <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-20">
+        <a class="" style="margin-top:2px;"
+           href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/Voluntary_Parents_Policy_FAQ.pdf" target="_blank" title="FAQ">
+            <i class="fas fa-info-circle fa-2x"></i>
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>HR - Voluntary Parents Policy </p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+               href="#"
+               data-jqueryselector="binarydownload"
+               data-url="@(Url.Action("ExcelDownloadHRVPP", "GeneralInfo", new { Area = "EmpGenInfo" }))">
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+        </div>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbGrid" class="table table-striped table-bordered">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th></th>
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.Employee)</th>
+                    <th>@Html.DisplayNameFor(model => model.EmpDob)</th>
+                    <th>@Html.DisplayNameFor(model => model.Parent)</th>
+                    <th>@Html.DisplayNameFor(model => model.Grade)</th>
+                    <th>@Html.DisplayNameFor(model => model.Designation)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.InsuredSumWords)</th>
+                    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp))
+                    {
+                        <th>UnLock</th>
+                    }
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+            localLoadDataTableVoluntaryParentsPolicyDetailList();
+        }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+        });
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#dob").on("change", function (event, date) {
+                $("#Dob").val(date.format("DD-MMM-YYYY"));
+            });
+
+        }
+
+        function localLoadDataTable() {
+
+            dataTable = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                responsive: true,
+                autoWidth: false,
+                lengthMenu: [25, 50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: { topStart: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp))
+            {
+                <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("VoluntaryParentsPolicyDetailForHRIndex", "GeneralInfo", new { Area = "EmpGenInfo" })"' +
+                        ' data-modalpopupwidth="rightw50" ' +
+                        ' data-id="' + data.empno + '"' +
+                        ' data-modaltitle="Voluntary parents policy detail list" ' +
+                        ' data-modalheader="Voluntary parents policy detail" ' +
+                        ' > ' +
+                                ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon",
+                    },
+                    { data: "empno" },
+                    { data: "employee" },
+                    { data: "empDob" },
+                    { data: "parent" },
+                    { data: "grade" },
+                    { data: "designation" },
+                    { data: "email" },
+                    { data: "insuredSumWords" },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+
+                                return '<button title="UnLock" class="btn btn-outline-danger btn-sm border-none " ' +
+                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                            ' data-url="@Url.Action("VoluntaryParentPolicyUnLock", "GeneralInfo", new { Area = "EmpGenInfo" })"' +
+                            ' data-id="' + data.applicationId + '"' +
+                            ' data-redirecturl="@Url.Action("VoluntaryParentPolicyForHRIndex", "GeneralInfo", new { Area = "EmpGenInfo" })"' +
+                            ' data-modaltitle="Please Confirm!" ' +
+                            ' data-confirmationtext="Do you want to unlock ' + data.empno + ' : ' + data.employee + '  ?" ' +
+                            ' data-confirmationtype="warning" ' +
+                            ' title="UnLock" ' +
+                            ' data-confirmbuttontext="UnLock" > ' +
+                                ' <i class="fas fa-unlock" aria-hidden="true"></i> ' +
+                                    ' </button>';
+
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                ],
+                </text>
+            }
+            else
+            {
+                <text>
+                        ordering: false,
+                        columns: [
+                        {
+                            data: null,
+                            render: function (data, type, row, meta) {
+                                return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("VoluntaryParentsPolicyDetailForHRIndex", "GeneralInfo", new { Area = "EmpGenInfo" })"' +
+                        ' data-modalpopupwidth="rightw50" ' +
+                        ' data-id="' + data.empno + '"' +
+                        ' data-modaltitle="Voluntary parents policy detail list" ' +
+                        ' data-modalheader="Voluntary parents policy detail" ' +
+                        ' > ' +
+                                    ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                    ' </button>'
+                            },
+                            'className': "td-icon",
+                        },
+                        { data: "empno" },
+                        { data: "employee" },
+                        { data: "empDob" },
+                        { data: "parent" },
+                        { data: "grade" },
+                        { data: "designation" },
+                        { data: "email" },
+                        { data: "insuredSumWords" }
+                    ],
+                </text>
+            }
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetVoluntaryParentPolicyForHRList", "GeneralInfo")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.genericSearch = $('#GenericSearch').val();
+                    d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                    d.startDateTime = null; // $('#FilterDataModel_StartDateTime').val();
+                    d.endDateTime = null; // $('#FilterDataModel_EndDateTime').val();
+                    d.statusTypeId = null; // $('#FilterDataModel_StatusTypeId').val();
+                    //d.isActive = $('#FilterDataModel_IsActive').val();
+                    //d.endDate = $('#FilterDataModel_EndDate').val();
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+            });
+
+        }
+
+        function localLoadDataTableVoluntaryParentsPolicyDetailList() {
+
+            $('#tbDataGridPreviousModel').DataTable().destroy();
+            $('#tbDataGridPreviousModel tbody').empty();
+            var table = $('#tbDataGridPreviousModel').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                order: [[3, "desc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                bPaginate: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                            ordering: false,
+                            columns: [
+                            { data: "name" },
+                            { data: "relation" },
+                            { data: "dob" },
+                            { data: "gender" },
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var applicationId = $("#formVoluntaryParentsPolicyDetailList input[id=PApplicationId]").val();
+                                          return '<button class="btn btn-outline-danger btn-sm border-none"  ' +
+                                         ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                         ' data-url="@Url.Action("HrVoluntaryParentPolicyDelete", "GeneralInfo", new { Area = "EmpGenInfo" })" ' +
+                                         ' data-redirecturl="VoluntaryParentPolicyForHRIndex" ' +
+                                         ' data-PostSaveReLoadDataTable="OK" ' +
+                                         ' data-id="' + applicationId + '!-!' + data.keyId + '"' +
+                                         ' data-modaltitle="Please Confirm!" ' +
+                                         ' data-confirmationtext="Delete record - ' + data.name + ' ?" ' +
+                                         ' data-confirmationtype="warning" data-confirmbuttontext="Delete"> ' +
+                                         ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                         ' </button> ';
+                                },
+                                'className': "td-icon",
+                            }
+                        ],
+                    </text>
+                }
+                else
+                {
+                    <text>
+                            ordering: false,
+                            columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card"> ';
+                                    item += '<div class="card-mobiledatatable"> ';
+                                    item += ' </div> </div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ],
+                    </text>
+                }
+                ajax:
+                {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListVoluntaryParentsPolicyDetail", "GeneralInfo")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.empno = null;
+                        d.startDate = null;
+                        d.assign = null;
+                        d.applicationId = $("#formVoluntaryParentsPolicyDetailList input[id=PApplicationId]").val();
+                    },
+                  error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+            });
+
+            //dataTableSearch();
+        }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+            localLoadDataTable();
+            hideLoader();
+        }
+
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+    </script>
+}

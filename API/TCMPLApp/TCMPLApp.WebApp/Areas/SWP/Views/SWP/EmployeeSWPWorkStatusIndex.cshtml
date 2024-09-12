@@ -1,0 +1,597 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeeSWPWorkStatusViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+
+}
+
+@section styles
+{
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Employee workspace details";
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWP">Smart work planning</a></li>
+    <li class="breadcrumb-item active">Employee workspace details</li>
+</ol>
+}
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee workspace details</p>
+    </div>
+    <div class="bg-gray-active rounded ">
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>
+                            @localizer[" Current week "]
+                            @Html.Raw(" ( " + Model.WeekStartDate.ToString("dd-MMM-yyyy") + " - " + Model.WeekEndDate.ToString("dd-MMM-yyyy") + " ) ")
+                            @Html.Raw(Model.CurrentWorkspaceText)
+                        </h5>
+                    </div>
+                    <div class="card-block " style="min-height:350px;">
+                        @if (@Model.IsShowPlanning == false)
+                        {
+                            @if (@Model.CurrentWorkspaceVal == 1)
+                            {
+                                <div class="form-group">
+                                    <div class="row  p-2">
+                                            <div class="col-xl-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        Office
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Html.Raw(Model.CurrentOffice)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        Floor
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Html.Raw(Model.CurrentFloor)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        Wing
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Html.Raw(Model.CurrentWing)
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        Desk
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Html.Raw(Model.CurrentDesk)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (@Model.CurrentWorkspaceVal == 2)
+                            {
+                                <div class="form-group">
+
+                                    @if (Model.CurrentWeekDataTableList != null)
+                                    {
+                                        <div class="row  p-2">
+                                            <div class="col-12">
+
+
+                                                <table id="tblCurrWeek" class="table w-100" style="width:100%!important">
+                                                    <thead class="bg-info text-light font-weight-bold">
+                                                        <tr>
+                                                            <td>Office</td>
+                                                            <td>Floor</td>
+                                                            <td>Wing</td>
+                                                            <td>Desk</td>
+                                                            <td>Day</td>
+                                                            <td>Date</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (@Model.CurrentWeekDataTableList != null)
+                                                        {
+                                                            @for (int i = 0; i < Model.CurrentWeekDataTableList.ToList().Count; i++)
+                                                            {
+                                                                @if (!string.IsNullOrEmpty(Model.CurrentWeekDataTableList.ToList()[i].Deskid))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Office)
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Floor)
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Wing)
+                                                                            </label>
+                                                                        </td>
+
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Desk)
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].DDay)
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy"))
+                                                                            </label>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card ">
+                    <div class="card-header">
+                        <h5>
+                            @localizer[" Planning week "]
+                            @Html.Raw(" ( " + Model.PlanningWeekStartDate?.ToString("dd-MMM-yyyy") + " - " + Model.PlanningWeekEndDate?.ToString("dd-MMM-yyyy") + " ) ")
+                            @Html.Raw(Model.PlanningWorkspaceText)
+                        </h5>
+                    </div>
+                    <div class="card-block " style="min-height:350px;">
+                        @if (@Model.IsShowPlanning == true)
+                        {
+                            @if (@Model.PlanningWorkspaceVal == 1)
+                            {
+                                <div class="form-group">
+                                    <div class="row  p-2">
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        Office
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Html.Raw(Model.PlanningOffice)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        Floor
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Html.Raw(Model.PlanningFloor)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        Desk
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Html.Raw(Model.PlanningWing)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        Desk
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Html.Raw(Model.PlanningDesk)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (@Model.PlanningWorkspaceVal == 2)
+                            {
+                                <div class="form-group">
+                                    @if (Model.PlanningWeekDataTableList != null)
+                                    {
+                                        <div class="row  p-2">
+                                            <div class="col-12">
+
+                                                <table id="tblPlanningWeek" class="table table-bordered  w-100" style="width:100%!important">
+                                                    <thead class="bg-info text-light font-weight-bold">
+                                                        <tr>
+
+                                                            <td>Date</td>
+                                                            <td>Day</td>
+                                                            <td>Desk</td>
+                                                            <td>Office</td>
+                                                            <td>Floor</td>
+
+                                                            <td>Wing</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (@Model.PlanningWeekDataTableList != null)
+                                                        {
+                                                            @for (int i = 0; i < Model.PlanningWeekDataTableList.ToList().Count; i++)
+                                                            {
+                                                                @if (!string.IsNullOrEmpty(Model.PlanningWeekDataTableList.ToList()[i].Deskid))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy"))
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].DDay)
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Deskid)
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Office)
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Floor)
+                                                                            </label>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <label class="control-label m-t-10 ">
+                                                                                @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Wing)
+                                                                            </label>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <h5 class="text-danger p-2 m-2">
+                                    @localizer[" Planning not available"]
+                                </h5>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        @*  @if (@Model.PrimaryWorkspaceVal == 1)
+            {
+            <div class="card mb-1">
+            <div class="card-header">
+            <h5>@localizer[" Primary workspace :"] @Html.Raw(" " + Model.PrimaryWorkspaceText + "  ")</h5>
+
+            </div>
+            <div class="card-block ">
+            <div class="form-group">
+            <div class="row  p-2">
+
+            @if (@Model.OfficeWorkSpaceDataTableList != null)
+            {
+
+            @for (int i = 0; i < Model.OfficeWorkSpaceDataTableList.ToList().Count; i++)
+            {
+
+            <div class="col-xl-3 col-md-6">
+            <div class="form-group">
+            <div class="dt-met">
+            Work Area
+            </div>
+            <div class="dd-met">
+            @Html.Raw(Model.OfficeWorkSpaceDataTableList.ToList()[i].WorkArea)
+            </div>
+            </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+            <div class="form-group">
+            <div class="dt-met">
+            Office
+            </div>
+            <div class="dd-met">
+            @Html.Raw(Model.OfficeWorkSpaceDataTableList.ToList()[i].Office)
+            </div>
+            </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+            <div class="form-group">
+            <div class="dt-met">
+            Floor
+            </div>
+            <div class="dd-met">
+            @Html.Raw(Model.OfficeWorkSpaceDataTableList.ToList()[i].Floor)
+            </div>
+            </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+            <div class="form-group">
+            <div class="dt-met">
+            Wing
+            </div>
+            <div class="dd-met">
+            @Html.Raw(Model.OfficeWorkSpaceDataTableList.ToList()[i].Wing)
+            </div>
+            </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+            <div class="form-group">
+            <div class="dt-met">
+            Desk
+            </div>
+            <div class="dd-met">
+            @Html.Raw(Model.OfficeWorkSpaceDataTableList.ToList()[i].Desk)
+            </div>
+            </div>
+            </div>
+
+            }
+            }
+
+
+            </div>
+            </div>
+            </div>
+            </div>
+            }
+            @if (@Model.PrimaryWorkspaceVal == 2)
+            {
+            <div class="card mb-1">
+            <div class="card-header">
+            <h5>@localizer[" Current week days "]@Html.Raw(" ( " + Model.WeekStartDate.ToString("dd-MMM-yyyy") + " - " + Model.WeekEndDate.ToString("dd-MMM-yyyy") + " ) ")</h5>
+            </div>
+            <div class="card-block ">
+
+            <div class="form-group">
+
+            @if (Model.CurrentWeekDataTableList != null)
+            {
+            <div class="row  p-2">
+            <div class="col-12">
+
+
+            <table id="tblCurrWeek" class="table w-100" style="width:100%!important">
+            <thead class="bg-info text-light font-weight-bold">
+            <tr>
+            <td>Work Area</td>
+            <td>Office</td>
+            <td>Desk</td>
+            <td>Floor</td>
+            <td>Wing</td>
+            <td>Bay</td>
+            <td>Desk</td>
+            <td>Day</td>
+            <td>Date</td>
+            </tr>
+            </thead>
+            <tbody>
+            @if (@Model.CurrentWeekDataTableList != null)
+            {
+            @for (int i = 0; i < Model.CurrentWeekDataTableList.ToList().Count; i++)
+            {
+            <tr>
+
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].WorkArea)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Office)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Floor)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Wing)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Bay)
+            </label>
+            </td>
+
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].Desk)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].WeekDays)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.CurrentWeekDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy"))
+            </label>
+            </td>
+            </tr>
+            }
+            }
+            </tbody>
+            </table>
+            </div>
+            </div>
+            }
+
+            </div>
+            </div>
+            </div>
+            }
+            @if (@Model.PrimaryWorkspaceVal == 2)
+            {
+            <div class="card mb-1">
+            <div class="card-header">
+            <h5>@localizer[" Planning week days "]@Html.Raw(" ( " + Model.PlanningWeekStartDate.ToString("dd-MMM-yyyy") + " - " + Model.PlanningWeekEndDate.ToString("dd-MMM-yyyy") + " ) ")</h5>
+            </div>
+            <div class="card-block ">
+
+            <div class="form-group">
+
+            @if (Model.PlanningWeekDataTableList != null)
+            {
+            <div class="row  p-2">
+            <div class="col-12">
+
+            <table id="tblPlanningWeek" class="table table-bordered  w-100" style="width:100%!important">
+            <thead class="bg-info text-light font-weight-bold">
+            <tr>
+            <td>Work Area</td>
+            <td>Office</td>
+            <td>Desk</td>
+            <td>Floor</td>
+            <td>Wing</td>
+            <td>Bay</td>
+            <td>Desk</td>
+            <td>Day</td>
+            <td>Date</td>
+            </tr>
+            </thead>
+            <tbody>
+            @if (@Model.PlanningWeekDataTableList != null)
+            {
+            @for (int i = 0; i < Model.PlanningWeekDataTableList.ToList().Count; i++)
+            {
+
+            <tr>
+
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].WorkArea)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Office)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Floor)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Wing)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Bay)
+            </label>
+            </td>
+
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].Desk)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].WeekDays)
+            </label>
+            </td>
+            <td class="align-middle">
+            <label class="control-label m-t-10 ">
+            @Html.Raw(Model.PlanningWeekDataTableList.ToList()[i].DDate.ToString("dd-MMM-yyyy"))
+            </label>
+            </td>
+            </tr>
+            }
+            }
+            </tbody>
+            </table>
+            </div>
+            </div>
+            }
+            </div>
+            </div>
+            </div>
+            }*@
+
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script type="text/javascript">
+
+    function localScript() {
+
+    }
+
+      $(document).ready(function () {
+
+      });
+
+</script>
+}

@@ -1,0 +1,424 @@
+﻿@model TCMPLApp.WebApp.Models.SWSEmployeePresentViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWP">Smart work planning</a></li>
+    <li class="breadcrumb-item active">Smart workspace - present list</li>
+</ol>
+}
+
+@section styles
+{
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+    <style>
+        .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+            border-bottom: 3px solid #04a9f5 !important
+        }
+    </style>
+}
+
+@{
+    ViewData["Title"] = "Smart workspace - present list";
+
+}
+<div style="display:none">
+    @Html.TextBoxFor(model => model.FilterDataModel.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Empno" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Assign" />
+
+
+</div>
+
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>
+            Smart workspace - present list
+            <label id="showDate" style=" float:right;font-weight: bold;margin: 5px;" name="showDate"></label>
+
+            <label id="showFilterList" style="  width:auto; float:right;"
+                   class="form-control-plaintext text-secondary hidden"
+                   name="showFilterList"></label>
+        </p>
+    </div>
+    <div class="card-toolbar">
+
+
+        <div role="toolbar">
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("AdminSWSEmpPresentFilterGet", "SWP", new { Area = "SWP" })'
+               data-modaltitle="Filters"
+               data-modalheader="Filters">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="AdminSWSEmpPresentIndex"
+               data-url='@Url.Action("ResetFilter", "SWP", new { Area = "SWP" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+
+            <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+               href='@Url.Action("ExcelDownloadAdminSWSEmpPresent", "SWP", new { Area = "SWP" })'>
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+        </div>
+
+@*        
+        <div class="mt-3 mb-2">
+            <ul class="nav nav-tabs " id="tabs-tab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link active" id="tabs-Attendance-tab" data-toggle="pill"
+                       href="#tabs-Attendance" onclick="ReLoadDataTable('AttendanceList')" role="tab" aria-controls="tabs-Attendance" aria-selected="true">Attendance list</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " id="tabs-Absent-tab" data-toggle="pill"
+                       href="#tabs-Absent" onclick="ReLoadDataTable('AbsentList')" role="tab" aria-controls="tabs-Absent" aria-selected="true">Absent list</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " id="tabs-OutOfTownAttendance-tab" data-toggle="pill"
+                       href="#tabs-OutOfTownAttendance" onclick="ReLoadDataTable('OutOfTurnAttendanceList')" role="tab" aria-controls="tabs-OutOfTownAttendance"
+                       aria-selected="true">Out of turn attendance </a>
+                </li>
+
+
+            </ul>
+        </div>
+
+*@
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+
+        @*        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+            <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+            </div>
+        *@
+        <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.EmployeeName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Emptype)</th>
+                    <th>@Html.DisplayNameFor(model => model.Grade)</th>
+                    <th>@Html.DisplayNameFor(model => model.Parent)</th>
+                    <th>@Html.DisplayNameFor(model => model.Assign)</th>
+                    <th>@Html.DisplayNameFor(model => model.AttendanceStatus)</th>
+                    <th>@Html.DisplayNameFor(model => model.Deskid)</th>
+
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script type="text/javascript">
+
+
+    function localScript() {
+
+        var a = 1+1;
+        initFilter();
+        //$('#btnexportplanning').off('click').on('click', function () {
+        //    event.preventDefault();
+        //    event.stopPropagation();
+        //    exportPWSCurrent();
+        //});
+     }
+
+
+       function initFilter() {
+
+            var d = new Date();
+
+            var currYear = moment().year();
+            var curYearLastDate = new Date(currYear, 11, 31);
+            var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                maxDate: d,
+                time: false
+            }).on('change', function (e, date) {
+
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+            });
+
+            if ($('#StartDate').val()) {
+                $('#startDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#StartDate").val()));
+            }
+
+        }
+
+    function localLoadDataTable() {
+
+
+        $('#tbDataGrid').DataTable().destroy();
+
+        $('#tbDataGrid tbody').empty();
+
+        var table = $('#tbDataGrid').DataTable({
+            drawCallback: function (settings) {
+                loadScript();
+            },
+            order: [[1, "asc"]],
+            responsive: true,
+            autoWidth: false,
+            pageLength: 25,
+            lengthMenu: [25, 50, 100, 200],
+            processing: true,
+            serverSide: true,
+            stateSave: false,
+            info: false,
+            filter: false,
+            //layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+            layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+            columnDefs: [
+                //{ orderable: false, targets: [0,1,2,3,4,5,6,7,8,9,10,11] }
+                { orderable: false, targets: '_all' }
+            ],
+          @if ((bool)@Context.Items["isMobile"] == false)
+          {
+                <text>
+                    columns: [
+                        { data: "empno",  width: '3.0rem'  },
+                        { data: "employeeName",  width: '10.0rem' },
+                        { data: "emptype", width: '1.0rem'  },
+                        { data: "grade", width: '3.0rem' },
+                        { data: "parent", width: '3.0rem'  },
+                        { data: "assign", width: '3.0rem' },
+
+                        { data: "attendanceStatus", width: '3.0rem' },
+                        { data: "deskid", width: '3.0rem'  }
+                    ],
+                </text>
+            }
+            else
+            {
+                <text>
+                    ordering: false,
+                    columns: [
+                        {
+                            data: null,
+                            render: function (data, type, row) {
+                                var item = '<div class="card">';
+                                item += '<div class="card-mobiledatatable">';
+                                item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.employeeName + '</dd></dl>';
+                                item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                                item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Assign)' + '</dt><dd class="col-lg-8">' + data.assign + '</dd></dl>';
+                                item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.AttendanceStatus)' + '</dt><dd class="col-lg-8">' + data.attendanceStatus + '</dd></dl>';
+                                item += '</div></div>';
+                                return item
+                            },
+                            sortable: false,
+                            searchable: false,
+                            className: "datatable-td-mobile"
+                        }
+                    ],
+                </text>
+            }
+            ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListAdminSWSEmpPresent", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.startDate = ($('#FilterDataModel_StartDate').val());
+                    d.genericSearch = $('#GenericSearch').val();
+                   },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+        });
+
+    }
+
+    $(document).ready(function () {
+        ShowDate();
+
+        ReLoadDataTable('AttendanceList');
+
+        localLoadDataTable();
+
+        //loadPrimaryWorkSpaceHeaderStatus();
+
+    });
+
+
+      function ShowDate() {
+
+
+        var dateVar = moment(new Date());
+        var newDateVar = dateVar.utc().format('DD-MMM-YYYY');
+
+        $('#showDate').text(newDateVar);
+
+         if ($('#FilterDataModel_StartDate').val())
+         {
+             var ndate = new Date($('#FilterDataModel_StartDate').val());
+             ndate.setDate(ndate.getDate() + 1);
+            dateVar = moment(new Date(ndate));
+            newDateVar = dateVar.utc().format('DD-MMM-YYYY');
+             $('#showDate').text(newDateVar);
+
+         };
+
+    };
+
+    function PostFilterReLoadDataTable(data) {
+        console.log(data);
+        $("#modalcontainer").modal('hide');
+
+        $("#FilterDataModel_StartDate").val(data.startDate);
+
+         $("#FilterDataModel_Empno").val(data.empno);
+        $("#FilterDataModel_Assign").val(data.assign);
+
+        $("#FilterDataModel_GradeList").val(data.gradeList);
+        $("#FilterDataModel_EmployeeTypeList").val(data.employeeTypeList);
+        $("#FilterDataModel_LaptopUser").val(data.laptopUser);
+        $("#FilterDataModel_EligibleForSWP").val(data.eligibleForSWP);
+        $("#FilterDataModel_PrimaryWorkspaceList").val(data.primaryWorkspaceList);
+
+        localLoadDataTable();
+        ShowDate();
+        hideLoader();
+    }
+
+
+
+        function exportPWSCurrent() {
+            let assignCodes = $("#excelDownloadPrimaryWorkspaceSet select[id=Assign]").val();
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#excelDownloadPrimaryWorkspaceSet input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("ExcelDownloadPrimaryWorkspaceCurrent", "SWP", new {Area = "SWP" })',
+                type: "POST",
+                data: {
+                    assign: assignCodes
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                var dataTable = $('#tbDataGrid').DataTable();
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            var dataTable = $('#tbDataGrid').DataTable();
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+       function ReLoadDataTable(filterListBy){
+           if(filterListBy == "AttendanceList"){
+
+                 $('#showFilterList').text("Attendance list");
+
+           }else if(filterListBy == "AbsentList"){
+
+             $('#showFilterList').text("Absent list");
+
+           }if(filterListBy == "OutOfTurnAttendanceList"){
+
+               $('#showFilterList').text("Out of turn attendance ");
+           }
+
+
+       };
+
+</script>
+}

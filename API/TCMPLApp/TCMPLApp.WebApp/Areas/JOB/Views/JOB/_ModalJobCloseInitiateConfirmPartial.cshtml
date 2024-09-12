@@ -1,0 +1,84 @@
+﻿@model TCMPLApp.WebApp.Models.JobCloseInitiateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="JOB"
+      asp-action="JobCloseInitiateConfirm"
+      id="formJobCloseInitiateConfirm"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null); localScript(null);loadScript();"
+      data-ajax-success="PostConfirmJobClosure(data);" 
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Projno)    
+    @Html.HiddenFor(m => m.ActualClosingDate)    
+    @Html.HiddenFor(m => m.IsConsent)
+    @Html.HiddenFor(m => m.Warning)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Confirm - Initiate approval of Job closure</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">            
+            <div class="card-header">
+                <h5>Confirm - Initiate approval of Job closure - @Model.Projno</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="ActualClosingDate" class="control-label"></label>
+                            <input class="form-control" value="@Model.ActualClosingDate?.ToString("dd-MMM-yyyy")" required readonly/>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="Notes" class="control-label"></label>
+                            <textarea asp-for="Notes" class="form-control" rows="8" maxlength="455" required readonly></textarea>                            
+                        </div>
+                    </div>
+                </div>                
+                <div id="divWarning" class="form-group" style="display:none">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label style="color:red" asp-for="Warning" class="control-label"></label>
+                            <textarea style="color:red" asp-for="Warning" class="form-control" rows="4" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div id="divChkWarning" class="row col-md-12" style="display:none">
+                    <div class="col-1 p-0 text-left">
+                        <input type="checkbox" id="chkWarning" />
+                        <label class="cr" style="top: 0px;"></label>
+                    </div>
+                    <div class="col-11" style="padding-bottom:10px;">
+                        <span style="color:red; font-size:1rem;font-weight:bold;">Set manhours forecasted in Projections on or after Actual closing date to 0</span>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">        
+        <button class="btn btn-danger" type="submit" id="btnconfirmjobclosure" style="display:none"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm - Initiate approval of Job closure"]">
+            @localizer["Confirm - Initiate approval of Job closure"]
+        </button>        
+        <button class="btn btn-primary" type="button" id="btneditjobclosure"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Edit"]">
+            @localizer["Edit"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+

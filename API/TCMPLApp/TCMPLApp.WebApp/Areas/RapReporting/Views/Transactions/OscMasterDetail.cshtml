@@ -1,0 +1,775 @@
+﻿@model TCMPLApp.WebApp.Models.OscMasterDetailViewModel
+
+@{
+    ViewData["Title"] = "PO detail";
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+        <li class="breadcrumb-item "><a asp-action="TransactionsIndex" asp-controller="Transactions" asp-area="RapReporting">Transactions</a></li>
+        <li class="breadcrumb-item "><a asp-action="OscMasterIndex" asp-controller="Transactions" asp-area="RapReporting">Outside subcontracts</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Outside subcontract detail</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<input type="hidden" asp-for="@Model.OscmId" />
+<input type="hidden" asp-for="@Model.OscmType" />
+<input type="hidden" asp-for="@Model.LockOrigBudgetDesc" />
+<input type="hidden" id="actionSubcontractPrengAdmin" value="@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin).ToString()"/>
+<input type="hidden" id="actionSubcontractDeptMono" value="@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractDeptMono).ToString()"/>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Outside subcontract: <b>@Model.PoNumber (@Model.LockOrigBudgetDesc)</b></h5>
+            @if(Model.LockOrigBudgetDesc == "Open" && 
+               ((Model.OscmType == "MONO" && 
+                    (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin) || 
+                     CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractDeptMono))) ||                
+                (Model.OscmType == "MULTI" && CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin)) 
+               ))
+            {
+                <button class="btn btn-outline-danger btn-sm border-none float-right" id="idDeactivateCostCenter" onclick="showDeleteConfirmationPopup(event,this);"
+                        data-jqueryselector="showconfirmationmodal"
+                        data-url='@Url.Action("OscMasterLock", "Transactions", new { Area = "RapReporting" })'
+                        data-redirecturl='@Url.Action("OscMasterIndex", "Transactions", new { Area = "RapReporting" })'
+                        data-id="@Model.OscmId"
+                        data-modaltitle="Please Confirm!"
+                        data-confirmationtext="Do you want to lock @Model.PoNumber ?"
+                        data-confirmationtype="warning"
+                        data-confirmbuttontext="Lock PO">
+                    <i class="fas fa-trash" aria-hidden="true"></i> Lock
+                </button>
+            }
+        </div>
+    </div>
+    <div class="card-block">
+        <div class="card-pill">
+            <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">Main</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-po-detail-tab" data-toggle="pill" href="#tabs-po-detail" role="tab" aria-controls="tabs-po-detail" aria-selected="false"
+                        data-url="@Url.Action("OscDetailIndex", "Transactions", new { Area = "RapReporting" })"
+                        data-id="@Model.OscmId"
+                        data-divid="pw-po-detail">Cost codes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-ses-tab" data-toggle="pill" href="#tabs-ses" role="tab" aria-controls="tabs-ses" aria-selected="false"
+                        data-url="@Url.Action("OscSESIndexPartial", "Transactions", new { Area = "RapReporting" })"
+                        data-id="@Model.OscmId"
+                        data-divid="pw-ses">SES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-actual-hours-booked-tab" data-toggle="pill" href="#tabs-actual-hours-booked" role="tab" aria-controls="tabs-actual-hours-booked" aria-selected="false"
+                        data-url="@Url.Action("OscActualHoursBookedIndexPartial", "Transactions", new { Area = "RapReporting" })"
+                        data-id="@Model.OscmId"
+                        data-divid="pw-actual-hours-booked">Actual hours booked</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="tab-tabContent">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                    <div class="card-deck">
+                        <div class="card shadow col-md-12 col-xl-12">
+                            <div class="card-block">
+                                    <div class="row">
+                                    @if ((Model.OscmType == "MONO" &&
+                                            (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin) ||
+                                             CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractDeptMono))) ||
+                                         (Model.OscmType == "MULTI" && CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin))
+                                        )
+                                    {
+                                        @if (Model.LockOrigBudgetDesc == "Open")
+                                        {
+                                            <a title="Edit PO" class="btn btn-outline-primary btn-sm border-none" href="#"
+                                            data-jqueryselector="openmodal"
+                                            data-modalcontainer="modalcontainer"
+                                            data-modalpopupwidth="rightw35"
+                                            data-url="@Url.Action("OscMasterEdit", "Transactions", new { Area = "RapReporting" })"
+                                            data-statichtmlsourcedivid=""
+                                            data-modaltitle="Edit PO"
+                                            data-modalheader="Edit PO"
+                                            data-id="@Model.OscmId">
+                                                <i class="fas fa-edit"></i>Edit
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a title="Edit PO" class="btn btn-outline-primary btn-sm border-none" href="#"
+                                            data-jqueryselector="openmodal"
+                                            data-modalcontainer="modalcontainer"
+                                            data-modalpopupwidth="rightw35"
+                                            data-url="@Url.Action("OscMasterEditCur", "Transactions", new { Area = "RapReporting" })"
+                                            data-statichtmlsourcedivid=""
+                                            data-modaltitle="Edit PO"
+                                            data-modalheader="Edit PO"
+                                            data-id="@Model.OscmId">
+                                                <i class="fas fa-edit"></i>Edit
+                                            </a>
+                                        }
+                                    }
+                                </div>
+                            </div>                            
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Projno5)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Projno5) - @Html.DisplayFor(model => model.Projno5Desc)</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.OscmVendor)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.OscmVendor) - @Html.DisplayFor(model => model.OscmVendorDesc)</div>
+                                </div>                                
+                                <div class="form-group col-md-2">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.OscmType)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.OscmType)</div>
+                                </div>                               
+                                <div class="form-group col-md-2">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.ScopeWorkDesc)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.ScopeWorkDesc)</div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.PoNumber)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.PoNumber)</div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.PoDate)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.PoDate)</div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.PoAmt)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.PoAmt)</div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.CurPoAmt)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.CurPoAmt)</div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.OrigEstHoursTotal)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.OrigEstHoursTotal)</div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.CurEstHoursTotal)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.CurEstHoursTotal)</div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.ActualHoursBookedTotal)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.ActualHoursBookedTotal)</div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.SesAmountTotal)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.SesAmountTotal)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-po-detail" role="tabpanel" aria-labelledby="tabs-po-detail-tab">
+                    <div id="pw-po-detail">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-ses" role="tabpanel" aria-labelledby="tabs-ses-tab">
+                    <div id="pw-ses">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-actual-hours-booked" role="tabpanel" aria-labelledby="tabs-actual-hours-booked-tab">
+                    <div id="pw-actual-hours-booked">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+
+        function localScript() {
+            if ($('#LockOrigBudgetDesc').val() == 'Locked'){
+                $('#Costcode').prop("disabled", true);
+                $('#Costcode').removeClass("required");
+            }
+            else {
+                $('#Costcode').addClass("required");
+                if ($('#actionSubcontractDeptMono').val() == "True"){                
+                    $('#Costcode').prop("multiple", false);
+                }
+            }
+
+             initSelect2();
+             initDatePicker()
+             loadCostcodeDataTable();
+             loadSesDataTable();
+             loadHoursDataTable();
+             loadActualHoursBookedDataTable();
+
+            $("#GenericSearchCostcode").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearchCostcode").length) {
+                        dataTable
+                            .search($('#GenericSearchCostcode').val())
+                            .draw();
+                    } else {
+                        dataTable
+                            .search($('#genericSearchCostcode').val())
+                            .draw();
+                    }
+                }
+             });
+
+            $('#buttonSearchCostcode').on('click', function () {
+                if ($("#GenericSearchCostcode").length) {
+                    dataTable
+                        .search($('#GenericSearchCostcode').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#GenericSearchCostcode').val())
+                        .draw();
+                }
+            });
+
+            $("#GenericSearchSes").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearchSes").length) {
+                        dataTable
+                            .search($('#GenericSearchSes').val())
+                            .draw();
+                    } else {
+                        dataTable
+                            .search($('#genericSearchSes').val())
+                            .draw();
+                    }
+                }
+            });
+
+            $('#buttonSearchSes').on('click', function () {
+                if ($("#GenericSearchSes").length) {
+                    dataTable
+                        .search($('#GenericSearchSes').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#GenericSearchSes').val())
+                        .draw();
+                }
+            });
+
+            $("#GenericSearchActualHoursBooked").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearchActualHoursBooked").length) {
+                        dataTable
+                            .search($('#GenericSearchActualHoursBooked').val())
+                            .draw();
+                    } else {
+                        dataTable
+                            .search($('#genericSearchActualHoursBooked').val())
+                            .draw();
+                    }
+                }
+             });
+
+            $('#buttonSearchActualHoursBooked').on('click', function () {
+                if ($("#GenericSearchActualHoursBooked").length) {
+                    dataTable
+                        .search($('#GenericSearchActualHoursBooked').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#GenericSearchActualHoursBooked').val())
+                        .draw();
+                }
+            });
+        }
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#poDate").on("change", function (event, date) {
+                $("#PoDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+            if ($('#PoDate').val()) {
+                $('#poDate').bootstrapMaterialDatePicker('setDate', new Date($("PoDate").val()));
+            }
+
+            if ($("#PoDate").val()) {
+                $('#poDate').val(moment($("#PoDate").val(),"DD-MMM-YYYY").format('DD-MMM-YYYY'));
+            }
+
+            $("#sesDate").on("change", function (event, date) {
+                $("#SesDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+            if ($('#SesDate').val()) {
+                $('#sesDate').bootstrapMaterialDatePicker('setDate', new Date($("#SesDate").val()));
+            }
+
+            if ($("#SesDate").val()) {
+                $('#sesDate').val(moment($("#SesDate").val(),"DD-MMM-YYYY").format('DD-MMM-YYYY'));
+            }
+        }
+
+
+        function loadCostcodeDataTable() {
+            dataTable = $('#tbCostcodeGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    return '<button title="Detail" class="btn btn-outline-info btn-sm border-none" ' +
+                                        ' data-jqueryselector="openmodal" ' +
+                                        ' data-modalcontainer="modalcontainer" '+
+                                        ' data-url="@Url.Action("OscHoursIndex", "Transactions", new { Area = "RapReporting" })"' +
+                                        ' data-modalpopupwidth="rightw35" ' +
+                                        ' data-id="' + data.oscdId + '"' +
+                                        ' data-modaltitle="Hours details" ' +
+                                        ' data-modalheader="Hours details" >' +
+                                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                        ' </button>';
+                                },
+                                className: "td-icon",
+                            },
+                            { 'data': "costcode" },
+                            { 'data': "costcodeDesc" },
+                            { 'data': "origEstHoursTotal" },
+                            { 'data': "curEstHoursTotal" },
+                            {
+                                'data': null,
+                                render: function (data, type, row) {                                    
+                                    if (data.isDeletable == 1 && $('#OscmType').val() == 'MULTI' && $('#actionSubcontractPrengAdmin').val() == "True") {
+                                        return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                                            ' data-url="@Url.Action("OscDetailDelete", "Transactions", new { Area = "RapReporting" })"' +
+                                            ' data-id="' + data.oscdId + '"' +
+                                            ' data-redirecturl="" ' +
+                                            ' data-PostSave="OK" ' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext=\'Do you want to delete "' + data.costcode + '" ?\' ' +
+                                            ' data-confirmationtype="warning" ' +
+                                            ' title="Delete Cost code" ' +
+                                            ' data-confirmbuttontext="Delete Cost code" > ' +
+                                            ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                            ' </button>';
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                                'className': "td-icon text-center  align-middle",
+                            }
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsOscDetail", "Transactions")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.oscmId = $('#OscmId').val();
+                        d.genericSearch = $('#GenericSearchCostcode').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        function loadSesDataTable() {
+            dataTable = $('#tbSesGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            { 'data': "projectNo" },
+                            { 'data': "projectName" },
+                            { 'data': "sesNo" },
+                            { 'data': "sesDate" },
+                            { 'data': "sesAmount" },
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    if (($('#OscmType').val() == 'MONO' && ($('#actionSubcontractPrengAdmin').val() == "True" || $('#actionSubcontractDeptMono').val() == "True")) ||
+                                         ($('#OscmType').val() == 'MULTI' && $('#actionSubcontractPrengAdmin').val() == "True")) {
+                                        return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                            ' data-jqueryselector="openmodal" ' +
+                                            ' data-modalcontainer="modalcontainer" '+
+                                            ' data-url="@Url.Action("OscSesEdit", "Transactions", new { Area = "RapReporting" })"' +
+                                            ' data-modalpopupwidth="rightw35" ' +
+                                            ' data-id="' + data.oscsId + '"' +
+                                            ' data-modaltitle="SES edit" ' +
+                                            ' data-modalheader="SES edit" >' +
+                                            ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                            ' </button>';
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                                className: "td-icon",
+                            },
+                            {
+                                'data': null,
+                                render: function (data, type, row) {
+                                    if (($('#OscmType').val() == 'MONO' && ($('#actionSubcontractPrengAdmin').val() == "True" || $('#actionSubcontractDeptMono').val() == "True")) ||
+                                         ($('#OscmType').val() == 'MULTI' && $('#actionSubcontractPrengAdmin').val() == "True")) {
+                                        return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                                            ' data-url="@Url.Action("OscSesDelete", "Transactions", new { Area = "RapReporting" })"' +
+                                            ' data-id="' + data.oscsId + '"' +
+                                            ' data-redirecturl="" ' +
+                                            ' data-PostSave="OK" ' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext=\'Do you want to delete SES? for "' + data.sesNo + '" ?\' ' +
+                                            ' data-confirmationtype="warning" ' +
+                                            ' title="Delete SES" ' +
+                                            ' data-confirmbuttontext="Delete SES" > ' +
+                                            ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                            ' </button>';
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                                'className': "td-icon text-center  align-middle",
+                            }
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsOscSesPartial", "Transactions")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                         d.oscmId = $('#OscmId').val();
+                        d.genericSearch = $('#GenericSearchSes').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        function loadHoursDataTable() {
+            dataTable = $('#tbHoursGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    if (($('#OscmType').val() == 'MONO' && ($('#actionSubcontractPrengAdmin').val() == "True" || $('#actionSubcontractDeptMono').val() == "True")) ||
+                                         ($('#OscmType').val() == 'MULTI' && $('#actionSubcontractPrengAdmin').val() == "True")) {
+                                        if (data.origEstHrsStatus == 'OPEN_ENABLED') {
+                                            return '<button title="Edit" class="btn btn-outline-info btn-sm border-none  " ' +
+                                                ' data-jqueryselector="openmodal" ' +
+                                                ' data-modalcontainer="modalcontainer" '+
+                                                ' data-url="@Url.Action("OscHoursOrigEdit", "Transactions", new { Area = "RapReporting" })"' +
+                                                ' data-modalpopupwidth="rightw35" ' +
+                                                ' data-id="' + data.oscdId + '!-!' + data.oschId + '"' +
+                                                ' data-modaltitle="Hours edit" ' +
+                                                ' data-modalheader="Hours edit" >' +
+                                                ' <i class="far fa-edit" aria-hidden="true"></i> ' +
+                                                ' </button>';
+                                        } else if (data.curEstHrsStatus == 'LOCKED_ENABLED' ) {
+                                            return '<button title="Edit" class="btn btn-outline-info btn-sm border-none  " ' +
+                                                ' data-jqueryselector="openmodal" ' +
+                                                ' data-modalcontainer="modalcontainer" '+
+                                                ' data-url="@Url.Action("OscHoursCurEdit", "Transactions", new { Area = "RapReporting" })"' +
+                                                ' data-modalpopupwidth="rightw35" ' +
+                                                ' data-id="' + data.oscdId + '!-!' + data.oschId + '"' +
+                                                ' data-modaltitle="Hours edit" ' +
+                                                ' data-modalheader="Hours edit" >' +
+                                                ' <i class="far fa-edit" aria-hidden="true"></i> ' +
+                                                ' </button>';
+                                        }                                     
+                                        else {
+                                            return '';
+                                        }
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                                className: "td-icon",
+                            },
+                            { 'data': "yyyymm" },
+                            { 'data': "origEstHrs" },
+                            { 'data': "curEstHrs" },
+                            {
+                                'data': null,
+                                render: function (data, type, row) {
+                                    if (($('#OscmType').val() == 'MONO' && ($('#actionSubcontractPrengAdmin').val() == "True" || $('#actionSubcontractDeptMono').val() == "True")) ||
+                                         ($('#OscmType').val() == 'MULTI' && $('#actionSubcontractPrengAdmin').val() == "True")) {
+                                        if (data.origEstHrsStatus == 'OPEN_ENABLED' || (data.origEstHrs == 0 && data.curEstHrsStatus == 'LOCKED_ENABLED') ) {
+                                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                                ' data-url="@Url.Action("OscHoursDelete", "Transactions", new { Area = "RapReporting" })"' +
+                                                ' data-id="' + data.oschId + '"' +
+                                                ' data-redirecturl="" ' +
+                                                ' data-PostSave="OK" ' +
+                                                ' data-modaltitle="Please Confirm!" ' +
+                                                ' data-confirmationtext=\'Do you want to delete hours?\' ' +
+                                                ' data-confirmationtype="warning" ' +
+                                                ' title="Delete hours" ' +
+                                                ' data-confirmbuttontext="Delete hours" > ' +
+                                                ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                                ' </button>';
+                                        } else {
+                                            return '';
+                                        }
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                                'className': "td-icon text-center  align-middle",
+                            }
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsOscHours", "Transactions")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.oscdId = $('#OscdId').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function loadActualHoursBookedDataTable() {
+            dataTable = $('#tbActualHoursBookedGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            { 'data': "yymm" },
+                            { 'data': "costcode" },                       
+                            { 'data': "hours", 'className': "text-right" },                            
+                            { 'data': "othours", 'className': "text-right"},                            
+                            { 'data': "totalHours", 'className': "text-right"}                            
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsOscActualHoursBookedPartial", "Transactions")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.oscmId = $('#OscmId').val();
+                        d.genericSearch = $('#GenericSearchActualHoursBooked').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+    </script>
+}

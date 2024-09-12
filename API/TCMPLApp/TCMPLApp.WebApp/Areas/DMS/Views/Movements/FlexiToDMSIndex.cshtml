@@ -1,0 +1,276 @@
+﻿@model TCMPLApp.WebApp.Models.FlexiToDMSIndexViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    ViewData["Title"] = "Convert flexi to DMS";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Movements" asp-area="DMS">Movements</a></li>        
+        <li class="breadcrumb-item active" aria-current="page">Convert flexi to DMS</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Convert flexi desk to DMS</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">            
+            <a href='@Url.Action("Index", "Movements", new { Area = "DMS" })' title="Back" class="btn btn-outline-info btn-sm border-none">
+                <i class="fas fa-arrow-left"></i>
+                @localizer["Back"]
+            </a> 
+            <a title="Import flexi desk to DMS" id="idImportFlexiDeskToDMS"
+               class="btn btn-outline-primary btn-sm border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ImportFlexiDeskToDMS", "Movements", new { Area = "DMS" })'               
+               data-modaltitle="Import flexi desk to DMS"
+               data-modalheader="Import flexi desk to DMS">
+                <i class="fas fa-arrow-alt-circle-up"></i>&nbsp; @localizer["Import flexi desk to DMS"]
+            </a>            
+        </div>
+    </div>    
+    <div class="m-1 p-1"></div>
+    <div class="bg-gray-active rounded">   
+        <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.CreatedOn)</th>
+                    <th>@Html.DisplayNameFor(model => model.Deskid)</th> 
+                    <th>@Html.DisplayNameFor(model => model.PreviousAreaId)</th>
+                    <th>@Html.DisplayNameFor(model => model.AreaId)</th>
+                    <th>@Html.DisplayNameFor(model => model.Isvisible)</th>
+                </tr>                
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    @* <script src="~/js/site.js" asp-append-version="true"></script> *@
+
+    <script type="text/javascript">
+        
+        function localScript() {
+            initSelect2();
+            
+        }
+
+        $(document).ready(function () {           
+            localLoadDataTable();
+            //loadFlexiToDMSDataTable();            
+        });
+
+        let vVUloadFlexiToDMSList = "@Url.Action("GetFlexiToDMSLists", "Movements")";
+
+        function loadFlexiToDMSDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbDataGrid",
+                pColumns: datatableColumns,
+                pUrl: vVUloadFlexiToDMSList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumns = [
+                    {
+                        data: "createdOn",
+                        render: function (data) {
+                            return moment(data).format('DD-MMM-YYYY');
+                        }
+                    },
+                    { data: "deskid" },
+                    { data: "previousAreaId" },
+                    { data: "areaId" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                           if (data.isisible == 1) {
+                                return '<button title="Rollback flexi to DMS" class="btn btn-outline-danger btn-sm border-none " ' +
+                                    ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                    ' data-jqueryselector = "showconfirmationmodal" ' +
+                                    ' data-url="@Url.Action("FlexiToDMSRollback", "Movements", new { Area = "DMS" })"' +
+                                    ' data-id="' + data.keyid + '"' +
+                                    ' data-redirecturl="@Url.Action("FlexiToDMSIndex", "Movements", new { Area = "DMS" })"' +
+                                    ' data-modaltitle="Please Confirm!" ' +
+                                    ' data-confirmationtext="Do you want to rollback for desk (' + data.deskid + ') ?" ' +
+                                    ' data-confirmationtype="warning" ' +
+                                    ' title="Rollback flexi to DMS" ' +
+                                    ' data-confirmbuttontext="Rollback flexi to DMS" > ' +
+                                    ' <i class="fas fa-rotate-left" aria-hidden="true"></i> ' +
+                                    ' </button>';
+                           } else {
+                                return ' ';
+                           }
+                        },
+                        className: "td-icon text-center  align-middle",
+                    }
+                ];
+            </text>
+        }
+
+        function localLoadDataTable() {
+
+                var table = $('#tbDataGrid').DataTable({
+                    drawCallback: function (settings) {
+                        loadScript();
+                    },
+                    destroy: true,
+                    ordering: false,
+                    responsive: true,
+                    autoWidth: true,
+                    pageLength: 25,
+                    processing: true,
+                    serverSide: true,
+                    stateSave: true,
+                    bLengthChange: false,
+                    bInfo: false,
+                    filter: false,
+                    layout: { topStart: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+                    columnDefs: [
+                        { orderable: false, targets: 0 }
+                    ],
+                    @if ((bool)@Context.Items["isMobile"] == false)
+                    {
+                        <text>
+                                ordering: false,
+                                columns: [        
+                                {
+                                    'data': "createdOn",
+                                    'render': function (data) {
+                                        return moment(data).format('DD-MMM-YYYY');
+                                    }
+                                },
+                                { data: "deskid"}, 
+                                { data: "previousAreaId"},                                
+                                { data: "areaId"},                                
+                                {
+                                    'data': null,
+                                    render: function (data, type, row) {
+                                        if (data.isvisible == 1) {
+                                            return '<button title="Rollback flexi to DMS" class="btn btn-outline-danger btn-sm border-none" ' +
+                                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                                ' data-url="@Url.Action("FlexiToDMSRollback", "Movements", new { Area = "DMS" })"' +
+                                                ' data-id="' + data.keyid + '"' +
+                                                ' data-redirecturl="@Url.Action("FlexiToDMSIndex", "Movements", new { Area = "DMS" })"' +
+                                                ' data-modaltitle="Please Confirm!" ' +
+                                                ' data-confirmationtext="Do you want to rollback for desk [ ' + data.deskid + ' ] ?" ' +
+                                                ' data-confirmationtype="warning" ' +
+                                                ' title="Rollback flexi to DMS" ' +
+                                                ' data-confirmbuttontext="Rollback flexi to DMS" > ' +
+                                                ' <i class="fas fa-undo" aria-hidden="true"></i> ' +
+                                                ' </button>';                                    
+                                        } else
+                                        {
+                                            return ' ';
+                                        }
+                                    },
+                                    'className': "td-icon text-center  align-middle",
+                                }
+                            ],
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                                ordering: false,
+                                columns: [
+                                {
+                                    data: null,
+                                    render: function (data, type, row) {
+                                        var item = '<div class="card">';
+                                        item += '<div class="card-mobiledatatable">';
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.CreatedOn)' + '</dt><dd class="col-lg-8">' + data.createdOn + '</dd></dl>';
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Deskid)' + '</dt><dd class="col-lg-8">' + data.deskid + '</dd></dl>';                                        
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.PreviousAreaId)' + '</dt><dd class="col-lg-8">' + data.previousAreaId + '</dd></dl>';
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.AreaId)' + '</dt><dd class="col-lg-8">' + data.areaId + '</dd></dl>';
+                                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Isvisible)' + '</dt><dd class="col-lg-8">' + data.isvisible + '</dd></dl>';
+                                        item += '</div></div>';
+                                        return item
+                                    },
+                                    sortable: false,
+                                    searchable: false,
+                                    className: "datatable-td-mobile"
+                                }
+                            ],
+                        </text>
+                    }
+                    ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetFlexiToDMSLists", "Movements")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }        
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                   localLoadDataTable();
+                    //loadFlexiToDMSDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                localLoadDataTable();
+                ///loadFlexiToDMSDataTable();
+            }
+        });
+
+        function PostSaveReLoadDataTable(data) {           
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                //loadFlexiToDMSDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+    </script>
+}
+

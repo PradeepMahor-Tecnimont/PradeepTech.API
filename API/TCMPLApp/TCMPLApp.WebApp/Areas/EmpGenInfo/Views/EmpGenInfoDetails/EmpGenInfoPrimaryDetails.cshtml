@@ -1,0 +1,180 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeePrimaryDetailsViewModelToDelete
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+<input type="hidden" asp-for="@Model.Empno" />
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-body" style="min-height: 450px;">
+            <div class="app-h4 app-card-header mb-2">
+
+                <p>Employee Details</p>
+
+            </div>
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-5">
+                    <div class="card-body">
+                        <div class="row p-2">
+                            <div class="form-group dd-met col-mb-6 col-xl-12">
+                                Employee Name as it would appear on Nomination Form
+                            </div>
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        @Html.DisplayNameFor(model=> model.EmpName) +
+                                        @Html.DisplayNameFor(model=> model.EmpFatherrHusbandName) +
+                                        @Html.DisplayNameFor(model=> model.Surname)
+                                    </div>
+                                    <div class="dd-met">
+                                        @($@"{Model.EmpName} {Model.EmpFatherrHusbandName} {Model.Surname}")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.EmpName)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.EmpName)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Surname)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Surname)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.EmpFatherrHusbandName)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.EmpFatherrHusbandName)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow col-md-12 col-xl-7">
+                    <div class="app-h4 app-card-header p-2">@localizer["Permanent Address"]</div>
+                    <div class="card-body">
+                        <div class="row p-2">
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met"> Address as it would appear on Nomination Form</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        (Permanent Address: Address + PinCode)
+                                    </div>
+                                    <div class="dd-met">
+                                        @Html.DisplayFor(model => model.Address)
+                                        @Html.DisplayFor(model => model.Pincode)
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Address)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Address)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.HouseNo)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.HouseNo) </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.City)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.City)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.District)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.District)  </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Pincode)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Pincode)</div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.State)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.State)</div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Country)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Country)  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck" style="margin-top: 20px">
+
+                <div class="card shadow col-md-12 col-xl">
+                    <div class="app-h4 app-card-header p-2">@localizer["Additional Information"]</div>
+                    <div class="card-body">
+                        <div class="row p-2">
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.BirthPlace)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.BirthPlace)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.BirthCountry)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.BirthCountry)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Nationality)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Nationality) </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Phone)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Phone)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Mobile)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Mobile)  </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.EmailId)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.EmailId)</div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.NoOfChildren)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.NoOfChildren) </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

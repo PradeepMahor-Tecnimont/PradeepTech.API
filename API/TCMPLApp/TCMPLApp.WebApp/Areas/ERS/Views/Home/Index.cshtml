@@ -1,0 +1,171 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Employee Referral Program</li>                
+</ol>
+}    
+
+@section Styles {
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-5">
+        <a href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/ERS_User_Manual.pdf" target="_blank">
+            <i class="fas fa-info-circle fa-2x"></i>
+        </a>
+    </div>
+</div>
+<div class="col-sm-12">
+    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.ERS.ERSHelper.ActionEmpType_R_F))
+    {
+        <div class="row">
+            <div class="row col-md-12 col-xl-12">
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Vacancies list</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="~/ERS/User/VacanciesIndex">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">Get list of vacancies</h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-list-alt f-20 text-white theme-light-teal"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Uploaded CVs</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="~/ERS/User/UploadedCVIndex">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">Get list of your uploaded CVs</h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users f-20 text-white theme-dark-orange"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>              
+        </div>
+    }
+
+    @if (
+            CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.ERS.ERSHelper.ActionEmpType_R_F) &&
+            CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.ERS.ERSHelper.ActionHR)
+        )
+    {
+        <hr />
+    }
+
+    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.ERS.ERSHelper.ActionHR))
+    {        
+        <div class="row">
+            <div class="row col-md-12 col-xl-12">
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>HR Vacancies list</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="~/ERS/HR/HRVacanciesIndex">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">Get list of vacancies</h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-list-alt f-20 text-white theme-brown"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>HR Uploaded CVs</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="~/ERS/HR/HRUploadedCVIndex">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">Get list of all uploaded CVs</h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users f-20 text-white theme-dark-green"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-md-3 col-xl-3">
+            <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                    <h5>Sync with SharePoint</h5>
+                    @if (ViewBag.statusSharePoint == "Processing...")
+                    {
+                        <span class="text-blue f-14 f-w-700">Processing... </span>
+                    }
+                </div>
+                <div class="card-block card-tile">
+                    @if (ViewBag.statusSharePoint == "Processing...")
+                    {
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        User will be intimated via email
+                                    </h7>
+                                    <div class="text-center">
+                                    <div id="lsharepoint_Loader" class="spinner-border text-info text-center hidden "
+                                    style="width: 2.5rem; height: 2.5rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                                &#160;
+                            </div>
+                                <div id="lsharepoint_Icon" class="col-auto">
+                                <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="~/ERS/Home/SyncSharePointProcess">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                        <h7 class="mb-2 f-w-300">User will be intimated via email</h7>
+                                    </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-sync f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    }                        
+                </div>
+            </div>
+        </div>*@
+            </div>        
+        </div>
+    }
+</div>
+
+

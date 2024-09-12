@@ -1,0 +1,232 @@
+﻿@model TCMPLApp.WebApp.Areas.RapReporting.RapViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Project activities";
+}
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    const string actionName = "ProjectActivityIndex";
+    const string controllerName = "Transactions";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+        <li class="breadcrumb-item "><a asp-action="TransactionsIndex" asp-controller="Transactions" asp-area="RapReporting">Transactions</a></li>
+        <li class="breadcrumb-item "><a asp-action="MasterIndex" asp-controller="Transactions" asp-area="RapReporting">Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Project activities</li>
+    </ol>
+}
+
+<input id="Projno" readonly type="hidden" asp-for="@Model.FilterDataModel.Projno" />
+<input id="Costcode" readonly type="hidden" asp-for="@Model.FilterDataModel.CostCode" />
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Project activities</p>
+    </div>
+    <div class="card-block">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-8"></div>
+            </div>
+        </div>
+    </div>
+    <div class="card-toolbar p-l-15">
+        <div role="toolbar">
+            <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                    data-jqueryselector="openmodal"
+                    data-modalcontainer="modalcontainer"
+                    data-modalpopupwidth="rightw35"
+                    data-url='@Url.Action("FilterGet", "Home", new { Area = "RapReporting" })'
+                    data-actionName=@actionName
+                    data-controllerName=@controllerName
+                    data-modaltitle="Filter"
+                    data-modalheader="Filter">
+                <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+                @if (!string.IsNullOrEmpty(Model.FilterDataModel.CostCode))
+                {
+                    @Html.Raw(localizer["Cost code : "] + Model.FilterDataModel.CostCode)
+                    ;
+                }
+                @if (!string.IsNullOrEmpty(Model.FilterDataModel.Projno))
+                {
+                    @Html.Raw(localizer[", Project : "] + Model.FilterDataModel.Projno)
+                    ;
+                }
+
+            </button>
+            &nbsp; &nbsp;
+            <a title="New project activity" id="projactivitycreate" class="btn btn-outline-primary btn-sm border border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ProjectActivityCreate", "Transactions", new { Area = "RAPReporting" })'
+               data-id="@Model.FilterDataModel.Projno"
+               data-costcode="@Model.FilterDataModel.CostCode"
+               data-statichtmlsourcedivid=""
+               data-modaltitle="New project activity"
+               data-modalheader="New project activity">
+                <i class="fas fa-plus"></i> Create
+            </a>
+        </div>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded">
+        <div class="table-responsive overflow-hidden ">
+            <div class="input-group pt-1 pl-1 pr-1 ">
+                <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg  ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        <th class="text-center">Activity</th>
+                        <th class="text-center">Budgt hours</th>
+                        <th class="text-center">No of docs</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-rap.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+
+        function localScript() {
+            initSelect2();
+            var cancelButtonRedirectUrl = "@Url.Action("RedirectPage", "Home", new
+            {
+                Area = "RapReporting",
+                actionName = @actionName,
+                controllerName = @controllerName
+            })";
+            callCancelButtonListeners(cancelButtonRedirectUrl);
+        };
+
+        $(document).ready(function () {
+            if ($('#Projno').val() == null || $('#Costcode').val() == '') {
+                $("#filterGet").click();
+            }
+            else {
+                localDataTable();
+            }
+        });
+
+        function localDataTable() {
+            var table = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                lengthMenu: [25, 50],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                layout: { topStart: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "activity", 'className': "text-center" },
+                    { data: "budghrs", 'className': "text-right" },
+                    { data: "noofdocs", 'className': "text-right" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("ProjectActivityEdit", "Transactions", new { Area = "RAPReporting" })" ' +
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-id="' + row.costcode + '"' +
+                                ' data-projno="' + row.projno + '"' +
+                                ' data-activity="' + row.activity + '"' +
+                                ' data-modaltitle="Edit projact activity" ' +
+                                ' data-modalheader="Edit projact activity"> ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        className: "td-icon",
+                    },
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetProjectActivityLists", "Transactions", new { Area = "RapReporting" })',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                    d.costcode = $('#Costcode').val();
+                    d.projno = $('#Projno').val();
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+
+                            });
+                        }
+
+        function postSaveReLoadDataTable(success) {
+            if (success) {
+                localDataTable();
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', '', 'Success');
+            }
+        }
+
+    </script>
+}

@@ -1,0 +1,286 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreLeaveCreateEditDeleteId = 173;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item active">Leave Calendar</li>
+    </ol>
+}
+
+@section styles
+    {
+    <style>
+        #calendar .fc-day-sun, #calendar .fc-day-sat {
+         }
+
+        .fc-small-font-size {
+         }
+
+        .fc .fc-col-header-cell {
+            background-color: #EFEBE9;
+        }
+
+        .fc-event {
+            cursor: pointer;
+        }
+
+        fc-event-time {
+            display: none;
+        }
+
+        .fc-time {
+            display: none;
+        }
+
+        .fc-day-grid-event .fc-time {
+            display: none;
+        }
+    </style>
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Leave calendar";
+
+}
+
+<input readonly type="hidden" value="@Model.IsFiltered" id="FilterDataModel_IsFiltered" name="FilterDataModel_IsFiltered" />
+<input readonly type="hidden" value="@Model.Empno" id="FilterDataModel_Empno" name="FilterDataModel_Empno"  />
+<input readonly type="hidden" value="@Model.Parent" id="FilterDataModel_Parent" name="FilterDataModel_Parent" />
+<input readonly type="hidden" id="FilterDataModel_CurrDate" />
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Leave Calendar</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("LeaveCalendarHRFilterGet", "Attendance", new { Area = "SelfService" })'
+               data-modaltitle="Filters"
+               data-modalheader="Filters">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="LeaveCalendarHRIndex"
+               data-url='@Url.Action("ResetFilter", "Attendance", new { Area = "SelfService" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+        </div>
+    </div>
+
+    <div class="m-1"></div>
+    <hr />
+    <div class="bg-gray-active rounded p-2 m-2 ">
+
+        <button class="btn btn-outline-info btn-sm border-none hidden " id="showDetails"
+             data-jqueryselector="openmodal" 
+             data-modalcontainer="modalcontainer" 
+             data-url="@Url.Action("LeaveDetails", "Attendance", new { Area = "SelfService" })"
+             data-modalpopupwidth="rightw35" 
+             data-applicationid=""
+             data-modaltitle="Leave details" 
+             data-modalheader="Leave details"  > 
+             <i class="far fa-eye" aria-hidden="true"></i> 
+        </button>
+
+            <div id='calendar' style="max-height:700px;"></div>
+ 
+    </div>
+</div>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/lib/fullcalendar/index.global.js"></script>
+    }
+
+        <script type="text/javascript">
+            var date = new Date();
+            var vdate = moment(date).format('DD-MMM-YYYY');
+            var vcalendartype = "Month";//Month,Week
+
+            function localScript() {
+                initSelect2();
+                 
+            }
+
+            $(document).ready(function () {
+                var date = new Date();
+                var vdate = moment(date).format('DD-MMM-YYYY');
+                vcalendartype = "dayGridMonth";
+                localLoadJson(vdate,vcalendartype);
+
+            });
+
+        function initCalendar(eventJson, month, calendartype) {
+
+                $("#FilterDataModel_CurrDate").val(month);
+
+                var setdatemonth = new Date(month);
+
+            // if (calendartype = 'null'  ) {
+            //     calendartype = "dayGridMonth";
+            // }
+                //calendartype = "dayGridMonth";
+
+            //     if (calendartype == "Week"){
+            //     }
+            // calendartype = "dayGridWeek";
+
+                var calendarEl = document.getElementById('calendar');
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                   // plugins: [timeGridPlugin],
+                //initialView: 'dayGridMonth',
+                    initialView: calendartype,
+                    //timeZone: 'UTC',
+                    initialDate: setdatemonth,
+                    themeSystem: 'bootstrap5',
+                    headerToolbar: {
+                        center: 'title',
+                        left: 'dayGridMonth,dayGridWeek',
+                        right: 'customtoday customprev,customnext'
+                    },
+                    views: {
+                            dayGridWeek: {                           
+                            type: 'dayGrid',
+                            titleFormat: { // will produce something like "Tuesday, September 18, 2018"
+                                month: 'long',
+                                year: 'numeric',
+                                day: 'numeric',
+                                //weekday: 'long'
+                            },
+                            duration: { weeks: 2 },
+                            //duration: { days: 14 },
+                             buttonText: '2 Weeks'
+                        },
+                         dayGridMonth: {
+                             buttonText: 'Month'
+                        }
+                    },
+                    customButtons: {
+                        customprev: {
+                            text: '  <  ',
+                            click: function (info) {
+
+                                var beforDate = moment(calendar.getDate()).format('MMM');
+                                calendar.prev();
+                                var afterDate = moment(calendar.getDate()).format('MMM');
+                                date = calendar.getDate();
+                                vdate = moment(date).format('DD-MMM-YYYY');
+
+                                vcalendartype = calendar.view.type;
+
+                                if (beforDate != afterDate) {
+                                    localLoadJson(vdate, vcalendartype);
+                                }
+
+                            }
+                        },
+                        customnext: {
+                            text: '  >  ',
+                            click: function () {
+
+                                var beforDate = moment(calendar.getDate()).format('MMM');
+                                calendar.next();
+                                var afterDate = moment(calendar.getDate()).format('MMM');
+                                date = calendar.getDate();
+                                vdate = moment(date).format('DD-MMM-YYYY');
+
+                            vcalendartype = calendar.view.type;
+
+                                if (beforDate != afterDate) {
+                                    localLoadJson(vdate, vcalendartype);
+                                }
+
+                                // calendar.next();
+                                // date = calendar.getDate();
+                                // vdate = moment(date).format('DD-MMM-YYYY');
+                                //localLoadJson(vdate,vcalendartype);
+                            }
+                        },
+                        customtoday: {
+                            text: ' ToDay ',
+                            click: function () {
+                                calendar.today();
+                                date = calendar.getDate();
+                                vdate = moment(date).format('DD-MMM-YYYY');
+                                localLoadJson(vdate, vcalendartype);
+                            }
+                        }
+                    },
+                    //weekNumbers: true,
+                    //dayMaxEvents: true,
+                    events: eventJson,                    
+                    eventDidMount: function (info) {
+                    },
+                    eventClick: function (info) {
+                        var vStartDate = moment(info.event.start);
+                        var vEndDate = moment(info.event.end);
+                         $('#showDetails').data('applicationid', info.event.id);
+                         $('#showDetails').click();
+                    } 
+                });
+
+                calendar.render();
+            }
+
+       function PostFilterReLoad(data) {
+             $("#modalcontainer").modal('hide');
+
+            $("#FilterDataModel_Parent").val(data.parent);
+
+            localLoadJson($("#FilterDataModel_CurrDate").val(), vcalendartype);
+            hideLoader();
+        }
+
+        function localLoadJson(p_month, vcalendartype) {
+            
+                $.ajax({
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        url: '@Url.Action("GetListsLeaveCalendarHR", "Attendance", new {Area = "SelfService" })',
+                        type: 'GET',
+                        dataType: "json",
+                        data: {
+                            month : p_month,
+                            //month : $("#FilterDataModel_CurrDate").val(),
+                            parent : $("#FilterDataModel_Parent").val(),
+                            employees : null
+                        },
+                        beforeSend: function () {
+                            showLoader();
+                        },
+                        success: function (data) {
+                            hideLoader();
+                             // $('#calendarEvents').text(JSON.stringify(data));
+                        initCalendar(data, p_month, vcalendartype);
+                        },
+                        error: function (result) {
+                            hideLoader();
+                            errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                            notify("error", result, 'Error');
+                        }
+                      });
+             }
+        </script>
+    }
+

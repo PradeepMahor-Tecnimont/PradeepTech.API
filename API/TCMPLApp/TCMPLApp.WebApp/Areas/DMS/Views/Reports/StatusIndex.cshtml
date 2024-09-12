@@ -1,0 +1,373 @@
+﻿@model TCMPLApp.WebApp.Models.DeskManagementStatusIndexViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    ViewData["Title"] = "Desk management status";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item "><a asp-action="ReportIndex" asp-controller="Home" asp-area="DMS">Reports</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Status</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Office" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Floor" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Wing" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Department" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Grade" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Designation" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.PcModelList" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.MonitorModel" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.DualMonitor" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.VacantDesk" />
+
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Desk management status</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar d-flex flex-row">
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("FilterGet", "Reports", new { Area = "DMS" })'
+               data-modaltitle="Filters - Desk management status"
+               data-modalheader="Filters - Desk management status">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="StatusIndex"
+               data-url='@Url.Action("ResetFilter", "Reports", new { Area = "DMS" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+            <a class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+               style="float:right"
+               href="#"
+               data-jqueryselector="binarydownload"
+               data-url="@(Url.Action("StatusIndexDownload", "Reports", new { Area = "DMS" }))">
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+        </div>
+    </div>
+    <div class="m-1 p-1"></div>
+    <div class="bg-gray-active rounded">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.Deskid)</th>
+                    <th>@Html.DisplayNameFor(model => model.Office)</th>
+                    <th>@Html.DisplayNameFor(model => model.Floor)</th>
+                    <th>@Html.DisplayNameFor(model => model.Wing)</th>
+                    <th>@Html.DisplayNameFor(model => model.Cabin)</th>
+                    <th>@Html.DisplayNameFor(model => model.Empno1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Name1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Userid1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Dept1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Grade1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Desg1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Shift1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email1)</th>
+
+                    <th>@Html.DisplayNameFor(model => model.NbHostname1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Nb1)</th>
+                    <th>@Html.DisplayNameFor(model => model.NbModel1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Ds1)</th>
+                    <th>@Html.DisplayNameFor(model => model.DsModel1)</th>
+
+
+                    <th>@Html.DisplayNameFor(model => model.Empno2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Name2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Userid2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Dept2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Grade2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Desg2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Shift2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email2)</th>
+
+                    <th>@Html.DisplayNameFor(model => model.NbHostname2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Nb2)</th>
+                    <th>@Html.DisplayNameFor(model => model.NbModel2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Ds2)</th>
+                    <th>@Html.DisplayNameFor(model => model.DsModel2)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeskDckStn)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeskDckStnModel)</th>
+
+
+                    <th>@Html.DisplayNameFor(model => model.Compname)</th>
+                    <th>@Html.DisplayNameFor(model => model.Computer)</th>
+                    <th class="text-nowrap">@Html.DisplayNameFor(model => model.Pcmodel)</th>
+                    <th>@Html.DisplayNameFor(model => model.Monitor1)</th>
+                    <th class="text-nowrap">@Html.DisplayNameFor(model => model.Monmodel1)</th>
+                    <th>@Html.DisplayNameFor(model => model.Monitor2)</th>
+                    <th class="text-nowrap">@Html.DisplayNameFor(model => model.Monmodel2)</th>
+                    <th>@Html.DisplayNameFor(model => model.Telephone)</th>
+                    <th class="text-nowrap">@Html.DisplayNameFor(model => model.Telmodel)</th>
+                    <th>@Html.DisplayNameFor(model => model.Printer)</th>
+                    <th class="text-nowrap">@Html.DisplayNameFor(model => model.Printmodel)</th>
+                    <th class="text-nowrap">@Html.DisplayNameFor(model => model.PcRam)</th>
+                    <th>@Html.DisplayNameFor(model => model.PcGcard)</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+
+        var dataTable;
+
+        $(document).ready(function () {
+            localLoadDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+        }
+
+        function localLoadDataTable() {
+            dataTable = $('#tbDataGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                    $(".dataTables_scrollHeadInner").width($(".dataTables_scrollBody").width());
+                    $(".table").css({ "width": "100%" });
+                    $('.table').wrap("<div style='overflow:auto;width:100%'></div>");
+                },
+                destroy: true,
+                pageLength: 25,
+                responsive: true,
+                autoWidth: false,
+                lengthMenu: [10, 25, 50],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "deskid" },
+                    { data: "office" },
+                    { data: "floor" },
+                    { data: "wing" },
+                    { data: "cabin" },
+                    { data: "empno1" },
+                    { data: "name1", className: "text-nowrap" },
+                    { data: "userid1" },
+                    { data: "dept1" },
+                    { data: "grade1" },
+                    { data: "desg1", className: "text-nowrap" },
+                    { data: "shift1" },
+                    { data: "email1", className: "text-nowrap" },
+
+                    { data: "nbHostname1" },
+                    { data: "nb1" },
+                    { data: "nbModel1", className: "text-nowrap" },
+                    { data: "ds1" },
+                    { data: "dsModel1", className: "text-nowrap" },
+
+
+                    { data: "empno2" },
+                    { data: "name2", className: "text-nowrap" },
+                    { data: "userid2" },
+                    { data: "dept2" },
+                    { data: "grade2" },
+                    { data: "desg2", className: "text-nowrap" },
+                    { data: "shift2" },
+                    { data: "email2", className: "text-nowrap" },
+
+                    { data: "nbHostname2" },
+                    { data: "nb2" },
+                    { data: "nbModel2", className: "text-nowrap" },
+                    { data: "ds2" },
+                    { data: "dsModel2", className: "text-nowrap" },
+
+                    { data: "deskDckStn" },
+                    { data: "deskDckStnModel", className: "text-nowrap" },
+                    { data: "compname" },
+                    { data: "computer" },
+                    { data: "pcmodel", className: "text-nowrap" },
+                    { data: "monitor1" },
+                    { data: "monmodel1", className: "text-nowrap" },
+                    { data: "monitor2" },
+                    { data: "monmodel2", className: "text-nowrap" },
+                    { data: "telephone" },
+                    { data: "telmodel" },
+                    { data: "printer" },
+                    { data: "printmodel", className: "text-nowrap" },
+                    { data: "pcRam", className: "text-right" },
+                    { data: "pcGcard", className: "text-nowrap" }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Deskid)' + '</dt><dd class="col-lg-8">' + data.deskid + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Office)' + '</dt><dd class="col-lg-8">' + data.office + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Floor)' + '</dt><dd class="col-lg-8">' + data.floor + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Wing)' + '</dt><dd class="col-lg-8">' + data.wing + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Cabin)' + '</dt><dd class="col-lg-8">' + data.cabin + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Empno1)' + '</dt><dd class="col-lg-8">' + data.empno1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Name1)' + '</dt><dd class="col-lg-8">' + data.name1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Userid1)' + '</dt><dd class="col-lg-8">' + data.userid1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Dept1)' + '</dt><dd class="col-lg-8">' + data.dept1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Grade1)' + '</dt><dd class="col-lg-8">' + data.grade1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Desg1)' + '</dt><dd class="col-lg-8">' + data.desg1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Shift1)' + '</dt><dd class="col-lg-8">' + data.shift1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Email1)' + '</dt><dd class="col-lg-8">' + data.email1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Empno2)' + '</dt><dd class="col-lg-8">' + data.empno2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Name2)' + '</dt><dd class="col-lg-8">' + data.name2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Userid2)' + '</dt><dd class="col-lg-8">' + data.userid2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Dept2)' + '</dt><dd class="col-lg-8">' + data.dept2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Grade2)' + '</dt><dd class="col-lg-8">' + data.grade2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Desg2)' + '</dt><dd class="col-lg-8">' + data.desg2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Shift2)' + '</dt><dd class="col-lg-8">' + data.shift2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Email2)' + '</dt><dd class="col-lg-8">' + data.email2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Compname)' + '</dt><dd class="col-lg-8">' + data.compname + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Computer)' + '</dt><dd class="col-lg-8">' + data.computer + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Pcmodel)' + '</dt><dd class="col-lg-8">' + data.pcmodel + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Monitor1)' + '</dt><dd class="col-lg-8">' + data.monitor1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Monmodel1)' + '</dt><dd class="col-lg-8">' + data.monmodel1 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Monitor2)' + '</dt><dd class="col-lg-8">' + data.monitor2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Monmodel2)' + '</dt><dd class="col-lg-8">' + data.monmodel2 + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Telephone)' + '</dt><dd class="col-lg-8">' + data.telephone + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Telmodel)' + '</dt><dd class="col-lg-8">' + data.telmodel + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Printer)' + '</dt><dd class="col-lg-8">' + data.printer + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Printmodel)' + '</dt><dd class="col-lg-8">' + data.printmodel + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Docstn)' + '</dt><dd class="col-lg-8">' + data.docstn + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Docstnmodel)' + '</dt><dd class="col-lg-8">' + data.docstnmodel + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.PcRam)' + '</dt><dd class="col-lg-8">' + data.pcram + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.PcGcard)' + '</dt><dd class="col-lg-8">' + data.pcgcard + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.DeskDckStn)' + '</dt><dd class="col-lg-8">' + data.deskDckStn + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.DeskDckStnModel)' + '</dt><dd class="col-lg-8">' + data.deskDckStnModel + '</dd></dl>';
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetDeskManagementStatusLists", "Reports")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.genericSearch = $('#GenericSearch').val() ? $('#GenericSearch').val() : null;;
+                    d.office = $('#FilterDataModel_Office').val() ? $('#FilterDataModel_Office').val() : null;
+                    d.floor = $('#FilterDataModel_Floor').val() ? $('#FilterDataModel_Floor').val() : null;
+                    d.wing = $('#FilterDataModel_Wing').val() ? $('#FilterDataModel_Wing').val() : null;
+                    d.department = $('#FilterDataModel_Department').val() ? $('#FilterDataModel_Department').val() : null;
+                    d.grade = $('#FilterDataModel_Grade').val() ? $('#FilterDataModel_Grade').val() : null;
+                    d.designation = $('#FilterDataModel_Designation').val() ? $('#FilterDataModel_Designation').val() : null;
+                    d.pcModelList = $('#FilterDataModel_PcModelList').val() ? $('#FilterDataModel_PcModelList').val() : null;
+                    d.monitorModel = $('#FilterDataModel_MonitorModel').val() ? $('#FilterDataModel_MonitorModel').val() : null;
+                    d.dualMonitor = $('#FilterDataModel_DualMonitor').val() ? $('#FilterDataModel_DualMonitor').val() : null;
+                    d.vacantDesk = $('#FilterDataModel_VacantDesk').val() ? $('#FilterDataModel_VacantDesk').val() : null;
+
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                                                                                                                                                                        });
+
+                                                                                                                                                                                    }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+
+
+            $("#FilterDataModel_Office").val(data.office);
+            $("#FilterDataModel_Floor").val(data.floor);
+            $("#FilterDataModel_Wing").val(data.wing);
+            $("#FilterDataModel_Department").val(data.department);
+            $("#FilterDataModel_Grade").val(data.grade);
+            $("#FilterDataModel_Designation").val(data.designation);
+            $("#FilterDataModel_PcModelList").val(data.pcModelList);
+            $("#FilterDataModel_MonitorModel").val(data.monitorModel);
+            $("#FilterDataModel_DualMonitor").val(data.dualMonitor);
+            $("#FilterDataModel_TelModel").val(data.telModel);
+            $("#FilterDataModel_PrinterModel").val(data.printerModel);
+            $("#FilterDataModel_DocstnModel").val(data.docstnModel);
+            $('#FilterDataModel_VacantDesk').val(data.vacantDesk);
+
+            localLoadDataTable();
+            hideLoader();
+        }
+
+    </script>
+}
+

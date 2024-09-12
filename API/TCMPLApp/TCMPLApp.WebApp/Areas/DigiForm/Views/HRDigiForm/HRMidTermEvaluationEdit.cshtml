@@ -1,0 +1,466 @@
+﻿@model TCMPLApp.WebApp.Models.MidTermEvaluationEditViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "HR - Mid term evaluation form";
+    var empno = Model.Empno;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DigiForm">Digi forms</a></li>
+        <li class="breadcrumb-item"><a asp-action="HRMidEvaluationHistoryIndex" asp-controller="HRDigiForm" asp-area="DigiForm">Mid term evaluation form</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Mid term evaluation Edit</li>
+    </ol>
+}
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        @@media (-webkit-min-device-pixel-ratio: 1.25) {
+            .openbal .col-xl-1, .closebal .col-xl-1 {
+                flex: 0 0 12% !important;
+                max-width: 12% !important;
+            }
+        }
+    </style>
+}
+@Html.AntiForgeryToken()
+
+<form asp-action="HRMidTermEvaluationEdit"
+      asp-controller="HRDigiForm"
+      asp-area="DigiForm"
+      id="HRMidTermEvaluationEdit"
+      method="post"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.KeyId" />
+
+
+    <div class="m-auto py-2 col-xl-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header">
+                <h5 class="card-title">
+                    HR - Mid term evaluation form
+                </h5>
+            </div>
+            <div class="card-block ">
+
+                <div class="card-deck">
+                    <div class="card col-md-12 col-xl-12">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmployeeName" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.EmployeeName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Empno" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Empno)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Desgcode" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.DesgName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Parent" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Parent)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Doj" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Doj?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EvaluationPeriod" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @* @Html.Raw(Model.EvaluationPeriod) *@
+                                            @Html.Raw(Model.Doj?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Location" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Location)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Attendance" class="control-label"></label>
+                                        <div class="dd-met">
+                                            <input asp-for="Attendance" class="form-control" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="card-deck " style="margin-top: 20px">
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-6">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-5 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Skill1" class="control-label"></label>
+                                        <textarea asp-for="Skill1" class="form-control" required rows="2"></textarea>
+                                        <span asp-validation-for="Skill1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Skill1Rating" class="control-label"></label>
+                                        <select asp-for="Skill1Rating" class="form-control Select2" required>
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Skill1Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Skill1Remark" class="control-label"></label>
+                                        <textarea asp-for="Skill1Remark" class="form-control" required rows="2"></textarea>
+                                        <span asp-validation-for="Skill1Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+
+                                        <textarea asp-for="Skill2" class="form-control" rows="2"></textarea>
+                                        <span asp-validation-for="Skill2" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Skill2Rating" class="form-control Select2">
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Skill2Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Skill2Remark" class="form-control" rows="2"></textarea>
+                                        <span asp-validation-for="Skill2Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Skill3" class="form-control" rows="2"></textarea>
+                                        <span asp-validation-for="Skill3" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Skill3Rating" class="form-control Select2">
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Skill3Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Skill3Remark" class="form-control" rows="2"></textarea>
+                                        <span asp-validation-for="Skill3Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Skill4" class="form-control" rows"2"></textarea>
+                                        <span asp-validation-for="Skill4" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Skill4Rating" class="form-control Select2">
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Skill4Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Skill4Remark" class="form-control" rows="2"></textarea>
+                                        <span asp-validation-for="Skill4Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Skill5" class="form-control" rows="2"></textarea>
+                                        <span asp-validation-for="Skill5" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Skill5Rating" class="form-control Select2">
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Skill5Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Skill5Remark" class="form-control" rows="2"></textarea>
+                                        <span asp-validation-for="Skill5Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-6  ">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Quest for enhancing knowledge and its application</label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Que2Rating" class="form-control Select2" required>
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Que2Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Que2Remark" class="form-control" required rows="2"></textarea>
+                                        <span asp-validation-for="Que2Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Initiative & Involvement in work </label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Que3Rating" class="form-control Select2" required>
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Que3Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Que3Remark" class="form-control" required rows="2"></textarea>
+                                        <span asp-validation-for="Que3Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Interpersonal & Communication Skills </label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Que4Rating" class="form-control Select2" required>
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Que4Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Que4Remark" class="form-control" required rows="2"></textarea>
+                                        <span asp-validation-for="Que4Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Attitude & behavior / approach towards Superior/Colleagues</label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Que5Rating" class="form-control Select2" required>
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Que5Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Que5Remark" class="form-control" required rows="2"></textarea>
+                                        <span asp-validation-for="Que5Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Discipline</label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <select asp-for="Que6Rating" class="form-control Select2" required>
+                                            <option value="" selected>Please select...</option>
+                                            <option value="4">Very Good</option>
+                                            <option value="3">Good</option>
+                                            <option value="2">Average</option>
+                                            <option value="1">Below Avg.</option>
+                                        </select>
+                                        <span asp-validation-for="Que6Rating" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <textarea asp-for="Que6Remark" class="form-control" required rows="2"></textarea>
+                                        <span asp-validation-for="Que6Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-deck" style="margin-top: 20px">
+                    <div class="card shadow col-md-12 col-xl">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Observations" class="control-label"></label>
+                                        <textarea asp-for="Observations" class="form-control" placeholder="@localizer["Observations"]" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" id="btnConfirm"
+                        data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                        data-text="@localizer["Confirm"]">
+                    @localizer["Confirm"]
+                </button>
+                
+                <button class="btn btn-success"
+                        type="button"
+                        id="passModelButton"
+                        onclick="SendtoHOD()"
+                        data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                        data-text="@localizer["Send To HOD"]">
+                    @localizer["Send To HOD"]
+                </button>
+                <a class="btn btn-secondary" asp-controller="HRDigiForm" asp-action="HRMidEvaluationPendingIndex" title="@localizer["Cancel"]">
+                    @localizer["Cancel"]
+                </a>
+            </div>
+        </div>
+    </div>
+
+</form>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+        };
+        function SendtoHOD() {
+
+            var formAction = "MidTermEvaluationSendToHOD";
+            $("#HRMidTermEvaluationEdit").attr("action", formAction);
+
+            var frm = $('#HRMidTermEvaluationEdit');
+            frm.submit();
+
+        }
+    </script>
+}

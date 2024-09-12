@@ -1,0 +1,75 @@
+﻿@model TCMPLApp.WebApp.Models.EmpGenInfoSupperannuationViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlSupperannuationAdd = isOnBehalf == IsOk ? Url.Action("OnBehalfSupperannuationNominationAdd", "EmpGenInfoDetails") : Url.Action("SupperannuationNominationAdd", "EmpGenInfoDetails");
+
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<input type="hidden" asp-for="Empno" />
+
+<div class="card-deck">
+    <div class="card shadow col-md-12 col-xl">
+        <div class="app-h4 app-card-header p-2">
+            @if (isOnBehalf == IsOk)
+            {
+                @localizer["Supperannuation Nomination (On BeHalf)"]
+            }
+            else
+            {
+                @localizer["Supperannuation Nomination"]
+            }
+        </div>
+        <div class="card-body">
+            <span id="spanDescriptionSupStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+            <div class="d-flex flex-row">
+                @if (@Model.LockStatusDetailViewModel.IsNominationOpen == "OK")
+                {
+                    <a title="New Supperannuation Nomination" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw35"
+                       data-url=@urlSupperannuationAdd
+                      
+                    @*data-url='@Url.Action("SupperannuationNominationAdd", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })'*@
+                       data-id="@Model.Empno"
+                       data-statichtmlsourcedivid=""
+                       data-modaltitle="New Supperannuation Nomination"
+                       data-modalheader="New Supperannuation Nomination">
+                        <i class="fas fa-plus"></i> Add
+                    </a>
+                }
+            </div>
+            <table id="tbSupperannuationGrid" class="table table-striped table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>Nominee Name</th>
+                        <th>Nominee Address</th>
+                        <th>Relation</th>
+                        <th>Nominee Birth Date</th>
+                        <th>Share (%)</th>
+                        @if (@Model.LockStatusDetailViewModel.IsNominationOpen == "OK")
+                        {
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        }
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+@*<div class="card-deck float-right" style="margin-top: 20px; margin-right: 20px">
+    <div class="form-group">
+
+        <button class="btn btn-success f-right" type="submit" id="btnprint"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Print"]">
+            @localizer["Print"]
+        </button>
+
+    </div>
+</div>*@

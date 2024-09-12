@@ -1,0 +1,45 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+    <input id="Yyyymm" readonly type="hidden" asp-for="@Model.Yyyymm" />
+    <input id="CostCode" readonly type="hidden" asp-for="@Model.CostCode" />
+    <input id="Yyyy" readonly type="hidden" asp-for="@Model.Yyyy" />
+    <input id="YearMode" readonly type="hidden" asp-for="@Model.YearMode" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["General Reports - Cost center"]</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Project manhours"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+
+            </div>
+            <div class="card-block">                             
+                <div class="form-group">
+                    <label asp-for="ProjectNo" class="control-label"></label>
+                    <select asp-for="ProjectNo" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Projnos" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="ProjectNo" class="text-danger"></span>
+                </div>                              
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">        
+        <a class="btn btn-primary" id="lProjMHrsReport" title="Employee report" href="#"
+            data-inprogress="0"
+            data-jqueryselector="generateReportPartial"
+            data-url="@Url.Action("ListProjMhrsReport", "Reports", new {Area ="RapReporting",
+                                                                       yymm = @Model.Yyyymm, 
+                                                                       costcode = @Model.CostCode, 
+                                                                       projectno = @Model.ProjectNo})"
+            data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+            data-text="Download">
+            
+            @localizer["Download"]
+        </a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>

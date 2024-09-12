@@ -1,0 +1,220 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Smart work planning</li>
+</ol>
+}
+
+@section Styles {
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+<style>
+    #tbGrid.table td, #tbGrid.table th {
+        padding: 0.2rem !important;
+    }
+</style>
+}
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-5">
+        <a href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/Smartworkplanning%20-%20User%20Manual.pdf" target="_blank">
+            <i class="fas fa-info-circle fa-2x"></i>
+
+        </a>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="row">
+
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionPrimaryWsPlanning
+        || p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionPrimaryWsStatus))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Primary workspace planning (Admin)</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("AdminPWSPlanningIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-clinic-medical f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionOfficeWsPlanning
+          || p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionOfficeWsStatus))
+        {
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Office workspace planning</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("OfficeWorkSpaceIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-truck-monster f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionSmartWsPlanning
+          || p.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionSmartWsWsStatus))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Smart workspace planning</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("SmartAttendancePlanning", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-invoice f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        <environment include="Development">
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee project mapping</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("EmployeeProjectMappingIndex", "SWP", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-invoice f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Desk asset management</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("Index", "DMSAsset", new { Area = "SWP" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-tools f-20 text-white theme-dark-orange"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </environment>
+        @*<div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+            <div class="card-header">
+            <h5>TCMPL SWP</h5>
+            </div>
+            <div class="card-block card-tile">
+            <a href="@Url.Action("PrimaryWorkSpacePlanning", "SWP", new { Area = "SWP" })">
+            <div class="row align-items-center justify-content-center stretched-link">
+            <div class="col">
+            <h3 class="mb-2 f-w-300"> </h3>
+            </div>
+            <div class="col-auto">
+            <i class="fas fa-file-alt	f-20 text-white theme-brown"></i>
+            </div>
+            </div>
+            </a>
+            </div>
+            </div>
+            </div>*@
+    </div>
+    <environment include="Development">
+        <div class="childcontent-div" id="div-empswpdetails">
+            <div id="pv-empswpdetails">
+            </div>
+        </div>
+    </environment>
+
+
+</div>
+
+@section Scripts
+{
+
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script type="text/javascript">
+
+
+    //var divid = $("#pv-empswpdetails");
+    ////var empno = $(this).val();
+    //var empno;
+
+    //if (empno == '') {
+    //    divid.empty();
+    //    $("#div-empswpdetails").removeClass("active");
+
+    //}
+    //else
+    //    $("#div-empswpdetails").addClass("active");
+
+    //$.ajax({
+    //    url: 'SWP/SWP/EmployeeSWPWorkStatus',
+    //    data: {
+    //        'empno': empno
+    //    },
+    //    type: 'GET',
+    //    beforeSend: function () {
+    //        showLoader();
+    //    },
+    //    success: function (data) {
+    //        divid.html(data);
+    //        //loadScript();
+    //        hideLoader();
+    //    },
+    //    error: function (result) {
+    //        hideLoader();
+    //        errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+    //        notify("error", errorText, 'Error');
+    //    }
+    //});
+
+
+
+</script>
+}

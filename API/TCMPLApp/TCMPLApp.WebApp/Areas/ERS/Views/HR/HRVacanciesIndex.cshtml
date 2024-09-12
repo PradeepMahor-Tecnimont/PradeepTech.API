@@ -1,0 +1,322 @@
+﻿@model TCMPLApp.WebApp.Areas.ERS.Models.HRVacanciesIndexViewModel
+
+@{
+    ViewData["Title"] = "Vacancies list";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="ERS">Employee Referral Program</a></li>
+        <li class="breadcrumb-item active" aria-current="page">HR Vacancies list</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />
+}
+
+@Html.HiddenFor(m => m.FilterDataModel.Status)
+@Html.HiddenFor(m => m.FilterDataModel.JobRefCode)
+@Html.HiddenFor(m => m.FilterDataModel.Location)
+<div style="display:none">
+    <input readonly type="datetime" asp-for="@Model.FilterDataModel.OpenFromDate" />
+    <input readonly type="datetime" asp-for="@Model.FilterDataModel.OpenToDate" />
+</div>
+
+
+@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.ERS.ERSHelper.ActionHR))
+{
+    <div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Vacancies list</p>
+        </div>
+        <div class="d-flex flex-row">            
+            <a title="New vacancy" class="btn btn-outline-primary btn-sm border border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw50"
+               data-url='@Url.Action("VacancyCreate", "HR", new { Area = "ERS" })'
+               data-statichtmlsourcedivid=""
+               data-modaltitle="Create vacancy"
+               data-modalheader="Create vacancy">
+                <i class="fas fa-plus"></i> Create
+            </a>
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("VacancyFilterGet", "HR", new { Area = "ERS" })'
+               data-modaltitle="Filters - Vacancy"
+               data-modalheader="Filters - Vacancy">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="HRUploadedCVIndex"
+               data-url='@Url.Action("VacancyResetFilter", "HR", new { Area = "ERS" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+            <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+                href="VacancyExcelDownload">
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+        </div>
+        <div class="m-1"></div>
+        <div class="bg-gray-active rounded ">
+            <div class="input-group pt-1 pl-1 pr-1 ">
+                <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+                <div class="input-group-append">
+                    <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>&nbsp;</th>  
+                        <th>&nbsp;</th>
+                        <th>@Html.DisplayNameFor(model => model.JobReferenceCode)</th>
+                        <th>@Html.DisplayNameFor(model => model.JobOpenDate)</th>
+                        <th>@Html.DisplayNameFor(model => model.ShortDesc)</th>
+                        <th>@Html.DisplayNameFor(model => model.JobType)</th>                   
+                        <th>@Html.DisplayNameFor(model => model.JobLocation)</th>
+                        <th>@Html.DisplayNameFor(model => model.UploadedCvs)</th>
+                        <th>Close vacancy</th>
+                    </tr>
+                </thead>
+            </table>
+            <div id="result"></div>
+        </div>
+    </div>
+}
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js" asp-append-version="true"></script>
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+
+    <script>
+        var dataTable;
+
+        $(document).ready(function () {            
+            loadDataTable();          
+        });
+
+        function localScript() {
+
+             $('#jobOpenDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {               
+                $("#JobOpenDate").val(date.format('DD-MMM-YYYY'));
+            });
+            
+            initFilter();
+        };
+
+        function initFilter() {
+            $('#openFromDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $('#openToDateFilter').bootstrapMaterialDatePicker('setMinDate', date);
+
+                $("#OpenFromDate").val(date.format('DD-MMM-YYYY'));
+
+            });
+
+            $('#openToDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#OpenToDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            if ($('#OpenFromDate').val()) {
+                $('#openFromDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#OpenFromDate").val()));
+            }
+            if ($('#OpenToDate').val())
+                $('#openToDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#OpenToDate").val()));
+
+        }
+
+        function loadDataTable() {
+            dataTable = $('#tbGrid').DataTable({
+                 drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                order: [[1, "asc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,                
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                'columnDefs': [
+                    { sortable: false, targets: [0, 8] }
+                ],
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                    columns: [
+                        {
+                            'data': null,
+                            render: function (data, type, row) {
+                            return '<button title="Detail" class="btn btn-sm-icon" ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" '+
+                                    ' data-url="@Url.Action("HRVacancyDetail", "HR", new { Area = "ERS" })"' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.jobKeyId + '"' +
+                                    ' data-modaltitle="Vacancy details" ' +
+                                    ' data-modalheader="Vacancy details" >' +                                   
+                                    ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                    ' </button>';                                                             
+                            },
+                            'className': "td-icon",
+                        },
+                        {
+                        'data': null,
+                            render: function (data, type, row) {
+                                if (data.jobStatus == 1) {
+                                return '<button title="Edit" class="btn btn-sm-icon" ' +
+                                        ' data-jqueryselector="openmodal" ' +
+                                        ' data-modalcontainer="modalcontainer" ' +
+                                        ' data-url="@Url.Action("VacancyEdit", "HR", new { Area = "ERS" })"' +
+                                        ' data-modalpopupwidth="rightw50" ' +
+                                        ' data-id="' + data.jobKeyId + '"' +
+                                        ' data-modaltitle="Vacancy Edit" ' +
+                                        ' data-modalheader="Vacancy Edit" >' +
+                                        ' <i class="far fa-edit" aria-hidden="true"></i> ' +
+                                        ' </button>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                            'className': "td-icon",
+                        },
+                        {   'data': "jobReferenceCode" },
+                        { 
+                            'data': "jobOpenDate", 
+                            render: function (data, type, row) {
+                                data = moment(data).format('DD-MMM-YYYY');
+                                return data;
+                            }
+                        },
+                        {   'data': "shortDesc" },                   
+                        {   'data': "jobType"  },
+                        {   'data': "jobLocation" },
+                        {   'data': "uploadedCvs" },
+                        {
+                            'data': "jobStatus",
+                            render: function (data, type, row) {
+                                if (data == 1) {
+                                return ' <button title="Close vacancy" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-redirecturl = "HRVacanciesIndex" ' +
+                                ' data-url="@Url.Action("VacancyClose", "HR", new { Area = "ERS" })"' +
+                                ' data-id="' + row.jobKeyId + '"' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext=\'Do you want to close the vacancy "' + row.jobReferenceCode + '" ?\' ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' data-confirmbuttontext="Close Vacancy" > ' +
+                                        ' <i class="fas fa-ban" aria-hidden="true"></i> ' +
+                                        ' </button>';
+                                } else {
+                                    return '';
+                                }
+
+                            },
+                            'className': "td-icon text-center  align-middle",
+                        }
+                        ],
+                    </text>
+                }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetVacanciesList", "HR")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.genericSearch = $('#GenericSearch').val();
+                    d.status = $('#FilterDataModel_Status').val();
+                    d.jobRefCode = $('#FilterDataModel_JobRefCode').val();
+                    d.location = $('#FilterDataModel_Location').val();
+                    d.openFromDate = $('#FilterDataModel_OpenFromDate').val();
+                    d.openToDate = $('#FilterDataModel_OpenToDate').val();
+                },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        };
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+            $("#FilterDataModel_Status").val(data.status);
+            $("#FilterDataModel_JobRefCode").val(data.jobRefCode);
+            $("#FilterDataModel_Location").val(data.location);
+            $("#FilterDataModel_OpenFromDate").val(data.openFromDate);
+            $("#FilterDataModel_OpenToDate").val(data.openToDate);
+
+            loadDataTable();
+            hideLoader();
+        }
+
+    </script>
+}
+
+

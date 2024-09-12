@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "Off-Boarding - User Management";
+
+    Html.AntiForgeryToken();
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page">User Management</li>
+    </ol>
+}
+
+
+<div class="container-fluid bg-gray-active border rounded shadow m-auto col-xl-11 p-1 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Off-Boarding - User Roles - Actions</p>
+    </div>
+    <div class="text-right">
+        <div class="text-right">
+            <button name="AddExit" id="idAddExit" title="New Exit" class="btn btn-sm btn-primary mx-2"
+                    data-jqueryselector="openmodal"
+                    data-modalcontainer="modalcontainer"
+                    data-modalpopupwidth="rightw35"
+                    data-url='@Url.Action("CreateUserAccess","UserManagement",new { Area = "OffBoarding"})'
+                    data-statichtmlsourcedivid=""
+                    data-modaltitle="Off-Boarding"
+                    data-modalheader="Assign Access">
+                <i class="fas fa-plus "></i>
+
+            </button>
+            <button name="ExcelDownload" id="idExcelDownload" title="Excel Download" class=" btn btn-sm btn-success mx-2">
+                <i class="far fa-file-excel green-color "></i>
+            </button>
+        </div>
+        <hr class="m-1" />
+    </div>
+    <div class="childcontent-div" id="div-userlist">
+        <div id="pv-userlist">
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            loadUserAccessList();
+        });
+
+
+        function loadUserAccessList() {
+            var divid = $("#pv-userlist");
+
+            if ($(divid).length == 0)
+                return;
+
+            $.ajax({
+                url: '@Url.Action("GetAllUserRolesActions", "UserManagement", new {Areas = "OffBoarding"})',
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divid.html(data);
+                    initDataTable();
+                    hideLoader();
+                    loadScript();
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+        }
+
+        function initDataTable() {
+            var oTable = $("#tbUserActions").DataTable({
+                'aaSorting': [[0, 'asc']],//, // start to sort data in first column
+                'pagingType': 'full'
+            });
+        }
+        function localScript() {
+             loadUserAccessList();
+            initSelect2();
+            initToastrMessage();
+        }
+
+        function failedAddNew(xhr) {
+
+            errorText = xhr.responseText.indexOf("divErrorMessage") == -1 ? xhr.responseText : ($(xhr.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+
+
+            notify("error", errorText, 'Error');
+        }
+
+
+    </script>
+}

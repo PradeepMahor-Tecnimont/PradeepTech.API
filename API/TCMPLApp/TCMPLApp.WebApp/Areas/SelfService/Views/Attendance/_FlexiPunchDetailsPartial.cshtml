@@ -1,0 +1,91 @@
+﻿@using System.Text.RegularExpressions
+@model IEnumerable<TCMPLApp.Domain.Models.Attendance.FlexiPunchDetailsDataTableList>
+
+<div class="  bg-gray-active border rounded ">
+    <div class="p-1 font-weight-bold ">
+        <span class="text-black-50">Employee name: </span><span id="empName" class="text-primary">@(ViewBag.EmployeeDetails.Empno + " - " + ViewBag.EmployeeDetails.Name)</span><br />
+        <span class="text-black-50">Punch details period : </span><span id="period" class="text-primary">@ViewBag.Period</span>
+    </div>
+    <table id="tbGrid" class="table m-0 table-bordered table-responsive-lg ">
+        <thead class="bg-info text-white">
+            <tr role="row">
+                <th></th>
+                <th>PDate</th>
+                <th>Day</th>
+                <th>Shift</th>
+                <th>First<br />Punch</th>
+                <th>Last<br />Punch</th>
+                <th>Work<br /> Hours</th>
+                <th>Delta<br />Hours</th>
+                <th>Extra<br />Hours</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.ToList().Count; i++)
+            {
+                <tr class="  @( string.IsNullOrEmpty( Model.ToList()[i].Remarks ) ? "" :  Regex.Replace(Model.ToList()[i].Remarks?.ToLower().Trim().Split()[0], @"[^0-9a-zA-Z\ ]+", "")  ) ">
+                    <td class="td-icon">
+                        <button class="btn btn-outline-info btn-sm border-none  "
+                                data-jqueryselector="openmodal"
+                                data-modalcontainer="modalcontainer"
+                                data-url="@Url.Action("GetListPunchListForDay", "Attendance", new { Area = "SelfService" })"
+                                data-modalpopupwidth="rightw35"
+                                data-punchdate="@Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")"
+                                data-empno="@Model.ToList()[i].Empno"
+                                data-modaltitle="Punch list"
+                                data-modalheader="Punch list for " @Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")>
+                            <i class="far fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    <td>@Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@Model.ToList()[i].Ddd</td>
+                    <td>@Model.ToList()[i].Shiftcode</td>
+                    <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Model.ToList()[i].FirstPunch)</td>
+                    <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Model.ToList()[i].LastPunch)</td>
+
+                    <td class="workedhours">@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WorkHrs))  </td>
+                    <td class="@(Model.ToList()[i].Deltahrs > 0 ? "text-primary" : Model.ToList()[i].Deltahrs < 0 ? "text-danger" : " ")">
+                        @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].Deltahrs))
+                    </td>
+                    <td class="@(Model.ToList()[i].ExtraHrs > 0 ? "text-success" : " ")">
+                        @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].ExtraHrs))
+                    </td>
+                    <td class="@(Model.ToList()[i].Remarks?.Trim() == "Absent" ? "text-danger" : " ")">
+                        @Model.ToList()[i].Remarks
+                    </td>
+                    @*                    <td>@(Model.ToList()[i].Remarks) </td>
+                *@
+                </tr>
+                @if (Model.ToList()[i].Ddd == "SUN" || i == Model.ToList().Count - 1)
+                {
+                    <tr role="row">
+                        <th class="weektotals" rowspan="2" colspan="2">Week Totals</th>
+                        <td class="text-primary" colspan="2">Estimated Work Hours (A) : @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumEstWorkHrs)) </td>
+                        <td class="text-primary" colspan="2">Worked Hours (B) : @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumWorkHrs)) </td>
+                        <td class="text-primary" colspan="2">Deductions during week (C) : @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumDeductionHrs)) </td>
+                        <td class="text-primary" colspan="1">Absent Hrs (D) : @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumAbsentHrs)) </td>
+                        <td class="text-primary" colspan="1">Leave/Depu/Tour Hrs (E) : @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumLdtHrs)) </td>
+
+
+                    </tr>
+                    <tr>
+                        <td class="text-primary" colspan="2">
+                            SPW Exception/WFH (F) : @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumSwpExceptionWfhHrs))
+                        </td>
+                        <td class="text-primary" colspan="2">
+                            Accounted Hrs (G) (G=B+C+D+E+F) : @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Model.ToList()[i].WkActualTotalHrs)
+                        </td>
+                        <td class="@(Model.ToList()[i].WkExcessShortFallHrs >= 0 ? "text-primary" : "text-danger" )" colspan="2">
+                            Excess / Shortfall (H) (H=G-A) : @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Model.ToList()[i].WkExcessShortFallHrs)
+                        </td>
+                        <td class="@(Model.ToList()[i].WkExcessShortFallHrs >= 0 ? "text-primary" : "text-danger" )" colspan="2">
+                            WeekEnd shortfall deduction (I) : @Model.ToList()[i].WkShortFallDeductionsHrs
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div id="result"></div>
+</div>

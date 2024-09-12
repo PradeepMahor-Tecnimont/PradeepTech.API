@@ -1,0 +1,174 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.SWPVaccine.EmployeeTraining>
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    ViewData["Title"] = "Employee Trainings";
+    Html.AntiForgeryToken();
+}
+@section Styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWPVaccine">SWPVaccine</a></li>
+    <li class="breadcrumb-item active">Employee Trainings for SWP Status</li>
+</ol>
+}
+
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee Trainings for SWP Status</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <div class="row p-2">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <button type="button" name="ShowFileUpload" id="idShowFileUpload"
+                                title="Show file upload dialog" class="btn btn-outline-primary btn-sm border border-white mx-2 ml-auto"
+                                data-jqueryselector="openmodal"
+                                data-modalcontainer="modalcontainer"
+                                data-modalpopupwidth="rightw35"
+                                data-url='@Url.Action("TrainingFileUpload", "EmployeeTraining", new { Area = "SWPVaccine" })'
+                                data-statichtmlsourcedivid=""
+                                data-modaltitle="Off-Boarding"
+                                data-modalheader="Upload file">
+                                <i class="fas fa-plus "></i>
+                                File upload
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="childcontent-div" id="div-traininglist">
+            <div id="pv-traininglist">
+            </div>
+        </div>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts
+{    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+<script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+<script>
+    $(document).ready(function() {
+        loadTrainings();
+    });
+
+    function localScript() {
+        initDropZone();
+    }
+
+    Dropzone.autoDiscover = false;
+
+    function initDropZone() {
+        $("div#iddropzone2").dropzone({
+            url: '@Url.Action("TrainingFileUpload", "EmployeeTraining", new {Area = "SWPVaccine"})',
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 1,
+            maxFiles: 1,
+            addRemoveLinks: true,
+            createImageThumbnails: false,
+            acceptedFiles: ".xls,.xlsx",
+            init: function() {
+                var myDropzone = this;
+
+                // First change the button to actually tell Dropzone to process the queue.
+                //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                //    // Make sure that the form isn't actually being sent.
+                //    e.preventDefault();
+                //    e.stopPropagation();
+                //    myDropzone.processQueue();
+                //});
+
+                // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                // of the sending event because uploadMultiple is set to true.
+                this.on("sending", function(file, xhr, formData) {
+
+                    formData.append("file", file);
+                    showModalLoader();
+
+                });
+                this.on("sendingmultiple", function() {
+                    // Gets triggered when the form is actually being sent.
+                    // Hide the success button or the complete form.
+                });
+                this.on("successmultiple", function(files, response) {
+                    if (response.success) {
+                        notify("success", "File uploaded successfully", "File upload");
+                        loadTrainings();
+                    }
+                    else
+                        notify("error", response.message, "File upload failed.");
+
+                    hideModalLoader();
+
+                    this.removeAllFiles(true);
+
+
+                });
+                this.on("errormultiple", function(files, response) {
+                    notify("error", "File not uploaded", "Error uploading");
+                    this.removeAllFiles(true);
+                    hideModalLoader();
+
+                    // Gets triggered when there was an error sending the files.
+                    // Maybe show form again, and notify user of error
+                });
+            }
+
+        });
+    }
+
+    function UploadFile() {
+        oDropZone2 = Dropzone.forElement("div#iddropzone2");
+        if (oDropZone2.files.length == 0) {
+            notify("error", "No files selected.", "Error")
+            return;
+        }
+        oDropZone2.processQueue();
+    }
+
+    function loadTrainings() {
+        var divid = $("#pv-traininglist");
+        $.ajax({
+            url: '@Url.Action("GetAllTrainings", "EmployeeTraining",new { Area = "SWPVaccine" } )',
+            data: {
+            },
+            type: 'GET',
+            beforeSend: function() {
+                showLoader();
+            },
+            success: function(data) {
+                divid.html(data);
+                $("#empTraining").DataTable({
+                    pagingType: 'full',
+                    pageLength: 25
+                });
+                hideLoader();
+            },
+            error: function(result) {
+                hideLoader();
+                errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                notify("error", errorText, 'Error');
+            }
+        });
+
+
+    }
+
+
+</script>
+}

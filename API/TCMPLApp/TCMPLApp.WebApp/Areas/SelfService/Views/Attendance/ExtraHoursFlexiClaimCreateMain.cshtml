@@ -1,0 +1,430 @@
+﻿@model TCMPLApp.WebApp.Models.PunchDetailsViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreLeaveCreateEditDeleteId = 173;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item"><a asp-action="ExtraHoursFlexiClaimsIndex" asp-controller="Attendance" asp-area="SelfService">Extra hours claims</a></li>
+        <li class="breadcrumb-item active">Flexi Extra hours claim</li>
+    </ol>
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+    <!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+    <!-- Material Datepicker css -->
+    <link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />
+
+}
+
+@{
+    ViewData["Title"] = "Flexi Extra hours claime";
+
+}
+
+@Html.TextBoxFor(model => model.FilterDataModel.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Flexi Extra hours claim</p>
+    </div>
+    <div class="d-flex flex-row">
+        <button type="button" class="btn btn-outline-primary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("ExtraHoursFlexiClaimCreateFilterGet", "Attendance", new { Area = "SelfService" })'
+                data-modaltitle="Filters - Extra hours claim"
+                data-modalheader="Filters - Extra hours claim">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </button>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="ExtraHoursFlexiClaimCreateMain"
+           data-url='@Url.Action("ResetFilter", "Attendance", new { Area = "SelfService" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+    </div>
+    <div class="m-1"></div>
+
+    <div class="bg-gray-active rounded ">
+
+        <div class="childcontent-div" id="div-punchdetails">
+            <div id="pv-extrahoursdetails">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            localLoadDataTable();
+        });
+
+        function localScript() {
+            initFilter();
+        }
+
+        function initFilter() {
+            let currDate = new Date();
+            let maxDate = currDate;
+            let minDate = new Date(new Date().setMonth(new Date().getMonth() - 3));
+
+            $('#startDateFilter').datepicker({
+                format: "MM-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true,
+                startDate: minDate,
+                endDate: maxDate
+            }).on('change', function (e,) {
+                var fvDate = $(this).val();
+                if (fvDate)
+                    $("#StartDate").val(moment(fvDate, "MMMM-YYYY").format('DD-MMM-YYYY'));
+                else
+                    $("#StartDate").val('');
+            });
+            if ($("#StartDate").val()) {
+                $('#startDateFilter').datepicker('setDate', new Date($("#StartDate").val()));
+            }
+        }
+
+        function localLoadDataTable() {
+            var divid = $("#pv-extrahoursdetails");
+
+            if ($(divid).length == 0)
+                return;
+
+            $.ajax({
+                url: '@Url.Action("ExtraHoursFlexiClaimCreate", "Attendance", new { Area = "SelfService" })',
+                type: 'GET',
+                data: {
+                    search: null,
+                    genericSearch: null,
+                    startDate: $('#FilterDataModel_StartDate').val(),
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divid.html(data);
+                    hideLoader();
+                    loadScript();
+                    initSelect2();
+                    formInputListener();
+                    initToastrMessage();
+
+                    let periodEndDate = new Date($("#periodEndDate").val());
+
+                    var currentDate = new Date();
+
+                    if (currentDate <= periodEndDate) {
+                        $('#confirmationModal').modal('show');
+                        $('#forcheck').hide();
+                        $('#confirm').hide();
+                        $('#btnCancel').hide();
+                        $("#btnConfirm").attr("onclick", "confirmationAcceptWhenLoad()");
+                    }
+
+                },
+                error: function (result) {
+                    hideLoader();
+                    divid.empty();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            window.location.reload();
+        }
+
+        function confirmationAcceptWhenLoad() {
+            $('#confirmationModal').modal('hide');
+        }
+        function formInputListener() {
+            $("input[data-day-compoffhours]").on("change", function () {
+                compOffCheckBoxChange(this);
+            });
+
+            $('input[data-wkdayotclaim-weekofyear]').on('change', function () {
+                validateWeekDayOTClaim(this);
+            });
+
+            $('input[data-holidayotclaim-weekofyear]').on('change', function () {
+                validateHolidayOTClaim(this);
+            });
+            $('select[name*=LeadApprover]').on('change', function () {
+                calculateTotals();
+            });
+
+        }
+
+        function compOffCheckBoxChange(obj) {
+
+            let wkClaimedCompOffSpanId = "#weeklyClaimedCompOff" + $(obj).data("weekoftheyear");
+            let isHolidayCompOff = $(obj).data("holiday");
+
+            let targetElemId = isHolidayCompOff == 0 ? "#applicableWeekDayOT" + $(obj).data("weekoftheyear") : "#applicableHoliDayOT" + $(obj).data("weekoftheyear");
+
+            let objElemCompOffHrs = $(obj).prop("checked") ? $(obj).data("day-compoffhours") : $(obj).data("day-compoffhours") * -1;
+
+            let weeklyCompOffHrs = $(wkClaimedCompOffSpanId).data("weekly-compoffhrs") + objElemCompOffHrs;
+
+            let strWeeklyCompOffText = minutesToHours(weeklyCompOffHrs);
+
+            $(wkClaimedCompOffSpanId).text(strWeeklyCompOffText);
+            $(wkClaimedCompOffSpanId).data("weekly-compoffhrs", weeklyCompOffHrs);
+
+            let objElemExtraHours = $(obj).prop("checked") ? $(obj).data("extrahours") * -1 : $(obj).data("extrahours");
+
+            let targetElemExtraHours = $(targetElemId).data("extrahours");
+
+            $(targetElemId).data("extrahours", targetElemExtraHours + objElemExtraHours);
+            $(targetElemId).text(minutesToHours(targetElemExtraHours + objElemExtraHours));
+
+            if (isHolidayCompOff) {
+                validateHolidayOTClaim(document.getElementById("inputHoliDayOTClaim" + $(obj).data("weekoftheyear")));
+            }
+            else {
+                validateWeekDayOTClaim(document.getElementById("inputWeekDayOTClaim" + $(obj).data("weekoftheyear")));
+            }
+        }
+
+        function validateWeekDayOTClaim(obj) {
+
+            let errorMessage = "OT Hours should be in multiple of 2hrs & cannot be more than applicable OT";
+            let inputValue = ($(obj).val()) ? $(obj).val() : 0;
+            let bIsError = false;
+            let applicableWeekdayOTElemId = "#applicableWeekDayOT" + $(obj).data("wkdayotclaim-weekofyear");
+            let applicableWeekdayOT = $(applicableWeekdayOTElemId).data("extrahours");
+
+            bIsError = isNaN(inputValue);
+
+            if (!bIsError) {
+                if ((inputValue % 2) > 0 || inputValue < 0 || (inputValue * 60) > applicableWeekdayOT) {
+                    bIsError = true;
+                }
+            }
+
+            if (bIsError) {
+                obj.setCustomValidity(errorMessage);
+                $(obj).addClass("is-invalid");
+            }
+            else {
+                obj.setCustomValidity("");
+                $(obj).removeClass("is-invalid");
+            }
+
+            calculateTotals();
+        }
+
+        function validateHolidayOTClaim(obj) {
+
+            let errorMessage = "Holiday OT Hours to be more than 4hrs, in multiples of 1hr and not more than applicable holiday OT";
+            let inputValue = ($(obj).val()) ? $(obj).val() : 0;
+            let bIsError = false;
+            let applicableHolidayOTElemId = "#applicableHoliDayOT" + $(obj).data("holidayotclaim-weekofyear");
+            let applicableHolidayOT = $(applicableHolidayOTElemId).data("extrahours") == undefined ? 0 : $(applicableHolidayOTElemId).data("extrahours");
+
+            bIsError = isNaN(inputValue);
+
+            if (!bIsError && ((inputValue % 1) > 0 || (inputValue < 4 && inputValue != 0) || (inputValue * 60) > applicableHolidayOT)) {
+                bIsError = true;
+            }
+            if (bIsError) {
+                obj.setCustomValidity(errorMessage);
+                $(obj).addClass("is-invalid");
+            }
+            else {
+                obj.setCustomValidity("");
+                $(obj).removeClass("is-invalid");
+            }
+            calculateTotals();
+        }
+
+        function checkmonth() {
+            let htmlClaimForm = document.getElementById("extraHoursClaim");
+
+            if ($("#leadApprover").val() == null || $("#leadApprover").val() == "") {
+                notify("error", "Approver not selected.", "Error");
+                return;
+            }
+
+            if (!htmlClaimForm.checkValidity()) {
+                console.log("Not Valid");
+                notify("error", "Claim form contains errors.", "Error");
+                return;
+            }
+
+            var startDate = new Date($("input[name*=Period]").val());
+            var currentDate = new Date();
+
+            if (startDate.getMonth() === currentDate.getMonth() && startDate.getFullYear() === currentDate.getFullYear()) {
+                $('#confirmationModal').modal('show');
+                $('#forcheck').show();
+                $('#confirm').show();
+                $('#btnCancel').show();
+                $("#btnConfirm").attr("onclick", "confirmSaveClaim()");
+            }
+            else {
+                saveClaim();
+            }
+        }
+
+        function confirmSaveClaim() {
+            const isChecked = $('#confirmationCheckbox').is(':checked');
+
+            if (isChecked) {
+                $('#confirmationModal').modal('hide');
+                saveClaim();
+            }
+            else {
+                notify("error", "Please select checkbox.", "Error");
+            }
+
+        }
+
+        function saveClaim() {
+            let htmlClaimForm = document.getElementById("extraHoursClaim");
+
+            if ($("#leadApprover").val() == null || $("#leadApprover").val() == "") {
+                notify("error", "Approver not selected.", "Error");
+                return;
+            }
+
+            if (!htmlClaimForm.checkValidity()) {
+                console.log("Not Valid");
+                notify("error", "Claim form contains errors.", "Error");
+                return;
+            }
+
+            objCompOffDays = [];
+            objWeeklyTotal = [];
+            $("input[data-day-compoffhours]:checkbox:checked").each(function () {
+                if ($(this).prop("checked")) {
+                    var pDate = $($(this).closest("tr")).find("td:eq(1)").text();
+                    var dayCompHoursSelected = $(this).prop("checked") ? 1 : 0;
+
+                    item = {}
+                    item["pDate"] = pDate;
+                    item["dayCompHoursSelected"] = dayCompHoursSelected;
+
+                    objCompOffDays.push(item);
+                }
+            });
+
+            $("tr[data-week-totals]").each(function () {
+                var claimedCompoffHrs = $($(this).find("span[id*=weeklyClaimedCompOff]")).data("weekly-compoffhrs");
+                var claimedWeekDayExtraHrs = $($(this).find("input[id*=inputWeekDayOTClaim]")).val();
+                var applicableWeekDayExtraHrs = $($(this).find("span[id*=applicableWeekDayOT]")).data("extrahours");
+
+                var claimedHoliDayExtraHrs = $($($(this).next()).find("input[id*=inputHoliDayOTClaim]")).val();
+                var applicableHoliDayExtraHrs = $($($(this).next()).find("span[id*=applicableHoliDayOT]")).data("extrahours");
+
+                item = {}
+                item["pDate"] = $($(this).find("input[id*=WeekEndDate]")).val();
+                item["claimedCompoffHrs"] = claimedCompoffHrs;
+                item["claimedWeekDayExtraHrs"] = claimedWeekDayExtraHrs * 60;
+                item["claimedHoliDayExtraHrs"] = claimedHoliDayExtraHrs * 60;
+                item["applicableWeekDayExtraHrs"] = applicableWeekDayExtraHrs;
+                item["applicableHoliDayExtraHrs"] = applicableHoliDayExtraHrs;
+
+                objWeeklyTotal.push(item);
+            });
+            const isChecked = $('#confirmationCheckbox').is(':checked');
+            var confirmationStatus = "KO";
+
+            if (isChecked)
+                confirmationStatus = "OK";
+            $.ajax({
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("ExtraHoursFlexiClaimCreate", "Attendance", new { Area = "SelfService" })',
+                type: 'POST',
+                data: {
+                    leadApprover: $("#leadApprover").val(),
+                    period: $("input[name*=Period]").val(),
+                    compOffDaySelection: objCompOffDays,
+                    weekEndTotals: objWeeklyTotal,
+                    earlysubmit: confirmationStatus
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    hideLoader();
+                    if (data.success) {
+                        window.location = "@Url.Action("ExtraHoursFlexiClaimsIndex", "Attendance", new { Area = "SelfService" })";
+                        notify("success", data.response, "Success");
+                    }
+                    else
+                        notify("error", data.response, "Error");
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+
+        }
+
+        function calculateTotals() {
+            let htmlClaimForm = document.getElementById("extraHoursClaim");
+
+            //console.log(htmlClaimForm.checkValidity());
+
+            if (!htmlClaimForm.checkValidity()) {
+                $("span#sumClaimCompOffHrs").text("ERR");
+                $("span#sumClaimWorkDayExtraHours").text("ERR");
+                $("span#sumClaimHoliDayExtraHours").text("ERR");
+
+                return;
+            }
+
+            let sumCompOffHrs = 0;
+            let sumWorkDayExtraHours = 0;
+            let symHoliDayExtraHours = 0;
+            $("span[id*=weeklyClaimedCompOff]").each(function () {
+                sumCompOffHrs += $(this).data("weekly-compoffhrs");
+            });
+
+            $("input[id*=inputWeekDayOTClaim]").each(function () {
+                sumWorkDayExtraHours = sumWorkDayExtraHours + (($(this).val()) ? $(this).val() : 0) * 1;
+            });
+
+            $("input[id*=inputHoliDayOTClaim]").each(function () {
+                symHoliDayExtraHours += (($(this).val()) ? $(this).val() : 0) * 1;
+            });
+
+            $("span#sumClaimCompOffHrs").text(minutesToHours(sumCompOffHrs));
+            $("span#sumClaimWorkDayExtraHours").text(minutesToHours(sumWorkDayExtraHours * 60));
+            $("span#sumClaimHoliDayExtraHours").text(minutesToHours(symHoliDayExtraHours * 60));
+        }
+    </script>
+}

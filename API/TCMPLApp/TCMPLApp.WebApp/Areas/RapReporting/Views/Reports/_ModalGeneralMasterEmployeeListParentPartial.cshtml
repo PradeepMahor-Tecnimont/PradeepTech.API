@@ -1,0 +1,42 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+    <input id="Yyyy" readonly type="hidden" asp-for="@Model.Yyyy" />
+    <input id="YearMode" readonly type="hidden" asp-for="@Model.YearMode" />
+    <input id="Yyyymm" readonly type="hidden" asp-for="@Model.Yyyymm" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["General Reports - Master"]</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Employee list for Parent"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+
+            </div>
+            <div class="card-block">                             
+                <div class="form-group">
+                    <label asp-for="CostCenter" class="control-label"></label>
+                    <select asp-for="CostCenter" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.CostCodes" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="CostCenter" class="text-danger"></span>
+                </div>                              
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">        
+        <a class="btn btn-primary" id="lLISTEMP_ParentReport" title="Employee list report" href="#"
+            data-inprogress="0"
+            data-jqueryselector="generateReportPartial"
+            data-url="@Url.Action("LISTEMP_ParentReport", "Reports", new {Area ="RapReporting",
+                                                                   costcenter = @Model.CostCenter})"
+            data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+            data-text="Download">
+            
+            @localizer["Download"]
+        </a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>

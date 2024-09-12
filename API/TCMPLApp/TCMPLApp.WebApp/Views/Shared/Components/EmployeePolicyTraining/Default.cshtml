@@ -1,0 +1,44 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeePolicyTrainingViewModel
+    <div style="background-color:rgba(0,0,0,0.03)">
+        
+            <table class="table table-striped table-bordered text-muted text-monospace table-responsive-lg ">
+                <thead>
+                    <tr>
+                        <th style="width:190px;">Particulars</th>
+                        <th>Training Done</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TEAMS</td>
+                        <td>@((bool)Model.Teams ? "Complete" : "Pending")</td>
+                        <td><a href="@( Model.UrlTeams  )" target="_blank">Click here</a></td>
+                    </tr>
+                    <tr>
+                        <td>SharePoint2016</td>
+                        <td>@((bool)Model.Sharepoint16 ? "Complete" : "Pending")</td>
+                        <td><a href="@( Model.UrlSharepoint16  )" target="_blank">Click here</a></td>
+
+                    </tr>
+                    <tr>
+                        <td>Planner</td>
+                        <td>@((bool)Model.Planner ? "Complete" : "Pending")</td>
+                        <td><a href="@( Model.UrlPlanner  )" target="_blank">Click here</a></td>
+                    </tr>
+                    <tr>
+                        <td>OneDrive365</td>
+                        <td>@((bool)Model.Onedrive365 ? "Complete" : "Pending")</td>
+                        <td><a href="@( Model.UrlOnedrive365  )" target="_blank">Click here</a></td>
+                    </tr>
+                    <tr>
+                        <td>Security</td>
+                        <td>@((bool)Model.Security ? "Complete" : "Pending")</td>
+                        <td><a href="@( Model.UrlSecurity  )" target="_blank">Click here</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        <div class="col-12 font-weight-bold @((bool)Model.IsTrainingComplete ? "text-primary" : "text-danger") }">
+            @Model.Message
+        </div>
+    </div>

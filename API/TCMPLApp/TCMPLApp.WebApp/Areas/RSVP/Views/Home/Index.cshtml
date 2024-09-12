@@ -1,0 +1,163 @@
+﻿@model TCMPLApp.WebApp.Models.NavratriRSVPCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    Html.AntiForgeryToken();
+    ViewData["Title"] = "RSVP - Navratri 2023";
+    const string rsvpBlock = "NO";
+}
+
+@section BreadCrumbs   {
+    <ol class="breadcrumb">        
+        <li class="breadcrumb-item">RSVP</li>        
+        <li class="breadcrumb-item active" aria-current="page">Navratri 2023</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        li {
+            list-style-type: none;
+        }
+    </style>
+}
+
+<script>
+    // Redirect to home page
+    window.location.href = "/Home/Index";
+ </script>
+
+    <form asp-action="RecordNavratriResponse"
+      asp-controller="Home"
+      asp-area="RSVP"
+      id="idRecordNavratriResponse"
+      method="post"
+      accept-charset="UTF-8">
+
+        <div class="container-fluid bg-white border rounded shadow m-auto py-2 col-xl-8">
+            <div class="app-h4 app-card-header mb-2">
+                <p>Navratri 2023</p>
+            </div>
+            <div class="row">
+                <div class="col-xl-8 col-md-8 col-8">
+                    <img src="~/img/rsvp_navratri_2023.jpg?123456" alt="Navratri 2023" style="width:95%; height:95%" asp-append-version="true" />
+                </div>
+                <div class="col-xl-4 col-md-4 col-4">
+                    <div class="col-md-12" style="min-height: 450px;">  
+                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RSVP.RSVPHelper.ActionNavratriCoordinator))
+                        {
+                            <div class="card-header header-flex">
+                                <a class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+                                    id="btExcelDownload" name="btExcelDownload"
+                                    href='@Url.Action("NavratriExcelDownload", "Home", new { Area = "RSVP" })'>
+                                    <i class="fas fa-file-excel green-color"></i> Export
+                                </a>
+                            </div> 
+
+                            <div class="card card-tpl">
+                                <div class="card-block">
+                                    <div class="row align-items-center justify-content-center">
+                                        <div class="col p-t-40">
+                                            <h3>Count : @Model.Counter</h3>
+                                        </div>
+                                        <div class="col-auto p-b-30">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        }
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @if(Model.Attend.ToString() == "1")
+                            {
+                            <p><b><span class="text-dark-blue">Thank you, for registering RSVP.</span></b></p>
+                                <p>Your selected option is <b><span class="text-dark-green">Yes</span></b></p>                                
+                            }
+                            else
+                            {
+                                 @if(Model.Attend.ToString() == "0")
+                                {
+                                    <p>Thank you, for registering RSVP.</p>
+                                    <p>Your selected option is <b><span class="text-brown">No</span></b></p>                                    
+                                } 
+                                else
+                                {
+                                <p><b>Please respond</b></p>
+                                }
+                            } 
+                            
+                            @if(rsvpBlock == "NO")
+                            {
+                                <hr/>
+
+                                <label id="lbattend" class="control-label">
+                                    Will you be participating for Navratri Celebration at MOC#1 on 20th of October 2023?        
+                                </label>
+                                <select asp-for="Attend" class="form-control Select2 required" placeholder="Please select" required value="@Model.Attend.ToString()">
+                                    <option selected></option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                                <span asp-validation-for="Attend" class="text-danger"></span>
+
+                                <br /><br />
+
+                                <label id="lbbus" class="control-label">
+                                    Do you need company bus from Airoli Office to Malad Office on 20th of October 2023?        
+                                </label>
+                                <select asp-for="Bus" class="form-control Select2 required" placeholder="Please select" required value="@Model.Bus.ToString()">
+                                    <option selected></option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                                <span asp-validation-for="Bus" class="text-danger"></span>
+
+                                <br /><br />
+
+                                <label id="lbdinner" class="control-label">
+                                    Should we consider you for dinner on 20th of October 2023?        
+                                </label>
+                                <select asp-for="Dinner" class="form-control Select2 required" placeholder="Please select" required value="@Model.Dinner.ToString()">
+                                    <option selected></option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                                <span asp-validation-for="Dinner" class="text-danger"></span>
+                            }
+                        </div>
+                    </div>
+                </div>                                             
+            </div>            
+            <div class="row">
+                <div class="col-xl-6 ">
+                    &nbsp;
+                </div>
+                <div class="col-xl-6">
+                    @if (rsvpBlock == "NO")
+                    {
+                        <button class="btn btn-primary mx-3 float-right" type="submit" id="btnconfirm"
+                        data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                        data-text="@localizer["Confirm"]">
+                            @localizer["Confirm"]
+                        </button>
+                        <a class="btn btn-secondary mx-3 float-right"
+                        asp-area=""
+                        asp-controller="Home"
+                        asp-action="Index">@localizer["Cancel"]</a>
+                    }
+            </div>
+            </div>
+        </div>
+    </form>
+
+    @section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }        
+}
+
+

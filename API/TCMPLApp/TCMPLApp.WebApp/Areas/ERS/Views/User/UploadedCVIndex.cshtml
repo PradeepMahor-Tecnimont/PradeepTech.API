@@ -1,0 +1,211 @@
+﻿@model TCMPLApp.WebApp.Areas.ERS.Models.UploadedCVIndexViewModel
+
+@{
+    ViewData["Title"] = "List of uploaded CVs";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="ERS">Employee Referral Program</a></li>
+        <li class="breadcrumb-item active" aria-current="page">List of uploaded CVs</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />   
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>List of uploaded CVs</p>
+    </div>    
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>                                       
+                    <th>@Html.DisplayNameFor(model => model.CvStatus)</th>
+                    <th>@Html.DisplayNameFor(model => model.JobReferenceCode)</th>
+                    <th>@Html.DisplayNameFor(model => model.ShortDesc)</th>
+                    <th>@Html.DisplayNameFor(model => model.CandidateName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Pan)</th>
+                    <th>@Html.DisplayNameFor(model => model.CandidateEmail)</th>                   
+                    <th>@Html.DisplayNameFor(model => model.CandidateMobile)</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+    
+    <script>
+        var dataTable;
+
+        $(document).ready(function () {            
+            loadDataTable();            
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        function loadDataTable() {
+            dataTable = $('#tbGrid').DataTable({
+                 drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                order: [[1, "asc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                sort: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                'columnDefs': [
+                    { sortable: false, targets: [5,6] }
+                ],
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                    columns: [                                                
+                        {   'data': "cvStatus" },
+                        {
+                            'data': null,
+                            render: function (data, type, row) {
+                            return '<a class="border-none" style="cursor:pointer"' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" '+
+                                    ' data-url="@Url.Action("VacancyDetail", "User", new { Area = "ERS" })"' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.vacancyJobKeyId + '"' +
+                                    ' data-modaltitle="Vacancy details" ' +
+                                    ' data-modalheader="Vacancy details" >' + data.jobReferenceCode +
+                                    ' </a>';                                                             
+                            },
+                            'className': "td-icon",
+                        }, 
+                        {   'data': "shortDesc" },
+                        {   'data': "candidateName" },
+                        {   'data': "pan" },
+                        {   'data': "candidateEmail"  },
+                        {   'data': "candidateMobile" },
+                        {
+                            'data': null,
+                            render: function (data, type, row) {
+                            return '<a class="btn btn-outline-primary btn-sm border-none" href="#" onclick="ofbfileDownload(event, this);"' +
+                                        //' href="/ERS/User/DownloadCandidateCV?KeyId=' + data.candidateCvOsName + '!-!' + data.jobReferenceCode + '!-!' + data.candidateEmail + '"' +
+                                        ' data-url="@Url.Action("DownloadCandidateCV", "User", new { Area = "Ers" })"' +
+                                        ' data-keyid="' + data.candidateCvOsName + '!-!' + data.jobReferenceCode + '!-!' + data.pan + '!-!' + data.candidateEmail + '"' +
+                                        ' data-clientfilename="' + data.jobReferenceCode + '_' + data.candidateEmail + '_CV.pdf"' +
+                                        ' title="Download CV" >' +                                                                 
+                                        ' <i class="fas fa-download" aria-hidden="true"></i> ' +
+                                        ' </a>';                                                             
+                            },
+                            'className': "td-icon",
+                        },
+                        {
+                            'data': null,
+                            render: function (data, type, row) {
+                                if (data.cvStatus == 'Uploaded') {
+                                    return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                        ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                        ' data-jqueryselector = "showconfirmationmodal" ' +
+                                        ' data-url="@Url.Action("VacancyReferDelete", "User", new { Area = "ERS" })"' +
+                                        ' data-id="' + data.vacancyJobKeyId + '!-!' + data.candidateEmail + '"' +
+                                        ' data-redirecturl="@Url.Action("UploadedCVIndex", "User", new { Area = "ERS" })"' +                                     
+                                        ' data-modaltitle="Please Confirm!" ' +
+                                        ' data-confirmationtext=\'Do you want to delete referred CV ?\' ' +
+                                        ' data-confirmationtype="warning" ' +
+                                        ' title="Delete referred CV" ' +
+                                        ' data-confirmbuttontext="Delete referred CV" > ' +
+                                        ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                        ' </button>';
+                                } else 
+                                {
+                                    return '';
+                                }
+                            },
+                            'className': "td-icon text-center  align-middle",
+                        }
+                    ],
+                    </text>
+                }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetUploadedCVList", "User")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;                   
+                    d.genericSearch = $('#GenericSearch').val();                    
+                   },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+
+            //dataTable.find('thead th').css('width', 'auto');
+        };
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+    </script>
+}
+
+

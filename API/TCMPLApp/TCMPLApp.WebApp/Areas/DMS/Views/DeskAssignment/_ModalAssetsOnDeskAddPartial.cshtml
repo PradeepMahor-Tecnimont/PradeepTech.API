@@ -1,0 +1,65 @@
+﻿@model TCMPLApp.WebApp.Models.AssetsOnDeskEditModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form asp-controller="DeskAssignment"
+      asp-action="AssetsOnDeskAdd"
+      id="formAssetsOnDeskAdd"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSaveForDesk('@Model.DeskNo');"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="DeskNo" />
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Assets on desk add"]</h5>
+        <button type="button" class="close" data-dismiss="modal" id="closeBtn" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Assets on desk add - @Model.DeskNo</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="AssetCategory" class="control-label"></label>
+                            <select asp-for="AssetCategory" class="form-control Select2" asp-items="ViewBag.AssetCategoryList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="AssetCategory" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="AssetId" class="control-label"></label>
+                            <select asp-for="AssetId" class="form-control Select2" asp-items="ViewBag.AssetsList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="AssetId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" id="cancelBtn" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

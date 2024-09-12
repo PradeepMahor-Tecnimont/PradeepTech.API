@@ -1,0 +1,88 @@
+﻿@model TCMPLApp.WebApp.Models.LopForExcessLeaveUploadViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+
+<form asp-controller="Attendance"
+      asp-action="LoPForExcessLeaveXLUpload"
+      asp-area="SelfService"
+      id="formLoPForExcessLeaveXLUpload"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);loadScript()"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+
+    @Html.TextBoxFor(model => model.PayslipYyyymm, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    <input type="hidden" asp-for="@Model.PaySlipMonth" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["LoP For Excess Leave upload"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["LoP For Excess Leave upload"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <label asp-for="LopType" class="control-label"></label>
+                            <select id="selLopTemplateType" asp-for="LopType" class="form-control Select2" required>
+                                <option value=""></option>                                
+                                <option value="LP">Credit (Loss of pay)</option>
+                                <option value="DR">Debit (Salary paid)</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <label asp-for="PayslipYyyymm" class="control-label"></label>
+                            <input id="payslipYyyymm" class="form-control datepicker" data-date-format="mmm-yyyy" placeholder="@localizer["Salary Month"]" value="@Model.PayslipYyyymm?.ToString("yyyy/MMM")" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+
+                            <button type="button" name="LopForExcessLeaveXLTemplate" id="btnLoPForExcessLeaveXLTemplate" title="Excel template Download"
+                                    class=" btn btn-sm btn-outline-primary mx-2" >
+                                <i class="far fa-file-excel "></i> Download template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                    <div class="dz-details">
+                        <div class="dz-filename"><span data-dz-name></span></div>
+                        <div class="dz-size" data-dz-size></div>
+                        <img data-dz-thumbnail />
+                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                    </div>
+                    <div class="dz-default dz-message" data=""><span>Drop excel file here to upload</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-outline-primary" type="button" id="btnUploadLoPForExcessLeave"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Upload LoP For Excess Leave"]">
+            @localizer["Upload LoP For Excess Leave"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

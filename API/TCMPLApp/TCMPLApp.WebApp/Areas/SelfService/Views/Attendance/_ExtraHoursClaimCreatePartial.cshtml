@@ -1,0 +1,202 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.Attendance.PunchDetailsDataTableList>
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+
+<form id="extraHoursClaim">
+    <div class="modal" id="confirmationModal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 600px; margin: auto;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="color:red;font-weight:bold;font-size: 15px" id="currentmonth">The selected month is the current month.If you submit your extra hours claim now, then you will not be able to resubmit the extra hours claim for the balance part of the current month. </p>
+                    <p style="color:red;font-weight:bold;font-size: 15px">If you submit your extra hours claim now, you will not be able to submit latecome / short leave for selected period.</>
+                    <p style="color:red;font-weight:bold;font-size: 15px" id="confirm">Please confirm the same.</p>
+                    <div class="form-check" id="forcheck">
+                        <input type="checkbox" class="form-check-input" id="confirmationCheckbox">
+                        <label class="form-check-label" for="confirmationCheckbox" style="font-weight:bold;font-size: 15px">I confirm above </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCancel" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="btnConfirm" onclick="confirmSaveClaim()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-gray-active border rounded ">
+        <div class="p-1 font-weight-bold ">
+            <span class="text-black-50">Employee name: </span><span id="empName" class="text-primary">@ViewBag.EmployeeDetails.Name</span><br />
+            <span class="text-black-50">Punch details period : </span><span id="period" name="period" class="text-primary">@ViewBag.Period</span>
+        </div>
+        <div class="mb-2">
+            <div class="col-md-6 col-xl-4 ">
+                <label class="control-label font-weight-bold text-muted">Select lead</label>
+                <select name="LeadApprover" id="leadApprover" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.Approvers" required>
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+        <input style="display:none" name="Period" id="getperiod" value="@ViewBag.Period" />
+        @{
+            string endDate = "";
+            if (Model != null)
+                endDate = Model.ToList().LastOrDefault().PunchDate.ToString("dd-MMM-yyyy");
+        }
+        <input type="hidden" name="periodEndDate" id="periodEndDate" value=@endDate />
+        <input type="hidden" name="SumClaimCompOffHrs" value="0" />
+        <input type="hidden" name="SumClaimWorkDayExtraHours" value="0" />
+        <input type="hidden" name="SumClaimHoliDayExtraHours" value="0" />
+        <table id="tbGrid" class="table m-0 table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th></th>
+                    <th style="width:100px;">@localizer["PDate"]</th>
+                    <th>@localizer["Day"]</th>
+                    <th>@localizer["Shift"]</th>
+                    <th>@localizer["First"]<br />@localizer["Punch"]</th>
+                    <th>@localizer["Last"]<br />@localizer["Punch"]</th>
+                    <th>@localizer["Work"]<br /> @localizer["Hours"]</th>
+                    <th>@localizer["Delta"]<br />@localizer["Hours"]</th>
+                    <th>@localizer["Extra"]<br />@localizer["Hours"]</th>
+                    <th>@localizer["Comp. Off"]</th>
+                    <th>@localizer["Timesheet"]<br />@localizer["Work Hrs"]</th>
+                    <th style="width:200px;">@localizer["Timesheet"]<br />@localizer["Extra Hrs"]</th>
+                    <th style="width:200px;">@localizer["Remarks"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    @for (int i = 0; i < Model.ToList().Count; i++)
+                    {
+
+                        <tr class="@Model.ToList()[i].Remarks?.ToLower()">
+                            <td>
+                                <button class="btn btn-outline-info btn-sm border-none"
+                                        data-jqueryselector="openmodal"
+                                        data-modalcontainer="modalcontainer"
+                                        data-url="@Url.Action("GetListPunchListForDay", "Attendance", new { Area = "SelfService" })"
+                                        data-modalpopupwidth="rightw35"
+                                        data-punchdate="@Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")"
+                                        data-empno="@Model.ToList()[i].Empno"
+                                        data-modaltitle="@localizer["Punch list"]"
+                                        data-modalheader="@localizer["Punch list for "] " @Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")>
+                                    <i class="far fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                            <td>@Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@Model.ToList()[i].Ddd</td>
+                            <td>@Model.ToList()[i].ShiftCode</td>
+                            <td>@Model.ToList()[i].FirstPunch</td>
+                            <td>@Model.ToList()[i].LastPunch</td>
+
+                            <td>@TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WrkHrs))  </td>
+
+                            <td class="@(Model.ToList()[i].DeltaHrs > 0 ? "text-primary" : Model.ToList()[i].DeltaHrs < 0 ? "text-danger" : " ")">
+                                @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].DeltaHrs))
+                            </td>
+                            <td class="@(Model.ToList()[i].ExtraHrs > 0 ? "text-success" : " ")">
+                                @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].ExtraHrs))
+                            </td>
+
+                            @if (Model.ToList()[i].CompOffHrs > 0)
+                            {
+                                <td>
+                                    <input class="compoff" type="checkbox" data-extrahours="@(Model.ToList()[i].ExtraHrs)" data-day-compoffhours="@(Model.ToList()[i].CompOffHrs)"
+                                           data-holiday="@(Model.ToList()[i].IsSunday)"
+                                           data-weekoftheyear="@(Model.ToList()[i].WkOfYear)" value="1" />
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td>@Model.ToList()[i].StrTsWorkHrs</td>
+                            <td>@Model.ToList()[i].StrTsExtraHrs</td>
+                            <td>@Model.ToList()[i].Remarks</td>
+                        </tr>
+                        @if (Model.ToList()[i].Ddd == "SUN" || i == Model.ToList().Count - 1)
+                        {
+                            <tr data-week-totals="1" role="row">
+                                <th class="weektotals" rowspan="3" colspan="2">@localizer["Weekly Totals"]<input type="hidden" id="@("WeekEndDate" + Model.ToList()[i].WkOfYear) " value="@Model.ToList()[i].PunchDate.ToString("dd-MMM-yyyy")" /> </th>
+                                <td colspan="2">@localizer["Worked Hours :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumWorkHrs)) </td>
+                                <td class="font-weight-bold text-muted" colspan="3">
+                                    @localizer["Comp. Off Hrs :"]
+                                    <span class="text-success" data-weekly-compoffhrs="0"
+                                          id="@("weeklyClaimedCompOff" + Model.ToList()[i].WkOfYear)">
+                                    </span>
+                                    <input type="hidden" name="ClaimedWeekCompOffHours" />
+                                </td>
+                                <td class="font-weight-bold text-muted" colspan="3">
+                                    @localizer["Applicable weekday extrahours :"]
+                                    <span class="text-primary" data-extrahours="@(Model.ToList()[i].WkSumWeekdayExtraHrs)"
+                                          id="@("applicableWeekDayOT" + Model.ToList()[i].WkOfYear)">
+                                        @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumWeekdayExtraHrs))
+                                    </span>
+                                </td>
+                                <td class="font-weight-bold text-muted">@localizer["WeekDay OT Claim:"]</td>
+                                <td colspan="2">
+                                    <div class="form-group ">
+                                        <input id="@("inputWeekDayOTClaim" + Model.ToList()[i].WkOfYear)" type="text" class="form-control w-25 weekDayOTClaim" data-wkdayotclaim-weekofyear="@Model.ToList()[i].WkOfYear" />
+                                        <div class="w-50 text-wrap invalid-feedback">@localizer["OT Hours to be in multiple of 2hrs & no more than applicable OT"]</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="3"></td>
+                                <td class="font-weight-bold text-muted" colspan="3">
+                                    @localizer["Applicable holiday extrahours :"]
+                                    <span class="text-primary" data-extrahours="@(Model.ToList()[i].WkSumHolidayExtraHrs)"
+                                          id="@("applicableHoliDayOT" + Model.ToList()[i].WkOfYear)">
+                                        @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumHolidayExtraHrs))
+                                    </span>
+                                </td>
+                                <td class="font-weight-bold text-muted">@localizer["HoliDay OT Claim:"]</td>
+                                <td colspan="2">
+                                    <div class="form-group ">
+                                        <input id="@("inputHoliDayOTClaim" + Model.ToList()[i].WkOfYear)" type="text"
+                                               class="form-control w-25 holiDayOTClaim" data-holidayotclaim-weekofyear="@Model.ToList()[i].WkOfYear" />
+                                        <div class="w-50 text-wrap invalid-feedback">@localizer["Holiday OT Hours to be more than 4hrs, in multiples of 1hr and not more than appliable holiday ot"]</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="@(Model.ToList()[i].WkSumDeltaHrs >= 0 ? "text-primary" : "text-danger" )" colspan="2">
+                                    @localizer["Delta Hours :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkSumDeltaHrs))
+                                </td>
+                                <td class="@(Model.ToList()[i].WkBfwdDeltaHrs >= 0 ? "text-primary" : "text-danger" )" colspan="2">
+                                    @localizer["BFwd Delta Hrs :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkBfwdDeltaHrs))
+                                </td>
+                                <td class="@(Model.ToList()[i].WkCfwdDeltaHrs >= 0 ? "text-primary" : "text-danger" )" colspan="2">
+                                    @localizer["CFwd Delta Hours :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkCfwdDeltaHrs))
+                                </td>
+                                <td class="@(Model.ToList()[i].WkPenaltyLeaveHrs == 0 ? "text-primary" : "text-danger" )" colspan="2">
+                                    @localizer["Penalty Leave Hours :"] @TCMPLApp.WebApp.Classes.StringHelper.MinutesToHrs(Decimal.ToInt32(Model.ToList()[i].WkPenaltyLeaveHrs))
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <tr>
+                        <td colspan="2">@localizer["Claim Totals"]</td>
+                        <td colspan="5">@localizer["Claimed compOff :"] <span id="sumClaimCompOffHrs">@localizer["00:00"]</span></td>
+                        <td colspan="3">@localizer["Claimed WorkDay Extra Hours :"] <span id="sumClaimWorkDayExtraHours">@localizer["00:00"]</span></td>
+                        <td colspan="3">@localizer["Claimed HoliDay Extra Hours :"] <span id="sumClaimHoliDayExtraHours">@localizer["00:00"]</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (Model != null)
+        {
+            <div>
+                <button class="btn btn-primary" type="button" onclick="checkmonth()">@localizer["Save"]</button>
+            </div>
+        }
+
+        <div style="display:none" id="results">@TempData["Message"]</div>
+    </div>
+</form>

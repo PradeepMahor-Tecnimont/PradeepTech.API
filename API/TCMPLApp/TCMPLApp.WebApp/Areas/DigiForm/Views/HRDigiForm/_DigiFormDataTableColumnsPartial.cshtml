@@ -1,0 +1,1148 @@
+﻿<script type="text/javascript">
+    let vVUloadCostcodeChangeRequestDataTableList = "@Url.Action("GetListsCostcodeChangeRequestList", "HRDigiForm")";
+    let pvvUrlApprovalDetailsList = '@Url.Action("GetListsApprovalsDetails", "HRDigiForm")';
+    let vVUloadHodApprovalsRequestsDataTableList = "@Url.Action("GetListsHodApprovalsRequestsList", "HRDigiForm")";
+    let vVUloadHodApprovalsHistoryDataTableList = "@Url.Action("GetListsHodHistoryApprovalsRequestsList", "HRDigiForm")";
+    let vVUloadHrApprovalsHistoryDataTableList = "@Url.Action("GetListsHrHistoryApprovalsRequestsList", "HRDigiForm")";
+    let vVUloadHRApprovalsRequestsDataTableList = "@Url.Action("GetListsHRApprovalsRequestsList", "HRDigiForm")";
+    let vVUloadHRApprovalsReturnRequestsDataTableList = "@Url.Action("GetListsHRApprovalsReturnRequestsList", "HRDigiForm")";
+    let vVUloadTemporaryEmployeesDataTableList = "@Url.Action("GetListsTemporaryEmployeesList", "HRDigiForm")";
+    let vVUloadSiteMasterDataTableList = "@Url.Action("GetListsSiteMasterList", "HRDigiForm")";
+    let vVUloadHrApprovedApprovalsDataTableList = "@Url.Action("GetListsHrApprovedApprovalsList", "HRDigiForm")";
+    let vVUloadHodTransferEmployeesDataTableList = "@Url.Action("GetListsHodTransferEmployeesList", "HRDigiForm")";
+    let vVUloadHrTransferEmployeesDataTableList = "@Url.Action("GetListsHrTransferEmployeesList", "HRDigiForm")";
+
+    let vVUloadHODAnnualPendingEvaluationDataTableList = "@Url.Action("GetListsHODAnnualEvaluationPendingList", "HRDigiForm")";
+    let vVUloadHODAnnualHistoryEvaluationDataTableList = "@Url.Action("GetListsHODAnnualEvaluationHistoryList", "HRDigiForm")";
+    let vVUloadHRAnnualPendingEvaluationDataTableList = "@Url.Action("GetListsHRAnnualEvaluationPendingList", "HRDigiForm")";
+    let vVUloadHRAnnualActionPendingEvaluationDataTableList = "@Url.Action("GetListsHRAnnualEvaluationActionPendingList", "HRDigiForm")";
+    let vVUloadHRAnnualHistoryEvaluationDataTableList = "@Url.Action("GetListsHRAnnualEvaluationHistoryList", "HRDigiForm")";
+
+    @if ((bool)@Context.Items["isMobile"] == false)
+    {
+        <text>
+            let datatableCostcodeChangeRequestColumns = [
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                            ' data-modalpopupwidth="rightw35" ' +
+                            ' data-id="' + data.keyId + '"' +
+                            ' data-modaltitle="Costcode Change Request Detail" ' +
+                            ' data-modalheader="Costcode Change Request Detail" ' +
+                            ' > ' +
+                            ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                            ' </button>'
+                    },
+                    'className': "td-icon",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return data.empNo + " - " + data.empName
+                    },
+                },
+                { data: "transferTypeText" },
+                { data: "currentCostcode" },
+                { data: "targetCostcode" },
+                {
+                    data: "transferDate",
+                    width: '10.0rem',
+                    render: function (data, type, row) {
+                        if (data)
+                            return moment(data).format("DD-MMM-YYYY");
+                        else
+                            return '';
+                    }
+                },
+                {
+                    data: "effectiveTransferDate",
+                    width: '10.0rem',
+                    render: function (data, type, row) {
+                        if (data) {
+                            return moment(data).format("DD-MMM-YYYY");
+                        }
+                        else {
+                            return "";
+                        }
+                    }
+                },
+                { data: "desgcodeText" },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var Status = data.statusText;
+                        return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-modalpopupwidth="rightw35" ' +
+                            ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                            ' data-id="' + data.keyId + '"' +
+                            ' data-modaltitle="Approval Details" ' +
+                            ' data-callback="loadApprovalsList" ' +
+                            ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                    },
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        if (data.statusVal == 2) {
+                            return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("CostcodeChangeRequestEdit", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.keyId + '"' +
+                                ' data-modaltitle="Edit Costcode Change Request" ' +
+                                ' data-modalheader="Edit Costcode Change Request"> ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        }
+                        else { return ""; }
+                    }
+                },
+
+            ];
+
+        let datatableColumnsApprovalDetails = [
+            { 'data': "approvalStatus" },
+            {
+                data: "modifiedOn",
+                width: '10.0rem',
+                render: function (data) {
+                    if (data)
+                        return moment(data).format('DD-MMM-YYYY');
+                    else
+                        return '-';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.modifiedBy == null) {
+                        return " - ";
+                    }
+                    else {
+                        return data.modifiedBy + " - " + data.modifiedByName
+                    }
+
+                },
+            },
+            { 'data': "approvalBy" },
+        ];
+
+        let datatableHodApprovalsColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            { data: "desgcodeText" },
+            { data: "apprlActionDesc" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Status = data.statusText;
+                    return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                },
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.isApprovalDue == 'OK') {
+                        if (data.apprlActionId == 'A247') {
+                            return '<button title="Approve" class="btn btn-outline-primary btn-sm border-none text-nowrap  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("CostcodeChangeRequestHODApproval", "HRDigiForm", new { Area = "DigiForm" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.keyId + '"' +
+                                ' data-modaltitle="Approve Costcode Request " ' +
+                                ' data-modalheader="Approve Costcode Request " >' +
+                                ' Approve' +
+                                ' </button>';
+                        }
+                        else {
+                            return '<button title="Approve" class="btn btn-outline-primary btn-sm border-none text-nowrap  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("CostcodeChangeRequestHRApproval", "HRDigiForm", new { Area = "DigiForm" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.keyId + '!-!' + data.apprlActionId + '"' +
+                                ' data-modaltitle="Approve Costcode Request " ' +
+                                ' data-modalheader="Approve Costcode Request " >' +
+                                ' Approve' +
+                                ' </button>';
+                        }
+
+                    }
+                    else { return ""; }
+                },
+                className: "td-icon",
+            },
+
+        ];
+
+        let datatableHodApprovalHistoryColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            { data: "desgcodeText" },
+            { data: "apprlActionDesc" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Status = data.statusText;
+                    return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                },
+            },
+        ];
+
+        let datatableHodTransferEmployeesColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            { data: "desgcodeText" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Status = data.statusText;
+                    return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                },
+            },
+        ];
+
+        let datatableHrTransferEmployeesColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            { data: "desgcodeText" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Status = data.statusText;
+                    return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                },
+            },
+        ];
+
+        let datatableHrApprovalHistoryColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            { data: "desgcodeText" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Status = data.statusText;
+                    return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                },
+            },
+        ];
+
+        let datatableHrApprovedApprovalColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+
+                    if (data.desgcodeVal != null) {
+                        return data.desgcodeVal + " - " + data.desgcodeText
+                    } else {
+                        return ''
+                    }
+
+                },
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Status = data.statusText;
+                    return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                },
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+
+                    if (data.transferTypeVal == '0') {
+                        return '<button class="btn btn-outline-primary btn-sm border-none text-nowrap" type="button" id="btnprint" ' +
+                            ' data-jqueryselector="binarydownload" ' +
+                            ' data-url="@Url.Action("ChangeCostCodeForPermanentTransferXmlPrint", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                            ' data-id="' + data.keyId + '"' +
+                            ' > ' +
+                            ' <i class="fas fa-file-word blue-color"></i> ' +
+                            ' </button>';
+
+                        // return '<button class="btn btn-outline-danger btn-sm border-none text-nowrap" type="button" id="btnprint" ' +
+                        //     ' data-jqueryselector="binarydownload" ' +
+                        //     ' data-url="@Url.Action("ChangeCostCodeForPermanentTransferPrint", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        //     ' data-id="' + data.keyId + '"' +
+                        //     ' > ' +
+                        //     ' <i class="fas fa-file-pdf red-color"></i> ' +
+                        //     ' </button>';
+                    }
+                    else {
+                        return ' <button class="btn btn-outline-primary btn-sm border-none text-nowrap" type="button" id="btnprint" ' +
+                            ' data-jqueryselector="binarydownload" ' +
+                            ' data-url="@Url.Action("ChangeCostCodeForTemporaryAssignmentXmlPrint", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                            ' data-id="' + data.keyId + '"' +
+                            ' > ' +
+                            ' <i class="fas fa-file-word blue-color"></i>  ' +
+                            ' </button>';
+
+                        // return '<button class="btn btn-outline-danger btn-sm border-none text-nowrap" type="button" id="btnprint" ' +
+                        //     ' data-jqueryselector="binarydownload" ' +
+                        //     ' data-url="@Url.Action("ChangeCostCodeForTemporaryAssignmentPrint", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        //     ' data-id="' + data.keyId + '"' +
+                        //     ' > ' +
+                        //     ' <i class="fas fa-file-pdf red-color"></i>  ' +
+                        //     ' </button>';
+
+                    }
+
+                },
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+
+                    return '<button class="btn btn-outline-primary btn-sm border-none text-nowrap" type="button" id="btnprint" ' +
+                        ' data-jqueryselector="binarydownload" ' +
+                        ' data-url="@Url.Action("ChangeCostCodeFormXmlPrint", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' > ' +
+                        ' <i class="fas fa-file-word blue-color"></i>  ' +
+                        ' </button>';
+
+                    // return '<button class="btn btn-outline-primary btn-sm border-none text-nowrap" type="button" id="btnprint" ' +
+                    //     ' data-jqueryselector="binarydownload" ' +
+                    //     ' data-url="@Url.Action("ChangeCostCodeForm", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                    //     ' data-id="' + data.keyId + '"' +
+                    //     ' > ' +
+                    //     ' <i class="fas fa-file-pdf red-color"></i>  ' +
+                    //     ' </button>';
+
+                },
+            },
+        ];
+
+        let datatableHRApprovalsColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            { data: "desgcodeText" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Status = data.statusText;
+                    return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                },
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.statusVal == 0) {
+                        return '<button title="Approve" class="btn btn-outline-primary btn-sm border-none text-nowrap  " ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("CostcodeChangeRequestHRApproval", "HRDigiForm", new { Area = "DigiForm" })"' +
+                            ' data-modalpopupwidth="rightw35" ' +
+                            ' data-id="' + data.keyId + '"' +
+                            ' data-modaltitle="Approve Costcode Request " ' +
+                            ' data-modalheader="Approve Costcode Request " >' +
+                            ' Approve' +
+                            ' </button>';
+
+                    }
+                    else { return ""; }
+                },
+                className: "td-icon",
+            },
+        ];
+
+        let datatableHRApprovalReturnColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            { data: "desgcodeText" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Status = data.statusText;
+                    return '<button name="RequestStatus" id="idRequestStatus" title ="Approval Status" class="btn btn-outline-primary btn-sm border-none text-nowrap" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-url="@Url.Action("GetAllApprovalsStatus", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + Status + '</button>';
+                },
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.hrApprovalVal == 0) {
+                        return '<button title="Approve" class="btn btn-outline-primary btn-sm border-none text-nowrap  " ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("CostcodeChangeReturnRequestHRApproval", "HRDigiForm", new { Area = "DigiForm" })"' +
+                            ' data-modalpopupwidth="rightw35" ' +
+                            ' data-id="' + data.keyId + '"' +
+                            ' data-modaltitle="Approve Costcode Request " ' +
+                            ' data-modalheader="Approve Costcode Request " >' +
+                            ' Approve' +
+                            ' </button>';
+
+                    }
+                    else { return ""; }
+                },
+                className: "td-icon",
+            },
+        ];
+
+        let datatableTemporaryEmployeesColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("CostcodeChangeRequestDetails", "HRDigiForm", new { Area = "DigiForm" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Costcode Change Request Detail" ' +
+                        ' data-modalheader="Costcode Change Request Detail" ' +
+                        ' > ' +
+                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                        ' </button>'
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empNo + " - " + data.empName
+                },
+            },
+            { data: "transferTypeText" },
+            { data: "currentCostcode" },
+            { data: "targetCostcode" },
+            {
+                data: "transferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "transferEndDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            {
+                data: "effectiveTransferDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                    else {
+                        return "";
+                    }
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.transferTypeVal == 1) {
+                        if (data.flag == 0) {
+                            return '<button title="Return" class="btn btn-outline-primary btn-sm border-none text-nowrap  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("CostcodeChangeRequestReturn", "HRDigiForm", new { Area = "DigiForm" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.keyId + '"' +
+                                ' data-modaltitle="Return Costcode Request " ' +
+                                ' data-modalheader="Return Costcode Request " >' +
+                                ' Return' +
+                                ' </button>';
+                        }
+                        else { return ""; }
+                    }
+                    else {
+                        return "";
+                    }
+                },
+                className: "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.transferTypeVal == 1) {
+                        if (data.flag == 0) {
+                            return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("CostcodeChangeRequestHODPostApproval", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.keyId + '"' +
+                                ' data-modaltitle="Edit Costcode Change Request" ' +
+                                ' data-modalheader="Edit Costcode Change Request"> ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        }
+                        else { return ""; }
+                    }
+                    else { return ""; }
+                }
+            },
+        ];
+
+        let datatableColumnsSiteMasterDetails = [
+            { 'data': "siteName" },
+            { 'data': "siteLocation" },
+            { 'data': "isActiveText" },
+            {
+                data: null,
+                render: function (data, type, row) {
+
+                    return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("SiteMasterEdit", "HRDigiForm", new { Area = "DigiForm" })" ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-modaltitle="Edit Site Details" ' +
+                        ' data-modalheader="Edit Site Details"> ' +
+                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                        ' </button>';
+                },
+                className: "td-icon",
+            },
+        ];
+
+        let datatableHODAnnualEvaluationPendingColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empno + " - " + data.name
+                },
+            },
+            { data: "grade" },
+            { data: "emptype" },
+            { data: "email" },
+            { data: "assign" },
+            { data: "parent" },
+            {
+                data: "doj",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            { data: "status" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<a title="Edit" class="btn btn-outline-primary btn-sm border-none" href="@Url.Action("HODAnnualEvaluationEdit", "HRDigiForm")' + '?empno=' + data.empno + '&keyId=' + data.keyId + '"  title="Edit"><i class="fas fa-edit" aria-hidden="true"></i> </a>';
+                },
+                className: "td-icon",
+            },
+
+        ];
+
+        let datatableHRAnnualEvaluationPendingColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var KeyId = "'" + data.keyId + "'";
+                    var Empno = "'" + data.empno + "'";
+                    return '<button class="btn btn-sm-icon" href="#" onclick="GotoDetails(' + KeyId + ',' + Empno + ')" title="Detail"><i class="far fa-eye"></i></button>';
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empno + " - " + data.name
+                },
+            },
+
+            { data: "grade" },
+            { data: "emptype" },
+            { data: "email" },
+            { data: "assign" },
+            { data: "parent" },
+            {
+                data: "doj",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            { data: "status" },
+
+        ];
+
+        let datatableHODAnnualEvaluationHistoryColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var KeyId = "'" + data.keyId + "'";
+                    var Empno = "'" + data.empno + "'";
+                    return '<button class="btn btn-sm-icon" href="#" onclick="GotoDetails(' + KeyId + ',' + Empno + ')" title="Detail"><i class="far fa-eye"></i></button>';
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empno + " - " + data.name
+                },
+            },
+
+            { data: "grade" },
+            { data: "emptype" },
+            { data: "email" },
+            { data: "assign" },
+            { data: "parent" },
+            {
+                data: "doj",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+        ];
+
+        let datatableHRAnnualEvaluationHistoryColumns = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var KeyId = "'" + data.keyId + "'";
+                    var Empno = "'" + data.empno + "'";
+                    return '<button class="btn btn-sm-icon" href="#" onclick="GotoDetails(' + KeyId + ',' + Empno + ')" title="Detail"><i class="far fa-eye"></i></button>';
+                },
+                'className': "td-icon",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empno + " - " + data.name
+                },
+            },
+
+            { data: "grade" },
+            { data: "emptype" },
+            { data: "email" },
+            { data: "assign" },
+            { data: "parent" },
+            {
+                data: "doj",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            // {
+            //     data: null,
+            //     render: function (data, type, row) {
+            //         var KeyId = "'" + data.keyId + "'";
+            //         var Empno = "'" + data.empno + "'";
+            //         return '<a class="btn btn-outline-primary btn-sm border-none" href="#" onclick="SendDetails(' + KeyId + ',' + Empno + ')" title="Detail"><i class="fas fa-edit" aria-hidden="true"></i></a>';
+            //     },
+            //     'className': "td-icon",
+            // },
+        ];
+
+        let datatableHRAnnualEvaluationActionPendingColumns = [
+
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empno + " - " + data.name
+                },
+            },
+
+            { data: "grade" },
+            { data: "emptype" },
+            { data: "email" },
+            { data: "assign" },
+            { data: "parent" },
+            {
+                data: "doj",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            },
+            { data: "status" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var KeyId = "'" + data.keyId + "'";
+                    var Empno = "'" + data.empno + "'";
+                    return '<a class="btn btn-outline-primary btn-sm border-none" href="#" onclick="SendDetails(' + KeyId + ',' + Empno + ')" title="Detail"><i class="fas fa-edit" aria-hidden="true"></i></a>';
+                },
+                'className': "td-icon",
+            },
+        ];
+
+        </text>
+    }
+</script>

@@ -1,0 +1,89 @@
+﻿@model TCMPLApp.WebApp.Models.JobErpPhasesFileDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="JOB"
+      asp-action="JobErpPhasesFileDetailPartial"
+      asp-area="JOB"
+      data-id="@Model.JobNo"
+      id="formJobErpPhasesFileDetailPartial"
+      data-projno="@@Model.JobNo"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.JobNo)
+    <div class="row">
+        <div class="modal-body">
+            <div class="card shadow">
+                <span id="spanERPPhasesStatus" class="f-12 badge badge-danger" style="text-align: left"></span>                
+                <div class="card-block">
+                    <div class="">                        
+                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobErpXlUpload))
+                        {
+                            <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                                data-jqueryselector="openmodal"
+                                data-modalcontainer="modalcontainer"
+                                data-modalpopupwidth="rightw35"
+                                data-url='@Url.Action("JobErpPhasesFileDetail", "JOB", new { Area = "JOB" })'
+                                data-statichtmlsourcedivid=""
+                                data-id="@Model.JobNo"
+                                data-modaltitle="Upload"
+                                data-modalheader="Upload">
+                                <i class="fas fa-plus"></i> Upload
+                            </a>
+                        }
+                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobErpXlDown))
+                        {
+                            @if (!string.IsNullOrEmpty(Model.ClintFileName))
+                            {
+                                <a id="btnJobErpPhasesUpdateXL" style="float:right" title="Excel Download"
+                                    class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto">
+                                    <i class="fas fa-download "></i> @(
+                                    Model.ClintFileName
+                                    )
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+                <hr class="p-1 m-1">
+
+                <div class="row p-2 m-2">
+                    @if (!string.IsNullOrEmpty(Model.ClintFileName))
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ModifiedBy)</div>
+                                <div class="dd-met">@(Model.ModifiedBy)</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.ModifiedOn)</div>
+                                <div class="dd-met">@(Model.ModifiedOn)</div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dd-met">
+                                    @Html.Raw("ERP Phases excel file not uploaded ")
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

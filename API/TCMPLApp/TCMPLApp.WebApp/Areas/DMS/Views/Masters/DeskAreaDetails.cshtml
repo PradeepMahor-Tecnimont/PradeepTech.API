@@ -1,0 +1,606 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAreaDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Desk Area Details";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Masters" asp-area="DMS">Masters</a></li>
+        <li class="breadcrumb-item "><a asp-action="DeskAreaIndex" asp-controller="Masters" asp-area="DMS">Areas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Desk Area Details</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+ @Html.HiddenFor(m => m.FilterDataModel.IsActive) 
+
+<input type="hidden" asp-for="AreaId" />
+<input type="hidden" asp-for="AreaCatgCode" />
+<input type="hidden" asp-for="AreaTypeVal" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Office" /> 
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Floor" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Cabin" />
+
+<div class="card bg-gray-active border rounded shadow m-auto col-xl-11 p-2">
+    <div class="card-header" style="padding:10px 18px;">
+        <h5 class="card-title">
+            @localizer["Desk Area Details"]
+        </h5>
+
+        <a href='@Url.Action("DeskAreaIndex", "Masters", new { Area = "DMS" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+            <i class="fas fa-undo"></i>
+            @localizer["Back"]
+        </a>
+
+        <a title="Import desk / user list" id="idImportDeskArea"
+           class="btn btn-outline-primary btn-sm border-white float-right" href="#"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("ImportDeskArea", "Masters", new { Area = "DMS" })'
+           data-id="@Model.AreaId@Html.Raw("!-!")@Model.AreaCatgCode"
+           data-modaltitle="Import desk / user list"
+           data-modalheader="Import desk / user list">
+            <i class="fas fa-arrow-alt-circle-up"></i>&nbsp; @localizer["Import"]
+        </a>
+    </div>
+    <div class="card-block ">
+
+        <div class="card-deck">
+            <div class="card col-md-12 col-xl-12">
+                <div class="card-body">
+                    <div id="divDeskAreaDetails">
+                        <div class="row p-2">
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AreaDesc)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.AreaId + " - " + Model.AreaDesc)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AreaCatgDesc)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.AreaCatgCode + " - " + Model.AreaCatgDesc)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AreaInfo)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.AreaInfo)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AreaTypeText)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.AreaTypeVal + " - " + Model.AreaTypeText)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.IsRestrictedText)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.IsRestrictedText)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-pill" style="margin-top: 20px">
+            <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-DeskListDetails-tab" data-toggle="pill" href="#tabs-DeskListDetails" role="tab" aria-controls="tabs-DeskListDetails" aria-selected="true"
+                       data-url="@Url.Action("DeskListDetailIndex", "Masters", new { areaId = @Model.AreaId })"
+                       data-id="@Model.AreaId"
+                       data-divid="pw-DeskListDetails"
+                       data-callback="loadDeskAreaDeskListDataTable();"
+                       data-area="DMS"
+                       data-controller="Masters"
+                       data-action="DeskListDetailIndex">
+                        Desk List
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-OfficeListDetails-tab" data-toggle="pill" href="#tabs-OfficeListDetails" role="tab" aria-controls="tabs-OfficeListDetails" aria-selected="false"
+                       data-url="@Url.Action("OfficeListDetailsIndex", "Masters", new { areaId = @Model.AreaId })"
+                       data-id="@Model.AreaId"
+                       data-divid="pw-OfficeListDetails"
+                       data-callback="loadDeskAreaOfficeListDataTable();"
+                       data-area="DMS"
+                       data-controller="Masters"
+                       data-action="OfficeListDetailsIndex">
+                        Office List
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-UserListDetails-tab" data-toggle="pill" href="#tabs-UserListDetails" role="tab" aria-controls="tabs-UserListDetails" aria-selected="false"
+                       data-url="@Url.Action("UserListDetailsIndex", "Masters", new { areaId = @Model.AreaId })"
+                       data-id="@Model.AreaId"
+                       data-divid="pw-UserListDetails"
+                       data-callback="loadDeskAreaUserListDataTable();"
+                       data-area="DMS"
+                       data-controller="Masters"
+                       data-action="UserListDetailsIndex">
+                        User List
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade show active" id="tabs-DeskListDetails" role="tabpanel" aria-labelledby="tabs-DeskListDetails-tab">
+                    <div id="pw-DeskListDetails">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-OfficeListDetails" role="tabpanel" aria-labelledby="tabs-OfficeListDetails-tab">
+                    <div id="pw-OfficeListDetails">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-UserListDetails" role="tabpanel" aria-labelledby="tabs-UserListDetails-tab">
+                    <div id="pw-UserListDetails">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#tabs-DeskListDetails-tab').click();
+        });
+
+        function localScript() {
+            initSelect2();
+
+            $('#btnDeskAreaImportTemplate').click(function () {
+                var btnDeskAreaImportTemplate = $('#btnDeskAreaImportTemplate');
+                var seldeskAreaTemplateType = $('#seldeskAreaTemplateType').val();               
+                var areaId = $('#AreaId').val();
+                var areaCategoryCode = $('#AreaCatgCode').val();
+                var areaType = $('#AreaTypeVal').val();
+                var docName = '';
+
+                switch (seldeskAreaTemplateType) {
+                    case 'Desk':
+                        docName = 'ImporDeskAreaDeskList.xlsx';
+                        break;
+                    case 'User':
+                        docName = 'ImporDeskAreaUserList.xlsx';
+                        break;
+                }
+                if (seldeskAreaTemplateType != null) {
+                    $.ajax({
+
+                        url: "@Url.Action("ExportDMSDeskAreaTemplate", "Masters", "DMS")", 
+                        type: "GET",
+                        cache: false,
+                        data: {
+                            deskAreaTemplateType: seldeskAreaTemplateType,                            
+                            areaId: areaId
+                            // areaCategoryCode: areaCategoryCode,
+                            // areaType: areaType
+                        },
+                        xhr: function () {
+                            var xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState == 2) {
+                                    if (xhr.status == 200) {
+                                        xhr.responseType = "blob";
+                                    }
+                                }
+                            };
+                            return xhr;
+                        },
+                        beforeSend: function () {
+                            btnDisable(btnDeskAreaImportTemplate);
+                            showModalLoader();
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            var link = document.createElement('a');
+                            var url = window.URL.createObjectURL(data);
+
+                            link.href = window.URL.createObjectURL(data);
+                            link.download = docName;
+                            link.click();
+                            link.remove();
+                            window.URL.revokeObjectURL(url);
+                            toastr.success("File downloaded successfully.");
+                        },
+                        error: function (xhr) {
+                            showError(xhr);
+                        },
+                        complete: function (xhr, statusText) {
+                            hideModalLoader();
+                            //btnEnable(btnImportDeskAreaXL);
+                        }
+                    });
+                }
+                else {
+                    toastr.success("Template type not selected...");
+                }
+
+            });
+
+            //Selection changed
+            $('#seldeskAreaTemplateType').change(function () {
+                var selectedTemplateTypeVal = $('#seldeskAreaTemplateType').val();
+                var selOfficeLocationVal = $('#selOfficeLocation').val();
+
+                $('#deskAreaTemplateType').val(selectedTemplateTypeVal);
+
+                if (selectedTemplateTypeVal != null && selOfficeLocationVal != null) {
+                    var btnDeskAreaImportTemplate = $('#btnDeskAreaImportTemplate');
+                    btnEnable(btnDeskAreaImportTemplate);
+                }
+            });
+
+            $('#selOfficeLocation').change(function () {
+                var selectedTemplateTypeVal = $('#seldeskAreaTemplateType').val();
+                var selOfficeLocationVal = $('#selOfficeLocation').val();
+                $('#deskAreaOfficeLocation').val(selOfficeLocationVal);
+
+                if (selectedTemplateTypeVal != null && selOfficeLocationVal != null) {
+                    var btnDeskAreaImportTemplate = $('#btnDeskAreaImportTemplate');
+                    btnEnable(btnDeskAreaImportTemplate);
+                }
+            });
+
+            $("#dropZoneWrapper").hide();
+            initUploadDeskAreaXL();
+        };
+
+        function initUploadDeskAreaXL() {
+            if ($("#formDeskAreaXLUpload").length != 0) {
+                initDropZone(".xlsx");
+            }
+
+            $('#btnImportDeskAreaXL').off('click').on('click', function () {
+                var seldeskAreaTemplateType = $('#seldeskAreaTemplateType').val(); 
+                event.preventDefault();
+                event.stopPropagation();
+                if (seldeskAreaTemplateType != "") {
+                    submitDeskAreaXL();
+                } else {
+                    toastr.error("Template type not selected...!!!");
+                }               
+            });
+        }
+
+        function submitDeskAreaXL() {            
+            var formDeskAreaXLUpload = "#formDeskAreaXLUpload";
+            if ($(formDeskAreaXLUpload).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length != 0) {
+                oDropZone2.processQueue();
+                //notify("error", "No files selected.", "Error");
+                //return;
+            }
+            else {
+                $(formDeskAreaXLUpload).submit();
+
+            }
+        }
+
+
+        let pvvUrlDeskAreaDeskList = '@Url.Action("GetListsDeskAreaDeskList", "Masters")';
+        let pvvUrlDeskAreaOfficeList = '@Url.Action("GetListsDeskAreaOfficeList", "Masters")';
+        let pvvUrlDeskAreaUserList = '@Url.Action("GetListsDeskAreaUserList", "Masters")';
+
+        function loadDeskAreaDeskListDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbDeskAreaDeskList",
+                pColumns: datatableColumnsDeskAreaDeskList,
+                pUrl: pvvUrlDeskAreaDeskList,
+                pUrlParams: {
+                    genericSearch: $('#DeskAreaDeskListSearch').val() ? $('#DeskAreaDeskListSearch').val() : null,
+                    workArea: $('#AreaId').val() ? $('#AreaId').val() : null,
+                    office: $('#FilterDataModel_Office').val() ? $('#FilterDataModel_Office').val() : null,
+                    floor: $('#FilterDataModel_Floor').val() ? $('#FilterDataModel_Floor').val() : null,
+                    cabin: $('#FilterDataModel_Cabin').val() ? $('#FilterDataModel_Cabin').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+            });
+        }
+
+        function loadDeskAreaOfficeListDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbDeskAreaOfficeList",
+                pColumns: datatableColumnsDeskAreaOfficeList,
+                pUrl: pvvUrlDeskAreaOfficeList,
+                pUrlParams: {
+                    genericSearch: $('#DeskAreaOfficeListSearch').val() ? $('#DeskAreaOfficeListSearch').val() : null,
+                    areaId: $('#AreaId').val() ? $('#AreaId').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+            });
+        }
+
+        function loadDeskAreaUserListDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbDeskAreaUserList",
+                pColumns: datatableColumnsDeskAreaUserList,
+                pUrl: pvvUrlDeskAreaUserList,
+                pUrlParams: {
+                    genericSearch: $('#DeskAreaUserListSearch').val() ? $('#DeskAreaUserListSearch').val() : null,
+                    areaId: $('#AreaId').val() ? $('#AreaId').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+            });
+        }
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumnsDeskAreaDeskList = [
+                    { 'data': "seatNo" },
+                    { 'data': "office" },
+                    { 'data': "floor" },
+                    { 'data': "wing" },
+                    { 'data': "cabin" },
+                    { 'data': "remarks" },
+
+                ];
+            let datatableColumnsDeskAreaOfficeList = [
+                { data: "office" },
+                { data: "officeDesc" },
+                
+            ];
+            let datatableColumnsDeskAreaUserList = [
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return data.empno + " - " + data.empName
+                    },
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return data.deptCode + " - " + data.deptName
+                    }
+                },
+                { data: "officeLocation" },
+                {
+                    data: "fromDate",
+                    width: '10.0rem',
+                    render: function (data, type, row) {
+                        if (data)
+                            return moment(data).format("DD-MMM-YYYY");
+                        else
+                            return '';
+                    }
+                },
+            ];
+            </text>
+        }
+
+        function genericSearchKeypress(fnName) {
+                if (this.event.keyCode === 13) {
+                    if (this.length) {
+                        if (fnName == "DeskAreaDeskListSearch") {
+                            loadDeskAreaDeskListDataTable();
+                        }
+                        if (fnName == "DeskAreaOfficeListSearch") {
+                            loadDeskAreaOfficeListDataTable();
+                        }
+                        if (fnName == "DeskAreaUserListSearch") {
+                            loadDeskAreaUserListDataTable();
+                        }
+                    }
+                }
+            }
+        
+        function genericSearchOnClick(fnName) {
+            if (this.length) {
+                if (fnName == "DeskAreaDeskListSearch") {
+                    loadDeskAreaDeskListDataTable();
+                }
+                if (fnName == "DeskAreaOfficeListSearch") {
+                    loadDeskAreaOfficeListDataTable();
+                }
+                if (fnName == "DeskAreaUserListSearch") {
+                    loadDeskAreaUserListDataTable();
+                }
+            }
+        }
+
+        function genericFilterReloadDatatabe(data, fnName) {
+            $("#modalcontainer").modal('hide');
+            if (fnName == "DeskAreaDeskListFilter") {
+                
+                $("#FilterDataModel_Office").val(data.office);
+                $("#FilterDataModel_Floor").val(data.floor);
+                $("#FilterDataModel_Cabin").val(data.cabin);
+
+                loadDeskAreaDeskListDataTable();
+            }
+
+            hideLoader();
+        }
+
+        Dropzone.autoDiscover = false;
+
+        function initDropZone(fileTypeExtension) {
+            detachDropZone();
+            $("#dropZoneWrapper").show();
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            $('div#iddropzone2').each(function () {
+
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    return;
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("ImportDMSDeskAreaTemplate", "Masters", new { Area = "DMS" })',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+
+                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    // of the sending event because uploadMultiple is set to true.
+                    this.on("processing", function (file) {
+
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+
+                        if (data.success) {
+                            PostSaveReLoadDataTable(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                            if (data.fileContent != null) {
+                                var blob = b64toBlob(data.fileContent.fileContents, data.fileContent.contentType);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = data.fileContent.fileDownloadName;
+                                link.click();
+                            }
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+            /*
+            const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, { type: contentType });
+                return blob;
+            };
+            */
+
+        }
+
+        function detachDropZone() {
+            $("#dropZoneWrapper").hide();
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+        }
+
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                var seldeskAreaTemplateType = $('#seldeskAreaTemplateType').val();
+                $("#modalcontainer").modal('hide');
+                if (seldeskAreaTemplateType == "Desk") {
+                    loadDeskAreaUserListDataTable();                    
+                }
+                if (seldeskAreaTemplateType == "User"){
+                    loadDeskAreaDeskListDataTable();                    
+                }                                
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+    </script>
+}

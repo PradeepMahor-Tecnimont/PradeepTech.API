@@ -1,0 +1,297 @@
+﻿@model TCMPLApp.WebApp.Models.VaccinationOfficeBatch2CreateViewModel
+
+@{
+    ViewData["Title"] = "TCMPL Vaccination Drive - Batch 2";
+}
+
+<div class="container col-xl-5 col-lg-8 col-md-10 col-sm-12">
+    <div class="card bg-light mb-4 shadow-3">
+        <div class="card-header app-h4 app-card-header">
+            TCMPL Vaccination Drive - Registration
+        </div>
+        <div class="card-body">
+            <div class="mb-2 border-bottom border-1 ">
+                <div class="container">
+                    @if (Model.SelfJab1Date.HasValue)
+                    {
+                        <div class="row mb-2 border-bottom border-1">
+                            <div class="col-md-6 ">
+                                <label class="control-label required" asp-for="SelfVaccineType"></label>
+                            </div>
+                            <div class="col-md-6 mb-2">
+
+                                <span class="text-info font-weight-bold">@Model.SelfVaccineType</span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2 border-bottom border-1">
+                            <div class="col-md-6 ">
+                                <label class="control-label required" asp-for="SelfJab1Date"></label>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <span class="text-info font-weight-bold"> @Html.DisplayFor(m => m.SelfJab1Date) </span>
+                            </div>
+                        </div>
+                        <div class="row mb-2 border-bottom border-1">
+                            <div class="col-md-6 ">
+                                <label class="control-label required" asp-for="SelfJab2Date"></label>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <span class="text-info font-weight-bold">@(Model.SelfJab2Date)</span>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.SelfJab1Date)
+                        @Html.HiddenFor(m => m.SelfJab2Date)
+                        @Html.HiddenFor(m => m.SelfVaccineType)
+                        @Html.HiddenFor(m => m.JabNumber)
+                    }
+                    <div class="row mb-2 border-bottom border-1">
+                        <div class="col-md-6 ">
+                            <label class="control-label required" asp-for="JabNumber"></label>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.HiddenFor(m => m.JabNumber)
+
+                            <span class="text-info font-weight-bold">@(Html.DisplayFor(m => m.JabNumber))</span>
+
+                        </div>
+                    </div>
+                    <div class="row mb-2 border-bottom border-1">
+                        <div class="col-md-6 ">
+                            <label class="control-label required" asp-for="PreferredJabDate"></label>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-info font-weight-bold">@Model.PreferredJabDate.ToString("dd-MMM-yyyy")</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2 border-bottom border-1">
+                        <div class="col-md-6 ">
+                            <label class="control-label required" asp-for="RegistrationFor"></label>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <span class="text-info font-weight-bold">@(Html.DisplayFor(m => m.RegistrationFor))</span>
+                            @Html.HiddenFor(m => m.RegistrationFor)
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                @if (ViewBag.RegistrationWindowClosed == false)
+                {
+                <div class=" d-flex flex-row mb-2 ">
+                    @if (Model.RegistrationFor.Contains("FAMILY"))
+                    {
+                        <button class="btn btn-outline-primary " type="button" id="button-addon2"
+                                data-jqueryselector="openmodal"
+                                data-modalcontainer="modalcontainer"
+                                data-modalpopupwidth="rightw35"
+                                data-url='@Url.Action("RegisterForBatch2FamilyCreate", "VaccinationOffice")'
+                                data-statichtmlsourcedivid=""
+                                data-modaltitle=""
+                                data-modalheader=""
+                                data-parameter="">
+                            <i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Family Member
+
+                        </button>
+                    }
+                    <button class="btn btn-sm btn-outline-danger ml-auto " id="idRemoveEntry"
+                            onclick="return resetRegistation(this);"
+                            data-url="@Url.Action("RegisterForBatch2Reset", "VaccinationOffice")"
+                            data-confirmationtext="Reset Registraion?">
+                        <i class="far fa-trash-alt"></i>&nbsp;&nbsp;Reset Registration
+                    </button>
+
+                </div>
+                }
+                @if (Model.RegistrationFor.Contains("FAMILY"))
+                {
+                    <div class="childcontent-div" id="div-familydetails">
+                        <div id="pv-familydetails">
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        var rowCounter = 0;
+        $(document).ready(function () {
+            loadFamilyDetails();
+        });
+
+
+        function deleteFamilyRegistration(object) {
+
+            var confirmationtext = $(object).data('confirmationtext');
+            var jsUrl = $(object).data('url');
+
+            var dataParams = $(object).data();
+
+            delete dataParams["url"];
+            delete dataParams["confirmationtext"];
+
+            swal({
+                title: "Are you sure?",
+                text: confirmationtext,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, remove it!",
+                closeOnconfirm: true
+            }, function () {
+                $.ajax({
+                    type: "POST",
+                    url: jsUrl,
+                    data: dataParams,
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            loadFamilyDetails();
+                            hideLoader();
+                            toastr.success(data.message);
+                        } else {
+                            hideLoader();
+                            toastr.error(data.message);
+                        }
+                    }
+                });
+            });
+        }
+
+
+        function resetRegistation(object) {
+
+            var confirmationtext = $(object).data('confirmationtext');
+            var jsUrl = $(object).data('url');
+
+            var dataParams = $(object).data();
+
+            delete dataParams["url"];
+            delete dataParams["confirmationtext"];
+
+            swal({
+                title: "Are you sure you want to reset?",
+                text: confirmationtext,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, reset it!",
+                closeOnconfirm: true
+            }, function () {
+                $.ajax({
+                    type: "POST",
+                    url: jsUrl,
+                    data: dataParams,
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            hideLoader();
+                            var url = '@Url.Action("RegisterForBatch2Create", "VaccinationOffice")';
+                            window.location.href = url;
+                            toastr.success(data.message);
+                        } else {
+                            hideLoader();
+                            toastr.error(data.message);
+                        }
+                    }
+                });
+            });
+        }
+
+
+        //$("#idSelRegistrationFor").change(function () {
+        //    var vaccinationFor = $(this).val();
+        //    if (vaccinationFor == "SELF") {
+        //        $("#idFamilyDetails").addClass("d-none");
+        //        $("#idBtnAddFamilyMember").addClass("d-none");
+        //    }
+        //    else {
+        //        $("#idFamilyDetails").removeClass("d-none");
+        //        $("#idBtnAddFamilyMember").removeClass("d-none");
+        //    }
+        //});
+
+
+
+        //$("#idBtnAddFamilyMember").click(function () {
+        //    var clonedRow = $("#idTblFamilyMembers tr").eq(1).clone();
+        //    clonedRow = clonedRow.removeClass('d-none');
+        //    $("#idTblFamilyMembers tbody").append(clonedRow);
+        //});
+
+        function loadFamilyDetails() {
+            var divid = $("#pv-familydetails");
+            if ($(divid).length == 0)
+                return;
+            //var empno = $(this).val();
+            //if (empno == '') {
+            //    divid.empty();
+            //    $("#div-empdetails").removeClass("active");
+            //    return;
+            //}
+            //else
+            //    $("#div-empdetails").addClass("active");
+
+            $.ajax({
+                url: '@Url.Action("Batch2FamilyDetails", "VaccinationOffice")',
+                //data: {
+                //    'empno': empno
+                //},
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divid.html(data);
+                    //loadScript();
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify("error", result.responseText, 'danger');
+                }
+            });
+        }
+
+        function addBlankRow() {
+            rowCounter = rowCounter + 1;
+
+            var clonedRow = $("#idTblFamilyMembers tr").eq(1).clone();
+            clonedRow = clonedRow.removeClass('d-none');
+
+            $(clonedRow).find("input").each(function () {
+                $(this).attr('name', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+                $(this).attr('id', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+            });
+            $(clonedRow).find("select").each(function () {
+                $(this).attr('name', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+                $(this).attr('id', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+            });
+
+            $(clonedRow).find("span").each(function () {
+                $(this).attr('data-valmsg-for', function (index, currentvalue) { currentvalue = currentvalue.replace("0", rowCounter); return currentvalue; })
+            });
+
+            $("#idTblFamilyMembers tbody").append(clonedRow);
+            return false;
+        }
+
+        function removeRow(obj) {
+ 
+            $(obj).closest('tr').remove();
+        }
+    </script>
+}

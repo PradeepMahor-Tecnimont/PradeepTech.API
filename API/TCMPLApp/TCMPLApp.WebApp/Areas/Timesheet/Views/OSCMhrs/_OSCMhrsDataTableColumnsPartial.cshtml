@@ -1,0 +1,224 @@
+﻿<script type="text/javascript">
+
+    let pvvUrlOSCMhrsDetails = "@Url.Action("GetListsOSCMhrs", "OSCMhrs")";
+    let pvvUrlOSCMhrsSummary = "@Url.Action("GetListsOSCMhrsSummary", "OSCMhrs")";
+
+
+    @if ((bool)@Context.Items["isMobile"] == false)
+    {
+        <text>
+            let datatableColumnsOSCMhrsDetails = [
+                { 'data': "empno", 'className': "td-icon text-center  align-middle", },
+                { 'data': "empName", 'className': "align-middle", },
+                { 'data': "projno", 'className': "td-icon text-center  align-middle", },
+                { 'data': "projnoName", 'className': "align-middle", },
+                { 'data': "wpcode", 'className': "td-icon text-center  align-middle", },
+                { 'data': "wpcodeName", 'className': "align-middle", },
+                { 'data': "activity", 'className': "td-icon text-center  align-middle", },
+                { 'data': "activityName", 'className': "align-middle", },
+                { 'data': "hours", 'className': "td-icon text-right  align-middle", },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        if (data.isEditable == "OK" && data.canEditDelete == "OK") {
+                            return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" ' +
+                                    ' data-url="@Url.Action("Edit", "OSCMhrs", new { Area = "Timesheet" })" ' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + row.oscdId + '"' +
+                                    ' data-modaltitle="Edit OSC Manhours" ' +
+                                    ' data-modalheader="Edit OSC Manhours"> ' +
+                                    ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                 ' </button>'
+                        }
+                        else{
+                            return '';
+                        }
+                        
+
+                    },
+                    className: "td-icon",
+                },
+                {
+                    'data': null,
+                    render: function (data, type, row) {
+                        if (data.isEditable == "OK" && data.canEditDelete == "OK") {
+                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("Delete", "OSCMhrs", new { Area = "Timesheet" })"' +
+                                ' data-id="' + data.oscmId + ';' + data.oscdId + '" ' +
+                                ' data-PostDeleteReLoadDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to Delete OSC Manhours of ' + data.empName + ' - ' + data.projno + ' - ' + data.wpcode + ' - ' + data.activity + ' " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Delete OSC Manhours" ' +
+                                ' data-confirmbuttontext="Delete OSC Manhours" > ' +
+                                ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        }
+                        else{
+                            return '';
+                        }
+                        
+                    },
+                    'className': "td-icon text-center  align-middle",
+                }
+            ];
+
+        let datatableColumnsOSCMhrsSummary = [
+            { 'data': "empno", 'className': "td-icon text-center  align-middle", },
+            { 'data': "empName", 'className': "align-middle", },
+            //{ 'data': "parent", 'className': "td-icon text-center  align-middle", },
+            //{ 'data': "parentName", 'className': "align-middle", },
+            { 'data': "assign", 'className': "td-icon text-center  align-middle", },
+            { 'data': "assignName", 'className': "align-middle", },
+            { 'data': "hours", 'className': "td-icon text-right  align-middle", },
+            {                
+                data: null,
+                render: function (data, type, row) {                    
+                    if (data.isEditable == "OK" && data.isHodApprove == "KO") {
+                        if (data.isLock == "OK") {
+                            return '<button title="Locked" class="btn btn-outline-primary btn-sm border-none " ' +
+                                        ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                        ' data-jqueryselector = "showconfirmationmodal" ' +
+                                        ' data-url="@Url.Action("Unlock", "OSCMhrs", new { Area = "Timesheet" })"' +
+                                        ' data-id="' + data.oscmId + '" ' +
+                                        ' data-PostLockUnlockReLoadOSCMhrsSummaryDataTables="OK" ' +
+                                        ' data-modaltitle="Please Confirm!" ' +
+                                        ' data-confirmationtext="Do you want to unlock manhours of ' + data.empName + ' ? " ' +
+                                        ' data-confirmationtype="warning" ' +
+                                        ' title="UnLock OSC Manhours" ' +
+                                        ' data-confirmbuttontext="Unlock OSC Manhours" > ' +
+                                        ' <i class="fas fa-lock" aria-hidden="true"></i> ' +
+                                   ' </button>';
+                        }
+                        else {
+                            return '<button title="Not locked" class="btn btn-outline-danger btn-sm border-none " ' +
+                                        ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                        ' data-jqueryselector = "showconfirmationmodal" ' +
+                                        ' data-url="@Url.Action("Lock", "OSCMhrs", new { Area = "Timesheet" })"' +
+                                        ' data-id="' + data.oscmId + '" ' +
+                                        ' data-PostLockUnlockReLoadOSCMhrsSummaryDataTables="OK" ' +
+                                        ' data-modaltitle="Please Confirm!" ' +
+                                        ' data-confirmationtext="Do you want to lock manhours of ' + data.empName + ' ? " ' +
+                                        ' data-confirmationtype="warning" ' +
+                                        ' title="Lock OSC Manhours" ' +
+                                        ' data-confirmbuttontext="Lock OSC Manhours" > ' +
+                                        ' <i class="fas fa-lock-open" aria-hidden="true"></i> ' +
+                                    ' </button>';
+                        }
+                    }
+                    else {
+                        if (data.isLock == "OK")
+                            return '&#x2713;';
+                        else
+                            return 'x';
+                    }
+                },
+                'className': "td-icon text-center  align-middle",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.isEditable == "KO" || (data.isLock == "OK" && data.isHodApprove == "OK" && data.isPost == "OK")) {                        
+                        if (data.isEditable == "OK")
+                            return '&#x2713;';
+                        else {
+                            if (data.isHodApprove == "OK")
+                                return '&#x2713;';
+                            else
+                                return 'x';
+                        }
+                    }
+                    else if (data.isLock == "KO") 
+                        return '';                    
+                    else if (data.isEditable == "OK" && data.isLock == "OK" && data.isPost == "KO") {
+                        if (data.isHodApprove == "OK") {
+                            return '<button title="Approved" class="btn btn-outline-primary btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("RevokeApproval", "OSCMhrs", new { Area = "Timesheet" })"' +
+                                ' data-id="' + data.oscmId + '" ' +
+                                ' data-PostLockUnlockReLoadOSCMhrsSummaryDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to revoke approval of manhours of ' + data.empName + ' ? " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Revoke approval of OSC Manhours" ' +
+                                ' data-confirmbuttontext="Revoke approval of OSC Manhours" > ' +
+                                ' <i class="fas fa-user-check" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        }
+                        else {
+                            return '<button title="Not approved" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("Approve", "OSCMhrs", new { Area = "Timesheet" })"' +
+                                ' data-id="' + data.oscmId + '" ' +
+                                ' data-PostLockUnlockReLoadOSCMhrsSummaryDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to approve manhours of ' + data.empName + ' ? " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Approve OSC Manhours" ' +
+                                ' data-confirmbuttontext="Approve OSC Manhours" > ' +
+                                ' <i class="fas fa-user-times" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        }
+                    }
+                },
+                'className': "td-icon text-center  align-middle",
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.isEditable == "KO" || (data.isEditable == "KO" && data.isLock == "OK" && data.isHodApprove == "OK" && data.isPost == "OK")) {
+                        if (data.isPost == "OK")
+                            return '&#x2713;';
+                        else
+                            return 'x';
+                    }
+                    else if (data.isHodApprove == "KO") 
+                        return '';                    
+                    else if (data.isEditable == "OK" && data.isLock == "OK" && data.isHodApprove == "OK") {
+                        if (data.isPost == "OK") {
+                            return '<button title="Posted" class="btn btn-outline-primary btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("Unpost", "OSCMhrs", new { Area = "Timesheet" })"' +
+                                ' data-id="' + data.oscmId + '" ' +
+                                ' data-PostLockUnlockReLoadOSCMhrsSummaryDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to unpost manhours of ' + data.empName + ' ? " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Unpost of OSC Manhours" ' +
+                                ' data-confirmbuttontext="Unpost OSC Manhours" > ' +
+                                ' <i class="fas fa-clipboard-check" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        }
+                        else {
+                            return '<button title="Not posted" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("Post", "OSCMhrs", new { Area = "Timesheet" })"' +
+                                ' data-id="' + data.oscmId + '" ' +
+                                ' data-PostLockUnlockReLoadOSCMhrsSummaryDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to post manhours of ' + data.empName + ' ? " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Post OSC Manhours" ' +
+                                ' data-confirmbuttontext="Post OSC Manhours" > ' +
+                                ' <i class="fas fa-clipboard-list" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        }
+                    }
+                },
+                'className': "td-icon text-center  align-middle",
+            }
+        ];
+        </text>
+    }
+
+
+
+</script>

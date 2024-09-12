@@ -1,0 +1,313 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeeSecondaryDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlSecondaryDetailsEdit = isOnBehalf == IsOk ? ("OnBehalfEmployeeSecondaryDetailsEdit") : ("EmployeeSecondaryDetailsEdit");
+}
+<form asp-controller="EmpGenInfoDetails"
+      asp-action=@urlSecondaryDetailsEdit
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#pw-SecondaryDetails"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript();"
+      data-ajax-success="PostSaveSecondary(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+
+    <div class="col-sm-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+
+            <div class="card-body" style="min-height: 450px;">
+                <div class="app-h4 app-card-header p-2">
+                    @if (isOnBehalf == IsOk)
+                    {
+                        @localizer["Employee Details (On BeHalf)"]
+                    }
+                    else
+                    {
+                        @localizer["Employee Details"]
+                    }
+
+                </div>
+                <span id="spanDescriptionSecondaryStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+                <div class="card-deck" style="margin-top: 20px">
+                    <div class="card shadow col-md-12 col-xl-12">
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="BloodGroup" class="control-label"></label>
+                                        <select asp-for="BloodGroup" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.BloodGroupList">
+                                            <option selected></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Religion" class="control-label"></label>
+                                        <input asp-for="Religion" class="form-control text-uppercase" placeholder="Religion" required />
+                                        <span asp-validation-for="Religion" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="checkbox checkboxlist">
+                                        <label asp-for="MaritalStatus" class="control-label"></label><br />
+
+                                        <div class=" form-group d-inline radio ">
+                                            <input type="radio" asp-for="MaritalStatus" name="MaritalStatus" id="Married" value="Married">
+                                            <label for="Married" class="cr margin-top-5">Married</label>
+                                        </div>
+                                        <div class=" form-group d-inline radio ">
+                                            <input type="radio" asp-for="MaritalStatus" name="MaritalStatus" id="UnMarried" value="UnMarried">
+                                            <label for="UnMarried" class="cr margin-top-5">UnMarried</label>
+                                        </div>
+                                        <div class=" form-group d-inline radio ">
+                                            <input type="radio" asp-for="MaritalStatus" name="MaritalStatus" id="Widow" value="Widow">
+                                            <label for="Widow" class="cr margin-top-5">Widow</label>
+                                        </div>
+                                        <div class=" form-group d-inline radio ">
+                                            <input type="radio" asp-for="MaritalStatus" name="MaritalStatus" id="Widower" value="Widower">
+                                            <label for="Widower" class="cr margin-top-5">Widower</label>
+                                        </div>
+
+                                        <span asp-validation-for="MaritalStatus" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-deck" style="margin-top: 20px">
+                    <div class="card shadow col-md-12 col-xl-6">
+                        <div class="app-h4 app-card-header p-2">@localizer["Residential Address (Current Mumbai Address)"]</div>
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="RAdd1" class="control-label"></label>
+                                        <textarea asp-for="RAdd1" class="form-control text-uppercase" rows="2" maxlength="200" required></textarea>
+                                        <span asp-validation-for="RAdd1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="RHouseNo" class="control-label"></label>
+                                        <input asp-for="RHouseNo" class="form-control text-uppercase" placeholder="House No" />
+                                        <span asp-validation-for="RHouseNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="RCity" class="control-label"></label>
+                                        <input asp-for="RCity" class="form-control text-uppercase" placeholder="City" />
+                                        <span asp-validation-for="RCity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="RDistrict" class="control-label"></label>
+                                        <input asp-for="RDistrict" class="form-control text-uppercase" placeholder="District" />
+                                        <span asp-validation-for="RDistrict" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="RPincode" class="control-label"></label>
+                                        <input asp-for="RPincode" class="form-control" placeholder="Pincode"
+                                               onkeypress="return AllowNumbersOnly(event);" required />
+                                        <span asp-validation-for="RPincode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="RState" class="control-label"></label>
+                                        <input asp-for="RState" class="form-control text-uppercase" placeholder="State" />
+                                        <span asp-validation-for="RState" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="RCountry" class="control-label"></label>
+                                        <input asp-for="RCountry" class="form-control text-uppercase" placeholder="Country" />
+                                        <span asp-validation-for="RCountry" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="PhoneRes" class="control-label"></label>
+                                        <input asp-for="PhoneRes" class="form-control" placeholder="Phone No"
+                                               onkeypress="return RestrictAlphabets(event);" maxlength="50" />
+                                        <span asp-validation-for="PhoneRes" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="MobileRes" class="control-label"></label>
+                                        <input asp-for="MobileRes" class="form-control" placeholder="Mobile No"
+                                               onkeypress="return RestrictAlphabets(event);" maxlength="20" />
+                                        <span asp-validation-for="MobileRes" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow col-md-12 col-xl-6">
+                        <div class="app-h4 app-card-header p-2">
+                            @localizer["Name / Address of Relative / Friend (To be contacted in case of EMERGENCY)"]
+                        </div>
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="RefPersonName" class="control-label"></label>
+                                        <input asp-for="RefPersonName" class="form-control text-uppercase" placeholder="Person Name" />
+                                        <span asp-validation-for="RefPersonName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="RefPersonPhone" class="control-label"></label>
+                                        <input asp-for="RefPersonPhone" class="form-control text-uppercase" placeholder="Phone No"
+                                               onkeypress="return RestrictAlphabets(event);" maxlength="50" />
+                                        <span asp-validation-for="RefPersonPhone" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="FAdd1" class="control-label"></label>
+                                        <textarea asp-for="FAdd1" class="form-control text-uppercase" rows="2" maxlength="200" required></textarea>
+                                        <span asp-validation-for="FAdd1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="FHouseNo" class="control-label"></label>
+                                        <input asp-for="FHouseNo" class="form-control text-uppercase" placeholder="House No" />
+                                        <span asp-validation-for="FHouseNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="FCity" class="control-label"></label>
+                                        <input asp-for="FCity" class="form-control text-uppercase" placeholder="City" />
+                                        <span asp-validation-for="FCity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="FDistrict" class="control-label"></label>
+                                        <input asp-for="FDistrict" class="form-control text-uppercase" placeholder="District" />
+                                        <span asp-validation-for="FDistrict" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="FPincode" class="control-label"></label>
+                                        <input asp-for="FPincode" class="form-control" placeholder="Pincode"
+                                               onkeypress="return AllowNumbersOnly(event);" required />
+                                        <span asp-validation-for="FPincode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="FState" class="control-label"></label>
+                                        <input asp-for="FState" class="form-control text-uppercase" placeholder="State" />
+                                        <span asp-validation-for="FState" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="FCountry" class="control-label"></label>
+                                        <input asp-for="FCountry" class="form-control text-uppercase" placeholder="Country" />
+                                        <span asp-validation-for="FCountry" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-deck" style="margin-top: 20px">
+                    <div class="card shadow col-md-12 col-xl-12">
+                        <div class="app-h4 app-card-header p-2">@localizer["Additional Information"]</div>
+
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CoBus" class="control-label"></label>
+                                        <select asp-for="CoBus" class="form-control chosen-select " data-placeholder=" Please select..." asp-items="ViewBag.CompanyBusList" required>
+                                            <option selected></option>
+                                        </select>
+                                        <span asp-validation-for="CoBus" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PickUpPoint" class="control-label"></label>
+                                        <input asp-for="PickUpPoint" class="form-control text-uppercase" placeholder="Pick Up Point" required />
+                                        <span asp-validation-for="PickUpPoint" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="MobileOff" class="control-label"></label>
+                                        <input asp-for="MobileOff" class="form-control text-uppercase" placeholder="Office Mobile No."
+                                               onkeypress="return RestrictAlphabets(event);" maxlength="20" />
+                                        <span asp-validation-for="MobileOff" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Fax" class="control-label"></label>
+                                        <input asp-for="Fax" class="form-control "
+                                               placeholder="Fax" />
+                                        <span asp-validation-for="Fax" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Voip" class="control-label"></label>
+                                        <input asp-for="Voip" class="form-control" placeholder="VOIP" />
+                                        <span asp-validation-for="Voip" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-deck float-right" style="margin-top: 20px; margin-right: 20px">
+                    <div class="form-group">
+                        <a class="btn btn-secondary f-right" asp-controller="Home" asp-action="Index" title="@localizer["Cancel"]">
+                            @localizer["Cancel"]
+                        </a>
+                        <span class="f-right">&nbsp; &nbsp;</span>
+                        <button class="btn btn-primary f-right" type="submit" id="btnconfirm"
+                                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                data-text="@localizer["Save"]">
+                            @localizer["Save"]
+                        </button>
+                    </div>
+                </div>
+                <div id="results" style="display:none">@TempData["Message"]</div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

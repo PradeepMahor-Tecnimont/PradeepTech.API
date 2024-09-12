@@ -1,0 +1,66 @@
+﻿@model TCMPLApp.WebApp.Models.SelectedDeskIndexViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="Movements"
+      asp-action="TargetDeskDelete"
+      id="formTargetsDesk"
+      data-ajax="true"     
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="Sid" value="@Model.Sid" />
+    <input type="hidden" id="Deskid" name="Deskid" value="@ViewData["DeskId"]" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Delete target desk"] [ <b>@ViewBag.DeskId</b> ]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">            
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">                        
+                        @if (@Model.MovementsSelectedDeskDataTableLists.Any())
+                        {
+                            @foreach (var targetdesks in Model.MovementsSelectedDeskDataTableLists)
+                            {
+
+                                <div class="col-md-12 ">
+                                    <div class="form-group">
+                                        <i class="fas @targetdesks.Iconname f-12"></i>
+                                        <label class="control-label">@if (targetdesks.Category == "A"){ @Html.Raw("Asset") } else { @Html.Raw("Employee") }</label>
+                                        <label class="form-control">@if (targetdesks.Category == "A"){ @targetdesks.AssetId @Html.Raw(" - ") @targetdesks.Name } else { @targetdesks.AssetId @Html.Raw(" - ") @targetdesks.Name }</label>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-md-12 ">
+                                <div class="form-group">
+                                    <label class="control-label">No asset / employee</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Delete"]">
+            @localizer["Delete"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

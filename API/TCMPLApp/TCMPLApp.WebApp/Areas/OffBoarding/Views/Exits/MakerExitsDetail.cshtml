@@ -1,0 +1,166 @@
+﻿@model TCMPLApp.Domain.Models.OffBoarding.OffBoardingEmployeeExitApprovals
+
+@{
+    ViewData["Title"] = "Off-Boarding approval details";
+
+    Html.AntiForgeryToken();
+
+}
+
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item "><a asp-action="MakerExitsPending" asp-controller="Exits" asp-area="OffBoarding">Exits List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Maker Approval</li>
+    </ol>
+}
+
+
+@Html.AntiForgeryToken()
+<form asp-action="MakerExitsApprove"
+      asp-controller="Exits"
+      asp-area="OffBoarding"
+      method="post"
+      accept-charset="UTF-8">
+
+    <div class="container-fluid bg-gray-active border rounded shadow m-auto py-2 col-xl-9">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Off-Boarding - Exits approval by @ViewBag.ActionAttributes.ActionDesc</p>
+        </div>
+        <div class="  bg-gray-active border rounded ">
+            <div class="childcontent-div" id="div-exitdetails">
+                <div id="pv-exitdetails">
+
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.Empno)
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.ApprovedBy)
+                    <label class="form-control readonly">@(Model.ApprovedBy + " - " + Model.ApproverName)  </label>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.Remarks)
+                    <label class="form-control readonly">@(Model.Remarks)  </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-sm-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.IsApprovedDesc)
+                    <label class="form-control readonly">@(Model.IsApprovedDesc ) </label>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.ApprovalDate)
+                    <label class="form-control readonly">@(Model.ApprovalDate?.ToString("dd-MMM-yyyy") ) </label>
+                </div>
+            </div>
+            <div class="col-xl-6 ">
+                <div class="childcontent-div" id="div-filesuploaded">
+                    <div id="pv-filesuploaded">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $(document).ready(function () {
+        loadEmployeeDetails();
+        loadFilesUploaded();
+    });;
+
+    function loadEmployeeDetails() {
+        var divid = $("#pv-exitdetails");
+
+        var empno = $("#Empno").val();
+
+
+        if (empno == '') {
+            divid.empty();
+            $("#div-exitdetails").removeClass("active");
+            return;
+        }
+        else
+            $("#div-exitdetails").addClass("active");
+
+        $.ajax({
+            url: '@Url.Action("GetEmpExitDetails", "Exits",new {Area = "OffBoarding"})',
+            data: {
+                'empno': empno
+            },
+            type: 'GET',
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (data) {
+                divid.html(data);
+                hideLoader();
+            },
+            error: function (result) {
+                hideLoader();
+                errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                notify("error", errorText, 'Error');
+            }
+        });
+    }
+
+    function loadFilesUploaded() {
+
+        var divid = $("#pv-filesuploaded");
+
+        var empno = $("#Empno").val();
+ 
+        var currUserGroupName = '@ViewBag.ActionAttributes.GroupName';
+ 
+        if (!(currUserGroupName == "TIME_MGMT"))
+            return;
+
+        if (empno == '') {
+            divid.empty();
+            $("#div-filesuploaded").removeClass("active");
+            return;
+        }
+        else
+            $("#div-filesuploaded").addClass("active");
+
+        $.ajax({
+            url: '@Url.Action("GetFilesUploadedList", "Exits",new {Area = "OffBoarding"})',
+            data: {
+                'empno': empno,
+                'groupname': currUserGroupName,
+                'readonly':true
+            },
+            type: 'GET',
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (data) {
+                divid.html(data);
+                hideLoader();
+            },
+            error: function (result) {
+                hideLoader();
+                errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                notify("error", errorText, 'Error');
+            }
+        });
+    }
+
+</script>
+}

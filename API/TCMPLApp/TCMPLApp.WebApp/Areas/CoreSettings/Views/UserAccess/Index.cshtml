@@ -1,0 +1,238 @@
+﻿@{
+    ViewData["Title"] = "User Access";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="CoreSettings">Core Settings</a></li>
+        <li class="breadcrumb-item active" aria-current="page">User Access</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.CoreSettings.CoreSettingsHelper.ActionViewUserAccess))
+{
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Module Master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ModulesIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Modules Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cog f-20 text-white theme-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Action Master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ActionsIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Actions Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cog f-20 text-white theme-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Role Master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("RolesIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Roles Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cog f-20 text-white theme-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Module Actions</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ModuleActionsIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Module + Actions Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Module Roles</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ModuleRolesIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Module + Roles Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Module Roles Actions</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ModuleRolesActionsIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Module + Roles + Actions Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl  ">
+                    <div class="card-header">
+                        <h5>Module Role User </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ModuleUserRolesIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Module + Roles + User Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Delegate</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("DelegateIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Delegate</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Module User Role Costcode</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ModuleUserRoleCostcodeIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Module User Role Costcode</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>VU-Module User Role Actions</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("VUModuleUserRoleActionsIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">View Module User Role Actions Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-bars f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Module User Role Actions</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ModuleUserRoleActionsIndex", "UserAccess", new { Area = "CoreSettings" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Add / modify Module User Role Actions Details</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-bars f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

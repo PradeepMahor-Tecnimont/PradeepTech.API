@@ -1,0 +1,146 @@
+﻿@model TCMPLApp.WebApp.Models.ProspectiveEmployeesCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="HRMIS"
+      asp-action="ProspectiveEmployeesCreate"
+      id="formProspectiveEmployees"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.ProposedDoj" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Add Prospective Employees"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add Prospective Employees</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="EmpName" class="control-label"></label>
+                            <input asp-for="EmpName" class="form-control" placeholder="Prospective employee name" required />
+                            <span asp-validation-for="EmpName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Costcode" class="control-label"></label>
+                            <select asp-for="Costcode" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.CostCodeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Costcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="OfficeLocationCode" class="control-label"></label>
+                            <select asp-for="OfficeLocationCode" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.OfficeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="OfficeLocationCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ProposedDoj" class="control-label"></label>
+                            <input id="proposedDoj" class="form-control datepicker" placeholder="@localizer["dd-MM-yyyy"]" value="@Model.ProposedDoj?.ToString("dd/MMM/yyyy")" required />
+                            <span asp-validation-for="ProposedDoj" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="JoinStatusCode" class="control-label"></label>
+                            <select asp-for="JoinStatusCode" class="form-control chosen-select"
+                                data-placeholder="Please select..." asp-items="ViewBag.JoiningStatusList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="JoinStatusCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Grade" class="control-label"></label>
+                            <select asp-for="Grade" class="form-control chosen-select"
+                                data-placeholder=" Please select..." asp-items="ViewBag.GradeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Grade" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Designation" class="control-label"></label>
+                            <select asp-for="Designation" class="form-control chosen-select"
+                                data-placeholder=" Please select..." asp-items="ViewBag.DesignationList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Designation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="EmploymentType" class="control-label"></label>
+                            <select asp-for="EmploymentType" class="form-control chosen-select"
+                                data-placeholder=" Please select..." asp-items="ViewBag.EmploymentTypeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="EmploymentType" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="SourcesOfCandidate" class="control-label"></label>
+                            <select asp-for="SourcesOfCandidate" asp-items="ViewBag.SourcesOfCandidateList"
+                                        class="form-control chosen-select" data-placeholder=" Please select..."  required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="SourcesOfCandidate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-9 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Empno" class="control-label"></label>
+                            <select asp-for="Empno" class="form-control chosen-select"
+                                data-placeholder=" Please select..." asp-items="ViewBag.EmployeeList">
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Empno" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

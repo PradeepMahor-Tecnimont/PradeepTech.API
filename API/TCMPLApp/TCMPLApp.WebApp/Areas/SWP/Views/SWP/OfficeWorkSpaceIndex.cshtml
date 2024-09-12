@@ -1,0 +1,765 @@
+﻿@model TCMPLApp.WebApp.Models.OfficeAtndViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWP">Smart work planning</a></li>
+        <li class="breadcrumb-item active">Office workspace planning</li>
+    </ol>
+}
+
+@section styles
+{
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Office workspace";
+}
+
+<div id="OfficeWorkSpace" name="OfficeWorkSpace">
+    <div style="display:none">
+        @Html.TextBoxFor(model => model.FilterDataModel.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Empno" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Assign" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.DeskAssigmentStatus" />
+
+    <input type="hidden" id="FilterDataModel_EmployeeTypeList" name="FilterDataModel_EmployeeTypeList" value='@String.Join(",", (Model.FilterDataModel.EmployeeTypeList != null) ? Model.FilterDataModel.EmployeeTypeList: new string[] { })' />
+    <input type="hidden" id="FilterDataModel_GradeList" name="FilterDataModel_GradeList" value='@String.Join(",", (Model.FilterDataModel.GradeList != null) ? Model.FilterDataModel.GradeList: new string[] { })' />
+
+
+    </div>
+    <div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Office workspace</p>
+        </div>
+        <div class="card-toolbar">
+            <div role="toolbar">
+                <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw35"
+                   data-url='@Url.Action("OfficeWorkSpaceFilterGet", "SWP", new { Area = "SWP" })'
+                   data-modaltitle="Filters - Office workspace"
+                   data-modalheader="Filters - Office workspace">
+                    <i class="fas fa-filter"></i>&nbsp;Filters
+                </a>
+                <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+                   data-actionid="OfficeWorkSpaceIndex"
+                   data-url='@Url.Action("ResetFilter", "SWP", new { Area = "SWP" })'
+                   href="#"
+                   onclick="resetFilter(event, this);"
+                   style="display: none;">
+                    <i class="fas fa-filter"></i> Reset
+                </a>
+            </div>
+        </div>
+
+        <div class="m-1"></div>
+        <div class="bg-gray-active rounded ">
+            <div class="input-group pt-1 pl-1 pr-1 ">
+                <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search Empno/Name...">
+                <div class="input-group-append">
+                    <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        <th> @Html.DisplayNameFor(model => model.Empno) </th>
+                        <th> @Html.DisplayNameFor(model => model.EmployeeName) </th>
+                        <th> @Html.DisplayNameFor(model => model.Emptype) </th>
+                        <th> @Html.DisplayNameFor(model => model.EmpGrade) </th>
+                        <th> @Html.DisplayNameFor(model => model.WorkArea) </th>
+                        <th> @Html.DisplayNameFor(model => model.Parent) </th>
+                        <th> @Html.DisplayNameFor(model => model.Assign) </th>
+                        <th> @Html.DisplayNameFor(model => model.Planned) </th>
+                        <th> @Html.DisplayNameFor(model => model.Deskid) </th>
+                        <th>   </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+      function localScript() {
+          console.log('localscript');
+          initSelect2();
+          initFilter();
+          localLoadDataTableForGeneralWorkAreas();
+          //localLoadDataTableForWorkAreas();
+
+      }
+
+      function initWorkAreaListners() {
+          $('*[data-workareaselector=showworkareadesks]').off('click').on('click', function () {
+              console.log('showworkareadesks')
+              event.preventDefault();
+              event.stopPropagation();
+              console.log(this.data);
+              var workArea = $(this).data('workarea');
+              var office = $(this).data('office');
+              var floor = $(this).data('floor');
+              var wing = $(this).data('wing');
+              var workAreaDesc = $(this).data('workareadesc');
+
+              var wing = $(this).data('wing');
+              $("#formOfficeWorkAreas input[id=WorkArea]").val(workArea);
+              $("#formOfficeWorkAreas input[id=Office]").val(office);
+              $("#formOfficeWorkAreas input[id=Floor]").val(floor);
+              $("#formOfficeWorkAreas input[id=Wing]").val(wing);
+              $("#formOfficeWorkAreas input[id=WorkAreaDesc]").val(workAreaDesc);
+              $("#formOfficeWorkAreas").submit();
+
+          });
+      }
+
+        function initWorkAreaDesksListners() {
+          $('button[id=btnbacktoworkareas]').off('click').on('click', function () {
+              event.preventDefault();
+              event.stopPropagation();
+
+              var workArea = $(this).data('workarea');
+              var office = $(this).data('office');
+              var floor = $(this).data('floor');
+              var wing = $(this).data('wing');
+              var workAreaDesc = $(this).data('workareadesc');
+
+              $("#formOfficeWorkAreas input[id=WorkArea]").val(workArea);
+              $("#formOfficeWorkAreas input[id=Office]").val(office);
+              $("#formOfficeWorkAreas input[id=Floor]").val(floor);
+              $("#formOfficeWorkAreas input[id=Wing]").val(wing);
+              $("#formOfficeWorkAreas input[id=WorkAreaDesc]").val(workAreaDesc);
+              $('#formOfficeWorkSpaceWorkAreaDesks').attr('action', "@Url.Action("OfficeWorkAreasPostBack", "SWP" )").submit();
+
+          });
+      }
+
+      function initWorkAreaDeskSelectListners() {
+          $('*[data-workareaselector=selectworkareadesk]').off('click').on('click', function () {
+              event.preventDefault();
+              event.stopPropagation();
+              var empno = $(this).data('empno');
+              var workArea = $(this).data('workarea');
+              var deskid = $(this).data('deskid');
+              var startdate = $(this).data('startdate');
+              var date = $(this).data('date');
+
+              var workAreaDesc = $(this).data('workareadesc');
+              var wing = $(this).data('wing');
+
+              $("#formOfficeWorkSpaceWorkAreaDesks input[id=WorkAreaDesc]").val(workAreaDesc);
+              $("#formOfficeWorkSpaceWorkAreaDesks input[id=Wing]").val(wing);
+              $("#formOfficeWorkSpaceWorkAreaDesks input[id=WorkArea]").val(workArea);
+              $("#formOfficeWorkSpaceWorkAreaDesks input[id=Deskid]").val(deskid);
+              $("#formOfficeWorkSpaceWorkAreaDesks input[id=Startdate]").val(startdate);
+              $("#formOfficeWorkSpaceWorkAreaDesks input[id=WorkArea]").val(workArea);
+
+             // $('#formOfficeWorkSpaceWorkAreaDesks').attr('action', "@Url.Action("OfficeWorkAreasPost", "SWP" )").submit();
+
+              $("#formOfficeWorkSpaceWorkAreaDesks").submit();
+
+          });
+      }
+
+          function initDatePicker() {
+              $('.datepicker').bootstrapMaterialDatePicker({
+                  format: 'DD-MMM-YYYY',
+                  weekStart: 0,
+                  time: false,
+                  useCurrent: false,
+                  nowButton: true,
+                  clearButton: true
+              });
+
+              $("#startDate").on("change", function (event, date) {
+                  if (!date) {
+                      $("#StartDate").val('');
+
+                      return;
+                  } else {
+
+                      $("#StartDate").val(date.format("DD-MMM-YYYY"));
+
+                  }
+
+              });
+
+          }
+
+          function initFilter() {
+
+              var currYear = moment().year();
+              var curYearLastDate = new Date(currYear, 11, 31);
+              var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+              $('#startDateFilter').bootstrapMaterialDatePicker({
+                  format: 'DD-MMM-YYYY',
+                  weekStart: 0,
+                  minDate: curYearMinDate,
+                  maxDate: curYearLastDate,
+                  time: false
+              }).on('change', function (e, date) {
+
+                  $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+              });
+
+              if ($('#StartDate').val()) {
+                  $('#startDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#StartDate").val()));
+              }
+
+          }
+
+          function localLoadDataTable() {
+              $.fn.dataTable.ext.errMode = 'none';
+
+              $('#tbDataGrid').DataTable().destroy();
+              $('#tbDataGrid tbody').empty();
+              var table = $('#tbDataGrid')
+              //.on('xhr.dt', function (e, settings, json, xhr) {
+              //        // Hack for test case to have empty data
+              //      console.log(xhr);
+              //        // Actual implementation
+              //        if (json.error) {
+              //          // Wait for DataTables to do its draw
+              //          table.one('draw', function () {
+              //              console.log("Hi");
+              //                $('#tbDataGrid tbody td').text(errMsg);
+              //              });
+              //          notify("error",json.error );
+              //        }})
+            .on("error.dt", function (e, settings, techNote, message) {
+
+                //console.log(settings.json.error);
+                //console.log(settings.jqXHR.responseJSON.error);
+                var errMsg = settings.jqXHR.responseJSON.error ? settings.jqXHR.responseJSON.error : message;
+                table.one('draw', function () {
+                      $('#tbDataGrid tbody td').text(errMsg);
+                    });
+                notify("error",errMsg);
+
+            })
+              .DataTable({
+                  drawCallback: function (settings) {
+                      loadScript();
+                  },
+                  ordering: true,
+                  order: [[7,"asc"],[1,"asc"]],
+                  responsive: true,
+                  autoWidth: false,
+                  pageLength: 25,
+                  lengthMenu: [25, 50, 100, 200],
+                  processing: true,
+                  serverSide: true,
+                  stateSave: false,
+                  info: false,
+                  filter: false,
+                  layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                columnDefs: [
+                    { orderable: false, targets: "_all" }
+                ],
+            @if ((bool)@Context.Items["isMobile"] == false)
+            {
+                  <text>
+                  columns: [
+                      { data: "empno", width: '3.0rem' },
+                      { data: "employeeName", width: '15.0rem' },
+                      { data: "emptype", width: '1.0rem' },
+                      { data: "empGrade", width: '3.0rem' },
+                      { data: "workArea", width: '3.0rem' },
+                      { data: "parent", width: '3.0rem' },
+                      { data: "assign", width: '3.0rem' },
+                      { data: "planned", width: '3.0rem' ,
+                        render: function (data, type, row) {
+
+                            if(data==0)
+                                return 'Pending';
+                            else
+                                return '';
+                        }
+                      },
+                      { data: "deskid", width: '3.0rem' },
+                      {
+                          data: null,
+                          render: function (data, type, row) {
+
+                              if ("@Html.ValueFor(model => model.PlanningExists)" != "OK")
+                                {
+                                    return '';
+                                }
+                              if (data.deskid == null || data.deskid == "") {
+                                  return '<button class="btn btn-sm-icon  " ' +
+                                      ' data-jqueryselector="openmodal" ' +
+                                      ' data-modalcontainer="modalcontainer" ' +
+                                      ' data-url="@Url.Action("OfficeWorkAreas", "SWP", new { Area = "SWP" })"' +
+                                      ' data-modalpopupwidth="rightw50" ' +
+                                      ' data-empno="' + data.empno + '"' +
+                                      ' > ' +
+                                      ' <i class="far fa-list-alt" aria-hidden="true"></i> ' +
+                                      ' </button>'
+                              } else {
+                                  return '';
+                              }
+                          },
+                          'className': "td-icon text-center  align-middle",
+                      }
+                  ],
+                  </text>
+              }
+              else
+              {
+                  <text>
+                  ordering: false,
+                  columns: [
+                      {
+                          data: null,
+                          render: function (data, type, row) {
+                              var item = '<div class="card">';
+                              item += '<div class="card-mobiledatatable">';
+                              item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                              item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                              item += '</div></div>';
+                              return item
+                          },
+                          sortable: false,
+                          searchable: false,
+                          className: "datatable-td-mobile"
+                      }
+                  ],
+                  </text>
+              }
+                  ajax: {
+                      headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                      url: '@Url.Action("GetListOfficeWorkSpaceEmployees", "SWP")',
+                      type: 'GET',
+                      cache: true,
+                      dataType: "json",
+                      data: function (d) {
+                          d.columns = null;
+                          d.order = null;
+                          d.search = null;
+                            d.assign = ($('#FilterDataModel_Assign').val());
+                            d.grade = $("#FilterDataModel_GradeList").val();
+                            d.employeeType = $("#FilterDataModel_EmployeeTypeList").val();
+                        d.genericSearch = $('#GenericSearch').val();
+                        d.deskAssignmentStatus = $("#FilterDataModel_DeskAssigmentStatus").val();
+
+                      },
+                      error: function (request, status, error) {
+                          console.log("Error");
+                          notify('error', request.responseText, 'danger');
+                      }
+                  }
+              });
+
+          }
+
+          $(document).ready(function () {
+
+              localLoadDataTable();
+
+          });
+
+          function PostSaveReLoadDataTable(data) {
+              if (data.success) {
+                  $("#modalcontainer").modal('hide');
+                  localLoadDataTable();
+                  hideLoader();
+                  notify('success', data.response, 'Success');
+              }
+          }
+
+          function PostFilterReLoadDataTable(data) {
+              $("#modalcontainer").modal('hide');
+
+              $("#FilterDataModel_StartDate").val(data.startDate);
+
+            $("#FilterDataModel_Empno").val(data.empno);
+            $("#FilterDataModel_Assign").val(data.assign);
+
+            $("#FilterDataModel_GradeList").val(data.gradeList);
+            $("#FilterDataModel_EmployeeTypeList").val(data.employeeTypeList);
+            $("#FilterDataModel_DeskAssigmentStatus").val(data.deskAssigmentStatus);
+
+              location.reload(true);
+
+              //localLoadDataTable();
+
+              hideLoader();
+          }
+
+          function localLoadDataTableForWorkAreas(vstartDate) {
+              console.log('localLoadDataTableForWorkAreas');
+              $('#tbDataGridModel').DataTable().destroy();
+
+              $('#tbDataGridModel tbody').empty();
+              var table = $('#tbDataGridModel').DataTable({
+                  drawCallback: function (settings) {
+                      loadScript();
+                      initWorkAreaListners();
+                  },
+                  //ordering: false,
+                  order: [[3, "desc"]],
+                  responsive: true,
+                  autoWidth: false,
+                  pageLength: 25,
+                  lengthMenu: [25, 50, 100, 200],
+                  processing: true,
+                  serverSide: true,
+                  stateSave: true,
+                  info: false,
+                  filter: false,
+                  layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+                  columnDefs: [
+                      { orderable: false, targets: 0 }
+                  ],
+          @if ((bool)@Context.Items["isMobile"] == false)
+          {
+              <text>
+                  ordering: false,
+                  columns: [
+                      { data: "workArea", class: "hidden" },
+                      { data: "areaDesc", width: "10.0rem" },
+                      { data: "office" },
+                      { data: "floor" },
+                      { data: "wing" },
+                      { data: "totalCount" },
+                      { data: "occupiedCount" },
+                      { data: "availableCount" },
+                      {
+                          data: null,
+                          render: function (data, type, row) {
+
+                              if (data.deskid == null || data.deskid == "") {
+                                  if (data.availableCount > 0) {
+                                      return '<button class="btn btn-sm-icon  " ' +
+                                          ' data-workareaselector=showworkareadesks ' +
+                                          ' data-workarea=' + data.workArea +
+                                          ' data-office="' + data.office + '"' +
+                                          ' data-floor="' + data.floor + '"' +
+                                          ' data-wing="' + data.wing + '"' +
+                                          ' > ' +
+                                          ' <i class="far fa-list-alt" aria-hidden="true"></i> ' +
+                                          ' </button>'
+                                  } else {
+                                      return '';
+                                  }
+                              } else {
+                                  return '';
+                              }
+                          },
+                          'className': "td-icon text-center  align-middle",
+                      }
+                  ],
+              </text>
+          }
+          else
+          {
+              <text>
+                  ordering: false,
+                  columns: [
+                      {
+                          data: null,
+                          render: function (data, type, row) {
+                              var item = '<div class="card"> ';
+                              item += '<div class="card-mobiledatatable"> ';
+                              item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                              item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                              item += ' </div> </div>';
+                              return item
+                          },
+                          sortable: false,
+                          searchable: false,
+                          className: "datatable-td-mobile"
+                      }
+                  ],
+              </text>
+          }
+                  ajax: {
+                      headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                      url: '@Url.Action("GetListGeneralWorkAreasForOfficeWorkspace", "SWP")',
+                      type: 'GET',
+                      cache: true,
+                      dataType: "json",
+                      data: function (d) {
+                          d.columns = null;
+                          d.order = null;
+                          d.search = null;
+                          d.startDate = ($('#StartDate').val());
+                          d.assign = ($('#FilterDataModel_Assign').val());
+                      },
+                      error: function (request, status, error) {
+                          notify('error', request.responseText, 'danger');
+                      }
+                  }
+              });
+
+          }
+
+          function localLoadDataTableForWorkAreasDesk() {
+               $('#tbDataGridDeskModel').DataTable().destroy();
+
+              $('#tbDataGridDeskModel tbody').empty();
+              var table = $('#tbDataGridDeskModel').DataTable({
+                  drawCallback: function (settings) {
+                      loadScript();
+                      initWorkAreaDesksListners();
+                      initWorkAreaDeskSelectListners();
+                  },
+                  ordering: false,
+                  responsive: true,
+                  autoWidth: false,
+                  pageLength: 25,
+                  lengthMenu: [25, 50, 100, 200],
+                  processing: true,
+                  serverSide: true,
+                  stateSave: true,
+                  info: false,
+                  filter: false,
+                  layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+                  columnDefs: [
+                      { orderable: false, targets: 0 }
+                  ],
+          @if ((bool)@Context.Items["isMobile"] == false)
+          {
+              <text>
+                  ordering: false,
+                  columns: [
+                       { data: "office" },
+                      { data: "floor" },
+                      { data: "seatNo" },
+                      { data: "wing" },
+                      //{ data: "assetCode" },
+                      { data: "bay" },
+                      {
+                          data: null,
+                          render: function (data, type, row) {
+
+                              return '<button class="btn btn-outline-primary btn-sm border-none  font-weight-bold" ' +
+                                  ' data-workareaselector=selectworkareadesk' +
+                                  ' data-empno="' + $('#Empno').val() + '" ' +
+                                  ' data-workarea="' + $('#WorkArea').val() + '" ' +
+                                  ' data-wing="' + data.wing + '"' +
+                                  ' data-deskid=' + data.deskid +
+                                  ' data-startdate="@Model.FilterDataModel.StartDate" ' +
+                                  ' data-date="@Model.FilterDataModel.StartDate" ' +
+                                  ' > ' + data.deskid  +
+                                  ' </button>';
+
+                          },
+                          'className': "td-icon text-center  align-middle",
+                      }
+                  ],
+              </text>
+          }
+          else
+          {
+              <text>
+                  ordering: false,
+                  columns: [
+                      {
+                          data: null,
+                          render: function (data, type, row) {
+                              var item = '<div class="card"> ';
+                              item += '<div class="card-mobiledatatable"> ';
+                              item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                              item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                              item += ' </div> </div>';
+                              return item
+                          },
+                          sortable: false,
+                          searchable: false,
+                          className: "datatable-td-mobile"
+                      }
+                  ],
+              </text>
+          }
+                  ajax: {
+                      headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                      url: '@Url.Action("GetListWorkAreaDesksForOfficeWorkspace", "SWP")',
+                      type: 'GET',
+                      cache: true,
+                      dataType: "json",
+                      data: function (d) {
+                          d.columns = null;
+                          d.order = null;
+                          d.search = null;
+                          d.workArea = ($('#WorkArea').val());
+                          d.wing = ($('#Wing').val());
+                          d.office = ($('#Office').val());
+                          d.floor = ($('#Floor').val());
+                          d.startDate = ($('#StartDate').val());
+                          d.assign = ($('#FilterDataModel_Assign').val());
+
+                      },
+                      error: function (request, status, error) {
+                          notify('error', request.responseText, 'danger');
+                      }
+                  }
+              });
+
+      }
+
+
+        function localLoadDataTableForGeneralWorkAreas() {
+            console.log('localLoadDataTableForGeneralWorkAreas');
+           $('#tbDataGridModel').DataTable().destroy();
+
+        $('#tbDataGridModel tbody').empty();
+
+        var table = $('#tbDataGridModel').DataTable({
+        drawCallback: function (settings) {
+                loadScript();
+                initWorkAreaListners();
+        },
+        order: [[3, "desc"]],
+        responsive: true,
+        autoWidth: false,
+        pageLength: 25,
+        lengthMenu: [25, 50, 100, 200],
+        processing: true,
+        serverSide: true,
+        stateSave: false,
+        info: false,
+        filter: false,
+        layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+        columnDefs: [
+        { orderable: false, targets: 0 }
+        ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                ordering: false,
+                columns: [
+                    { data: "workArea", class : "hidden"},
+                    { data: "areaDesc" , width: "10.0rem" },
+                    { data: "office" },
+                    { data: "floor" },
+                    { data: "wing" },
+                    { data: "totalCount" },
+                    { data: "occupiedCount" },
+                    { data: "availableCount" },
+                    {
+                        data: null,
+                            render: function (data, type, row) {
+
+                                if (data.deskid == null || data.deskid == "") {
+                                    if (data.availableCount > 0  ) {
+                                    return '<a class="btn btn-sm-icon  " ' +
+                                        ' data-workareaselector=showworkareadesks' +
+                                        ' data-date="'+ ($('#StartDate').val()) +'"' +
+                                        ' data-workareadesc="'+ data.areaDesc +'"' +
+                                        ' data-workarea=' + data.workArea +
+                                        ' data-office="' + data.office + '"' +
+                                        ' data-floor="' + data.floor + '"' +
+                                        ' data-wing="' + data.wing + '"' +
+                                         ' > ' +
+                                        ' <i class="far fa-list-alt" aria-hidden="true"></i> ' +
+                                        ' </a>'
+                                    } else {
+                                        return '';
+                                    }
+                                } else {
+                                    return '' ;
+                                }
+                        },
+                                'className': "td-icon text-center  align-middle",
+                        }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                ordering: false,
+                columns: [
+                {
+                data: null,
+                render: function (data, type, row) {
+                var item = '<div class="card"> ';
+                    item += '<div class="card-mobiledatatable"> ';
+                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                        item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                        item += ' </div> </div>';
+                return item
+                },
+                sortable: false,
+                searchable: false,
+                className: "datatable-td-mobile"
+                }
+                ],
+            </text>
+        }
+        ajax: {
+        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+         url: '@Url.Action("GetListGeneralWorkAreasForOfficeWorkspace", "SWP")',
+        type: 'GET',
+        cache: true,
+        dataType: "json",
+        data: function (d) {
+            d.columns = null;
+            d.order = null;
+            d.search = null;
+            d.empno = $("#formOfficeWorkAreas input[id=Empno]").val();
+            d.startDate = ($('#StartDate').val());
+
+            d.assign = ($('#FilterDataModel_Assign').val());
+        },
+        error: function (request, status, error) {
+        notify('error', request.responseText, 'danger');
+        }
+        }
+        });
+
+    }
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                var dataTable = $('#tbDataGrid').DataTable();
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+        $('#buttonSearch').on('click', function () {
+            var dataTable = $('#tbDataGrid').DataTable();
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+    </script>
+}

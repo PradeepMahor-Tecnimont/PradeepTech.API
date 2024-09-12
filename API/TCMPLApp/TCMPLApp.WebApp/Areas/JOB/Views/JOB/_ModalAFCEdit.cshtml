@@ -1,0 +1,95 @@
+﻿@model TCMPLApp.WebApp.Models.JobEditAFCViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="JOB"
+      asp-action="EditAFC"
+
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccess(null);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Projno)
+
+    <div class="modal-header">
+        <h5 class="modal-title">@ViewBag.Title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.Title</h5>
+            </div>
+            <div class="card-toolbar">
+                <div role="toolbar">
+                    <a title="Create" class="btn btn-outline-primary btn-sm border-none" href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw35"
+                       data-url='@Url.Action("ClientCreate", "JOB", new { Area = "JOB" })'
+                       data-id="@Model.Projno"
+                       data-modaltitle="Create"
+                       data-modalheader="Create"
+                       data-callback="openModalListner">
+                        &nbsp;&nbsp;<i class="fas fa-plus"></i> Create Client
+                    </a>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="Client" class="control-label"></label>
+                            <select asp-for="Client" class="form-control Select2" data-placeholder=" Please select..." asp-items="ViewBag.ClientList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Client" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="ProjectType" class="control-label"></label>
+                            <select asp-for="ProjectType" class="form-control Select2" data-placeholder=" Please select..." asp-items="ViewBag.ProjectTypesList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ProjectType" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="InvoiceToGrpCompany" class="control-label"></label>
+                            <select asp-for="InvoiceToGrpCompany" class="form-control Select2" data-placeholder=" Please select..." asp-items="ViewBag.InvoiceToGrpCompanyList" required>
+                                <option selected></option>
+                            </select>
+                            @*
+                            <select asp-for="InvoiceToGrpCompany" class="form-control chosen-select" data-placeholder="Please select..." required>
+                            <option selected></option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                            </select>*@
+                            <span asp-validation-for="InvoiceToGrpCompany" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Approve"]">
+            @localizer["Approve"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+

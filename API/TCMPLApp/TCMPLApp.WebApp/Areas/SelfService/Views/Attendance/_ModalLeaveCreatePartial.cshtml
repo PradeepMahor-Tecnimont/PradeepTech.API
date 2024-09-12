@@ -1,0 +1,167 @@
+﻿@model TCMPLApp.WebApp.Models.LeaveCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Attendance"
+      asp-action="LeaveCreate"
+      id="formNewLeaveCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="loadScript()"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.HalfDayDay)
+    <input type="hidden" asp-for="@Model.StartDate" />
+    <input type="hidden" asp-for="@Model.EndDate" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Leave application</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Leave application"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dd-met">@(ViewBag.EmployeeDetails.Empno + " - " + ViewBag.EmployeeDetails.Name)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="OfficeLocation" class="control-label"></label>
+                            <input asp-for="OfficeLocation" class="form-control" placeholder="Office location" required />
+                            <span asp-validation-for="OfficeLocation" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="Project" class="control-label"></label>
+                            <input asp-for="Project " class="form-control" placeholder="Working on" required />
+                            <span asp-validation-for="Project" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="Appover" class="control-label"></label>
+                            <select asp-for="Appover" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.Approvers" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Appover" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="CareTaker" class="control-label"></label>
+                            <input asp-for="CareTaker" class="form-control" placeholder="Caretaker" required />
+                            <span asp-validation-for="CareTaker" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <label asp-for="LeaveType" class="control-label"></label>
+                            <select asp-for="LeaveType" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.LeaveTypes" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="LeaveType" class="text-danger"></span>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <label asp-for="LeavePeriod" class="control-label"></label>
+                            <input asp-for="LeavePeriod" class="form-control" placeholder="Leave period" required />
+                            <span asp-validation-for="LeavePeriod" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <div id="divHalfDay">
+                                <label asp-for="HalfDayDay" class="control-label"></label>
+                                <select id="halfDayDay" class="form-control chosen-select " data-placeholder="Please select..." asp-items="ViewBag.HalfDayDay">
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="HalfDayDay" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <label asp-for="StartDate" class="control-label"></label>
+                            <input id="startDate" class="form-control datepicker" placeholder="@localizer["Start date"]" value="" required />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <label asp-for="EndDate" class="control-label"></label>
+                            <input id="endDate" class="form-control datepicker" placeholder="@localizer["End date"]" value="" required />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="Reason" class="control-label"></label>
+                            <input asp-for="Reason" class="form-control" placeholder="Reason" required />
+                            <span asp-validation-for="Reason" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="PhoneNumber" class="control-label"></label>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="Phone number" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="StdNumber" class="control-label"></label>
+                            <input asp-for="StdNumber" class="form-control" placeholder="Std number" />
+                            <span asp-validation-for="StdNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+                            <label asp-for="Address" class="control-label"></label>
+                            <textarea asp-for="Address" class="form-control" placeholder="Address" rows="2"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <div class="switch d-inline m-r-5">
+                                <input type="checkbox" asp-for="MedicalCertificate" />
+                                <label for="MedicalCertificate" class="cr"></label>
+                            </div>
+                            @Html.DisplayNameFor(model => model.MedicalCertificate)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

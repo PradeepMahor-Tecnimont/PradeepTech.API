@@ -1,0 +1,81 @@
+﻿@model TCMPLApp.Domain.Models.RapReporting.BulkReport
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Report";
+}
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+
+<div class="modal-header">
+    <h5 class="modal-title">Report</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>@Model.Reportid</h5>
+        </div>
+        <div class="card-block">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12 col-xl-12">
+                        <label asp-for="Reportid" class="control-label"></label>
+                        <input asp-for="Reportid" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <label asp-for="Yyyy" class="control-label"></label>
+                        <input asp-for="Yyyy" class="form-control" readonly />
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <label asp-for="Yymm" class="control-label"></label>
+                        <input asp-for="Yymm" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <label asp-for="Yearmode" class="control-label"></label>
+                        <input asp-for="Yearmode" class="form-control" readonly />
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <label asp-for="SDate" class="control-label"></label>
+                        <input asp-for="SDate" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <label asp-for="Status" class="control-label"></label>
+                        <input asp-for="Status" class="form-control" readonly />
+                    </div>
+                    @if (Model.iscomplete == 0)
+                    {
+                        <div class="col-md-6 col-xl-6">
+                            <label asp-for="Filename" class="control-label"></label>                            
+                            @*<a id="downloadBulkReport" href="C:\RAPRepository\Download\lmEH6etd26.zip">Download</a>*@
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+</div>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

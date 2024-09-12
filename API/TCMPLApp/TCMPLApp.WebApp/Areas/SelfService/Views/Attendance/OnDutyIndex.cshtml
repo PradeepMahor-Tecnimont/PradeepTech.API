@@ -1,0 +1,478 @@
+﻿@model TCMPLApp.WebApp.Models.LeaveOnDutyApplicationsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section styles
+{
+
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+<!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+<!-- Material Datepicker css -->
+    @*<link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />*@
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+    <li class="breadcrumb-item active">On duty</li>
+</ol>
+}
+
+@{
+    ViewData["Title"] = "On duty applications";
+
+}
+
+@*<input type="hidden" asp-for="@Model.FilterDataModel.BusinessEntityId" />
+    <input type="hidden" id="FilterDataModel_StartDateTime" name="FilterDataModel_StartDateTime" value="@Model.FilterDataModel.StartDateTimeString" />
+    <input type="hidden" id="FilterDataModel_EndDateTime" name="FilterDataModel_EndDateTime" value="@Model.FilterDataModel.EndDateTimeString" />
+    <input type="hidden" asp-for="@Model.FilterDataModel.StatusTypeId" />*@
+<div style="display:none">
+    @Html.TextBoxFor(model => model.FilterDataModel.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    @Html.TextBoxFor(model => model.FilterDataModel.EndDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Empno" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.OndutyType" />
+</div>
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>OnDuty applications</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <a class="btn btn-outline-primary btn-sm border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw50"
+               data-url='@Url.Action("OnDutyCreateTab1", "Attendance", new { Area = "SelfService" })'
+               data-modaltitle="On duty application"
+               data-modalheader="On duty application">
+                <i class="fas fa-plus"></i>&nbsp;@localizer["On duty application"]
+            </a>
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("OnDutyFilterGet", "Attendance", new { Area = "SelfService" })'
+               data-modaltitle="Filters - OnDuty"
+               data-modalheader="Filters - OnDuty">
+                <i class="fas fa-filter"></i>
+                Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="OndutyIndex"
+               data-url='@Url.Action("ResetFilter", "Attendance", new { Area = "SelfService" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+        </div>
+    </div>
+
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        @*<div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+            <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+            </div>*@
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th></th>
+                    <th>@Html.DisplayNameFor(model => model.ApplicationDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.ApplicationId)</th>
+                    <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.OndutyType)</th>
+                    <th>@Html.DisplayNameFor(model => model.LeadName)</th>
+                    <th>@Html.DisplayNameFor(model => model.LeadApproval)</th>
+                    <th>@Html.DisplayNameFor(model => model.HodApproval)</th>
+                    <th>@Html.DisplayNameFor(model => model.HrApproval)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script type="text/javascript">
+        function localScript() {
+            initSelect2();
+            initFilter();
+            initDatePicker();
+        }
+
+    function initDatePicker() {
+
+        var currentDate = moment(new Date);
+        var PastMonth = moment(currentDate).add(-1, 'M');
+        var futureMonth = moment(currentDate).add(1, 'M');
+        var futureMonthEnd = moment(futureMonth).endOf('month');
+
+        if (currentDate.date() != futureMonth.date() && futureMonth.isSame(futureMonthEnd.format('YYYY-MM-DD'))) {
+            futureMonth = futureMonth.add(1, 'd');
+        }
+
+        var currYear = moment().year();
+
+        $('#fromHRS').bootstrapMaterialDatePicker({
+            date: false,
+            format: 'HH:mm',
+            shortTime: true,
+            pickSeconds: false,
+        }).on('change', function (e, date) {
+            $("#FromHRS").val(date.format('HH:mm'));
+
+            var fromTime = $("#FromHRS").val();
+            var ToTime = $("#EndTime").val();
+
+            if (ToTime != null || ToTime != '') {
+                var beginningTime = moment(fromTime, 'HH:mm');
+                var endTime = moment(ToTime, 'HH:mm');
+
+                if (endTime.isBefore(beginningTime)) {
+                    $("#FromHRS").val("");
+                    notify('error', 'Invalid Time', 'danger');
+                }
+            }
+            $("#Remarks").focus();
+        });
+
+        $('#toHRS').bootstrapMaterialDatePicker({
+            date: false,
+            format: 'HH:mm',
+            shortTime: true,
+            pickSeconds: false,
+        }).on('change', function (e, date) {
+            $("#ToHRS").val(date.format('HH:mm'));
+
+            var fromTime = $("#FromHRS").val();
+            var ToTime = $("#ToHRS").val();
+
+            var beginningTime = moment(fromTime, 'HH:mm');
+            var endTime = moment(ToTime, 'HH:mm');
+
+            if (endTime.isBefore(beginningTime)) {
+                $("#ToHRS").val("");
+                notify('error', 'Invalid Time', 'danger');
+            }
+            $("#Remarks").focus();
+        });
+
+        $('.datepicker').bootstrapMaterialDatePicker({
+            format: 'DD-MMM-YYYY',
+            weekStart: 0,
+            time: false,
+            useCurrent: false,
+            nowButton: true
+        });
+
+        $("#startDate").on("change", function (event, date) {
+            $("#StartDate").val(date.format("DD-MMM-YYYY"));
+        });
+         $("#endDate").on("change", function (event, date) {
+             $("#EndDate").val(date.format("DD-MMM-YYYY"));
+        });
+          $("#newEndDate").on("change", function (event, date) {
+             $("#NewEndDate").val(date.format("DD-MMM-YYYY"));
+        });
+
+
+    }
+
+        function initFilter() {
+
+            var currYear = moment().year();
+            var curYearLastDate = new Date(currYear, 11, 31);
+            var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+            $('.datepickerFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                useCurrent: false
+            });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMinDate', date);
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMaxDate', curYearLastDate);
+
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+            });
+
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            if ($('#StartDate').val()) {
+                $('#startDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#StartDate").val()));
+            }
+            if ($('#EndDate').val())
+                $('#endDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#EndDate").val()));
+
+
+        }
+
+        function localLoadDataTable() {
+            $('#tbGrid').DataTable().destroy();
+
+            $('#tbGrid tbody').empty();
+
+            let isHRAdmin = "@(CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleAttendanceAdmin))";
+            console.log('HR Admin - ' + isHRAdmin);
+            var table = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+              @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        //order: [1, "asc"],
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    return '<button class="btn btn-outline-info btn-sm border-none" ' +
+                                        ' data-jqueryselector="openmodal" ' +
+                                        ' data-modalcontainer="modalcontainer" '+
+                                        ' data-url="@Url.Action("OnDutyDetails", "Attendance", new { Area = "SelfService" })"' +
+                                        ' data-modalpopupwidth="rightw35" ' +
+                                        ' data-applicationid="' + data.applicationId + '"' +
+                                        ' data-modaltitle="On duty details" ' +
+                                        ' data-modalheader="On duty details" ' +
+                                        ' > ' +
+                                        ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                        ' </button>'
+                                },
+                                'className': "td-icon",
+                            },
+                            { data: "applicationDate", width: "100px" },
+                            { data: "applicationId" },
+                            {
+                                data: "startDate",
+                                width: "100px",
+                                render: function (data, type, row) {
+                                    return moment(data).format("DD-MMM-YYYY");
+                                }
+                            },
+                            { data: "ondutyType" },
+                            { data: "leadName" },
+                            { data: "leadApproval" },
+                            { data: "hodApproval" },
+                            { data: "hrApproval" },
+                            { data: "description" },
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    if (isHRAdmin == "True") {
+                                        return ' <button class="btn btn-outline-danger btn-sm border-none"  ' +
+                                            ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-url="@Url.Action("OndutyDeleteForce", "Attendance", new { Area = "SelfService" })" ' +
+                                            ' data-postsavereloaddatatable="OK" ' +
+                                            ' data-applicationid="' + data.applicationId + '" ' +
+                                            ' data-empno="' + data.empno + '" ' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext="Delete leave application ' + data.applicationId + ' ?" ' +
+                                            ' data-confirmationtype="warning" data-confirmbuttontext="Delete application"> ' +
+                                            ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                            ' </button> ';
+                                    }
+                                    else if (data.canDeleteApp)
+                                        return ' <button class="btn btn-outline-danger btn-sm border-none"  ' +
+                                            ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-url="@Url.Action("OndutyDelete", "Attendance", new { Area = "SelfService" })" ' +
+                                            ' data-redirecturl="" ' +
+                                            ' data-postsavereloaddatatable="OK" ' +
+                                            ' data-applicationid="' + data.applicationId + '" ' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext="Delete onduty application ' + data.applicationId + ' ?" ' +
+                                            ' data-confirmationtype="warning" data-confirmbuttontext="Delete application"> ' +
+                                            ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                            ' </button> ';
+                                    else
+                                        return '';
+                                },
+                                'className': "td-icon",
+                            },
+                           {
+                                data: null,
+                                render: function (data, type, row) {
+
+                                    if (data.ondutyType == "DP" && isHRAdmin == "True" && data.hrApproval == "Approved")
+                                    {
+                                    return '<button class="btn btn-outline-primary " ' +
+                                        ' data-jqueryselector="openmodal" ' +
+                                        ' data-modalcontainer="modalcontainer" '+
+                                        ' data-url="@Url.Action("OnDutyDeputationExtension", "Attendance", new { Area = "SelfService" })"' +
+                                        ' data-modalpopupwidth="rightw35" ' +
+                                        ' data-applicationid="' + data.applicationId + '"' +
+                                        ' data-modaltitle="On duty details" ' +
+                                        ' data-modalheader="On duty details" ' +
+                                        ' > ' +
+                                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                        ' </button>'
+                                        }else{
+                                            return '';
+                                        }
+                                },
+                                'className': "td-icon",
+                            },
+                        ],
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApplicationDate)' + '</dt><dd class="col-lg-8">' + moment(data.applicationDate).format('L') + '</dd></dl>';
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApplicationId)' + '</dt><dd class="col-lg-8">' + data.ApplicationId+ '</dd></dl>';
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApplicationForDate)' + '</dt><dd class="col-lg-8">' + moment(data.ApplicationForDate).format('L') + '</dd></dl>';
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.OndutyType)' + '</dt><dd class="col-lg-8">' + data.OndutyType + '</dd></dl>';
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.LeadName)' + '</dt><dd class="col-lg-8">' + data.LeadName + '</dd></dl>';
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.LeadApproval)' + '</dt><dd class="col-lg-8">' + data.LeadApproval + '</dd></dl>';
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.HodApproval)' + '</dt><dd class="col-lg-8">' + data.HodApproval + '</dd></dl>';
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.HrApproval)' + '</dt><dd class="col-lg-8">' + data.HRApproval + '</dd></dl>';
+                                    item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Description)' + '</dt><dd class="col-lg-8">' + data.Description + '</dd></dl>';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ],
+                    </text>
+                }
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsOnDutyApplications", "Attendance")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                        d.startDate = $('#FilterDataModel_StartDate').val();
+                        d.endDate = $('#FilterDataModel_EndDate').val();
+                        d.empno = $('#FilterDataModel_Empno').val();
+                        d.onDutyType = $('#FilterDataModel_OndutyType').val();
+                        },
+                        error: function (request, status, error) {
+                            notify('error', request.responseText, 'danger');
+                        }
+                    }
+            });
+        }
+        function loadHeader() {
+            $.ajax({
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsOnDutyApplicationsHeader", "Attendance",new { Area = "SelfService" })',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    data: {
+                        empno: ($('#FilterDataModel_Empno').val())
+                    },
+                    success: function (data) {
+                        if (data.error) {
+                         }
+                        else {
+                            let period = data.period == null ? ' - ' : data.period;
+                            var headerDetailsDiv = '';
+
+                            headerDetailsDiv += '<div class="p-1 font-weight-bold ">';
+                            headerDetailsDiv += '<span class="text-black-50">Employee name: </span><span id="empName" class="text-primary">' + data.empno + ' - ' + data.employeeName + '</span><br />';
+                            headerDetailsDiv += '</div>';
+                            $("div.headerDetails").html(headerDetailsDiv);
+                        }
+                        hideLoader();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                        hideLoader();
+                    }
+                });
+        }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+            loadHeader();
+            //dataTableSearch();
+        });
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+            $("#FilterDataModel_StartDate").val(data.startDate);
+            $("#FilterDataModel_EndDate").val(data.endDate);
+            $("#FilterDataModel_Empno").val(data.empno);
+            $("#FilterDataModel_OndutyType").val(data.onDutyType);
+
+            localLoadDataTable();
+            loadHeader();
+            hideLoader();
+        }
+
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                loadHeader();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+</script>
+}  

@@ -1,0 +1,456 @@
+﻿@model TCMPLApp.WebApp.Models.RapNavIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Rap Reporting</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input id="Yyyy" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyy" />
+<input id="YearMode" readonly type="hidden" asp-for="@Model.FilterDataModel.YearMode" />
+<input id="Yyyymm" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+<input id="CostCode" readonly type="hidden" asp-for="@Model.FilterDataModel.CostCode" />
+<input id="Projno" readonly type="hidden" asp-for="@Model.FilterDataModel.Projno" />
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-8 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Rap Reporting Navigation</p>
+    </div>
+    <div role="toolbar">
+        <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("FilterGet", "Home", new { Area = "RapReporting" })'
+                data-modaltitle="Filter"
+                data-modalheader="Filter">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+            {
+                @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy)
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.YearMode))
+            {
+                @Html.Raw(localizer[", Year mode : "] + (Model.FilterDataModel.YearMode == "A" ? "April - March" : "January - December"))
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+            : "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)))
+                ;
+            }
+
+        </button>
+        <div class="d-flex justify-content-end td-r-2 m-b-10 m-r-20 divSitemap">
+
+            <a class="btn btn-secondary btn-sm border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ShowSitemap", "Home", new { Area = "RapReporting" })'
+               data-modaltitle="Sitemap"
+               data-modalheader="Sitemap"
+               title="Sitemap">
+                <i class="fas fa-sitemap fa-1x"></i>
+            </a>
+        </div>
+    </div>
+    <div class="m-2"></div>
+
+    <div class="bg-gray-active rounded ">
+
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="input" name="input" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <div class="m-2"></div>
+
+        <button class="btn btn-outline-primary btn-sm border-none" id="show_all" type="button" data-dismiss="modal">
+            <i class="fas fa-plus"></i>&nbsp;&nbsp;@localizer["Expand all"]
+        </button>
+        <button class="btn btn-outline-primary btn-sm border-none" id="hide_all" type="button" data-dismiss="modal">
+            <i class="fas fa-minus"></i>&nbsp;&nbsp;@localizer["Collapse all"]
+        </button>
+
+        <div class="m-2"></div>
+
+        <table id="mytable" class="table-responsive-lg table-hover" style="border-collapse: collapse;font-size:16px;padding-left:10px;width:100%;">
+            <!-- JSON data rows will be display here -->
+            <tbody>
+            </tbody>
+
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/site-rap.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#YearMode').val() == null || $('#YearMode').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                $("#filterGet").click();
+            }
+            loadJsonTree();
+
+            localScript();
+            loadScript();
+        });
+
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+            var yearMonthListUrl = "@Url.Action("GetYearMonthList", "Home", new {Area = "RapReporting"})";
+            callRapReportingFilterListeners(yearMonthListUrl);
+
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#YearMode').val() == null || $('#YearMode').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                hideFilterCancelButton('HIDE');
+            }
+            else {
+                hideFilterCancelButton('SHOW');
+            }
+            callFilterDefaultsListeners();
+
+            $('#btnExportExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                var url = '@Url.Action("ReportExcelDownload", "Home", new {Area = "RapReporting" })';
+                exportExcel(url);
+            });
+
+        }
+
+        function loadJsonTree() {
+            $("#input").on("keyup", function () { //here #input textbox id
+                var value = $(this).val().toLowerCase();
+                $("#mytable tr").filter(function () { //here #table table body id
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            var NavData = [
+                // General Report Data
+                {
+                    "Name": "General Report", "isLeaf": "No", "level": "level0", "dataDepth": 0, "isExcel": "KO"
+                },
+                {
+                    "Name": "CostCenter", "isLeaf": "No", "level": "level1", "dataDepth": 1, "isExcel": "KO"
+                },
+                {
+                    "Name": "Before Posting", "isLeaf": "No", "level": "level2", "dataDepth": 2, "isExcel": "KO"
+                },
+                // Before Posting Data
+                {
+                    "Name": "Costcenter Manhours Report", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "OK"
+                },
+                {
+                    "Name": "Hours exceeding 240", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "KO"
+                },
+                {
+                    "Name": "Monthly costcodewise manhours", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "OK"
+                },
+                {
+                    "Name": "Manhours of costcenter", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "KO"
+                },
+                {
+                    "Name": "Leave manhours", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "OK"
+                },
+                {
+                    "Name": "Odd timesheet", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "OK"
+                },
+                {
+                    "Name": "Timesheet not posted", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "OK"
+                },
+                {
+                    "Name": "Timesheet status", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "KO"
+                },
+                // After Posting Data
+                {
+                    "Name": "After Posting", "isLeaf": "No", "level": "level2", "dataDepth": 2, "isExcel": "KO"
+                },
+                {
+                    "Name": "Hours costcode & activity wise", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "KO"
+                },
+                {
+                    "Name": "Projectwise costcode activity wise", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "OK"
+                },
+                {
+                    "Name": "Project costcode hours OT breakup", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "OK"
+                },
+                {
+                    "Name": "Project costcode hours OT breakup (Crosstab)", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "KO"
+                },
+                {
+                    "Name": "Project manhours", "isLeaf": "Yes", "level": "level3", "dataDepth": 3, "isExcel": "KO"
+                },
+
+                // Transaction Data
+                {
+                    "Name": "Transactions", "isLeaf": "No", "level": "level0", "dataDepth": 0, "isExcel": "OK"
+                },
+                {
+                    "Name": "Master", "isLeaf": "No", "level": "level1", "dataDepth": 1, "isExcel": "KO"
+                },
+                {
+                    "Name": "Activity master", "isLeaf": "Yes", "level": "level2", "dataDepth": 2, "isExcel": "OK"
+                },
+                {
+                    "Name": "Project activity", "isLeaf": "Yes", "level": "level2", "dataDepth": 2, "isExcel": "OK"
+                },
+                {
+                    "Name": "Add expected jobs", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "KO"
+                },
+                {
+                    "Name": "Update movements", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "KO"
+                },
+                {
+                    "Name": "Manhours projections - current jobs", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "OK"
+                },
+                {
+                    "Name": "Manhours projections - expected jobs", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "OK"
+                },
+                {
+                    "Name": "Overtime update", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "OK"
+                },
+                {
+                    "Name": "Outside subcontracts", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "OK"
+                },
+                // Manage Data
+                {
+                    "Name": "Manage", "isLeaf": "No", "level": "level0", "dataDepth": 0, "isExcel": "KO"
+                },
+                {
+                    "Name": "Download Report", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "KO"
+                },
+                {
+                    "Name": "Update Employee Count (Script)", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "OK"
+                },
+                {
+                    "Name": "Repost", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "OK"
+                },
+                {
+                    "Name": "Move Month", "isLeaf": "Yes", "level": "level1", "dataDepth": 1, "isExcel": "KO"
+                },
+            ];
+
+            var $tableBody = $('#mytable > tbody:last-child');
+            let row = "";
+            let isleaf = "";
+            let navTd = "";
+            let reportUrl = "@Url.Action("ReportDownload", "Home", new { Area = "RapReporting" })";
+            $.each(NavData, function (index, RapNav) {
+
+                if (RapNav.isLeaf == "Yes")
+                    isleaf = "leaf";
+                else
+                    isleaf = "branch";
+
+                if (isleaf == "branch") {
+                    navTd = '<tr data-depth="' + RapNav.dataDepth + '" class="Collapse ' + RapNav.level + " " + isleaf + ' open">' +
+                        '<td><a class="hover" style="color:black">' + RapNav.Name + '</a></td> ';
+                }
+                else {
+                    navTd = '<tr data-depth="' + RapNav.dataDepth + '" class="' + RapNav.level + '">' +
+                        '<td class=' + isleaf + '>' + RapNav.Name + '</td>';
+
+                    if (RapNav.isExcel == "OK") {
+                        navTd = navTd + '<td><button id="exportButton" class="btn btn-outline-light btn-sm border-none" ' +
+                            'data-jqueryselector = "openmodal" ' +
+                            'data-modalcontainer = "modalcontainer" ' +
+                            'data-modalpopupwidth = "rightw35" ' +
+                            'data-url = "' + reportUrl + '" ' +
+                            'data-id="' + RapNav.Name + '"' +
+                            'href = "#" ' +
+                            'title = "Download File" >' +
+                            '<i class="fas fa-file-excel leafIcon"></i></button></td>';
+                    }
+                    else { navTd = navTd + '<td></td>'; }
+                }
+
+                row = row + navTd + '</tr> \n';
+
+            });
+            $tableBody.append(row);
+
+            $('.Collapse').on('click', function () {
+                var findChildren = function (tr) {
+                    var depth = tr.data('depth');
+                    return tr.nextUntil($('tr').filter(function () {
+                        return $(this).data('depth') <= depth;
+                    }));
+                };
+
+                var children = findChildren($(this));
+                if ($(children).is(':visible')) {
+                    $(this).removeClass("open");
+                    $(this).addClass("closed");
+                    $(children).hide();
+
+                } else {
+                    $(this).removeClass("closed");
+                    $(children).show();
+                    var children = findChildren($(".closed"));
+                    $(this).addClass("open");
+                    $(children).hide();
+
+                }
+            });
+            $('#show_all').on('click', function () {
+                $("#mytable tr.Collapse").removeClass("closed").show();
+                $("#mytable tr").removeClass("closed").show();
+            });
+
+            $("#hide_all").on("click", function () {
+                $("#mytable tr.Collapse:not([data-depth='0'])").hide();
+                $("#mytable tr:not([data-depth='0'])").hide();
+                let a = document.querySelectorAll("#mytable tr.Collapse.level0");
+                for (const iterator of a) {
+                    if (iterator.nextSibling.nextSibling.className.includes("level1")) {
+                        $("#mytable tr.Collapse").removeClass("open");
+                        $(iterator).addClass("closed");
+                    }
+                }
+            });
+        }
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true
+            });
+
+            $('#date1').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#Date1").val(date.format('DD-MMM-YYYY'));
+            });
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+            });
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+        }
+
+        function exportExcel(Purl) {
+
+            let vField1 = $("#formReportDownload input[id=startDateFilter]").val();
+            let vField2 = $("#formReportDownload input[id=endDateFilter]").val();
+            let vField3 = $("#formReportDownload input[id=date1]").val();
+            let vField4 = $("#formReportDownload input[id=Field3]").val();
+            let vField5 = $("#formReportDownload textarea[id=Field4]").val();
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formReportDownload input[name="__RequestVerificationToken"]').val() },
+                url: Purl,
+                type: "POST",
+                data: {
+                    startdate: vField1,
+                    enddate: vField2,
+                    date1: vField3,
+                    singleline: vField4,
+                    multiline: vField5,
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                    $("#btnExportExcel").hide();
+                    $('#exportExcel_Loader').removeClass("hidden");
+                },
+
+                success: function (blob, status, xhr) {
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    toastr.success("File downloaded successfully.");
+                    hideLoader();
+                    $("#modalcontainer").modal('hide');
+
+                    $("#btnExportExcel").show();
+                    $('#exportExcel_Loader').addClass("hidden");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                    $("#btnExportExcel").show();
+                    $('#exportExcel_Loader').addClass("hidden");
+                }
+            });
+        }
+    </script>
+}

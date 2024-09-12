@@ -1,0 +1,140 @@
+﻿@model TCMPLApp.WebApp.Models.ShiftDetailsUpdateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Attendance"
+      asp-action="ShiftEditTab1"
+      id="formShiftEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="TimeIn" />
+    <input type="hidden" asp-for="TimeOut" />
+    <input type="hidden" asp-for="Shiftcode" />
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">Shift Edit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Model.Shiftcode - @Model.Shiftdesc</h5>
+            </div>
+            <div class="card-block">
+                <div class="card-pill">
+                    <ul class="nav nav-tabs " id="tabs-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tabs-detail1-tab" data-toggle="pill" href="#tabs-detail1" role="tab" aria-controls="tabs-detail1" aria-selected="true">
+                                @localizer["Shift Details"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <button id="btndetails2" name="submit" type="submit" formnovalidate="" value="Details2" class="nav-link bg-white" aria-selected="false">
+                                @localizer["Shift Config Details"]
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="btndetails3" name="submit" type="submit" formnovalidate="" value="Details3" class="nav-link bg-white" aria-selected="false">
+                                @localizer["Shift Half Day Details"]
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="btndetails4" name="submit" type="submit" formnovalidate="" value="Details4" class="nav-link bg-white" aria-selected="false">
+                                @localizer["Shift Lunch Time Details"]
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tabs-detail1" role="tabpanel" aria-labelledby="tabs-detail1-tab">
+                        <div id="pw-detail1">
+                            <div class="modal-body">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="row">
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label asp-for="Shiftcode" class="control-label"></label>
+                                                    <input asp-for="Shiftcode" class="form-control" disabled />
+                                                    <span asp-validation-for="Shiftcode" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label asp-for="Shiftdesc" class="control-label"></label>
+                                                    <input asp-for="Shiftdesc" class="form-control" required />
+                                                    <span asp-validation-for="Shiftdesc" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label asp-for="TimeIn" class="control-label"></label>
+                                                    <input id="timeIn" class="form-control datetimepicker" value="@Model.TimeIn" placeholder="@localizer["HH:mm"]" required />
+                                                    <span asp-validation-for="TimeIn" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label asp-for="TimeOut" class="control-label"></label>
+                                                    <input id="timeOut" class="form-control datetimepicker" value="@Model.TimeOut" placeholder="@localizer["HH:mm"]" required />
+                                                    <span asp-validation-for="TimeOut" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label asp-for="LunchMn" class="control-label"></label>
+                                                    <input asp-for="LunchMn" class="form-control" />
+                                                    <span asp-validation-for="LunchMn" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label asp-for="Shift4allowance" class="control-label"></label>
+                                                    <select asp-for="Shift4allowance" class="form-control chosen-select" data-placeholder="Optional">
+                                                        <option></option>
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label asp-for="OtApplicable" class="control-label"></label>
+                                                    <select asp-for="OtApplicable" class="form-control chosen-select" data-placeholder="Optional">
+                                                        <option></option>
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm" name="submit" value="Confirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+    <div id="results" style="display:none">@TempData["Message"]</div>
+</form>

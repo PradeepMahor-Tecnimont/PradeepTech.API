@@ -1,0 +1,176 @@
+﻿@model TCMPLApp.WebApp.Models.EmpDeskInMoreThan1PlacesIndexViewModel
+
+@{
+    ViewData["Title"] = "Emp/Desk In More Than 1Places ";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Emp/Desk In More Than 1Places </li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.IsRestricted" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.AreaCatgCode" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.AreaType" />
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee In More Than 1Places</p>
+    </div>
+    <div class="d-flex flex-row">
+        <a title="New area category" class="btn btn-outline-primary btn-sm border border-white"
+           href="@Url.Action("DeskInMoreThan1PlacesIndex", "Reports", new { Area = "DMS" })">
+            <i class="fas fa-list"></i> Goto Desk List
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("EmpDeskInMoreThan1PlacesExcelDownload", "Reports", new { Area = "DMS" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.EmpName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Deskid)</th>
+                    <th>@Html.DisplayNameFor(model => model.UserIn)</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            loadEmpDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+        }
+
+        function loadEmpDataTable() {
+            dataTable = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 300,
+                responsive: true,
+                autoWidth: false,
+                lengthMenu: [300, 500],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            { 'data': "empno" },
+                            { 'data': "empName" },
+                            { 'data': "deskid" },
+                            { 'data': "userIn" }
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetEmpLists", "Reports")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = $('#GenericSearch').val();
+                        d.isRestricted = ($('#FilterDataModel_IsRestricted').val());
+                        d.areaCatgCode = ($('#FilterDataModel_AreaCatgCode').val());
+                        d.areaType = ($('#FilterDataModel_AreaType').val());
+
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+    </script>
+}

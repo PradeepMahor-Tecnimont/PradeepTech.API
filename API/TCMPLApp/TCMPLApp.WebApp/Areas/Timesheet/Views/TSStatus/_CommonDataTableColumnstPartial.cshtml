@@ -1,0 +1,641 @@
+﻿<script type="text/javascript">
+
+    let pvvUrlTimesheetStatusDetails = "@Url.Action("GetListsTimesheetStatus", "TSStatus")";
+    let pvvUrlTimesheetLockedDetails = "@Url.Action("GetListsTimesheetLocked", "TSStatus")";
+    let pvvUrlTimesheetApprovedDetails = "@Url.Action("GetListsTimesheetApproved", "TSStatus")";
+    let pvvUrlTimesheetPostedDetails = "@Url.Action("GetListsTimesheetPosted", "TSStatus")";
+    let pvvUrlTimesheetNotfilledDetails = "@Url.Action("GetListsTimesheetNotfilled", "TSStatus")";
+
+    let pvvUrlEmployeeCountPartial = "@Url.Action("GetListsEmployeeCountPartial", "TSStatus")";
+    let pvvUrlEmployeeProjectPartial = "@Url.Action("GetListsEmployeeProjectPartial", "TSStatus")";
+
+    let pvvUrlTimesheetFilledPartial = "@Url.Action("GetListsPartialStatus", "TSStatus")";
+    let pvvUrlTimesheetStatusPartial = "@Url.Action("GetListsPartialStatus", "TSStatus")";
+    let pvvUrlTimesheetLockedPartial = "@Url.Action("GetListsPartialStatus", "TSStatus")";
+    let pvvUrlTimesheetApprovedPartial = "@Url.Action("GetListsPartialStatus", "TSStatus")";
+    let pvvUrlTimesheetPostedPartial = "@Url.Action("GetListsPartialStatus", "TSStatus")";
+
+    let pvvUrlProjectTimesheetList = "@Url.Action("GetListsProjectTimesheet", "TSStatus")";
+    let pvvUrlProjectTimesheetDetails = "@Url.Action("GetListsProjectDetail", "TSStatus")";
+    
+    @if ((bool)@Context.Items["isMobile"] == false)
+    {
+        <text>
+
+            //---------------- Employee region
+        
+            let datatableColumnsStatusDetails = [
+                { 'data': "empno", 'className': "text-center  align-middle", },
+                { 'data': "empname", 'className': "align-middle", },
+                { 'data': "emptype", 'className': "text-center align-middle", },
+                { 'data': "parent", 'className': "text-center align-middle", },
+                { 'data': "assign", 'className': "text-center  align-middle", },
+                { 'data': "hours", 'className': "text-center  align-middle", },
+                { 'data': "otHours", 'className': "text-center  align-middle", },
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" },                
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        if (data.tsLocked == 1) {
+                            return 'Yes';  // '<span>&#x2713;</span>'
+                        }
+                        else {
+                            return '';
+                        }
+                    },
+                    className: "td-icon text-center align-middle",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        if (data.tsApproved == 1) {
+                            return 'Yes';  // '<span>&#x2713;</span>'
+                        }
+                        else {
+                            return '';
+                        }
+                    },
+                    className: "td-icon text-center align-middle",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        if (data.tsPosted == 1) {
+                            return 'Yes';  // '<span>&#x2713;</span>'
+                        }
+                        else {
+                            return '';
+                        }
+                    },
+                    className: "td-icon text-center align-middle",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm border-none  " ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("EmployeeTimesheet", "Reports", new { Area = "Timesheet" })"' +
+                            ' data-modalpopupwidth="rightw75" ' +
+                            ' data-id="' + data.empno + '"' +
+                            ' data-assign="' + data.assign + '"' +
+                            ' data-modaltitle="Employee Timesheet" ' +
+                            ' data-modalheader="Employee Timesheet" ' +
+                            ' > ' +
+                            ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                            ' </button>'
+                    },
+                    'className': "text-center",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var tempEmp = "'" + data.empno + "'";
+                        var yymm = '@Model.FilterDataModel.Yyyymm';
+                        var tempUrl = '';
+
+                        tempUrl = tempUrl + '<button class="btn btn-outline-primary btn-sm border-none" title="Download"' +
+                            'data-inprogress="0" data-jqueryselector="generatereport" href="#" ' +
+                            'onclick="downloadTimesheet(' + tempEmp + ',' + yymm + ')" title="Download Timesheet"><i class="fas fa-download" aria-hidden="true"></i></button>';
+                        return tempUrl;
+                    },
+                    'className': "text-center"
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm border-none" ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-modalpopupwidth="rightw50" ' +
+                            ' data-url="@Url.Action("TimeSheetProjectBreakupPartial", "TSStatus", new { Area = "Timesheet" })"' +
+                            ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '" ' +
+                            ' data-modaltitle="Timesheet project breakup" ' +
+                            ' data-modalheader="Timesheet project breakup" ' +
+                            ' title="Timesheet project breakup"> ' +
+                            ' <i class="fas fa-list" aria-hidden="true"></i> ' +
+                            ' </button>';
+                    },
+                    className: "text-center",
+                }
+            ];
+
+            let datatableColumnsLockedDetails = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                { 'data': "parent", 'className': "text-center align-middle" },
+                { 'data': "assign", 'className': "text-center  align-middle" },
+                { 'data': "hours", 'className': "text-right  align-middle" },
+                { 'data': "otHours", 'className': "text-right  align-middle" }, 
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" },     
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        if (data.isActionVisible == 1) {
+                            if (data.tsApproved == 0) {
+                                if (data.isTsFreeze == 1) {                                
+                                    if (data.tsLocked == 1) {
+                                        return '<button title="Unlock timesheet" class="btn btn-outline-primary btn-sm border-none " ' +
+                                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                                            ' data-url="@Url.Action("TimeSheetStatusUpdate", "TSStatus", new { Area = "Timesheet" })"' +
+                                            ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '!-!' + 'UNLOCK' + '!-!' + data.emptype + '" ' +
+                                            ' data-callback="PostSaveReLoad"' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext="Do you want to UNLOCK timesheet for ' + data.empname + ' [' + data.empno + '] " ' +
+                                            ' data-confirmationtype="warning" ' +
+                                            ' title="Unlock timesheet" ' +
+                                            ' data-confirmbuttontext="Unlock timesheet" > ' +
+                                            ' <i class="fas fa-lock" aria-hidden="true"></i> ' +
+                                            ' </button>';
+                                    }
+                                    else {
+                                        return '<button title="Lock timesheet" class="btn btn-outline-danger btn-sm border-none " ' +
+                                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                                            ' data-url="@Url.Action("TimeSheetStatusUpdate", "TSStatus", new { Area = "Timesheet" })"' +
+                                            ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '!-!' + 'LOCK' + '!-!' + data.emptype + '" ' +
+                                            ' data-callback="PostSaveReLoad"' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext="Do you want to LOCK timesheet for ' + data.empname + ' [' + data.empno + '] " ' +
+                                            ' data-confirmationtype="warning" ' +
+                                            ' title="Lock timesheet" ' +
+                                            ' data-confirmbuttontext="Lock timesheet" > ' +
+                                            ' <i class="fas fa-lock-open" aria-hidden="true"></i> ' +
+                                            ' </button>';
+                                    }
+                                }
+                                else {
+                                    return '<button title="Timesheet under processing, can not LOCK / UNLOCK" class="btn btn-outline-warning btn-sm border-none " > ' +                                        
+                                       ' <i class="fas fa-lock" aria-hidden="true"></i> ' +
+                                       ' </button>';                                    
+                                }
+                            }
+                            else{
+                                return 'Locked';
+                            }
+                        }
+                        else {
+                            return '';
+                        }
+                        
+                    },
+                    className: "text-center",
+                },            
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm border-none  " ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("EmployeeTimesheet", "Reports", new { Area = "Timesheet" })"' +
+                            ' data-modalpopupwidth="rightw75" ' +
+                            ' data-id="' + data.empno + '"' +
+                            ' data-assign="' + data.assign + '"' +
+                            ' data-modaltitle="Employee Timesheet" ' +
+                            ' data-modalheader="Employee Timesheet" ' +
+                            ' > ' +
+                            ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                            ' </button>'
+                    },
+                    'className': "text-center",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var tempEmp = "'" + data.empno + "'";
+                        var yymm = '@Model.FilterDataModel.Yyyymm';
+                        var tempUrl = '';
+
+                        tempUrl = tempUrl + '<button class="btn btn-outline-primary btn-sm border-none" title="Download"' +
+                            'data-inprogress="0" data-jqueryselector="generatereport" href="#" ' +
+                            'onclick="downloadTimesheet(' + tempEmp + ',' + yymm + ')" title="Download Timesheet"><i class="fas fa-download" aria-hidden="true"></i></button>';
+                        return tempUrl;
+                    },
+                    'className': "text-center"
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm border-none" ' +                                  
+                                ' data-jqueryselector="openmodal" ' + 
+                                ' data-modalcontainer="modalcontainer" ' + 
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-url="@Url.Action("TimeSheetProjectBreakupPartial", "TSStatus", new { Area = "Timesheet" })"' +
+                                ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '" ' +
+                                ' data-modaltitle="Timesheet project breakup" ' +
+                                ' data-modalheader="Timesheet project breakup" ' +
+                                ' title="Timesheet project breakup"> ' +
+                                ' <i class="fas fa-list" aria-hidden="true"></i> ' +
+                                ' </button>';
+                    },
+                    className: "text-center",
+                }
+            ];
+
+            let datatableColumnsApprovedDetails = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                { 'data': "parent", 'className': "text-center align-middle" },
+                { 'data': "assign", 'className': "text-center  align-middle" },
+                { 'data': "hours", 'className': "text-right  align-middle" },
+                { 'data': "otHours", 'className': "text-right  align-middle" },
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" }, 
+                {
+                    data: null,
+                    render: function (data, type, row) {                        
+                        if (data.isActionVisible == 1) {
+                            if (data.tsPosted == 0) {
+                                if (data.isTsFreeze == 1) {                                
+                                    if (data.tsApproved == 1) {
+                                        return '<button title="Unapprove timesheet" class="btn btn-outline-primary btn-sm border-none " ' +
+                                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                                            ' data-url="@Url.Action("TimeSheetStatusUpdate", "TSStatus", new { Area = "Timesheet" })"' +
+                                            ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '!-!' + 'UNAPPROVE' + '!-!' + data.emptype + '" ' +
+                                            ' data-callback="PostSaveReLoad"' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext="Do you want to UNAPPROVE timesheet for ' + data.empname + ' [' + data.empno + '] " ' +
+                                            ' data-confirmationtype="warning" ' +
+                                            ' title="Unapprove timesheet" ' +
+                                            ' data-confirmbuttontext="Unapprove timesheet" > ' +
+                                            ' <i class="fas fa-user-check" aria-hidden="true"></i> ' +
+                                            ' </button>';
+                                    }
+                                    else {
+                                        return '<button title="Approve timesheet" class="btn btn-outline-danger btn-sm border-none " ' +
+                                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                                            ' data-url="@Url.Action("TimeSheetStatusUpdate", "TSStatus", new { Area = "Timesheet" })"' +
+                                            ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '!-!' + 'APPROVE' + '!-!' + data.emptype + '" ' +
+                                            ' data-callback="PostSaveReLoad"' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext="Do you want to APPROVE timesheet for ' + data.empname + ' [' + data.empno + '] " ' +
+                                            ' data-confirmationtype="warning" ' +
+                                            ' title="Approve timesheet" ' +
+                                            ' data-confirmbuttontext="Approve timesheet" > ' +
+                                            ' <i class="fas fa-user-times" aria-hidden="true"></i> ' +
+                                            ' </button>';
+                                    }
+                                }
+                                else {
+                                     return '<button title="Timesheet under processing, can not APPROVE" class="btn btn-outline-warning btn-sm border-none " > ' +                                        
+                                       ' <i class="fas fa-user-check" aria-hidden="true"></i> ' +
+                                       ' </button>';
+                                }
+                            }
+                            else{
+                                return 'Approved';                                
+                            }
+                        }
+                        else {
+                            return '';
+                        }
+                    },
+                    className: "text-center",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm border-none  " ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("EmployeeTimesheet", "Reports", new { Area = "Timesheet" })"' +
+                            ' data-modalpopupwidth="rightw75" ' +
+                            ' data-id="' + data.empno + '"' +
+                            ' data-assign="' + data.assign + '"' +
+                            ' data-modaltitle="Employee Timesheet" ' +
+                            ' data-modalheader="Employee Timesheet" ' +
+                            ' > ' +
+                            ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                            ' </button>'
+                    },
+                    'className': "text-center",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var tempEmp = "'" + data.empno + "'";
+                        var yymm = '@Model.FilterDataModel.Yyyymm';
+                        var tempUrl = '';
+
+                        tempUrl = tempUrl + '<button class="btn btn-outline-primary btn-sm border-none" title="Download"' +
+                            'data-inprogress="0" data-jqueryselector="generatereport" href="#" ' +
+                            'onclick="downloadTimesheet(' + tempEmp + ',' + yymm + ')" title="Download Timesheet"><i class="fas fa-download" aria-hidden="true"></i></button>';
+                        return tempUrl;
+                    },
+                    'className': "text-center"
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm border-none" ' +                                  
+                                ' data-jqueryselector="openmodal" ' + 
+                                ' data-modalcontainer="modalcontainer" ' + 
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-url="@Url.Action("TimeSheetProjectBreakupPartial", "TSStatus", new { Area = "Timesheet" })"' +
+                                ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '" ' +
+                                ' data-modaltitle="Timesheet project breakup" ' +
+                                ' data-modalheader="Timesheet project breakup" ' +
+                                ' title="Timesheet project breakup"> ' +
+                                ' <i class="fas fa-list" aria-hidden="true"></i> ' +
+                                ' </button>';
+                    },
+                    className: "text-center",
+                }               
+            ];
+
+            let datatableColumnsPostedDetails = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                { 'data': "parent", 'className': "text-center align-middle" },
+                { 'data': "assign", 'className': "text-center  align-middle" },
+                { 'data': "hours", 'className': "text-right  align-middle" },
+                { 'data': "otHours", 'className': "text-right  align-middle" }, 
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" }, 
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        if (data.isActionVisible == 1) {
+                            if (data.isTsFreeze == 1) {  
+                                if (data.tsPosted == 1) {
+                                    return '<button title="Unpost timesheet" class="btn btn-outline-primary btn-sm border-none " ' +
+                                        ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                        ' data-jqueryselector = "showconfirmationmodal" ' +
+                                        ' data-url="@Url.Action("TimeSheetStatusUpdate", "TSStatus", new { Area = "Timesheet" })"' +
+                                        ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '!-!' + 'UNPOST' + '!-!' + data.emptype + '" ' +
+                                        ' data-callback="PostSaveReLoad"' +
+                                        ' data-modaltitle="Please Confirm!" ' +
+                                        ' data-confirmationtext="Do you want to UNPOST timesheet for ' + data.empname + ' [' + data.empno + '] " ' +
+                                        ' data-confirmationtype="warning" ' +
+                                        ' title="Unpost timesheet" ' +
+                                        ' data-confirmbuttontext="Unpost timesheet" > ' +
+                                        ' <i class="fas fa-clipboard-check" aria-hidden="true"></i> ' +
+                                        ' </button>';
+                                }
+                                else {
+                                    return '<button title="Post timesheet" class="btn btn-outline-danger btn-sm border-none " ' +
+                                        ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                        ' data-jqueryselector = "showconfirmationmodal" ' +
+                                        ' data-url="@Url.Action("TimeSheetStatusUpdate", "TSStatus", new { Area = "Timesheet" })"' +
+                                        ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '!-!' + 'POST' + '!-!' + data.emptype + '" ' +
+                                        ' data-callback="PostSaveReLoad"' +
+                                        ' data-modaltitle="Please Confirm!" ' +
+                                        ' data-confirmationtext="Do you want to POST timesheet for ' + data.empname + ' [' + data.empno + '] " ' +
+                                        ' data-confirmationtype="warning" ' +
+                                        ' title="Post timesheet" ' +
+                                        ' data-confirmbuttontext="Post timesheet" > ' +
+                                        ' <i class="fas fa-clipboard-list" aria-hidden="true"></i> ' +
+                                        ' </button>';
+                                }
+                            }
+                            else{
+                                if (data.tsPosted == 1) {
+                                    return 'Posted';
+                                }
+                                else {
+                                    return '<button title="Timesheet under processing, can not POST" class="btn btn-outline-warning btn-sm border-none " > ' +                                        
+                                           ' <i class="fas fa-clipboard-check" aria-hidden="true"></i> ' +
+                                           ' </button>';
+                                }
+                            }
+                        }
+                        else {
+                            return '';
+                        }  
+                    },
+                    className: "text-center",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm border-none  " ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("EmployeeTimesheet", "Reports", new { Area = "Timesheet" })"' +
+                            ' data-modalpopupwidth="rightw75" ' +
+                            ' data-id="' + data.empno + '"' +
+                            ' data-assign="' + data.assign + '"' +
+                            ' data-modaltitle="Employee Timesheet" ' +
+                            ' data-modalheader="Employee Timesheet" ' +
+                            ' > ' +
+                            ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                            ' </button>'
+                    },
+                    'className': "text-center",
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var tempEmp = "'" + data.empno + "'";
+                        var yymm = '@Model.FilterDataModel.Yyyymm';
+                        var tempUrl = '';
+
+                        tempUrl = tempUrl + '<button class="btn btn-outline-primary btn-sm border-none" title="Download"' +
+                            'data-inprogress="0" data-jqueryselector="generatereport" href="#" ' +
+                            'onclick="downloadTimesheet(' + tempEmp + ',' + yymm + ')" title="Download Timesheet"><i class="fas fa-download" aria-hidden="true"></i></button>';
+                        return tempUrl;
+                    },
+                    'className': "text-center"
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm border-none" ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-modalpopupwidth="rightw50" ' +
+                            ' data-url="@Url.Action("TimeSheetProjectBreakupPartial", "TSStatus", new { Area = "Timesheet" })"' +
+                            ' data-id="' + data.empno + '!-!' + data.yymm + '!-!' + data.assign + '" ' +
+                            ' data-modaltitle="Timesheet project breakup" ' +
+                            ' data-modalheader="Timesheet project breakup" ' +
+                            ' title="Timesheet project breakup"> ' +
+                            ' <i class="fas fa-list" aria-hidden="true"></i> ' +
+                            ' </button>';
+                    },
+                    className: "text-center",
+                }
+            ];
+
+            let datatableColumnsNotfilledDetails = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                { 'data': "parent", 'className': "text-center align-middle" },
+                { 'data': "assign", 'className': "text-center  align-middle" },
+                {
+                    data: null,
+                    render: function (data, type, row) { 
+                        return 'Not filled';
+                    }
+                }
+        ];
+
+
+            //---------------- Department region
+
+            let datatableColumnsEmployeeCountPartial = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                { 'data': "parent", 'className': "text-center  align-middle" },
+                { 'data': "assign", 'className': "text-center align-middle" },
+                { 'data': "timesheetType", 'className': "align-middle" },
+                { 'data': "statusName", 'className': "align-middle" }                
+            ];
+
+            let datatableColumnsEmployeeProjectList = [                     
+                { 'data': "projno", 'className': "text-center  align-middle" },
+                { 'data': "name", 'className': "align-middle" },                  
+                { 'data': "hours", 'className': "text-right  align-middle" },
+                { 'data': "otHours", 'className': "text-right  align-middle" },
+                { 'data': "totHours", 'className': " text-right  align-middle" }
+            ];
+
+            let datatableColumnsFilledPartial = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                { 
+                    data: null,
+                    className: "td-icon text-center align-middle",
+                    render: function (data, type, row) {                        
+                        if(data.txtColor != null)
+                        {
+                            return '<b class="' + data.txtColor + '">' + data.hours + '</b>';
+                        }                        
+                        return data.hours;
+                    }                                
+                },
+                { 'data': "otHours", 'className': " text-right  align-middle" },
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" },
+                { 'data': "currentStatus", 'className': " text-left  align-middle" }                
+            ];
+
+            let datatableColumnsLockedPartial = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                { 
+                    data: null,
+                    className: "td-icon text-center align-middle",
+                    render: function (data, type, row) {                       
+                        if(data.txtColor != null)
+                        {
+                            return '<b class="' + data.txtColor + '">' + data.hours + '</b>';
+                        }                        
+                        return data.hours;
+                    }                                
+                },
+                { 'data': "otHours", 'className': " text-right  align-middle" },
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" },
+                { 'data': "currentStatus", 'className': " text-left  align-middle" }  
+            ];
+
+            let datatableColumnsApprovedPartial = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                { 
+                    data: null,
+                    className: "td-icon text-center align-middle",
+                    render: function (data, type, row) {                        
+                        if(data.txtColor != null)
+                        {
+                            return '<b class="' + data.txtColor + '">' + data.hours + '</b>';
+                        }                        
+                        return data.hours;
+                    }                                
+                },
+                { 'data': "otHours", 'className': " text-right  align-middle" },
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" },
+                { 'data': "currentStatus", 'className': " text-left  align-middle" }  
+            ];
+
+            let datatableColumnsPostedPartial = [
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" },
+                { 'data': "emptype", 'className': "text-center  align-middle" },
+                {
+                    data: null,
+                    className: "td-icon text-center align-middle",
+                    render: function (data, type, row) {                       
+                        if (data.txtColor != null) {
+                            return '<b class="' + data.txtColor + '">' + data.hours + '</b>';
+                        }
+                        return data.hours;
+                    }
+                },
+                { 'data': "otHours", 'className': " text-right  align-middle" },
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" },
+                { 'data': "currentStatus", 'className': " text-left  align-middle" }  
+            ];
+
+            //---------------- Project region
+
+            let datatableColumnsProjectList = [
+                {
+                    data: null,
+                    render: function (data, type, row) {                        
+                    return '<button title="Project timesheet details" class="btn btn-outline-primary btn-sm border-none" ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-url="@Url.Action("ProjectTimesheetDetail", "TSStatus", new { Area = "Timesheet" })" ' +
+                            ' data-modalpopupwidth="rightw50" ' +
+                            ' data-id="' + data.yymm + '!-!' + $('#Costcode').val() + '!-!' + data.projno + '"' +
+                            ' data-modaltitle="Project timesheet details" ' +
+                            ' data-modalheader="Project timesheet details"> ' +
+                            ' <i class="fas fa-list" aria-hidden="true"></i> ' +
+                            ' </button>';                        
+                    },
+                    className: "td-icon",
+                },     
+                { 'data': "projno", 'className': "text-center  align-middle" },
+                { 'data': "name", 'className': "align-middle" },                  
+                { 'data': "hours", 'className': "text-right  align-middle" },
+                { 'data': "otHours", 'className': "text-right  align-middle" },
+                { 'data': "totHours", 'className': " text-right  align-middle" }
+
+            ];
+
+            let datatableColumnsProjectDetails = [                   
+                { 'data': "empno", 'className': "text-center  align-middle" },
+                { 'data': "empname", 'className': "align-middle" }, 
+                { 'data': "parent", 'className': "align-middle" },
+                { 'data': "assign", 'className': "align-middle" },
+                { 'data': "hours", 'className': "text-right  align-middle" },
+                { 'data': "otHours", 'className': "text-right  align-middle" },
+                { 'data': "ccHours", 'className': "text-right  align-middle" },
+                { 'data': "ccOtHours", 'className': " text-right  align-middle" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.isStatusTrue == 1) {
+                        return '<span>&#x2713;</span>'
+                    }
+                    else {
+                        return '';
+                    }
+                },
+                className: "td-icon text-center align-middle",
+            }
+
+            ];
+
+        </text>
+    }
+
+
+
+</script>

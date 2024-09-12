@@ -1,0 +1,102 @@
+﻿
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Employee"
+      asp-action="EmployeesXLUpload"
+      asp-area="HRMasters"
+      id="formEmployeeXLUpload"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"      
+      data-ajax-complete="onComplete(null);loadScript()"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Import employee details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Import employee details"]</h5>
+            </div>
+            <div class="card-block">               
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">                            
+                            <button type="button" id="btnEmployeeXLTemplate" title="Excel Download" class=" btn btn-sm btn-success mx-2">
+                                <i class="far fa-file-excel "></i> Download template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                    <div class="dz-details">
+                        <div class="dz-filename"><span data-dz-name></span></div>
+                        <div class="dz-size" data-dz-size></div>
+                        <img data-dz-thumbnail />
+                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                    </div>
+                    <div class="dz-default dz-message" data=""><span>Drop excel file here to import</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" id="btnImportEmployeesXL"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Import employee details"]">
+            @localizer["Import"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+@*<div class="modal-header">
+    <h5 class="modal-title">Import employee details</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>Import employee details</h5>
+        </div>
+
+        <div class="card-block">
+            <form>                
+                <div id="divBrickImportTemplate">
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <button class="btn btn-success" type="button" id="btnEmployeeMasterImportTemplate">
+                                Template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form asp-area="HRMasters"
+                  asp-controller="Employee"
+                  asp-action="EmployeeMAsterImportTemplate"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="dropzone dz-clickable"
+                  id="myawesomedropzone" style="display: block;">
+                <div class="dz-default dz-message"><span>Drop file here to upload</span></div>
+
+            </form>
+            <div class="vertical-space-15"></div>
+            <div class="vertical-space-15"></div>
+            <h4 class="font-weight-bolder text-center" id="response"></h4>
+            <div id="result"></div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+</div>*@
+
+

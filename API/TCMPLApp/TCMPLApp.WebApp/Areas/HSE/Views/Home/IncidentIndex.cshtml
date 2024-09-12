@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">        
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="HSE">HSE</a></li>        
+        <li class="breadcrumb-item active" aria-current="page">Incident preliminary report</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Incident Reporting</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("Index", "Incident", new { Area = "HSE" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">User can report occurance of incident</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-ambulance f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>  
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HSE.HSEHelper.ActionIncidentAdmin))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Incident Coordinator</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("CoordinateIndex", "Incident", new { Area = "HSE" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Coordinator will process incident reports</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div> 
+        }
+           
+    </div>
+</div>

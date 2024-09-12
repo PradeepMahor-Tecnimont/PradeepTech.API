@@ -1,0 +1,117 @@
+﻿@model TCMPLApp.WebApp.Models.OscMasterUpdateCurViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="Transactions"
+      asp-action="OscMasterEditCur"
+      id="formOscMasterEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="onDataTableReloadSuccess(null);PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.OscmId" />
+    <input type="hidden" asp-for="@Model.LockOrigBudget" />
+    <input type="hidden" asp-for="@Model.Projno5" />
+    <input type="hidden" asp-for="@Model.OscmVendor" />
+    <input type="hidden" asp-for="@Model.OscmType" />
+    <input type="hidden" asp-for="@Model.OscswId" />
+    @Html.TextBoxFor(model => model.PoDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Outside subcontract edit"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Outside subcontract edit</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Projno5" class="control-label"></label>
+                            <input id="projno5" class="form-control" value="@ViewBag.Projno5WithName" readonly required />                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="OscmVendor" class="control-label"></label>
+                            <input id="oscmVendor" class="form-control" value="@ViewBag.VendorWithName" readonly required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="OscswId" class="control-label"></label>
+                            <input id="OscswId" class="form-control" value="@ViewBag.ScopeWorkDesc" readonly required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Costcode" class="control-label"></label>
+                            <select asp-for="Costcode" class="form-control chosen-select Select2-required" asp-items="ViewBag.CostcodeList" data-placeholder="Please select..." multiple="multiple">
+                            </select>
+                            <span asp-validation-for="Costcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="PoNumber" class="control-label"></label>
+                            <input asp-for="PoNumber" class="form-control" required />
+                            <span asp-validation-for="PoNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="PoDate" class="control-label"></label>
+                            <input id="ppoDate" class="form-control" value="@Model.PoDate?.ToString("dd-MMM-yyyy")" readonly required />
+                            <span asp-validation-for="PoDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="PoAmt" class="control-label"></label>
+                            <input asp-for="PoAmt" class="form-control" readonly required />
+                            <span asp-validation-for="PoAmt" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="CurPoAmt" class="control-label"></label>
+                            <input asp-for="CurPoAmt" class="form-control" required/>
+                            <span asp-validation-for="CurPoAmt" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

@@ -1,0 +1,951 @@
+﻿@model TCMPLApp.WebApp.Models.JobmasterMainDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Job details";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="JOB">Job form</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="JOB" asp-area="JOB">Jobs list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Details</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<input type="hidden" id="MonthDate" />
+<input type="hidden" asp-for="Projno" />
+<input type="hidden" id="OpeningMonth" value="@ViewBag.YYYYMM" />
+<input type="hidden" id="IsExport" />
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-header">
+            <h5 class="card-title">
+                Job name : <b>@Model.ShortDesc [ @Model.Projno ] </b>
+            </h5>
+            <a href='@Url.Action("Index", "JOB", new { Area = "JOB" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                <i class="fas fa-undo"></i>
+                Back
+            </a>
+
+            @if (string.IsNullOrEmpty(Model.ActualCloseDate))
+            {
+                @if ((CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobChangeErpPm)
+                              && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobChangeErpPm))
+                              || (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobChangeSponsor)
+                              && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobChangeSponsor)))
+                {
+                    <a title="Edit PM/JS" id="idEditPmJs"
+                    class="btn btn-outline-primary btn-sm border-white float-right" href="#"
+                    data-jqueryselector="openmodal"
+                    data-modalcontainer="modalcontainer"
+                    data-modalpopupwidth="rightw35"
+                    data-url='@Url.Action("EditPmJs", "JOB", new { Area = "JOB" })'
+                    data-id="@Model.Projno"
+                    data-modaltitle="Edit PM/JS"
+                    data-modalheader="Edit PM/JS">
+                        <i class="fas fa-user"></i>&nbsp;@localizer["Edit PM/JS"]
+                    </a>
+                }
+
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobEdit)
+                                  && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobEdit))
+                {
+                    <a title="Edit job" id="idEditJob"
+                    class="btn btn-outline-primary btn-sm border-white float-right"
+                    href='@Url.Action("EditJob", "JOB", new { Area = "JOB" })/@Model.Projno'>
+                        <i class="fas fa-edit"></i>&nbsp;@localizer["Edit job"]
+                    </a>
+                }
+
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobCreateRevision)
+                              && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobCreateRevision))
+                {
+                    <a title="Revise job" id="idReviseJob"
+                    class="btn btn-outline-primary btn-sm border-none float-right"
+                    href='@Url.Action("ReviseJob", "JOB", new { Area = "JOB", id= Model.Projno })'>
+                        <i class="fas fa-highlighter"></i>&nbsp;@localizer["Revise job"]
+                    </a>
+                }
+
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobClose)
+                    && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobClose))
+                {
+                    @if (Model.ApprovalStatus.PAfcStatus == "Approved")
+                    {
+                        <a title="Close job" id="idCloseJob"
+                            class="btn btn-outline-danger btn-sm border-none float-right" href="#"
+                            data-jqueryselector="openmodal"
+                            data-modalcontainer="modalcontainer"
+                            data-modalpopupwidth="rightw35"
+                            data-url='@Url.Action("JobCloseInitiate", "JOB", new { Area = "JOB" })'
+                            data-id="@Model.Projno"
+                            data-modaltitle="Initiate job closure"
+                            data-modalheader="Initiate job closure">
+                            <i class="fas fa-stop"></i>&nbsp;@localizer["Close job"]
+                        </a>
+                    }
+                }
+            }
+        </div>
+        <div class="card-block">
+            @await Html.PartialAsync("_ApproverStatusPartial.cshtml", Model.ApprovalStatus)
+            <div class="card-pill">
+                <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">@localizer["Job details"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-notes-tab" data-toggle="pill" href="#tabs-notes" role="tab" aria-controls="tabs-notes" aria-selected="false"
+                           data-url="@Url.Action("NotesIndex", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-notes"
+                           data-callback="validateTabs()"
+                           data-area="JOB"
+                           data-controller="JOB"
+                           data-action="PhaseIndex">@localizer["Description & notes"]
+                           <i id="imgDescriptionNotesStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-phases-tab" data-toggle="pill" href="#tabs-phases" role="tab" aria-controls="tabs-phases" aria-selected="false"
+                           data-url="@Url.Action("PhaseIndex", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-phases"
+                           data-callback="loadJobPhaseDataTable()"
+                           data-area="JOB"
+                           data-controller="JOB"
+                           data-action="PhaseIndex"
+                           >@localizer["Job phases"]
+                            <i id="imgJobPhasesStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-maillist-tab" data-toggle="pill" href="#tabs-maillist" role="tab" aria-controls="tabs-maillist" aria-selected="false"
+                           data-url="@Url.Action("MailListIndex", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-maillist"
+                           data-callback="loadMailListDataTable()"
+                           data-area="JOB"
+                           data-controller="JOB"
+                           data-action="MailListIndex">@localizer["Mailing List"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-responsible-approvers-tab" data-toggle="pill" href="#tabs-responsible-approvers" role="tab" aria-controls="tabs-responsible-approvers" aria-selected="false"
+                           data-url="@Url.Action("ResponsibleApproversIndex", "JobResponsibleApprovers", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-responsible-approvers"
+                           data-callback="loadJobResponsibleApproversDataTable()"
+                           data-area="JOB"
+                           data-controller="JobResponsibleApprovers"
+                           data-action="ResponsibleApproversIndex">
+                            @localizer["Responsible"]
+                            <i id="imgResponsibleStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-budget-tab" data-toggle="pill" href="#tabs-budget" role="tab" aria-controls="tabs-budget" aria-selected="false"
+                           data-url="@Url.Action("BudgetIndex", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-budget"
+                           data-callback="loadBudgetDataTable()"
+                           data-area="JOB"
+                           data-controller="JOB"
+                           data-action="BudgetIndex">@localizer["Budget"]
+                            <i id="imgJobBudgetStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+                        </a>
+                    </li>
+                    @if ((CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobErpXlUpload)) ||
+                        (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobErpXlDown)))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-erpPhases-tab" data-toggle="pill" href="#tabs-erpPhases" role="tab" aria-controls="tabs-erpPhases" aria-selected="false"
+                           data-url="@Url.Action("JobErpPhasesFileDetailPartial", "JOB", new { Area = "JOB" })"
+                           data-id="@Model.Projno"
+                           data-divid="pw-erpPhases"
+                           data-callback="validateTabs()"
+                           data-area="JOB"
+                           data-controller="JOB">@localizer["ERP Phases"]</a>
+                        </li>
+                    }
+                    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobEdit)
+                        && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobEdit)
+                        && string.IsNullOrEmpty(Model.ActualCloseDate))
+                    {
+                        <button class="btn btn-smx btn-primary f-w-600 m-l-30 btn-glow-blink" style="display: inline"
+                            onclick="showDeleteConfirmationPopup(event,this);"
+                            data-jqueryselector="showconfirmationmodal"
+                            data-url='@Url.Action("Send4Approval", "JOB", new { Area = "JOB", id = Model.Projno })'
+                            data-redirecturl="@Url.Action("Detail", "JOB", new { Area = "JOB", id = Model.Projno })"
+                            data-modaltitle="Please Confirm!"
+                            data-confirmationtext="@("Do you want to send job " + @Model.Projno  + " for approval?")"
+                            data-confirmationtype="warning"
+                            data-confirmbuttontext="Send job for approval"
+                            title="Send job for approval">
+                            <i class="fas fa-thumbs-up" aria-hidden="true"></i> &nbsp;
+                            @localizer["Send for approval"]
+                        </button>
+                    }
+                </ul>
+                <div class="tab-content">
+                    @await Html.PartialAsync("_LoaderPartial")
+                    <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                        @await Html.PartialAsync("_MainDetailPartial.cshtml", Model)
+                    </div>
+                    <div class="tab-pane fade" id="tabs-notes" role="tabpanel" aria-labelledby="tabs-notes-tab" callback="validateTabs">
+                        <div id="pw-notes">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-phases" role="tabpanel" aria-labelledby="tabs-phases-tab">
+                        <div id="pw-phases">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-maillist" role="tabpanel" aria-labelledby="tabs-maillist-tab">
+                        <div id="pw-maillist">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-responsible-approvers" role="tabpanel" aria-labelledby="tabs-responsible-approvers-tab">
+                        <div id="pw-responsible-approvers">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-budget" role="tabpanel" aria-labelledby="tabs-budget-tab">
+                        <div id="pw-budget">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-erpPhases" role="tabpanel" aria-labelledby="tabs-erpPhases-tab">
+                        <div id="pw-erpPhases">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_MainDetailDataTableColumnsPartial", Model.ProjectActions);
+    }
+
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+    <script src="~/js/JobFormDetail.js" asp-append-version="true"></script>
+
+    <script>
+
+        Dropzone.autoDiscover = false;
+
+        $(document).ready(function () {
+            localScript();
+
+
+             $('#btnJobmasterBudgetXLTemplate').on('click', function () {
+                var openmonth = $('#OpeningMonth').val();
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (openmonth != "") {
+                    $('#IsExport').val("0");
+                    downloadJobmasterBudgetXLTemplate();
+                } else {
+                    alert('Opending month not entered');
+                }
+            });
+
+            $('#btnJobErpPhasesXLTemplate').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadJobErpPhasesTemplateXLTemplate();
+            });
+
+            $('#btnJobErpPhasesUpdateXL').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadJobErpPhasesXLFile();
+            });
+
+            validateTabs();
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+            initImportJobmasterBudgetUpdateControls();
+            initJobErpPhasesUpdateControls();
+            initJobBudgetExport();
+            editJobClosure();
+            checkWarning();
+            //responsibleRequiredAttributeOnOff();
+        };
+
+        Dropzone.autoDiscover = false;
+
+        function initDatePicker() {
+            $('.datepicker2').bootstrapMaterialDatePicker({
+                format: 'MMM-YYYY',
+                startView: 'year',
+                minViewMode: 'month',
+                changeMonth: true,
+                changeYear: true,
+                time: false,
+                nowButton: true
+            }).on('change', function (e, date) {
+                var fvDate = $(this).val();
+                $("#MonthDate").val(moment(fvDate, 'MMMM-YYYY').format("YYYYMM"));
+                $("#OpeningMonth").val(moment(fvDate, 'MMMM-YYYY').format("YYYYMM"));
+                $(this).datepicker('hide');
+            });
+
+            if ($("#MonthDate").val()) {
+                $('#monthDate').val(moment($("#MonthDate").val()).format('MMMM-YYYY'));
+            }
+
+            $('.datepickerMaxDateToday').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: false,
+                clearButton: true,
+                maxDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
+            });
+
+            $('#actualClosingDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {                
+                if (date == undefined) {
+                    $("#ActualClosingDate").val('');
+                } else {
+                    $("#ActualClosingDate").val(date.format('DD-MMM-YYYY'));
+                }
+            });
+
+        }
+
+        function initDropZone(fileTypeExtension) {
+            detachDropZone();
+
+            $("#dropZoneWrapper").show();
+
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            $('div#iddropzone2').each(function () {
+
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    return;
+                }
+            });
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("JobBudgetXLTemplateUpload", "JOB", new {Area = "JOB"})',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    this.on("processing", function (file) {
+                        //console.log($(formId).attr("action"));
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("projno", $("#ProjectImport").val());
+                        formData.append("openingmonth", $("#OpeningMonth").val());
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+                        onBegin($('#btnjobmasterBudgetUpdateXL'));
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        if (data.success) {
+                            PostSave(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        if (data.success) {
+                            PostSave(data)
+                        }
+                        else {
+                            notify("error", data.response, "File upload failed.");
+                            if (data.fileContent != null) {
+                                var blob = b64toBlob(data.fileContent.fileContents, data.fileContent.contentType);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = data.fileContent.fileDownloadName;
+                                link.click();
+                            }
+                        }
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                    this.on("complete", function (files, data) {
+                        onComplete($('#btnjobmasterBudgetUpdateXL'));
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+                    });
+
+                },
+                error: function (request, status, error) {
+                    notify('error', status, 'danger');
+                    this.removeAllFiles(true);
+                }
+            });
+
+            const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, { type: contentType });
+                return blob;
+            };
+        }
+
+        function initImportJobmasterBudgetUpdateControls() {
+
+            if ($("#formJobmasterBudgetXLUpload").length != 0) {
+                initDropZone(".xlsx");
+            }
+
+            $('#btnJobmasterBudgetExport').on('click', function () {
+                 var openmonth = $('#OpeningMonth').val();
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (openmonth != "") {
+                    $('#IsExport').val("1");
+                    downloadJobmasterBudgetXLTemplate();
+                } else {
+                    alert('Opending month not entered');
+                }
+            });
+
+            $('#btnJobmasterBudgetXLTemplate').on('click', function () {
+                var openmonth = $('#OpeningMonth').val();
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (openmonth != "") {
+                    $('#IsExport').val("0");
+                    downloadJobmasterBudgetXLTemplate();
+                } else {
+                    alert('Opending month not entered');
+                }
+            });
+
+            $('#btnjobmasterBudgetUpdateXL').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitJobmasterBudgetUpdateXL();
+            });
+        }
+
+        function detachDropZone() {
+            $("#dropZoneWrapper").hide();
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+        }
+
+
+        function submitJobmasterBudgetUpdateXL() {
+            var formJobmasterBudgetXLUpload = "#formJobmasterBudgetXLUpload";
+            if ($(formJobmasterBudgetXLUpload).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length == 0) {
+                notify("error", "No files selected.", "Error");
+                return;
+            }
+            oDropZone2.processQueue();
+        }
+
+        function postDeleteMailListReload(data) {
+            hideLoader();
+            if (data.success) {
+                notify('success', data.response, 'Success');
+            }
+            loadMailListDataTable();
+        }
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+            detachDropZone();
+        }
+
+        function initDropZoneForJobErpPhases(fileTypeExtension) {
+
+            detachDropZone();
+
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("TrainingFileUpload", "EmployeeTraining", new {Area = "SWPVaccine"})',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: fileTypeExtension,
+                init: function () {
+                    var myDropzone = this;
+
+                    this.on("processing", function (file) {
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+
+                        if (data.success) {
+                            onSuccessTab('erpPhases');
+                            $('#modalcontainer').modal('hide');
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+
+                        if (data.success) {
+                            onSuccessTab('erpPhases');
+
+                            notify('success', data.response, 'Success');
+
+                            $('#modalcontainer').modal('hide');
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                },
+                error: function (request, status, error) {
+                    this.removeAllFiles(true);
+                    notify('error', status, request, error);
+                }
+
+            });
+        }
+
+        function initJobErpPhasesUpdateControls() {
+
+            if ($("#formJobErpPhasesFileDetail").length != 0) {
+                initDropZoneForJobErpPhases(".xlsx");
+            }
+
+            $('#btnJobErpPhasesXLTemplate').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadJobErpPhasesTemplateXLTemplate();
+            });
+
+            $('#btnJobErpPhasesUpdateXL').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadJobErpPhasesXLFile();
+            });
+
+            $('#btnSaveJobErpPhasesUpdateXL').on('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitJobErpPhasesUpdateXL();
+            });
+        }
+
+        function submitJobErpPhasesUpdateXL() {
+
+            var formJobErpPhasesFileDetail = "#formJobErpPhasesFileDetail";
+            if ($(formJobErpPhasesFileDetail).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone3 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone3.files.length == 0) {
+                notify("error", "No files selected.", "Error");
+                return;
+            }
+            oDropZone3.processQueue();
+            //return;
+        }
+
+        function downloadJobErpPhasesTemplateXLTemplate() {
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formJobErpPhasesFileDetail input[name="__RequestVerificationToken"]').val() },
+                url: "@Url.Action("ExcelJobErpPhasesTemplateDownload", "JOB", new { Area = "JOB"})",
+                type: "GET",
+                data: {
+                    projno: $('#Projno').val()
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        };
+
+        function downloadJobErpPhasesXLFile() {
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formJobErpPhasesFileDetail input[name="__RequestVerificationToken"]').val() },
+                url: "@Url.Action("JobErpPhasesXLFileDownload", "JOB", new { Area = "JOB"})",
+                type: "GET",
+                data: {
+                    projno: $('#Projno').val()
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        };
+
+        function responsibleRequiredAttributeOnOff() {
+
+            if ($("#EmpnoR05RequiredAttribute").length != 0) {
+                if ($('#EmpnoR05RequiredAttribute').val() == 'TRUE'){
+                    $('#EmpnoR05').prop('required', true)
+                }
+                else {
+                    $('#EmpnoR05').prop('required', false)
+                }
+            }
+
+            if ($("#EmpnoR06RequiredAttribute").length != 0) {
+                if ($('#EmpnoR06RequiredAttribute').val() == 'TRUE'){
+                    $('#EmpnoR06').prop('required', true)
+                }
+                else {
+                    $('#EmpnoR06').prop('required', false)
+                }
+            }
+
+            if ($("#EmpnoR07RequiredAttribute").length != 0) {
+                if ($('#EmpnoR07RequiredAttribute').val() == 'TRUE'){
+                    $('#EmpnoR07').prop('required', true)
+                }
+                else {
+                    $('#EmpnoR07').prop('required', false)
+                }
+            }
+
+            if ($("#EmpnoR08RequiredAttribute").length != 0) {
+                if ($('#EmpnoR08RequiredAttribute').val() == 'TRUE') {
+                    $('#EmpnoR08').prop('required', true)
+                }
+                else {
+                    $('#EmpnoR08').prop('required', false)
+                }
+            }
+        }
+
+        function validateTabs() {
+            var projno = $('#Projno').val();
+
+            $.ajax({
+                url: '@Url.Action("GetJobValidateStatus", "JOB", new { Area = "JOB", projno = @Model.Projno })',
+                data: {
+                    'projno': projno
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    flagUnflagTabs(data);
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                }
+            });
+        }
+
+        function flagUnflagTabsCallback(jsonData){
+            flagUnflagTabs(jsonData.headerData);
+        }
+
+        function flagUnflagTabs(data) {
+            if (data.pDescNotesType == 'KO') {
+                $('#imgDescriptionNotesStatus').show();
+                $("#imgDescriptionNotesStatus").attr("title", data.pDescNotesText);
+                $("#spanDescriptionNotesStatus").text(data.pDescNotesText);
+            }
+            else {
+                $('#imgDescriptionNotesStatus').hide();
+                $('#spanDescriptionNotesStatus').hide();
+            }
+
+            if (data.pJobPhasesType == 'KO') {
+                $("#imgJobPhasesStatus").show();
+                $("#imgJobPhasesStatus").attr("title", data.pJobPhasesText);
+                $("#spanJobPhasesStatus").text(data.pJobPhasesText);
+            }
+            else {
+                $("#imgJobPhasesStatus").hide();
+                $("#spanJobPhasesStatus").hide();
+            }
+
+            if (data.pResponsibleRolesType == 'KO') {
+                $("#imgResponsibleStatus").show();
+                $("#imgResponsibleStatus").attr("title", data.pResponsibleRolesText);
+                $("#spanResponsibleStatus").text(data.pResponsibleRolesText);
+            }
+            else {
+                $("#imgResponsibleStatus").hide();
+                $("#spanResponsibleStatus").hide();
+            }
+
+            if (data.pBudgetType == 'KO') {
+                $("#imgJobBudgetStatus").show();
+                $("#imgJobBudgetStatus").attr("title", data.pBudgetText);
+                $("#spanJobBudgetStatus").text(data.pBudgetText);
+            }
+            else {
+                $("#imgJobBudgetStatus").hide();
+                $("#spanJobBudgetStatus").hide();
+            }
+
+            if (data.pErpPhasesType == 'KO') {
+                $('#imgERPPhasesStatus').show();
+                $("#imgERPPhasesStatus").attr("title", data.pErpPhasesText);
+                $("#spanERPPhasesStatus").text(data.pErpPhasesText);
+            }
+            else {
+                $('#imgERPPhasesStatus').hide();
+                $('#spanERPPhasesStatus').hide();
+            }
+        }
+
+        function editJobClosure() {
+            if ($("#formJobCloseInitiateConfirm").length == 0)
+                return;
+
+            $('#btnconfirmjobclosure').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                $("#formJobCloseInitiateConfirm").submit();
+            });
+
+            $('#btneditjobclosure').off('click').on('click', function () {
+                $("#formJobCloseInitiateConfirm").attr('action', '@Url.Action("JobCloseInitiateEdit","JOB",new { Area = "JOB" })').submit();
+                showModalLoader();
+            });
+        }
+
+        function PostConfirmJobClosure(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');                
+                hideLoader();                
+                location.reload();
+            }
+        }
+
+        function checkWarning() {            
+            if ($('#Warning').val() == '' || $('#Warning').val() == null || $('#Warning').val() == 'undefined') {                
+                $("#btnconfirmjobclosure").show();
+                $("#divWarning").hide();
+                $("#divChkWarning").hide();
+            }
+            else {                
+                $("#btnconfirmjobclosure").hide();
+                $("#divWarning").show();
+                $("#divChkWarning").show();
+
+                if ($("#chkWarning").is(':checked')) {
+                    $("#IsConsent").val('OK');
+                    $("#btnconfirmjobclosure").show();
+                }
+                else {
+                    $("#IsConsent").val('KO');
+                    $("#btnconfirmjobclosure").hide();
+                }
+            }            
+
+
+            $('#chkWarning').on('click', function () {                
+                if ($("#chkWarning").is(':checked')) {                    
+                    $("#IsConsent").val('OK');
+                    $("#btnconfirmjobclosure").show();
+                }
+                else {                    
+                    $("#IsConsent").val('KO');
+                    $("#btnconfirmjobclosure").hide();
+                }
+            });
+        }
+
+    </script>
+}

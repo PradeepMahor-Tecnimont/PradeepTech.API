@@ -1,0 +1,222 @@
+﻿@model TCMPLApp.WebApp.Models.BookingSummaryViewModel
+
+@{
+    ViewData["Title"] = "Booking Summary";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DeskBooking">Desk Booking</a></li>
+        <li class="breadcrumb-item active">Booking Summary</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Office" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.BookingDate" />
+<input type="hidden" asp-for="@Model.ActionId" />
+@{
+    var filterDate = DateTime.Now;
+    if (Model.FilterDataModel.BookingDate != null)
+    {
+        filterDate = DateTime.ParseExact(Model.FilterDataModel.BookingDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+}
+
+<form asp-controller="Bookings"
+      asp-action="BookingSummaryDetailIndex"
+      id="formBookingSummaryDetails">
+
+    <input type="hidden" asp-for="WorkArea" />
+    <input type="hidden" asp-for="Office" />
+    <input type="hidden" asp-for="BookingDate" />
+    <input type="hidden" asp-for="Assign" />
+</form>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Booking Summary</p>
+    </div>
+    <div class="d-flex flex-row p-1">
+        <span id="filterGet ">
+            <i class="fas fa-filter"></i>&nbsp;Filter applied  ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.BookingDate))
+            {
+                @Html.Raw("BookingDate : <b>" + (filterDate.ToLongDateString()) + "</b>")
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Office))
+            {
+                @Html.Raw(", Office Location : ") <b>@Model.FilterDataModel.Office</b>
+                ;
+            }
+        </span>
+    </div>
+    <hr />
+
+    <div class="d-flex flex-row">
+
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("BookingSummaryFilterGet", "Bookings", new { Area = "DeskBooking" })'
+           data-modaltitle="Filters - Booking Summary"
+           data-modalheader="Filters - Booking Summary">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="BookingSummaryIndex"
+           data-url='@Url.Action("ResetFilter", "Bookings", new { Area = "DeskBooking" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("BookingSummaryExcelDownload", "Bookings", new { Area = "DeskBooking" }))" data-id="@Model.ActionId">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+        @* <a class="btn btn-sm-icon" href="#" onclick="GotoBookingSummaryDetails('MOC1','A55','@filterDate','0106')" title="Detail"><i class="far fa-eye"></i></a> *@
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbBookingSummary" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@Html.DisplayNameFor(model => model.Office)</th>
+                    <th>@Html.DisplayNameFor(model => model.WorkArea)</th>
+                    <th>@Html.DisplayNameFor(model => model.AreaDesc)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeskCount)</th>
+                    <th>@Html.DisplayNameFor(model => model.Assign)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeptEmpCount)</th>
+                    <th>@Html.DisplayNameFor(model => model.BookedDesks)</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadBookingSummaryDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+
+        }
+
+        let vVUloadBookingSummaryList = "@Url.Action("GetListsBookingSummary", "Bookings")";
+
+        function loadBookingSummaryDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbBookingSummary",
+                pColumns: datatableBookingSummaryColumns,
+                pUrl: vVUloadBookingSummaryList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    office: $('#FilterDataModel_Office').val() ? $('#FilterDataModel_Office').val() : null,
+                    bookingDate: $('#FilterDataModel_BookingDate').val() ? $('#FilterDataModel_BookingDate').val() : null,
+                    actionId: $('#ActionId').val() ? $('#ActionId').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableBookingSummaryColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var office = "'" + data.office + "'";
+                            var workArea = "'" + data.workArea + "'";
+                            var costcode = "'" + data.assign + "'";
+                            var bookingDate = @Model.FilterDataModel.BookingDate;
+                            return '<a class="btn btn-sm-icon" href="#" onclick="GotoBookingSummaryDetails(' + office + ',' + workArea + ',' + bookingDate + ',' + costcode + ') " title="Detail"><i class="far fa-eye"></i></a>';
+                        },
+                        'className': "td-icon",
+                    },
+                    { data: "office" },
+                    { data: "workArea" },
+                    { data: "areaDesc" },
+                    { data: "deskCount" },
+                    { data: "assign" },
+                    { data: "deptEmpCount" },
+                    { data: "bookedDesks" },
+
+                ];
+            </text>
+        }
+            function PostSave(data) {
+                if (data.success) {
+                    $("#modalcontainer").modal('hide');
+                    hideLoader();
+                    loadBookingSummaryDataTable();
+                    notify('success', data.response, 'Success');
+                }
+            }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadBookingSummaryDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadBookingSummaryDataTable();
+            }
+        });
+
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+            $("#FilterDataModel_Office").val(data.office);
+            $("#FilterDataModel_BookingDate").val(data.bookingDate);
+            location.reload();
+            hideLoader();
+        }
+        function GotoBookingSummaryDetails(office, workArea, bookingDate,costcode) {
+
+            $('#WorkArea').val(workArea);
+            $('#Office').val(office);
+            $('#BookingDate').val(bookingDate);
+            $('#Assign').val(costcode);
+
+            var frm = $('#formBookingSummaryDetails');
+            frm.submit();
+        }
+    </script>
+}

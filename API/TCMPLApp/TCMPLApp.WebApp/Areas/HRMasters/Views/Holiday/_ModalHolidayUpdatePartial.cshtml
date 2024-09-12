@@ -1,0 +1,54 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.HolidayUpdateViewModel
+@Html.AntiForgeryToken()
+
+<form asp-controller="Holiday"
+      asp-action="Edit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onDataTableReloadSuccess"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Srno)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit Holiday</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xl-12 col-md-6">
+                <div class="form-group">
+                    <label asp-for="Holiday" class="control-label"></label>
+                    <input asp-for="Holiday" class="form-control" type="date" placeholder="dd-mm-yyyy" value="@Model.Holiday.ToString("yyyy/MM/dd")" required />
+                    <span asp-validation-for="Holiday" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" placeholder="Description" value="@Model.Description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

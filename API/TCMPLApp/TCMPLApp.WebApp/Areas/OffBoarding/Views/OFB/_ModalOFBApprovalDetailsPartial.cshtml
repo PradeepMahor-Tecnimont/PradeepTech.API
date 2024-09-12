@@ -1,0 +1,73 @@
+﻿@model TCMPLApp.WebApp.Models.OFBApprovalDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="OFB"
+      asp-action="GetAllApprovals"
+      id="formGetAllApprovals"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);doTest();localscript();"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Off-Boarding</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Department Approvals"]</h5>
+            </div>
+
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-8 col-mb-4 col-xl-12">
+                            <div class="form-group">
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Empno + " - " + Model.EmpName + " [" + Model.Parent + " - " + Model.ParentName + "]" )
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <div class="col-sm-8 col-mb-4 col-xl-12">
+                            <div class="form-group">
+                                <div class="dd-met">
+                                    @Html.DisplayNameFor(model => model.RelievingDate)
+                                    @Html.Raw(":" + Model.RelievingDate)
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+                <div style="overflow:auto">
+                    <table id="tbApprovalDetails" class="table table-bordered  table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr>
+                                <th>@localizer[Html.DisplayNameFor(model => model.ActionDesc)]</th>
+                                <th>@localizer[Html.DisplayNameFor(model => model.Remarks)]</th>
+                                <th>@localizer[Html.DisplayNameFor(model => model.ApprovalStatus)]</th>
+                                <th>@localizer[Html.DisplayNameFor(model => model.ApprovalDate)]</th>
+                                <th>@localizer[Html.DisplayNameFor(model => model.ApproverName)]</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

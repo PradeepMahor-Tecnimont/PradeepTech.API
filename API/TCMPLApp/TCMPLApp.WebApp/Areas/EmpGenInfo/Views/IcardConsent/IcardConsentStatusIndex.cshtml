@@ -1,0 +1,158 @@
+﻿@model TCMPLApp.WebApp.Models.HRICardConsentStatusViewModel
+
+@Html.AntiForgeryToken()
+
+
+@{
+    ViewData["Title"] = "ICard Consent";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ICard Consent</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>ICard Consent</p>
+    </div>
+    <div class="d-flex flex-row">
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("ICardConsentStatusExcelDownload", "IcardConsent", new { Area = "EmpGenInfo" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbICardConsent" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.ConsentDate)</th>
+                    <th>@Html.DisplayNameFor(m => m.PhotoChangedDate)</th>
+                    <th>@Html.DisplayNameFor(m => m.HrResetDate)</th>
+                    <th>@Html.DisplayNameFor(m => m.HrName)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+        $(document).ready(function () {
+            loadICardConsentDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let vVUloadICardConsentList = "@Url.Action("GetListsICardConsent", "IcardConsent")";
+
+        function loadICardConsentDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbICardConsent",
+                pColumns: datatableColumns,
+                pUrl: vVUloadICardConsentList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.empno + " - " + data.name
+                        },
+                    },
+                    { data: "consentDate" },
+                    { data: "photoChangedDate" },
+                    { data: "hrResetDate" },
+                    { data: "hrName" },
+                    {
+                        'data': null,
+                        className: "td-icon",
+                        render: function (data, type, row) {
+                            if (data.isConsent == "OK") {
+                                return '<button title="Revoke" class="btn btn-outline-primary btn-sm border-none " ' +
+                                    ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                    ' data-jqueryselector = "showconfirmationmodal" ' +
+                                    ' data-url="@Url.Action("RevokeConsent", "IcardConsent", new { Area = "EmpGenInfo" })"' +
+                                    ' data-id="' + data.empno + '"' +
+                                    ' data-PostDeleteReLoadDataTables="OK" ' +
+                                    ' data-modaltitle="Please Confirm!" ' +
+                                    ' data-confirmationtext="Do you want to Revoke the Consent Of Employee No : ' + data.empno + ' " ' +
+                                    ' data-confirmationtype="success" ' +
+                                    ' title="Revoke Consent" ' +
+                                    ' data-confirmbuttontext="Revoke Consent" > ' +
+                                    ' <i class="fas fa-arrow-circle-left" aria-hidden="true"></i>  ' +
+                                    ' </button>';
+                            } else {
+                                return '';
+                            }
+
+                        }
+                    }
+                ];
+            </text>
+
+
+        }
+
+            $("#GenericSearch").keypress(function (event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearch").length) {
+                        loadICardConsentDataTable();
+                    }
+                }
+            });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadICardConsentDataTable();
+            }
+        });
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadICardConsentDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        };
+
+
+
+    </script>
+}

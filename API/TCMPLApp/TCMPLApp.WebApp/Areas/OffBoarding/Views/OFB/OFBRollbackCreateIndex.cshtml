@@ -1,0 +1,214 @@
+﻿@model TCMPLApp.WebApp.Models.OFBRollbackRequestViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Off-Boarding - Rollback";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="OFBIndex" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a asp-action="OFBRollbackPendingIndex" asp-controller="OFB" asp-area="OffBoarding">Rollback Pending</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create</li>
+    </ol>
+}
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+}
+@Html.AntiForgeryToken()
+
+<form asp-action="OFBRollbackCreate"
+      asp-controller="OFB"
+      asp-area="OffBoarding"
+      id="idCreateEmpRollback"
+      method="post"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+
+    <div class="m-auto py-2 col-xl-10">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Off-Boarding - Rollback
+                </h5>
+                <a href='@Url.Action("OFBRollbackPendingIndex", "OFB", new { Area = "OffBoarding" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                    <i class="fas fa-undo"></i>
+                    @localizer["Back"]
+                </a>
+            </div>
+            <div class="card-block ">
+
+                <div class="card-deck">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Empno" class="control-label"></label>
+                                        @*<select asp-for="Empno" class="form-control chosen-select" data-placeholder=" Please select..." id="Empno" asp-items="ViewBag.EmployeeList" required>
+                                        <option selected></option>
+                                        </select>
+                                        <span asp-validation-for="Empno" class="text-danger"></span>*@
+
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.EmployeeName)
+                                            @*<a title="Change employee" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                            data-jqueryselector="openmodal"
+                                            data-modalcontainer="modalcontainer"
+                                            data-modalpopupwidth="rightw25"
+                                            data-url='@Url.Action("SelectEmployee", "OFB", new { Area = "OffBoarding" })'
+                                            data-statichtmlsourcedivid=""
+                                            data-modaltitle="Change employee"
+                                            data-modalheader="Change employee">
+                                            <i class="fas fa-edit"></i>
+                                            </a>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Hod" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Hod + " - " + Model.HodName)
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PersonId" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.PersonId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="DesgCode" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.DesgCode + " - " + Model.DesgName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CostName" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.CostName)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Grade" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Grade)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmpType" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.EmpType)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Doj" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Doj?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row p-2">
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="ResignationDate" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.ResignationDate?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="RelievingDate" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.RelievingDate?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Address" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Address)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EndByDate" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.EndByDate?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmailId" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.EmailId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Remarks" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Remarks)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row p-2">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="RollbackRemarks" class="control-label"></label>
+                                        <textarea rows="2" class="form-control" asp-for="RollbackRemarks" required></textarea>
+                                        <span asp-validation-for="RollbackRemarks" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" id="btnConfirm"
+                            data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                            data-text="@localizer["Confirm"]">
+                        @localizer["Confirm"]
+                    </button>
+                    <a class="btn btn-secondary" asp-controller="OFB" asp-action="OFBRollbackPendingIndex" title="@localizer["Cancel"]">
+                        @localizer["Cancel"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

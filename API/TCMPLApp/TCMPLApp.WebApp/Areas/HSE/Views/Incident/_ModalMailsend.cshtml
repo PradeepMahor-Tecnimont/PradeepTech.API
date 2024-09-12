@@ -1,0 +1,74 @@
+﻿@model TCMPLApp.WebApp.Models.IncidentMailsendViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="formMailsend"      
+      asp-area="HSE"
+      asp-controller="incident"
+      asp-action="CoordinateMailsend"      
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onDataTableReloadSuccess"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    
+    <input type="hidden" asp-for="Reportid" value="@Model.Reportid" />
+    <input type="hidden" asp-for="Recipients" value=""  />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Email send</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.InjuredPerson</h5>
+            </div>
+            <div class="card-deck">
+                <div class="card shadow">
+                    <div class="card-block">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-vertical-center">
+                                <thead>
+                                    <tr>
+                                        <th aria-controls="responsive-table"></th>
+                                        <th aria-controls="responsive-table">@localizer["Role"]</th>
+                                        <th aria-controls="responsive-table">@localizer["Email"]</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   @foreach(var item in @ViewData["IncidentMailsend"] as IEnumerable<TCMPLApp.Domain.Models.HSE.IncidentMailsendList>)
+                                   {
+                                        <tr>
+                                            <td class="p-w-20">
+                                                <input class="emailcheck" type="checkbox" value="@(item.Email)" onclick="selEmail(this, '@(item.Email)')"  />
+                                            </td>
+                                            <td>                                                                                                 
+                                                @Html.DisplayFor(modelItem => item.Role)                                                
+                                            </td>                    
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>                                            
+                                        </tr>                                        
+                                   }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>       
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>

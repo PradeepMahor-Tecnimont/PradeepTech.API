@@ -1,0 +1,167 @@
+﻿<script type="text/javascript">
+
+    let pvvUrlOFBAllApprovalsHistoryList = '@Url.Action("GetListsOFBAllApprovalsHistory", "OFB")';
+    let pvvUrlOFBPendingApprovalsHistoryList = '@Url.Action("GetListsOFBPendingApprovalsHistory", "OFB")';
+    let pvvUrlOFBApprovedApprovalsHistoryList = '@Url.Action("GetListsOFBApprovedApprovalsHistory", "OFB")';
+    let pvvUrlOFBApprovalDetailsList = '@Url.Action("GetListsOFBApprovalsDetails", "OFB")';
+
+    @if ((bool)@Context.Items["isMobile"] == false)
+    {
+        <text>
+            let datatableColumnsOFBAllApprovalsHistory = [
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var Empno = "'" + data.empno + "'";
+                        return '<button class="btn btn-sm-icon" href="#" onclick="GotoDetails(' + Empno + ')" title="Detail"><i class="far fa-eye"></i></button>';
+                    },
+                    className: "td-icon",
+                },
+                { 'data': "empno" },
+                { 'data': "empName" },
+                { 'data': "parent" },
+                { 'data': "parentName" },
+                { 'data': "grade" },
+                {
+                    'data': "relievingDate",
+                    'render': function (data) {
+                        return moment(data).format('DD-MMM-YYYY');
+                    }
+                },
+                { 'data': "initiatorRemarks" },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        var approvalStatus = data.approvalStatus;
+                        if (data.isRollbackInitiated=="OK")
+                        {
+                            approvalStatus = "Rollback initiated";
+                        }
+                        return '<button class="btn btn-link btn-sm border-none p-0" name="ApprovalStatus" id="idApprovalStatus" title ="Approval Status" class="btn-link" href ="#" ' +
+                            ' data-jqueryselector="openmodal" ' +
+                            ' data-modalcontainer="modalcontainer" ' +
+                            ' data-modalpopupwidth="rightw50" ' +
+                            ' data-url="@Url.Action("GetAllApprovals", "OFB", new { Area = "OffBoarding" })" ' +
+                            ' data-id="' + data.empno + '"' +
+                            ' data-empname="' + data.empName + '"' +
+                            ' data-parent="' + data.parent + '"' +
+                            ' data-deptname="' + data.parentName + '"' +
+                            ' data-relivevingdate="' + data.relievingDate + '"' +
+                            ' data-modaltitle="Approval Details" ' +
+                            ' data-callback="loadApprovalsList" ' +
+                            ' data-modalheader="Approval Details"> ' + approvalStatus + '</button>';
+                    },
+                },
+                
+            ];
+
+        let datatableColumnsOFBPendingApprovalsHistory = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Empno = "'" + data.empno + "'";
+                    return '<button class="btn btn-sm-icon" href="#" onclick="GotoDetails(' + Empno + ')" title="Detail"><i class="far fa-eye"></i></button>';
+                },
+                className: "td-icon",
+            },
+            { 'data': "empno" },
+            { 'data': "empName" },
+            { 'data': "parent" },
+            { 'data': "parentName" },
+            { 'data': "grade" },
+            {
+                'data': "relievingDate",
+                'render': function (data) {
+                    return moment(data).format('DD-MMM-YYYY');
+                }
+            },
+            { 'data': "initiatorRemarks" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var approvalStatus = data.approvalStatus;
+                    if (data.isRollbackInitiated == "OK") {
+                        approvalStatus = "Rollback initiated";
+                    }
+                    return '<button class="btn btn-link btn-sm border-none p-0" name="ApprovalStatus" id="idApprovalStatus" title ="Approval Status" href ="#" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw50" ' +
+                        ' data-url="@Url.Action("GetAllApprovals", "OFB", new { Area = "OffBoarding" })" ' +
+                        ' data-id="' + data.empno + '"' +
+                        ' data-empname="' + data.empName + '"' +
+                        ' data-parent="' + data.parent + '"' +
+                        ' data-deptname="' + data.parentName + '"' +
+                        ' data-relivevingdate="' + data.relievingDate + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + approvalStatus + '</button>';
+                },
+            },
+         
+        ];
+
+        let datatableColumnsOFBApprovedApprovalsHistory = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var Empno = "'" + data.empno + "'";
+                    return '<button class="btn btn-sm-icon" href="#" onclick="GotoDetails(' + Empno + ')" title="Detail"><i class="far fa-eye"></i></button>';
+                },
+                className: "td-icon",
+            },
+            { 'data': "empno" },
+            { 'data': "empName" },
+            { 'data': "parent" },
+            { 'data': "parentName" },
+            { 'data': "grade" },
+            {
+                'data': "relievingDate",
+                'render': function (data) {
+                    return moment(data).format('DD-MMM-YYYY');
+                }
+            },
+            { 'data': "initiatorRemarks" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var approvalStatus = data.approvalStatus;
+                    if (data.isRollbackInitiated == "OK") {
+                        approvalStatus = "Rollback initiated";
+                    }
+                    return '<button class="btn btn-link btn-sm border-none p-0" name="ApprovalStatus" id="idApprovalStatus" title ="Approval Status" href ="#" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-modalpopupwidth="rightw50" ' +
+                        ' data-url="@Url.Action("GetAllApprovals", "OFB", new { Area = "OffBoarding" })" ' +
+                        ' data-id="' + data.empno + '"' +
+                        ' data-empname="' + data.empName + '"' +
+                        ' data-parent="' + data.parent + '"' +
+                        ' data-deptname="' + data.parentName + '"' +
+                        ' data-relivevingdate="' + data.relievingDate + '"' +
+                        ' data-modaltitle="Approval Details" ' +
+                        ' data-callback="loadApprovalsList" ' +
+                        ' data-modalheader="Approval Details"> ' + approvalStatus + '</button>';
+                },
+            },
+        ];
+
+        let datatableColumnsOFBApprovalDetails = [
+            { 'data': "actionDesc" },
+            { 'data': "remarks" },
+            { 'data': "approvalStatus" },
+            {
+                'data': "approvalDate",
+                'render': function (data) {
+                    if(data)
+                    return moment(data).format('DD-MMM-YYYY');
+                    else
+                    return '';
+                }
+            },
+            { 'data': "approverName" },
+         
+        ];
+        </text>
+    }
+</script>

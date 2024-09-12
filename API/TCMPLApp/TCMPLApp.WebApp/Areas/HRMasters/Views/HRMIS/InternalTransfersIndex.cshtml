@@ -1,0 +1,330 @@
+﻿@model TCMPLApp.WebApp.Models.InternalTransferViewModel
+
+@Html.AntiForgeryToken()
+
+
+@{
+    ViewData["Title"] = "Internal Transfers";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Internal Transfers</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.StartDate" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.EndDate" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.FromDept" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.ToDept" />
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Internal Transfers</p>
+    </div>
+    <div class="d-flex flex-row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISTransfersUpdate))
+        {
+            <a title="New Internal Transfers" class="btn btn-outline-primary btn-sm border border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("InternalTransferCreate", "HRMIS", new { Area = "HRMasters" })'
+               data-statichtmlsourcedivid=""
+               data-modaltitle="New Internal Transfers"
+               data-modalheader="New Internal Transfers">
+                <i class="fas fa-plus"></i> Create
+            </a>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISTransfersReadAll))
+        {
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("InternalTransferFilterGet", "HRMIS", new { Area = "HRMasters" })'
+               data-modaltitle="Filters - Internal Transfers"
+               data-modalheader="Filters - Internal Transfers">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="InternalTransferIndex"
+               data-url='@Url.Action("ResetFilter", "HRMIS", new { Area = "HRMasters" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+        }
+        <a style="float:right"
+           class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("HRMISExcelDownload", "HRMIS", new { typeId = @ViewBag.XLDownloadType })'>
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbInternalTransfer" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.EmployeeName)</th>
+                    <th>@Html.DisplayNameFor(m => m.FromDept)</th>
+                    <th>@Html.DisplayNameFor(m => m.ToDept)</th>
+                    <th>@Html.DisplayNameFor(m => m.TransferDate)</th>
+                    @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISTransfersUpdate))
+                    {
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    }
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/HRMasters.js" asp-append-version="true"></script>
+    <script>
+
+        $(document).ready(function () {
+            loadInternalTransferDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+            $('#btnExportExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                var url = '@Url.Action("HRMISExcelDownload", "HRMIS", new {Area = "HRMasters" })';
+                exportExcel(url);
+            });
+
+
+        };
+
+        let vVUloadInternalTransferList = "@Url.Action("GetListsInternalTransfer", "HRMIS")";
+
+        function loadInternalTransferDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbInternalTransfer",
+                pColumns: datatableColumns,
+                pUrl: vVUloadInternalTransferList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    startDate: $('#FilterDataModel_StartDate').val() ? $('#FilterDataModel_StartDate').val() : null,
+                    endDate: $('#FilterDataModel_EndDate').val() ? $('#FilterDataModel_EndDate').val() : null,
+                    fromDept: $('#FilterDataModel_FromDept').val() ? $('#FilterDataModel_FromDept').val() : null,
+                    toDept: $('#FilterDataModel_ToDept').val() ? $('#FilterDataModel_ToDept').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                @*{
+            data: null,
+            render: function (data, type, row) {
+            return data.empno + " - " + data.empName
+            },
+            },*@
+                    { data: "employeeName" },
+                    { data: "fromDept" },
+                    { data: "toDept" },
+                    {
+                        data: "transferDate",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            if (data)
+                                return moment(data).format("DD-MMM-YYYY");
+                            else
+                                return '';
+                        }
+                    }
+                ];
+
+
+            </text>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISTransfersUpdate))
+        {
+            <text>
+                datatableColumns.push(
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("InternalTransferEdit", "HRMIS", new { Area = "HRMasters" })" ' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + row.keyId + '"' +
+                                ' data-modaltitle="Edit Internal Transfer" ' +
+                                ' data-modalheader="Edit Internal Transfer"> ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>'
+
+                        },
+                        className: "td-icon",
+                    },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+
+                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("InternalTransferDelete", "HRMIS", new { Area = "HRMasters" })"' +
+                                ' data-id="' + data.keyId + '"' +
+                                ' data-PostDeleteReLoadDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to Internal Transfer of Employee No ' + data.employeeName + ' " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Delete Internal Transfer" ' +
+                                ' data-confirmbuttontext="Delete Internal Transfer" > ' +
+                                ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                ' </button>';
+
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                );
+            </text>
+        }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadInternalTransferDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadInternalTransferDataTable();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadInternalTransferDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+
+
+            $("#FilterDataModel_StartDate").val(data.startDate);
+            $("#FilterDataModel_EndDate").val(data.endDate);
+            $("#FilterDataModel_FromDept").val(data.fromDept);
+            $("#FilterDataModel_ToDept").val(data.toDept);
+
+            loadInternalTransferDataTable();
+            hideLoader();
+        }
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true
+            });
+
+            $('#transferDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#TransferDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+
+            $('#startDateXl').datepicker({
+                format: "dd-MM-yyyy",
+                autoclose: true
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val()
+
+                $("#StartDate").val(fvDate)
+
+                $(this).datepicker('hide')
+            })
+
+            $('#endDateXl').datepicker({
+                format: "dd-MM-yyyy",
+                autoclose: true
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val()
+                $("#EndDate").val(fvDate)
+
+                $(this).datepicker('hide')
+
+            });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+                var vStartDate = moment(date);
+                var futureMonthEnd = moment(vStartDate).endOf('month');
+
+                $('#endDateFilter').bootstrapMaterialDatePicker('setDate', futureMonthEnd);
+                $('#endDateFilter').val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+                $("#EndDate").val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+
+            });
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+        }
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadInternalTransferDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+    </script>
+}

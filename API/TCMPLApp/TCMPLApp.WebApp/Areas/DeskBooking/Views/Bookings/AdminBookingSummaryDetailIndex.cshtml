@@ -1,0 +1,270 @@
+﻿@model TCMPLApp.WebApp.Models.BookingSummaryDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Booking Summary Details";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DeskBooking">Desk Booking</a></li>
+        <li class="breadcrumb-item"><a asp-action="AdminBookingSummaryIndex" asp-controller="Bookings" asp-area="DeskBooking">Booking Summary</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Booking Summary Details</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<input type="hidden" asp-for="AreaId" />
+<input type="hidden" asp-for="Office" />
+<input type="hidden" asp-for="BookingDate" />
+<input type="hidden" asp-for="Costcode" />
+<input type="hidden" asp-for="ActionId" />
+<input type="hidden" asp-for="bookingDate" />
+
+<div class="card bg-gray-active border rounded shadow m-auto col-xl-11 p-2">
+    <div class="card-header" style="padding:10px 18px;">
+        <h5 class="card-title">
+            @localizer["Booking Summary Details"]
+        </h5>
+
+        <a href='@Url.Action("AdminBookingSummaryIndex", "Bookings", new { Area = "DeskBooking" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+            <i class="fas fa-undo"></i>
+            @localizer["Back"]
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("DeptBookingSummaryExcelDownload", "Bookings", new { Area = "DeskBooking" }))"
+           data-id="@Model.ActionId"
+           data-areaId="@Model.AreaId"
+           data-bookingDate="@Model.bookingDate"
+           data-office="@Model.Office"
+           data-costcode="@Model.Costcode">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="card-block ">
+
+        <div class="card-deck">
+            <div class="card col-md-12 col-xl-12">
+                <div class="card-body">
+                    <div id="divBookingSummaryDetails">
+                        <div class="row p-2">
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AreaId)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.AreaId + " - " + Model.AreaDesc)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Office)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.Office)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Costcode)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.Costcode)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.DeskCount)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.DeskCount)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.DeptEmpnoCount)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.DeptEmpnoCount)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.BookedDesks)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.BookedDesks)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.BookingDate)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.BookingDate.ToString("dd-MM-yyyy"))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-pill" style="margin-top: 20px">
+            <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-AdminEmpBookedDeskList-tab" data-toggle="pill" href="#tabs-AdminEmpBookedDeskList" role="tab" aria-controls="tabs-AdminEmpBookedDeskList" aria-selected="false"
+                       data-url="@Url.Action("AdminEmpBookedDeskListDetailsIndex", "Bookings", new { Area = "DeskBooking" })"
+                       @* data-id="@Model.AreaId" *@
+                       data-divid="pw-AdminEmpBookedDeskList"
+                       data-callback="loadAdminEmpBookedDeskListDataTable();"
+                       data-area="DeskBooking"
+                       data-controller="Bookings"
+                       data-action="AdminEmpBookedDeskListIndex">
+                        Employee Booked Desks
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-AdminDeskList-tab" data-toggle="pill" href="#tabs-AdminDeskList" role="tab" aria-controls="tabs-AdminDeskList" aria-selected="true"
+                       data-url="@Url.Action("AdminDeskListDetailIndex", "Bookings", new { Area = "DeskBooking" })"
+                       @* data-id="@Model.AreaId" *@
+                       data-divid="pw-AdminDeskList"
+                       data-callback="loadAdminDeskListDataTable();"
+                       data-area="DeskBooking"
+                       data-controller="Bookings"
+                       data-action="AdminDeskListIndex">
+                        Desk List
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade" id="tabs-AdminEmpBookedDeskList" role="tabpanel" aria-labelledby="tabs-AdminEmpBookedDeskList-tab">
+                    <div id="pw-AdminEmpBookedDeskList">
+                    </div>
+                </div>
+                <div class="tab-pane fade show active" id="tabs-AdminDeskList" role="tabpanel" aria-labelledby="tabs-AdminDeskList-tab">
+                    <div id="pw-AdminDeskList">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+            $('#tabs-AdminEmpBookedDeskList-tab').click();
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let pvvUrlAdminDeskList = '@Url.Action("GetListsAdminDeskList", "Bookings")';
+
+        let pvvUrlAdminEmpBookedDeskList = '@Url.Action("GetListsAdminEmpBookedDeskList", "Bookings")';
+
+        function loadAdminDeskListDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbAdminDeskList",
+                pColumns: datatableColumnsAdminDeskList,
+                pUrl: pvvUrlAdminDeskList,
+                pUrlParams: {
+                    genericSearch: $('#AdminDeskListSearch').val() ? $('#AdminDeskListSearch').val() : null,
+                    areaId: $('#AreaId').val() ? $('#AreaId').val() : null,
+                    office: $('#Office').val() ? $('#Office').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+            });
+        }
+
+        function loadAdminEmpBookedDeskListDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbAdminEmpBookedDeskList",
+                pColumns: datatableColumnsAdminEmpBookedDeskList,
+                pUrl: pvvUrlAdminEmpBookedDeskList,
+                pUrlParams: {
+                    genericSearch: $('#AdminEmpBookedDeskListSearch').val() ? $('#AdminEmpBookedDeskListSearch').val() : null,
+                    areaId: $('#AreaId').val() ? $('#AreaId').val() : null,
+                    office: $('#Office').val() ? $('#Office').val() : null,
+                    bookingDate: $('#BookingDate').val() ? $('#BookingDate').val() : null,
+                    costcode: $('#Costcode').val() ? $('#Costcode').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+            });
+        }
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumnsAdminDeskList = [
+                    { 'data': "deskid" },
+                    { 'data': "floor" },
+                    { 'data': "wing" },
+
+                ];
+
+            let datatableColumnsAdminEmpBookedDeskList = [
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return data.empno + " - " + data.name
+                    }
+                },
+                { data: "deskid" },
+                { data: "office" },
+
+            ];
+            </text>
+        }
+
+            function genericSearchKeypress(fnName) {
+                if (this.event.keyCode === 13) {
+                    if (this.length) {
+                        if (fnName == "AdminDeskListSearch") {
+                            loadAdminDeskListDataTable();
+                        }
+                        if (fnName == "AdminDeptEmpListSearch") {
+                            loadAdminEmployeeListDataTable();
+                        }
+                        if (fnName == "AdminEmpBookedDeskListSearch") {
+                            loadAdminEmpBookedDeskListDataTable();
+                        }
+                    }
+                }
+            }
+        function genericSearchOnClick(fnName) {
+            if (this.length) {
+                if (fnName == "AdminDeskListSearch") {
+                    loadAdminDeskListDataTable();
+                }
+                if (fnName == "AdminDeptEmpListSearch") {
+                    loadAdminEmployeeListDataTable();
+                }
+                if (fnName == "AdminEmpBookedDeskListSearch") {
+                    loadAdminEmpBookedDeskListDataTable();
+                }
+            }
+        }
+    </script>
+}

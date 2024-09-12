@@ -1,0 +1,730 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAssignmentNewViewModel
+@{
+    ViewData["Title"] = "Desk Assignment";
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Desk Assignment</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<form asp-controller="DeskAssignment"
+      asp-action="DeskAssignmentNewIndex"
+      id="formDeskAssignmentNewIndex">
+    <input type="hidden" asp-for="SearchByDeskNoOrEmpNo" />
+
+    <input class="hidden" id="Emp1" name="Emp1" value="@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Empno">
+    <input class="hidden" id="Emp2" name="Emp2" value="@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Empno">
+    <input class="hidden" id="DeskNo" name="DeskNo" value="@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo">
+
+    <div class="col-sm-12">
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="input-group pt-1 pr-1 ">
+                    <input class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" value="@Model.SearchByDeskNoOrEmpNo"
+                           placeholder="Search EmpNo / DeskNo...">
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-12 p-1 m-1">
+            @if (Model.DeskTileViewModel.DeskDetailHeaderFields.IsBlocked == IsOk)
+            {
+                <span id="spanReasoneDeskBlocked" class="pr-1 f-12 badge badge-danger" style="text-align: left">
+                    @Html.Raw(Model.DeskTileViewModel.DeskDetailHeaderFields.BlockedReason)
+                </span>
+            }
+        </div>
+
+        @if (Model.TrueFlag == 0)
+        {
+            <div class="card w-25" style="margin-left:auto; margin-right:auto">
+                <div class="card-header">
+                    <table id="tbMasterGrid" class="table table-hover table-bordered table-responsive-lg ">
+                        <thead class="bg-info text-white">
+                            <tr>
+                                <th></th>
+                                <th>Employee no</th>
+                                <th>Desk no</th>
+                                <th>User in</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (@Model.MasterList is not null)
+                            {
+                                @foreach (var item in Model.MasterList)
+                                {
+                                    <tr>
+                                        @if (item.UserIn == "DMS")
+                                        {
+                                            <td>
+                                                <button style="" type="button" class="btn btn-outline-danger  btn-sm border border-white "
+                                                        onclick="showDeleteConfirmationPopup(event,this);"
+                                                        data-jqueryselector="showconfirmationmodal"
+                                                        data-url='@Url.Action("DeleteEmpFromDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                        data-redirecturl="@Url.Action("DeskAssignmentNewIndex", "DeskAssignment", new { Area = "DMS" , search = Model.SearchByDeskNoOrEmpNo})"
+                                                        data-PostSave="PostSave(true)"
+                                                        data-empno="@item.Empno"
+                                                        data-deskno="@item.Deskid"
+                                                        data-modaltitle="Please Confirm!"
+                                                        data-confirmationtext="Do you want to delete Employee from DMS (@item.Deskid) - (@item.Empno) ?"
+                                                        data-confirmationtype="warning"
+                                                        title="Delete Employee 1"
+                                                        data-confirmbuttontext="Delete Employee">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        }
+
+                                        else
+                                        {
+                                            <td> </td>
+                                        }
+                                        <td>@item.Empno </td>
+                                        <td>@item.Deskid </td>
+                                        <td>@item.UserIn </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>No data found</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row ">
+                <div class="col-xl-4 col-md-6 col-sm-12 ">
+                    <div class=" mt-1 ml-1 mr-1 ">
+                        <div class="card-deck" style="min-height:570px;">
+                            <div class="card shadow col-md-12 col-xl-12 ">
+                                <div class="card-block pl-0 pr-0">
+                                    <div class="card-header" style="height: 40px!important;padding-left: 15px;padding-top: 5px;">
+                                        <h5 class="card-title">
+                                            <b>
+                                                Assets on desk @if (!string.IsNullOrEmpty(@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo))
+                                                    @Html.Raw("- [ " + @Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo + " ]")
+                                            </b>
+                                        </h5>
+                                        <br />
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo))
+                                    {
+                                        <div class="card-toolbar">
+                                            <div role="toolbar">
+                                                @if (Model.DeskTileViewModel.DeskDetailHeaderFields.IsBlocked == NotOk)
+                                                {
+                                                    <a title="Desktop" id="lDesktop" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                                       data-jqueryselector="openmodal"
+                                                       data-modalcontainer="modalcontainer"
+                                                       data-modalpopupwidth="rightw35"
+                                                       data-url='@Url.Action("AssetsOnDeskAdd", "DeskAssignment", new { Area = "DMS" })'
+                                                       data-deskno="@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo"
+                                                       data-itemTypeCode="PC"
+                                                       data-statichtmlsourcedivid=""
+                                                       data-modaltitle="Desktop"
+                                                       data-modalheader="Desktop">
+                                                        <i class="fas fa-plus"></i> Add / Modification
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <br />
+                                        <div class="row m-0 p-0 w-100">
+                                            <div id="assetsOnDeskIndexPartial" class="w-100">
+
+                                                <div class="m-1"></div>
+                                                <div class="bg-gray-active rounded ">
+                                                    <div class="m-3"></div>
+
+                                                    <div class="row pr-2 pl-2">
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Desk Number</div>
+                                                            <div class="dd-met">@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo</div>
+                                                        </div>
+
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Office</div>
+                                                            <div class="dd-met">@Model.DeskTileViewModel.DeskDetailHeaderFields.Office</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Floor</div>
+                                                            <div class="dd-met">@Model.DeskTileViewModel.DeskDetailHeaderFields.Floor</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Area</div>
+                                                            <div class="dd-met">@Model.DeskTileViewModel.DeskDetailHeaderFields.AreaDesc</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Cabin/Desk</div>
+                                                            <div class="dd-met">
+                                                                @if (@Model.DeskTileViewModel.DeskDetailHeaderFields.CabinDesk == null)
+                                                                {
+                                                                    @Html.Raw("Desk");
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Model.DeskTileViewModel.DeskDetailHeaderFields.CabinDesk
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr style="margin-top: -15px;">
+                                                    <div style="overflow:auto; " class="">
+
+                                                        <table id="tbAssetsOnDeskGrid" class="table table-hover table-bordered ">
+                                                            <thead class="bg-info text-white">
+                                                                <tr>
+                                                                    <th>Asset id</th>
+                                                                    <th>Code</th>
+                                                                    <th>Asset name</th>
+                                                                    <th>Description</th>
+                                                                    @if (Model.DeskTileViewModel.DeskDetailHeaderFields.IsBlocked == NotOk)
+                                                                    {
+                                                                        <th>&nbsp;</th>
+                                                                        <th>&nbsp;</th>
+                                                                    }
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (@Model.DeskTileViewModel.DeskAssetsList is not null)
+                                                                {
+                                                                    @foreach (var assets in Model.DeskTileViewModel.DeskAssetsList)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@assets.AssetId </td>
+                                                                            <td>@assets.AssetCode </td>
+                                                                            <td>@assets.AssetName </td>
+                                                                            <td>@assets.Description </td>
+                                                                            @if (Model.DeskTileViewModel.DeskDetailHeaderFields.IsBlocked == NotOk)
+                                                                            {
+                                                                                <td style="text-align:center">
+                                                                                    <button style="" type="button" class="btn btn-outline-danger  btn-sm border border-white"
+                                                                                            onclick="showDeleteConfirmationPopup(event,this);"
+                                                                                            data-jqueryselector="showconfirmationmodal"
+                                                                                            data-url='@Url.Action("DeleteAssetsFromDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                                                            data-redirecturl="@Url.Action("DeskAssignmentNewIndex", "DeskAssignment", new { Area = "DMS", search = Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo })"
+                                                                                            data-PostSave="OK"
+                                                                                            data-assetid="@assets.AssetId"
+                                                                                            data-deskno="@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo"
+                                                                                            data-modaltitle="Please Confirm!"
+                                                                                            data-confirmationtext="Do you want to delete Asset (@assets.AssetId) ?"
+                                                                                            data-confirmationtype="warning"
+                                                                                            title="Delete Asset (@assets.AssetName) "
+                                                                                            data-confirmbuttontext="Delete Asset">
+                                                                                        <i class="fas fa-trash"></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td style="text-align:center">
+                                                                                    <a title="Replace Assets" class="btn btn-outline-primary  btn-sm border border-white" href="#"
+                                                                                       @*data-jqueryselector="openmodal"*@
+                                                                                       onclick="functionPpenModalListner(this)"
+                                                                                       data-modalcontainer="modalcontainer"
+                                                                                       data-modalpopupwidth="rightw35"
+                                                                                       data-url='@Url.Action("ReplaceAssetsFromDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                                                       data-deskno="@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo"
+                                                                                       data-assetId="@assets.AssetId"
+                                                                                       data-itemTypeCode="@assets.AssetCode"
+                                                                                       data-itemDesc="@assets.Description"
+                                                                                       data-statichtmlsourcedivid=""
+                                                                                       data-modaltitle="Replace Assets"
+                                                                                       data-modalheader="Replace Assets">
+                                                                                        <i class="fas fa-exchange-alt	"></i>
+                                                                                    </a>
+                                                                                </td>
+                                                                            }
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr>
+                                                                        <td>No data found</td>
+                                                                    </tr>
+
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div id="result"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw("No data found")
+                                        ;
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12 ">
+                    <div class=" mt-1 ml-1 mr-1 ">
+                        <div class="card-deck" style="min-height:570px;">
+                            <div class="card shadow col-md-12 col-xl-12">
+                                <div class="card-block pl-0 pr-0">
+                                    <div class="card-header" style="height: 40px!important;padding-left: 15px;padding-top: 5px;">
+                                        <h5 class="card-title">
+                                            <b>
+                                                Employee 1 @if (!string.IsNullOrEmpty(Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo))
+                                                    @Html.Raw("- [ " + @Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo + " ]")
+                                            </b>
+                                        </h5>
+                                        <br />
+                                    </div>
+
+                                    <div class="card-toolbar">
+                                        <div role="toolbar">
+                                            @if (!string.IsNullOrEmpty(@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo))
+                                            {
+                                                @if (string.IsNullOrEmpty(@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Empno))
+                                                {
+                                                    @if (Model.DeskTileViewModel.DeskDetailHeaderFields.IsBlocked == NotOk)
+                                                    {
+                                                        <a title="Employee 1" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                                           data-jqueryselector="openmodal"
+                                                           data-modalcontainer="modalcontainer"
+                                                           data-modalpopupwidth="rightw35"
+                                                           data-url='@Url.Action("AddEmpToDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                           data-empno="@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Empno"
+                                                           data-deskno="@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo"
+                                                           data-statichtmlsourcedivid=""
+                                                           data-modaltitle="Employee 1"
+                                                           data-modalheader="Employee 1">
+                                                            <i class="fas fa-plus"></i> Add Employee 1
+                                                        </a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (Model.DeskTileViewModel.DeskDetailHeaderFields.IsBlocked == NotOk)
+                                                    {
+                                                        <button style="" type="button" class="btn btn-outline-danger  btn-sm border border-white "
+                                                                onclick="showDeleteConfirmationPopup(event,this);"
+                                                                data-jqueryselector="showconfirmationmodal"
+                                                                data-url='@Url.Action("DeleteEmpFromDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                                data-redirecturl="@Url.Action("DeskAssignmentNewIndex", "DeskAssignment", new { Area = "DMS", search = Model.SearchByDeskNoOrEmpNo })"
+                                                                data-PostSave="PostSave(true)"
+                                                                data-empno="@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Empno"
+                                                                data-deskno="@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo"
+                                                                data-modaltitle="Please Confirm!"
+                                                                data-confirmationtext="Do you want to delete Employee 1 (@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Empno) ?"
+                                                                data-confirmationtype="warning"
+                                                                title="Delete Employee 1"
+                                                                data-confirmbuttontext="Delete Employee 1">
+                                                            <i class="fas fa-trash"></i> Remove Employee 1
+                                                        </button>
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <br />
+                                    @if (!string.IsNullOrEmpty(@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Empno))
+                                    {
+
+                                        <div class="row m-0 p-0 w-100">
+                                            <div id="employee1AssetsIndexPartial" class="w-100">
+                                                <div class="m-1"></div>
+                                                <div class="bg-gray-active rounded ">
+
+                                                    <div class="row pr-2 pl-2">
+                                                        <div class="form-group col-md-12">
+                                                            <div class="dt-met pb-1">
+                                                                Employee
+                                                                @if ((@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Status) == "1")
+                                                                {
+                                                                    <b class="text-success">Active</b>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <b class="text-danger">De-Active</b>
+                                                                }
+                                                            </div>
+                                                            <div class="dd-met">@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Empno - @Model.Employee1TileViewModel.EmployeeDetailHeaderFields.EmpName</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Grade</div>
+                                                            <div class="dd-met"> @Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Grade</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Parent</div>
+                                                            <div class="dd-met"> @Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Parent</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Assign</div>
+                                                            <div class="dd-met">@Model.Employee1TileViewModel.EmployeeDetailHeaderFields.Assign </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr style="margin-top:-15px" />
+                                                    <table id="tbEmpAssetsGrid" class="table table-hover table-bordered ">
+                                                        <thead class="bg-info text-white">
+                                                            <tr>
+                                                                <th>Asset id</th>
+                                                                <th>Code</th>
+                                                                <th>Asset name</th>
+                                                                <th>Description</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (@Model.Employee1TileViewModel.EmployeeAssetsList is not null)
+                                                            {
+                                                                @foreach (var assets in Model.Employee1TileViewModel.EmployeeAssetsList)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@assets.AssetId </td>
+                                                                        <td>@assets.AssetCode </td>
+                                                                        <td>@assets.AssetName </td>
+                                                                        <td>@assets.Description </td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr>
+                                                                    <td>No data found</td>
+                                                                </tr>
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                    <div id="result"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw("No data found")
+                                        ;
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12 ">
+                    <div class=" mt-1 ml-1 mr-1 ">
+                        <div class="card-deck" style="min-height:570px;">
+                            <div class="card shadow col-md-12 col-xl-12">
+                                <div class="card-block pl-0 pr-0">
+                                    <div class="card-header" style="height: 40px!important;padding-left: 15px;padding-top: 5px;">
+                                        <h5 class="card-title">
+                                            <b>
+                                                Employee 2 @if (!string.IsNullOrEmpty(Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo))
+                                                    @Html.Raw("- [ " + @Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo + " ]")
+                                            </b>
+                                        </h5>
+                                        <br />
+                                    </div>
+
+                                    <div class="card-toolbar">
+                                        <div role="toolbar">
+                                            @if (!string.IsNullOrEmpty(@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo))
+                                            {
+                                                @if (string.IsNullOrEmpty(@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Empno))
+                                                {
+                                                    @if (Model.DeskTileViewModel.DeskDetailHeaderFields.IsBlocked == NotOk)
+                                                    {
+                                                        <a title="Add Employee 2" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                                           data-jqueryselector="openmodal"
+                                                           data-modalcontainer="modalcontainer"
+                                                           data-modalpopupwidth="rightw35"
+                                                           data-url='@Url.Action("AddEmpToDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                           data-empno="@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Empno"
+                                                           data-deskno="@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo"
+                                                           data-statichtmlsourcedivid=""
+                                                           data-modaltitle="Employee 2"
+                                                           data-modalheader="Employee 2">
+                                                            <i class="fas fa-plus"></i> Add Employee 2
+                                                        </a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (Model.DeskTileViewModel.DeskDetailHeaderFields.IsBlocked == NotOk)
+                                                    {
+                                                        <button style="" type="button" class="btn btn-outline-danger  btn-sm border border-white"
+                                                                onkeydown="return (event.keyCode!=13);"
+                                                                onclick="showDeleteConfirmationPopup(event,this);"
+                                                                data-jqueryselector="showconfirmationmodal"
+                                                                data-url='@Url.Action("DeleteEmpFromDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                                data-redirecturl="@Url.Action("DeskAssignmentNewIndex", "DeskAssignment", new { Area = "DMS", search = Model.SearchByDeskNoOrEmpNo })"
+                                                                data-PostSave="OK"
+                                                                data-empno="@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Empno"
+                                                                data-deskno="@Model.DeskTileViewModel.DeskDetailHeaderFields.DeskNo"
+                                                                data-modaltitle="Please Confirm!"
+                                                                data-confirmationtext="Do you want to delete Employee 1 (@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Empno) ?"
+                                                                data-confirmationtype="warning"
+                                                                title="Delete Employee 2"
+                                                                data-confirmbuttontext="Delete Employee 2">
+                                                            <i class="fas fa-trash"></i> Remove Employee 2
+                                                        </button>
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <br />
+                                    @if (!string.IsNullOrEmpty(@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Empno))
+                                    {
+                                        <div class="row m-0 p-0 w-100">
+                                            <div id="employee2AssetsIndexPartial" class="w-100">
+                                                <div class="m-1"></div>
+                                                <div class="bg-gray-active rounded ">
+
+                                                    <div class="row pr-2 pl-2">
+                                                        <div class="form-group col-md-12">
+                                                            <div class="dt-met">
+                                                                Employee
+                                                                @if ((@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Status) == "1")
+                                                                {
+                                                                    <b class="text-success">Active</b>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <b class="text-danger">De-Active</b>
+                                                                }
+                                                            </div>
+                                                            <div class="dd-met">@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Empno - @Model.Employee2TileViewModel.EmployeeDetailHeaderFields.EmpName</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Grade</div>
+                                                            <div class="dd-met"> @Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Grade</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Parent</div>
+                                                            <div class="dd-met"> @Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Parent</div>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <div class="dt-met">Assign</div>
+                                                            <div class="dd-met">@Model.Employee2TileViewModel.EmployeeDetailHeaderFields.Assign </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr style="margin-top:-15px" />
+                                                    <table id="tbEmpAssetsGrid" class="table table-hover table-bordered ">
+                                                        <thead class="bg-info text-white">
+                                                            <tr>
+                                                                <th>Asset id</th>
+                                                                <th>Code</th>
+                                                                <th>Asset name</th>
+                                                                <th>Description</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (@Model.Employee2TileViewModel.EmployeeAssetsList is not null)
+                                                            {
+                                                                @foreach (var assets in Model.Employee2TileViewModel.EmployeeAssetsList)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@assets.AssetId </td>
+                                                                        <td>@assets.AssetCode </td>
+                                                                        <td>@assets.AssetName </td>
+                                                                        <td>@assets.Description </td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr>
+                                                                    <td>No data found</td>
+                                                                </tr>
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                    <div id="result"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw("No data found")
+                                        ;
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</form>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-costcenter.js"></script>
+    <script>
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            reloadLocation();
+
+            $("#AssetCategory").change(function (e) {
+                var selected = $('#AssetCategory').find(':selected');
+                var assetCategory = selected[0].value;
+                var assetId = $('#AssetId').val();
+
+                $.ajax({
+                    url: '@Url.Action("GetAssetList", "DeskAssignment")',
+                    data: {
+                        'assetCategory': assetCategory
+                    },
+                    type: 'GET',
+                    beforeSend: function () {
+                        showLoader();
+                        $("#btnconfirm").hide();
+                    },
+                    success: function (data) {
+                        let dropdown = $('#AssetId');
+                        dropdown.empty();
+                        var flag = false;
+                        var jsondata = JSON.parse(data);
+
+                        $(jsondata).each(function () {
+
+                            $('<option value="' + this.DataValueField + '">' + this.DataTextField + '</option>').appendTo(dropdown);
+                        });
+
+                        if (flag == false) {
+                            assetId = null;
+                        }
+
+                        dropdown.val(assetId);
+                        dropdown.trigger("change");
+                        hideLoader();
+                    },
+                    error: function (result) {
+                        hideLoader();
+                        notify('Error', result.responseText, 'danger');
+                    }
+
+                });
+
+            });
+        };
+
+        function PostSave(data) {
+
+            if (data.success) {
+
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+
+                @*if ($("#DeskNo").val() != "" || $("#DeskNo").val() != '') {
+
+                    $("#assetsOnDeskIndexPartial").load('@Url.Action("AssetsOnDeskIndexPartial", "DeskAssignment")?id=@Model.DeskNo');
+                }
+
+                if ($("#Emp1").val() != "" || $("#Emp1").val() != '') {
+
+                    $("#employee1AssetsIndexPartial").load('@Url.Action("EmployeeAssetsIndexPartial", "DeskAssignment")?id=@Model.Emp1');
+                }
+
+                if ($("#Emp2").val() != "" || $("#Emp2").val() != '') {
+
+                    $("#employee2AssetsIndexPartial").load('@Url.Action("EmployeeAssetsIndexPartial", "DeskAssignment")?id=@Model.Emp2');
+                }*@
+            }
+
+            $('#SearchByDeskNoOrEmpNo').val($('#GenericSearch').val());
+            var frm = $('#formDeskAssignmentNewIndex');
+            frm.submit();
+        }
+
+        function PostSaveForDesk(data) {
+
+            hideLoader();
+            notify('success', data.response, 'Success');
+
+            if ($(data).val() != "" || $(data).val() != '') {
+
+                $('#SearchByDeskNoOrEmpNo').val($(data).val());
+
+                deskOnAsset = 1;
+
+                if ($(data).val() != "" || $(data).val() != '') {
+                    @*$("#assetsOnDeskIndexPartial").load('@Url.Action("AssetsOnDeskIndexPartial", "DeskAssignment")?id=@Model.DeskNo');*@
+                    document.querySelector("#lDesktop").click();
+                }
+
+                //location.reload();
+
+                //var frm = $('#formDeskAssignmentNewIndex');
+                //frm.submit();
+
+            };
+
+        }
+
+        function reloadLocation() {
+            $("#closeBtn").off('click').on('click', function () {
+
+                $('#SearchByDeskNoOrEmpNo').val($('#GenericSearch').val());
+                var frm = $('#formDeskAssignmentNewIndex');
+                frm.submit();
+            });
+
+            $("#cancelBtn").off('click').on('click', function () {
+
+                $('#SearchByDeskNoOrEmpNo').val($('#GenericSearch').val());
+                var frm = $('#formDeskAssignmentNewIndex');
+                frm.submit();
+            });
+        }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").val() != "" || $("#GenericSearch").val() != '') {
+                    $('#SearchByDeskNoOrEmpNo').val($('#GenericSearch').val());
+                    var frm = $('#formDeskAssignmentNewIndex');
+                    frm.submit();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").val() != "" || $("#GenericSearch").val() != '') {
+                $('#SearchByDeskNoOrEmpNo').val($('#GenericSearch').val());
+                var frm = $('#formDeskAssignmentNewIndex');
+                frm.submit();
+            }
+        });
+    </script>
+}

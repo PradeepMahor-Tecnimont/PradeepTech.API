@@ -1,0 +1,128 @@
+﻿@model TCMPLApp.WebApp.Models.AssetsOnDeskViewModel
+
+@{
+    ViewData["Title"] = "AssetsOnDesk";
+}
+
+@Html.AntiForgeryToken()
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+
+<div class="m-1"></div>
+<div class="bg-gray-active rounded ">
+    <div class="m-3"></div>
+
+    <div class="row pr-2 pl-2">
+        <div class="form-group col-md-4">
+            <div class="dt-met">Desk Number</div>
+            <div class="dd-met">@Model.DeskNo</div>
+        </div>
+
+        <div class="form-group col-md-4">
+            <div class="dt-met">Office</div>
+            <div class="dd-met">@Model.Office</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">Floor</div>
+            <div class="dd-met">@Model.Floor</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">Area</div>
+            <div class="dd-met">@Model.Area</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">Cabin/Desk</div>
+            <div class="dd-met">
+                @if (@Model.CabinDesk == null)
+                {
+                    @Html.Raw("Desk");
+                }
+                else
+                {
+                    @Model.CabinDesk
+                }
+            </div>
+        </div>
+    </div>
+    <hr style="margin-top:-15px">
+    <table id="tbAssetsOnDeskGrid" class="table table-hover table-bordered table-responsive-lg ">
+        <thead class="bg-info text-white">
+            <tr>
+                <th>Asset id</th>
+                <th>Code</th>
+                <th>Asset name</th>
+                <th>Description</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (@Model.assetsOnDeskDataTableList.Any())
+            {
+                @foreach (var assets in Model.assetsOnDeskDataTableList)
+                {
+                    <tr>
+                        <td>@assets.AssetId </td>
+                        <td>@assets.AssetCode </td>
+                        <td>@assets.AssetName </td>
+                        <td>@assets.Description </td>
+                        <td style="text-align:center">
+                            <button style="" type="button" class="btn btn-outline-danger  btn-sm border border-white"
+                                    onclick="showDeleteConfirmationPopup(event,this);"
+                                    data-jqueryselector="showconfirmationmodal"
+                                    data-url='@Url.Action("DeleteAssetsFromDesk", "DeskAssignment", new { Area = "DMS" })'
+                                    data-redirecturl="@Url.Action("DeskAssignmentNewIndex", "DeskAssignment", new { Area = "DMS" , search = Model.DeskNo})"
+                                    data-PostSave="OK"
+                                    data-assetid="@assets.AssetId"
+                                    data-deskno="@Model.DeskNo"
+                                    data-modaltitle="Please Confirm!"
+                                    data-confirmationtext="Do you want to delete Asset (@assets.AssetName) ?"
+                                    data-confirmationtype="warning"
+                                    title="Delete Asset (@assets.AssetName) "
+                                    data-confirmbuttontext="Delete Asset">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+
+                        <td style="text-align:center">
+                            <a title="Replace Assets" class="btn btn-outline-primary  btn-sm border border-white" href="#"
+                               @*data-jqueryselector="openmodal"*@
+                               onclick="functionPpenModalListner(this)"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("ReplaceAssetsFromDesk", "DeskAssignment", new { Area = "DMS" })'
+                               data-deskno="@Model.DeskNo"
+                               data-assetId="@assets.AssetId"
+                               data-itemTypeCode="@assets.AssetCode"
+                               data-itemDesc="@assets.Description"
+                               data-statichtmlsourcedivid=""
+                               data-modaltitle="Replace Assets"
+                               data-modalheader="Replace Assets">
+                                <i class="fas fa-exchange-alt	"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No data found</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    <div id="result"></div>
+
+</div>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

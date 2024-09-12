@@ -1,0 +1,30 @@
+﻿@model TCMPLApp.WebApp.Models.BGAmendmentDataTableListViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<div class="card">
+    <div class="vertical-space-5"></div>    
+    <div id="idAmendmentIndex" class="table-responsive p-r-10">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="dataTableAmendments" class="table table-striped table-bordered table-responsive-lg">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Amendmentnum)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Bgaccept)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Currdesc)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Bgamt)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Convrate)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Docurl)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Status)]</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

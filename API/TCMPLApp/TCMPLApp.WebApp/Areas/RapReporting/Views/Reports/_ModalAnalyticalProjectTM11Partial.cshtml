@@ -1,0 +1,45 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+    <input id="Yyyy" readonly type="hidden" asp-for="@Model.Yyyy" />
+    <input id="YearMode" readonly type="hidden" asp-for="@Model.YearMode" />
+    <input id="Yyyymm" readonly type="hidden" asp-for="@Model.Yyyymm" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Analytical Reports - Project"]</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["TM01 TM11 (Closed jobs)"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+
+            </div>
+            <div class="card-block">                             
+                <div class="form-group">
+                    <label asp-for="ClosedProjno" class="control-label"></label>
+                    <select asp-for="ClosedProjno" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Projnos" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="ClosedProjno" class="text-danger"></span>
+                </div>                              
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-primary" id="lemp2011Report" title="TM01 TM11 (Closed jobs)" href="#"
+            data-inprogress="0"
+            data-jqueryselector="generateReportPartial"
+            data-url="@Url.Action("TM11ClosedJobs", "Reports", new { Area = "RapReporting",
+                                                                     closedProjno = @Model.ClosedProjno,
+                                                                     yymm = @Model.Yyyymm,
+                                                                     yearmode = @Model.YearMode
+                                                                   })"
+            data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+            data-text="Download">
+            
+            @localizer["Download"]
+        </a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>

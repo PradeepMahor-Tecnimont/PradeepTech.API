@@ -1,0 +1,219 @@
+﻿@model TCMPLApp.WebApp.Models.HRVppConfigProcessDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="VppConfigProcess"
+      asp-action="VppConfigProcessDetail"
+      id="vppConfigProcessDetail"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.KeyId)
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Configuration Process details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Configuration Process details</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.StartDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.StartDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EndDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EndDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.IsApplicableToAllText)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.IsApplicableToAllText)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmpJoiningDate)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmpJoiningDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.IsInitiateConfigText)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.IsInitiateConfigText)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.IsDraftText)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.IsDraftText)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CreatedBy)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CreatedOn)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CreatedOn?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.ModifiedBy.Trim() != ":")
+                        {
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        @Html.DisplayNameFor(model => model.ModifiedBy)
+                                    </div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.ModifiedBy)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        @Html.DisplayNameFor(model => model.ModifiedOn)
+                                    </div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.ModifiedOn?.ToString("dd-MMM-yyyy"))
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <div style="overflow:auto">
+                    <table id="tbDataGrid" class="table table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr class="font-weight-bold">
+
+                                <td> @localizer["Insured Sum"] </td>
+                                <td> @localizer["Persons"] </td>
+                                <td> @localizer["Premium"] </td>
+                                <td> @localizer["Lacs"] </td>
+                                <td> @localizer["GST amount"] </td>
+                                <td> @localizer["Total premium"] </td>
+                            </tr>
+                        </thead>
+                        @{
+                            foreach (var item in Model.vppConfigPremiumDataTableList)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.InsuredSumId.ToString()
+                                    </td>
+                                    <td>
+                                        @item.Persons.ToString()
+                                    </td>
+                                    <td>
+                                        @item.Premium.ToString()
+                                    </td>
+                                    <td>
+                                        @item.Lacs.ToString()
+                                    </td>
+                                    <td>
+                                        @item.GstAmt.ToString()
+                                    </td>
+                                    <td>
+                                        @item.TotalPremium.ToString()
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+<script>
+
+    $(document).ready(function () {
+
+        intDataTable();
+
+    });
+
+    function intDataTable() {
+        $("#tbDataGrid").DataTable({
+            destroy: true,
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [10, 50],
+            processing: true,
+            serverSide: false,
+            stateSave: false,
+            info: true,
+            filter: true,
+            layout: {
+                topStart: null,
+                bottomStart: 'pageLength',
+                bottomEnd: 'paging'
+            },
+            aaSorting: [[1, 'asc']], // start to sort data in second column
+            aaSorting: [[1, 'asc']], // start to sort data in second column
+            pagingType: 'full'
+        });
+    }
+
+</script>

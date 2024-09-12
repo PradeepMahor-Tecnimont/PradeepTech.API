@@ -1,0 +1,661 @@
+﻿@model TCMPLApp.WebApp.Models.InvEmployeeTransactionDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Transactions detail";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+            <li class="breadcrumb-item "><a asp-action="Index" asp-controller="INV" asp-area="DMS">Inventory</a></li>
+            @*<li class="breadcrumb-item "><a asp-action="InvEmployeeTransactionIndex" asp-controller="INV" asp-area="DMS">Transactions - Issue to employee list</a></li>*@
+        <li class="breadcrumb-item active" aria-current="page">Transactions - Issue to employee detail</li>
+    </ol>
+}
+
+<input type="hidden" asp-for="@Model.Empno" />
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<input type="hidden" asp-for="@Model.TransDate" />
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Transactions - Issue to employee detail</p>
+    </div>
+    <hr/>
+    <div class="card-block">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="dt-met">@Html.DisplayNameFor(model => model.Empno)</div>
+                    <div class="dd-met">@Html.DisplayFor(model => model.Empno) @Html.DisplayFor(model => model.InvEmployeeDetails.PEmpName)
+                    <a title="Change employee" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                        data-jqueryselector="openmodal"
+                        data-modalcontainer="modalcontainer"
+                        data-modalpopupwidth="rightw35"
+                        data-url='@Url.Action("SelectEmployee", "INV", new { Area = "DMS" })'
+                        data-statichtmlsourcedivid=""
+                        data-modaltitle="Change employee"
+                        data-modalheader="Change employee">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dt-met">@Html.DisplayNameFor(model => model.InvEmployeeDetails.PParent)</div>
+                    <div class="dd-met">@Html.DisplayFor(model => model.InvEmployeeDetails.PParent) @Html.DisplayFor(model => model.InvEmployeeDetails.PParentName)</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dt-met">@Html.DisplayNameFor(model => model.InvEmployeeDetails.PAssign)</div>
+                    <div class="dd-met">@Html.DisplayFor(model => model.InvEmployeeDetails.PAssign) @Html.DisplayFor(model => model.InvEmployeeDetails.PAssignName)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="card-block">
+            <div class="card-pill">
+                <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true"
+                        onclick="loadDataTable();"
+                        >@localizer["Issued to employee"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-reserved-tab" data-toggle="pill" href="#tabs-reserved" role="tab" aria-controls="tabs-reserved" aria-selected="false"
+                           data-url="@Url.Action("InvEmployeeTransactionReservedIndex", "INV", new { Area = "DMS" })"
+                           data-id="@Model.Empno"
+                           data-callback="loadDataTableReserved();"
+                           data-divid="pw-reserved">@localizer["Reserved / Incomplete return"]
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-history-tab" data-toggle="pill" href="#tabs-history" role="tab" aria-controls="tabs-history" aria-selected="false"
+                           data-url="@Url.Action("InvEmployeeTransactionHistoryIndex", "INV", new { Area = "DMS" })"
+                           data-id="@Model.Empno"
+                           data-callback="loadDataTableHistory();"
+                           data-divid="pw-history">@localizer["Transaction history"]
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    @await Html.PartialAsync("_LoaderPartial")
+                    <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                       <div class="row p-1 m-0">
+                          @* <div class="col-3 p-0 m-0">
+	                        <input id="transDate" class="form-control  datepicker" placeholder="@localizer["Transaction date"]" value="" required />
+                          </div>
+                          <div class=" col-7 mb-2">
+                            <textarea asp-for="Remarks" class="form-control w-100" title="Remarks" rows="1" required ></textarea>
+                          </div> *@
+                           <div class="col-12 p-0 m-0">
+                                @*<button class="form-control btn btn-sm btn-primary-info" type="button"
+                                 id="btnSubmit"> Return </button>*@
+
+                                <button class=" btn btn-md btn-outline-info" type="button" id="btnSubmit" style="float:right"
+                                        data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                        data-text="@localizer["Confirm"]">
+                                    @localizer["Return"]
+                                </button>
+
+                                <div id="btnSubmit_Loader" class="spinner-border text-info text-center hidden "
+                                     style="width: 2.5rem; height: 2.5rem;" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <button class=" hidden" type="button" id="btnshowPopup" style=""
+                                        href="#"
+                                       data-jqueryselector="openmodal"
+                                       data-modalcontainer="modalcontainer"
+                                       data-modalpopupwidth="rightw50"
+                                       data-modaltitle="Return items"
+                                       data-modalheader="Return items"
+                                       data-empno=""
+                                       data-items=""
+                                       data-url=''>
+                                    @localizer["Return"]
+                                </button>
+                           </div>
+
+                        </div>
+                        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+                            <thead class="bg-info text-white">
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.TransDateString)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Barcode)</th>
+                                    <th>@Html.DisplayNameFor(model => model.ItemTypeDesc)</th>
+                                    <th>@Html.DisplayNameFor(model => model.ItemId)</th>
+                                    <th>@Html.DisplayNameFor(model => model.ItemDetails)</th>
+                                    <th>@localizer["Return"]</th>
+                                    <th>@Html.DisplayNameFor(model => model.ItemUsable)</th>
+
+                                </tr>
+                            </thead>
+                        </table>
+                        <div id="result"></div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-reserved" role="tabpanel" aria-labelledby="tabs-reserved-tab">
+                        <div id="pw-reserved">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-history" role="tabpanel" aria-labelledby="tabs-history-tab">
+                        <div id="pw-history">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/site-rap.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            loadDataTable();
+             initSelect2();
+             initDatePicker();
+         });
+
+        function localScript() {
+             initSelect2();
+            initDatePicker();
+
+            $("#GenericSearchReserve").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearchReserve").length) {
+                        dataTable
+                            .search($('#GenericSearchReserve').val())
+                            .draw();
+                    } else {
+                        dataTable
+                            .search($('#genericSearchReserve').val())
+                            .draw();
+                    }
+                }
+             });
+
+            $("#GenericSearchHistory").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearchHistory").length) {
+                        dataTable
+                            .search($('#GenericSearchHistory').val())
+                            .draw();
+                    } else {
+                        dataTable
+                            .search($('#genericSearchHistory').val())
+                            .draw();
+                    }
+                }
+            });
+
+            $('#buttonSearchHistory').on('click', function () {
+
+                if ($("#GenericSearchHistory").length) {
+                    dataTable
+                        .search($('#GenericSearchHistory').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearchHistory').val())
+                        .draw();
+                }
+            });
+
+            $("#GenericSearchIssue").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearchIssue").length) {
+                    dataTable
+                        .search($('#GenericSearchIssue').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearchIssue').val())
+                        .draw();
+                }
+            }
+
+            });
+
+            $('#buttonSearchIssue').on('click', function () {
+
+                if ($("#GenericSearchIssue").length) {
+                    dataTable
+                        .search($('#GenericSearchIssue').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearchIssue').val())
+                        .draw();
+                }
+            });
+
+            $('#CheckAll').click(function () {
+                if (this.checked) {
+                    $('.check').each(function () {
+                        this.checked = true;
+                    });
+                } else {
+                    $('.check').each(function () {
+                        this.checked = false;
+                    });
+                }
+            })
+            $('.check').click(function () {
+                if ($('.check:checked').length == $('.check').length) {
+                    $('#CheckAll').prop('checked', true);
+                } else {
+                    $('#CheckAll').prop('checked', false);
+                }
+            });
+
+        }
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#transDate").on("change", function (event, date) {
+                $("#TransactionDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+            if ($('#TransactionDate').val()) {
+                $('#transDate').bootstrapMaterialDatePicker('setDate', new Date($("PoDate").val()));
+            }
+
+            if ($("#TransactionDate").val()) {
+                $('#transDate').val(moment($("#TransactionDate").val(),"DD-MMM-YYYY").format('DD-MMM-YYYY'));
+            }
+
+        };
+
+        function loadDataTable() {
+
+            dataTable = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            { 'data': "transDateString" },
+                            { 'data': "barcode" },
+                            { 'data': "itemTypeDesc" },
+                            { 'data': "itemId" },
+                            { 'data': "itemDetails" },
+                            {
+                                'data': null,
+
+                                render: function (data, type, row) {
+                                    return '<div class="checkboxlabel"> <input type="checkbox"  name="' + data.itemId + '" id="' + data.itemId + '" class="checkBox-Blue" value = "'+data.itemId+'" /></div>';
+                                  //return '<div class="checkboxlabel"><label for="' + data.itemId + '"><input type="checkbox"  name="' + data.itemId + '" id="' + data.itemId + '" class="checkBox-Blue" value = "'+data.itemId+'" /></div>';
+
+                                },
+                                'className': "td-icon text-center  align-middle ",
+                            },
+                            {
+                                'data': null,
+                                render: function (data, type, row) {
+
+			                            return '<div class="selectUsable"> <select  id="' + data.itemId + '" name="' + data.itemId + '" class="m-1" >  <option  selected value=""></option>  @Html.Raw(ViewBag.ItemUsableTypesList)   </select></div>';
+                                },
+                                'className': "td-icon text-center  align-middle ",
+                            }
+                            //,{ 'data': "itemUsable" },
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsEmployeeTransactionDetail", "INV")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = $('#GenericSearchIssue').val();
+                        d.empno = $('#Empno').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+
+        }
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadDataTable();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function loadDataTableReserved() {
+            dataTable = $('#tbGridInvEmployeeTransactionReserved').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            { 'data': "transDateString" },
+                            { 'data': "transType" },
+                            { 'data': "barcode" },
+                            { 'data': "itemTypeDesc" },
+                            { 'data': "itemId" },
+                            { 'data': "itemDetails" },
+                            { 'data': "itemUsable" }
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsEmployeeTransactionReserved", "INV")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = $('#GenericSearchReserve').val();
+                        d.empno = $('#Empno').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        function loadDataTableHistory() {
+            dataTable = $('#tbGridInvEmployeeTransactionHistory').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            { 'data': "transDateString" },
+                            { 'data': "transType" },
+                            { 'data': "barcode" },
+                            { 'data': "itemTypeDesc" },
+                            { 'data': "itemId" },
+                            { 'data': "itemDetails" },
+                            { 'data': "itemUsable" },
+                            {
+                                'data': null,
+                                render: function (data, type, row) {
+                                    if(data.transType == "ISSUED" )
+                                    {
+
+                                        return '<a class="btn btn-outline-primary btn-sm border-none  " ' +
+	                                            ' data-jqueryselector="binarydownload" ' +
+	                                            ' data-url="@Url.Action("InvTransactionGatePassGenerateAjax", "INV")"' +
+	                                            ' data-modalpopupwidth="rightw50" ' +
+	                                            ' data-id="' + data.transId + '"' +
+	                                            ' title="GetPass"' +
+	                                            ' > ' +
+	                                            ' <i class="fas fa-file-word" ></i> ' +
+                                            ' </a>'
+                                        }
+                                    else{
+                                        return '';
+                                    }
+                                },
+                                'className': "td-icon text-center  align-middle ",
+                            },
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsEmployeeTransactionHistory", "INV")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = $('#GenericSearchHistory').val();
+                        d.empno = $('#Empno').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        function validateData() {
+            var objs = [];
+            var vitemid;
+            var vIsReturn;
+            var vIsUsable;
+            var IsValid = 0;
+            var totalCount = 0;
+            var skipCount = 0;
+
+            $("#tbGrid > tbody > tr").each(function (index,element)
+            {
+
+                vitemid = $(element).find(".checkBox-Blue").val();
+                vIsReturn = $(element).find(".checkBox-Blue").prop('checked');
+                vIsUsable = $(element).find(':selected').val();
+
+                var tempJson = {"itemId" : vitemid ,"isReturn" : vIsReturn ,"isUsable" : vIsUsable };
+
+                totalCount = totalCount + 1;
+
+                 if(vIsReturn == false && vIsUsable == "")
+                 {
+                    skipCount = skipCount + 1;
+                 }
+                   if(vIsReturn == true && vIsUsable == "")
+                 {
+
+                     IsValid = 1;
+                     return IsValid;
+                 }
+
+                 if( vIsReturn == false && vIsUsable != "")
+                 {
+
+                     IsValid = 1;
+                     return IsValid;
+                 }
+
+            });
+
+            if(totalCount == skipCount)
+            {
+                  //notify("error", "Return Item not selected.. ", 'Error');
+                  IsValid = 1;
+            }
+            return IsValid;
+        }
+
+       $('#btnSubmit').on('click', function () {
+
+           // let transactionDate = $('#TransDate').val();
+           // let transactionRemarks = $('#Remarks').val();
+
+           // if(transactionDate == null || transactionDate == '' ){
+           //      notify("error", "Transaction date is required.. ", 'Error');
+           //      $('#transDate').focus();
+           //     return;
+           // }
+           // if(transactionRemarks.lenth <= 0 || transactionRemarks == '' ){
+           //      notify("error", "Remarks date is required.. ", 'Error');
+           //      $('#Remarks').focus();
+           //     return;
+           // }
+          var IsValid =  validateData();
+
+           if(IsValid != 0)
+           {
+                notify("error", "Return Item/IsUsable not selected.. ", 'Error');
+               return;
+           }
+
+            var vitemid ;
+            var vIsReturn ;
+            var vIsUsable ;
+            var objs = [];
+            var stringObject="";
+            $("#tbGrid > tbody > tr").each(function (index,element)
+            {
+                vitemid = $(element).find(".checkBox-Blue").val();
+                vIsReturn = $(element).find(".checkBox-Blue").prop('checked');
+                vIsUsable = $(element).find(':selected').val();
+
+                //var stringObject = vitemid +'~!~' + vIsReturn  +'~!~' + vIsUsable +',';
+                 if( vIsReturn == true && (vIsUsable != "" || vIsUsable != "null" || vIsUsable != "undefined"))
+                 {
+                     var tempJson = {'itemId' : vitemid ,'isReturn' : vIsReturn ,"isUsable" : vIsUsable };
+                     objs.push(tempJson);
+                     stringObject = stringObject + vitemid +'~!~' + vIsUsable +',';
+                 }
+            });
+
+            var JsObject = {
+                     returnItem  : objs
+            };
+
+            JsObject = JSON.stringify(JsObject)
+            let link = $('#btnshowPopup');
+            var url = '@Url.Action("ShowInvItemReturnViewModel", "INV", new {Area = "DMS" })';
+            link.data('empno', $('#Empno').val());
+            link.data('items', stringObject.slice(0,-1));
+            link.data('url',url);
+            link.click();
+
+ });
+
+    </script>
+}

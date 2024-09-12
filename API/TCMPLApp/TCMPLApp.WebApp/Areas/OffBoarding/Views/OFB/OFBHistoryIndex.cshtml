@@ -1,0 +1,184 @@
+﻿@model TCMPLApp.WebApp.Models.OFBInitViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Off-Boarding History";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="OFBIndex" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page">History</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Off-Boarding - History</p>
+    </div>
+    <div class="card-block">
+        <div class="card-pill">
+            <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">@localizer["All"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-pending-tab" data-toggle="pill" href="#tabs-pending" role="tab" aria-controls="tabs-pending" aria-selected="false"
+                       data-url="@Url.Action("OFBPendingApprovalsIndex", "OFB", new { Area = "OffBoarding" })"
+                       data-divid="pw-pending"
+                       data-callback="loadOFBPendingApprovalsDataTable()"
+                       data-area="OffBoarding"
+                       data-controller="OFB"
+                       data-action="OFBPendingApprovalsIndex">
+                        @localizer["Pending"]
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-approved-tab" data-toggle="pill" href="#tabs-approved" role="tab" aria-controls="tabs-approved" aria-selected="false"
+                       data-url="@Url.Action("OFBApprovedApprovalsIndex", "OFB", new { Area = "OffBoarding" })"
+                       data-divid="pw-approved"
+                       data-callback="loadOFBApprovedApprovalsDataTable()"
+                       data-area="OffBoarding"
+                       data-controller="OFB"
+                       data-action="OFBApprovedApprovalsIndex">
+                        @localizer["Approved"]
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                    @await Html.PartialAsync("_OFBAllApprovalsDetailsPartial.cshtml", Model)
+                </div>
+                <div class="tab-pane fade" id="tabs-pending" role="tabpanel" aria-labelledby="tabs-pending-tab">
+                    <div id="pw-pending">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-approved" role="tabpanel" aria-labelledby="tabs-approved-tab">
+                    <div id="pw-approved">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_OFBDetailsDataTableColumnsPartial");
+
+    }
+    <script src="~/js/OFBDetails.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {
+            initSelect2();
+            initFilter();
+
+            //$('#btnExportOFBAllApprovalsDetailsExcel').off('click').on('click', function () {
+            //    event.preventDefault();
+            //    event.stopPropagation();
+            //    exportOFBAllApprovalsDetailsExcel();
+            //});
+            $('#btnExportExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                var url = '@Url.Action("OFBExcelDownload", "OFB", new {Area = "OffBoarding" })';
+                exportExcel(url);
+            });
+        };
+
+        function exportExcel(Purl) {
+
+            let vStartYear = $("#formOFBApprovalsDetailsExcel input[id=StartYear]").val();
+            let vEndYear = $("#formOFBApprovalsDetailsExcel input[id=EndYear]").val();
+            let vTypeId = $("#formOFBApprovalsDetailsExcel input[id=typeId]").val();
+
+            if (vStartYear > vEndYear) {
+                toastr.error('Please Select Valid End Year.! ');
+                return;
+            }
+            if (vTypeId == null || vTypeId == '') {
+                toastr.error('Invalid type');
+                return;
+            }
+            if (vStartYear == null || vStartYear == '') {
+                toastr.error('Invalid Start Year ');
+                return;
+            }
+            if (vEndYear == null || vEndYear == '') {
+                toastr.error('Invalid End Year');
+                return;
+            }
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formOFBApprovalsDetailsExcel input[name="__RequestVerificationToken"]').val() },
+                url: Purl,
+                type: "POST",
+                data: {
+                    startYear: vStartYear,
+                    endYear: vEndYear,
+                    typeId: vTypeId
+
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                    $("#btnExportExcel").hide();
+                    $('#exportExcel_Loader').removeClass("hidden");
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    toastr.success("File downloaded successfully.");
+                    hideLoader();
+                    $("#modalcontainer").modal('hide');
+
+                    $("#btnExportExcel").show();
+                    $('#exportExcel_Loader').addClass("hidden");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                    $("#btnExportExcel").show();
+                    $('#exportExcel_Loader').addClass("hidden");
+                }
+            });
+        }
+    </script>
+}

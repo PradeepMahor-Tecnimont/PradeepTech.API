@@ -1,0 +1,70 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="DMSGuestFilterSet"
+      asp-area="DMS"
+      asp-controller="DMS"
+      asp-action="DMSGuestMasterFilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+    @Html.TextBoxFor(model => model.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    @Html.TextBoxFor(model => model.EndDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Filter"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Filters setup"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+                @*@if (Model.IsFiltered == true)
+                    {
+                    <a class="btn btn-outline-danger btn-sm border-white"
+                    data-action="ResetFilterSession"
+                    href="/DynamicForm/Template/ResetFilterSession?controllerName=Template"
+                    onclick="resetFilter(event, this);">
+                    <i class="fas fa-filter"></i>
+                    @localizer["Reset"]
+                    </a>
+                    }*@
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <label asp-for="CostCode" class="control-label"></label>
+                    <select asp-for="CostCode" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.CostCodeList">
+                        <option selected></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input id="startDateFilter" class="form-control datepickerFilter" placeholder="@localizer["Start date"]" />
+                </div>
+                <div class="form-group ">
+                    <label asp-for="EndDate" class="control-label"></label>
+                    <input id="endDateFilter" class="form-control datepickerFilter" placeholder="@localizer["End date"]" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

@@ -1,0 +1,367 @@
+﻿@model TCMPLApp.WebApp.Models.InvTransactionDetailViewModel
+
+@{
+    ViewData["Title"] = "Transactions detail";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    @if(ViewBag.pagename=="ReserveItem")
+    {
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+            <li class="breadcrumb-item "><a asp-action="Index" asp-controller="INV" asp-area="DMS">Inventory</a></li>
+            <li class="breadcrumb-item "><a asp-action="InvReserveItemIndex" asp-controller="INV" asp-area="DMS">Transactions - Reserve Items list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Transactions - Issue to employee detail</li>
+    </ol>
+    }
+    else
+    {
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+            <li class="breadcrumb-item "><a asp-action="Index" asp-controller="INV" asp-area="DMS">Inventory</a></li>
+            <li class="breadcrumb-item "><a asp-action="INVTransactionIndex" asp-controller="INV" asp-area="DMS">Transactions - Issue to employee list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Transactions - Issue to employee detail</li>
+    </ol>
+    }
+}
+
+<input type="hidden" asp-for="@Model.TransId" />
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+
+    <div id="div_main">
+        @await Html.PartialAsync("_InvTransactionDetailMainPartial.cshtml")
+    </div>
+
+    <div class="bg-gray-active rounded ">
+        @await Html.PartialAsync("_InvTransactionDetailPartial.cshtml")
+    </div>
+</div>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            loadDataTable();
+
+             if($('#TransId').val() == "" || $('#TransId').val() == null ){
+                document.querySelector("#newtransaction").click();
+               // notify("error", "ready", 'Error');
+            }
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+            ItemTypeCodeChange();
+            EmpnoChange();
+
+            //if($('#TransId').val() == "" || $('#TransId').val() == null ){
+            //    document.querySelector("#newtransaction").click();
+            //    notify("error", "localScript", 'Error');
+
+            //}
+        }
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#transDate").on("change", function (event, date) {
+                $("#TransDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+            if ($('#TransDate').val()) {
+                $('#transDate').bootstrapMaterialDatePicker('setDate', new Date($("PoDate").val()));
+            }
+
+            if ($("#TransDate").val()) {
+                $('#transDate').val(moment($("#TransDate").val(),"DD-MMM-YYYY").format('DD-MMM-YYYY'));
+            }
+
+        }
+
+        function loadDataTable() {
+
+            if($('#TransId').val() == "" || $('#TransId').val() == null ){
+
+                return;
+            }
+
+            dataTable = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    //loadScript();
+
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            { 'data': "itemTypeDesc" },
+                            { 'data': "itemId" },
+                            { 'data': "itemDetails" },
+                            { 'data': "itemUsable" },
+                            {
+                                'data': null,
+                                render: function (data, type, row) {
+                                    if (data.deleteItem == 1 && data.totalRow > 1) {
+                                        return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                                            ' data-url="@Url.Action("InvTransactionDetailDelete", "INV", new { Area = "DMS" })"' +
+                                            ' data-id="' + $('#TransId').val() + '!-!' + data.transDetId + '!-!' + data.transTypeDesc + '"' +
+                                            ' data-redirecturl="@Url.Action("InvTransactionDetailIndex", "INV", new { Area = "DMS" })"' +
+                                            ' data-modaltitle="Please Confirm!" ' +
+                                            ' data-confirmationtext="Do you want to delete item ?" ' +
+                                            ' data-confirmationtype="warning" ' +
+                                            ' title="Delete" ' +
+                                            ' data-confirmbuttontext="Delete" > ' +
+                                            ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                            ' </button>';
+                                    } else
+                                    {
+                                        return '';
+                                    }
+                                },
+                                'className': "td-icon text-center  align-middle",
+                            }
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsTransactionDetail", "INV")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = $('#GenericSearch').val();
+                        d.transId = $('#TransId').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+         });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                var TransId = $('#TransId').val();
+                $("#modalcontainer").modal('hide');
+                loadDetailMain(TransId);
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function PostCreate() {
+            var TransId = $('#formInvTransactionCreate').find('input[name="TransId"]').val();
+            $('#TransId').val(TransId);
+            loadDetailMain(TransId);
+            loadDataTable();
+        }
+
+        function loadDetailMain(TransId) {
+            var divid = $('#div_main');
+            $.ajax({
+                url: "@Url.Action("InvTransactionDetailMain", "INV", new {Area = "DMS"})",
+                data: {
+                    'id': TransId
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divid.html(data);
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify($.i18n('Error'), result.responseText, 'danger');
+                },
+                complete: function(xhr, txtStatus) {
+                    loadScript();
+                }
+            });
+        }
+
+        function ItemTypeCodeChange() {
+            $('#ItemTypeCode').on('change', function (e) {
+            var itemTypeCode = $('#ItemTypeCode').val();
+            var itemId = $('#ItemId').val();
+
+                if (itemTypeCode != null && itemTypeCode != '') {
+                $.ajax({
+                    url: "@Url.Action("GetItem", "INV", new {Area = "DMS"})",
+                    data: {
+                        'id': itemTypeCode
+                    },
+                    type: 'GET',
+                    beforeSend: function () {
+                        showModalLoader();
+                        $("#ItemId").prop("disabled", true);
+                    },
+                    success: function (data) {
+                        let dropdown = $('#ItemId');
+                        dropdown.empty();
+                        var flag = false;
+                        var options = '';
+
+                        $(data).each(function () {
+                            if (this.dataValueField == itemId) {
+                                flag = true;
+                                options += '<option selected="selected" value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                            }
+                            else {
+                                options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                            }
+                        });
+                        dropdown.html(options);
+
+                        if (flag == false) {
+                            phase = null;
+                        }
+
+                        dropdown.val(phase);
+                        hideModalLoader();
+                        $("#ItemId").prop("disabled", false);
+                    },
+                    error: function (result) {
+                        hideLoader();
+                        notify($.i18n('Error'), result.responseText, 'danger');
+                    }
+                });
+            }
+        });
+        }
+
+        function EmpnoChange() {
+            $('#Empno').on('change', function (e) {
+            var empno = $('#Empno').val();
+            var itemId = $('#ItemId').val();
+
+            if (empno != null && empno != '') {
+                $.ajax({
+                    url: "@Url.Action("GetReturnItem", "INV", new {Area = "DMS"})",
+                    data: {
+                        'id': empno
+                    },
+                    type: 'GET',
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data) {
+                        let dropdown = $('#ItemId');
+                        dropdown.empty();
+                        var flag = false;
+                        var options = '';
+
+                        $(data).each(function () {
+                            if (this.dataValueField == itemId) {
+                                flag = true;
+                                options += '<option selected="selected" value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                            }
+                            else {
+                                options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                            }
+                        });
+                        dropdown.html(options);
+
+                        if (flag == false) {
+                            phase = null;
+                        }
+
+                        dropdown.val(phase);
+                        hideLoader();
+                    },
+                    error: function (result) {
+                        hideLoader();
+                        notify($.i18n('Error'), result.responseText, 'danger');
+                    }
+                });
+            }
+        });
+        }
+
+    </script>
+}

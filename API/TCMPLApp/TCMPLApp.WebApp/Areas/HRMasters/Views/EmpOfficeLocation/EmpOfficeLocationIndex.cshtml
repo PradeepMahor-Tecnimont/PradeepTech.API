@@ -1,0 +1,378 @@
+﻿@model TCMPLApp.WebApp.Models.EmpOfficeLocationViewModel
+
+@Html.AntiForgeryToken()
+
+
+@{
+    ViewData["Title"] = "Employee Office Location";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Employee Office Location</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Parent" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Grade" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.EmpType" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.OfficeLocationCode" />
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee Office Location</p>
+    </div>
+    <div class="d-flex flex-row">
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("EmpOfficeLocationFilterGet", "EmpOfficeLocation", new { Area = "HRMasters" })'
+           data-modaltitle="Filters - Emp Office Location"
+           data-modalheader="Filters - Emp Office Location">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="EmpOfficeLocationIndex"
+           data-url='@Url.Action("ResetFilter", "EmpOfficeLocation", new { Area = "HRMasters" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+        <a class="btn btn-outline-primary btn-sm border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("ImportEmpOffice", "EmpOfficeLocation", new { Area = "HRMasters" })'
+           data-modaltitle="Upload Employee Office"
+           data-modalheader="Upload Employee Office">
+            <i class="fa fa-upload"></i>&nbsp;Import Data
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("EmpOfficeLocationExcelDownload", "EmpOfficeLocation", new { Area = "HRMasters" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbEmpOffice" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@Html.DisplayNameFor(m => m.Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.Grade)</th>
+                    <th>@Html.DisplayNameFor(m => m.Parent)</th>
+                    <th>@Html.DisplayNameFor(m => m.Assign)</th>
+                    <th>@Html.DisplayNameFor(m => m.Emptype)</th>
+                    <th>@Html.DisplayNameFor(m => m.EmpOfficeLocation)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+            loadEmpOfficeLocationDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+            loadEmpOfficeDetailsList();
+            loadEmpOfficeLocationDataTable();
+
+            $('button[id=btnBackToEmpOfficeLocationDetails]').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+
+                var vUrl = "@Url.Action("EmpOfficeLocationList", "EmpOfficeLocation")"
+                $('#formEmpOfficeLocationCreate').attr('action', vUrl).submit();
+
+            });
+        };
+
+
+        function loadEmpOfficeHistList() {
+            genericLoadDataTable({
+                pDataTableId: "#tbEmpOfficeDetails",
+                pColumns: datatableColumnsEmpOffice,
+                pUrl: vVUloadEmpOfficeList,
+                pUrlParams: {
+                    empno: $('#formEmpOfficeLocationDetailIndex #Empno').val() ? $('#formEmpOfficeLocationDetailIndex #Empno').val() : null
+
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        function loadEmpOfficeDetailsList() {
+            genericLoadDataTable({
+                pDataTableId: "#tblEmpOfficeDetails",
+                pColumns: datatableColumnsEmpOfficeDetails,
+                pUrl: vVUloadEmpOfficeList,
+                pUrlParams: {
+                    empno: $('#formEmpOfficeLocationDetailIndex #Empno').val() ? $('#formEmpOfficeLocationDetailIndex #Empno').val() : null
+
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        let vVUloadEmpOfficeLocationList = "@Url.Action("GetListsEmpOfficeLocation", "EmpOfficeLocation")";
+        let vVUloadEmpOfficeList = "@Url.Action("GetListsEmpOfficeLocationHistory", "EmpOfficeLocation")";
+        let canEditEmpOfficeLocation = @(CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditEmplmast) ? "true" : "false")  ;
+
+        function loadEmpOfficeLocationDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbEmpOffice",
+                pColumns: datatableColumns,
+                pUrl: vVUloadEmpOfficeLocationList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    parent: $('#FilterDataModel_Parent').val() ? $('#FilterDataModel_Parent').val() : null,
+                    grade: $('#FilterDataModel_Grade').val() ? $('#FilterDataModel_Grade').val() : null,
+                    empType: $('#FilterDataModel_EmpType').val() ? $('#FilterDataModel_EmpType').val() : null,
+                    officeLocationCode: $('#FilterDataModel_OfficeLocationCode').val() ? $('#FilterDataModel_OfficeLocationCode').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("EmpOfficeLocationDetailIndex", "EmpOfficeLocation", new { Area = "HRMasters" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-empno="' + data.empno + '"' +
+                                ' data-modaltitle="Employee Office Location Detail" ' +
+                                ' data-callback="loadEmpOfficeHistList" ' +
+                                ' data-modalheader="Employee Office Location Detail" ' +
+                                ' > ' +
+                                ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon",
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.empno + " - " + data.name
+                        },
+                    },
+                    { data: "grade" },
+                    { data: "parent" },
+                    { data: "assign" },
+                    { data: "emptype" },
+                    { data: "empOfficeLocation" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (canEditEmpOfficeLocation) {
+                                return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" ' +
+                                    ' data-url="@Url.Action("EmpOfficeLocationList", "EmpOfficeLocation", new { Area = "HRMasters" })"' +
+                                    ' data-modalpopupwidth="rightw50" ' +
+                                    ' data-empno="' + data.empno + '"' +
+                                    ' data-callback="loadEmpOfficeDetailsList" ' +
+                                    ' data-modaltitle="Employee Office Location edit" ' +
+                                    ' data-modalheader="Employee Office Location edit" >' +
+                                    ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                    ' </button>';
+                            }
+                            else {
+                                return '';
+                            }
+                        },
+                        className: "td-icon",
+                    },
+                ];
+
+            let datatableColumnsEmpOffice = [
+                {
+                    width: '6.0rem',
+                    data: "startDate",
+                    render: function (data, type, row) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                },
+                { data: "empOfficeLocation" },
+                { data: "modifiedBy", width: "13.0rem" },
+                {
+                    width: '6.0rem',
+                    data: "modifiedOn",
+                    render: function (data, type, row) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                }
+            ];
+
+            let datatableColumnsEmpOfficeDetails = [
+                {
+                    width: '6.0rem',
+                    data: "startDate",
+                    render: function (data, type, row) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                },
+                { data: "empOfficeLocation" },
+                { data: "modifiedBy", width: "13.0rem" },
+                {
+                    width: '6.0rem',
+                    data: "modifiedOn",
+                    render: function (data, type, row) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return ' <button class="btn btn-outline-danger btn-sm border-none"  ' +
+                            ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                            ' data-url="@Url.Action("EmpOfficeLocationDelete", "EmpOfficeLocation", new { Area = "HRMasters" })" ' +
+                            ' data-redirecturl="" ' +
+                            ' data-PostDeleteReLoadDataTable="OK" ' +
+                            ' data-id="' + data.keyId + '" ' +
+                            ' data-modaltitle="Please Confirm!" ' +
+                            ' data-confirmationtext="Delete employee office location ' + data.empOfficeLocation + ' ?" ' +
+                            ' data-confirmationtype="warning" data-confirmbuttontext="Delete office loaction"> ' +
+                            ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                            ' </button> ';
+
+                    },
+                    'className': "td-icon",
+                }
+            ];
+
+            </text>
+        };
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadEmpOfficeLocationDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadEmpOfficeLocationDataTable();
+            }
+        });
+
+        function PostSave(data) {
+            //console.log(data);
+            if (data.messageType == "KO") {
+                //console.log(data.messageFileContent);
+                var blob = convertToBlob(data.messageFileContent.fileContents, data.messageFileContent.contentType);
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = data.messageFileContent.fileDownloadName;
+                link.click();
+                notify("error", data.messageText, 'Error');
+            }
+            else {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadEmpOfficeLocationDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+
+
+            $("#FilterDataModel_StartDate").val(data.startDate);
+            $("#FilterDataModel_EndDate").val(data.endDate);
+            $("#FilterDataModel_Parent").val(data.parent);
+            $("#FilterDataModel_Grade").val(data.grade);
+            $("#FilterDataModel_EmpType").val(data.empType);
+            $("#FilterDataModel_OfficeLocationCode").val(data.officeLocationCode);
+
+            loadEmpOfficeLocationDataTable();
+            hideLoader();
+        }
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true,
+                maxDate: moment(),
+                minDate: moment().subtract(1, 'months')
+            });
+            $('#startDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+                var vStartDate = moment(date);
+                var futureMonthEnd = moment(vStartDate).endOf('month');
+
+                $('#endDateFilter').bootstrapMaterialDatePicker('setDate', futureMonthEnd);
+                $('#endDateFilter').val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+                $("#EndDate").val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+
+            });
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+        }
+    </script>
+}

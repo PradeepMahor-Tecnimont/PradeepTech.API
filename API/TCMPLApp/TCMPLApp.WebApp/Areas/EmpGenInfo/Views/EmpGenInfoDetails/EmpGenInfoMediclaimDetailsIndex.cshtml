@@ -1,0 +1,98 @@
+﻿@model TCMPLApp.WebApp.Models.EmpGenInfoMediclaimDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+<input type="hidden" asp-for="Empno" />
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-body" style="min-height: 450px;">
+            <div class="app-h4 app-card-header mb-2">
+
+                <p>Employee Details</p>
+
+            </div>
+
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-12">
+                    <div class="app-h4 app-card-header p-2">@localizer["Family Details (for MEDICLAIM)"]</div>
+                    <div class="card-body">
+                        <table id="tbMediclaimDetailsGrid" class="table table-striped table-bordered table-responsive-lg ">
+                            <thead class="bg-info text-white">
+                                <tr>
+                                    <th>Name of Member</th>
+                                    <th>Date of Birth</th>
+                                    <th>Relation with employee</th>
+                                    <th>Occupation</th>
+                                    <th>Pre-Existing Diseases</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="card-deck float-right" style="margin-top: 20px; margin-right: 20px">
+            <div class="form-group">
+            <a class="btn btn-secondary f-right" asp-controller="Home" asp-action="Index" title="@localizer["Cancel"]">
+            @localizer["Cancel"]
+            </a>
+            <span class="f-right">&nbsp; &nbsp;</span>
+            <button class="btn btn-primary f-right" type="submit" id="btnconfirm"
+            data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+            data-text="@localizer["Save"]">
+            @localizer["Save"]
+            </button>
+            </div>
+            </div>*@
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadDataTable();
+        });
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#birthDate").on("change", function (event, date) {
+                $("#BirthDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+            if ($('#BirthDate').val()) {
+                $('#birthDate').bootstrapMaterialDatePicker('setDate', new Date($("PoDate").val()));
+            }
+
+            if ($("#BirthDate").val()) {
+                $('#birthDate').val(moment($("#BirthDate").val(), "DD-MMM-YYYY").format('DD-MMM-YYYY'));
+            }
+
+        }
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+        }
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadDataTable();
+                notify('success', data.response, 'Success');
+            }
+        }
+    </script>
+}

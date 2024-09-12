@@ -1,0 +1,315 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<form id="attendanceStatusExcel" name="attendanceStatusExcel"
+      asp-area="SWP"
+      asp-controller="SWP"
+      asp-action="AttendanceStatusExcel"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="onSuccess(null)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+
+    @Html.TextBoxFor(model => model.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    @Html.TextBoxFor(model => model.EndDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Attendance status excel download"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="card" style="min-height: 450px;">
+        <div class="card-header">
+            <h5>@localizer["Attendance status excel download"]</h5>
+        </div>
+        <div class="card-toolbar-modal">
+        </div>
+        <div class="card-block">
+            <div class="card-pill">
+                <ul class="nav nav-tabs " id="tabs-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active tabChange" id="tabs-attendancePlanningInfo-tab" data-toggle="pill" href="#tabs-attendancePlanningInfo" role="tab"
+                           aria-controls="tabs-attendancePlanningInfo" aria-selected="false"
+                           data-divid="pw-attendancePlanningInfo"
+                           data-area=""
+                           data-controller=""
+                           data-action="">Attendance planning status   </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link tabChange" id="tabs-dayDetail-tab" data-toggle="pill" href="#tabs-dayDetail" role="tab" aria-controls="tabs-dayDetail" aria-selected="false"
+                           data-divid="pw-dayDetail"
+                           data-area=""
+                           data-controller=""
+                           data-action="">Attendance day status </a>
+                    </li>
+                    @* <summary>
+                         Start - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+                       </summary>*@
+                    <li class="nav-item">
+                        <a class="nav-link tabChange" id="tabs-monthlyDetail-tab" data-toggle="pill" href="#tabs-monthlyDetail" role="tab" aria-controls="tabs-monthlyDetail" aria-selected="false"
+                           data-divid="pw-monthlyDetail"
+                           data-area=""
+                           data-controller=""
+                           data-action="">Attendance monthly status </a>
+                    </li>
+                    @* <summary>
+                        End - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+                       </summary>*@
+                </ul>
+            </div>
+            <div class="tab-content">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade show active" id="tabs-attendancePlanningInfo" role="tabpanel" aria-labelledby="tabs-attendancePlanningInfo-tab">
+                    <div id="pw-attendancePlanningInfo">
+                        <div class="modal-body">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="form-group">
+                                        <label asp-for="StartDate" class="control-label"></label>
+                                        <input id="startDateFilter" class="form-control materialdatepickerFilter"
+                                               placeholder="@localizer["Start date"]" value="@Model.StartDate?.ToString("DD-MMM-YYYY")" required />
+                                    </div>
+                                    <div class="form-group ">
+                                        <label asp-for="EndDate" class="control-label"></label>
+                                        <input id="endDateFilter" class="form-control materialdatepickerFilter"
+                                               placeholder="@localizer["End date"]" value="@Model.EndDate?.ToString("DD-MMM-YYYY")" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IncludeEmployeeLocation" class="control-label"></label>
+                                        <div class="form-group">
+                                            <div class="row mr-1 ml-1">
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationAll" class="control-label">All</label>
+                                                    <div class=" form-group d-inline radio ">
+                                                        <input type="radio" checked asp-for="IncludeEmployeeLocation" id="All" value="All">
+                                                        <label for="All" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationGurugram" class="control-label"> Gurugram </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" asp-for="IncludeEmployeeLocation" id="Gurugram" value="Gurugram">
+                                                        <label for="Gurugram" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationOthers" class="control-label"> Others </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" asp-for="IncludeEmployeeLocation" id="Others" value="Others">
+                                                        <label for="Others" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IsExcludeX1Employees" class="control-label"></label>
+                                        <div class="form-group">
+                                            <div class="row mr-1 ml-1">
+                                                <div class="col-3">
+                                                    <label id="IsExcludeX1EmployeesYes" class="control-label">Yes</label>
+                                                    <div class=" form-group d-inline radio ">
+                                                        <input type="radio" asp-for="IsExcludeX1Employees" id="Yes" value="1">
+                                                        <label for="Yes" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IsExcludeX1EmployeesNo" class="control-label"> No </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" checked asp-for="IsExcludeX1Employees" id="No" value="0">
+                                                        <label for="No" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" id="btnExportAttendanceStatusExcel"
+                                    data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                                    data-text="@localizer["Confirm"]">
+                                @localizer["Confirm"]
+                            </button>
+                             <div id="attendanceStatus_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                        <span class="sr-only">Loading...</span>
+                                                                    </div>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-dayDetail" role="tabpanel" aria-labelledby="tabs-dayDetail-tab">
+                    <div id="pw-dayDetail">
+                        <div class="modal-body">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="form-group">
+                                        <label asp-for="StartDate" class="control-label"></label>
+                                        <input id="startOnDateFilter" class="form-control materialdatepickerFilter"
+                                               placeholder="@localizer["Start date"]" value="@Model.StartDate?.ToString("DD-MMM-YYYY")" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IncludeEmployeeLocationForDay" class="control-label"></label>
+                                        <div class="form-group">
+                                            <div class="row mr-1 ml-1">
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationAllForDay" class="control-label">All</label>
+                                                    <div class=" form-group d-inline radio ">
+                                                        <input type="radio" checked asp-for="IncludeEmployeeLocationForDay" id="AllForDay" value="All">
+                                                        <label for="AllForDay" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationGurugramForDay" class="control-label"> Gurugram </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" asp-for="IncludeEmployeeLocationForDay" id="GurugramForDay" value="Gurugram">
+                                                        <label for="GurugramForDay" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationOthersForDay" class="control-label"> Others </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" asp-for="IncludeEmployeeLocationForDay" id="OthersForDay" value="Others">
+                                                        <label for="OthersForDay" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IsExcludeX1EmployeesForDay" class="control-label"></label>
+                                        <div class="form-group">
+                                            <div class="row mr-1 ml-1">
+                                                <div class="col-3">
+                                                    <label id="IsExcludeX1EmployeesYes" class="control-label">Yes</label>
+                                                    <div class=" form-group d-inline radio ">
+                                                        <input type="radio"  asp-for="IsExcludeX1EmployeesForDay" id="DayYes" value="1">
+                                                        <label for="DayYes" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IsExcludeX1EmployeesNo" class="control-label"> No </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" checked asp-for="IsExcludeX1EmployeesForDay" id="DayNo" value="0">
+                                                        <label for="DayNo" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" id="btnExportDateAttendanceExcel"
+                                    data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                                    data-text="@localizer["Confirm"]">
+                                @localizer["Confirm"]
+                            </button>
+                            <div id="dateAttendance_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                        <span class="sr-only">Loading...</span>
+                                                                    </div>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+                        </div>
+                    </div>
+                </div>
+                @* <summary>
+                    Start - (CR000064) New Attendance Status Report - Monthly week-wise analysis
+                 </summary>*@
+                <div class="tab-pane fade" id="tabs-monthlyDetail" role="tabpanel" aria-labelledby="tabs-monthlyDetail-tab">
+                    <div id="pw-monthlyDetail">
+                        <div class="modal-body">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="form-group">
+                                        <label class="control-label">Select month</label>
+                                    <input id="startMonthDateFilter" class="form-control datepickerFilter" data-date-format="mm-yyyy"
+                                            placeholder="@localizer["Select month"]" value="@Model.StartDate?.ToString("DD-MMM-YYYY")" required />
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IncludeEmployeeLocationForMonth" class="control-label"></label>
+                                        <div class="form-group">
+                                            <div class="row mr-1 ml-1">
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationAll" class="control-label">All</label>
+                                                    <div class=" form-group d-inline radio ">
+                                                        <input type="radio" checked asp-for="IncludeEmployeeLocationForMonth" id="All" value="All">
+                                                        <label for="All" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationGurugramForMonth" class="control-label"> Gurugram </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" asp-for="IncludeEmployeeLocationForMonth" id="GurugramForMonth" value="Gurugram">
+                                                        <label for="GurugramForMonth" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IncludeEmployeeLocationOthersForMonth" class="control-label"> Others </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" asp-for="IncludeEmployeeLocationForMonth" id="OthersForMonth" value="Others">
+                                                        <label for="OthersForMonth" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IsExcludeX1EmployeesForMonth" class="control-label"></label>
+                                        <div class="form-group">
+                                            <div class="row mr-1 ml-1">
+                                                <div class="col-3">
+                                                    <label id="IsExcludeX1EmployeesYes" class="control-label">Yes</label>
+                                                    <div class=" form-group d-inline radio ">
+                                                        <input type="radio"  asp-for="IsExcludeX1EmployeesForMonth" id="MonthYes" value="1">
+                                                        <label for="MonthYes" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label id="IsExcludeX1EmployeesNo" class="control-label"> No </label>
+                                                    <div class=" form-group d-inline radio d-inline">
+                                                        <input type="radio" checked asp-for="IsExcludeX1EmployeesForMonth" id="MonthNo" value="0">
+                                                        <label for="MonthNo" class="cr margin-top-5"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" id="btnExportMonthlyAttendanceExcel"
+                                    data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                                    data-text="@localizer["Confirm"]">
+                                @localizer["Confirm"]
+                            </button>
+                            <div id="monthlyAttendance_Loader" class="spinner-border text-info text-center hidden "
+                                                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                                                        <span class="sr-only">Loading...</span>
+                                                                    </div>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+                        </div>
+                    </div>
+                </div>
+                @* <summary>
+                    End - (CR000064) New Attendance Status Report - Monthly analysis for the month
+                 </summary>*@
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+</form>

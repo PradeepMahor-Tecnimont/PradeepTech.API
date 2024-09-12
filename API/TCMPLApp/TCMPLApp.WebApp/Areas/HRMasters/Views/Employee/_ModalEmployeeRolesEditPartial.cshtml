@@ -1,0 +1,125 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.EmployeeMasterRolesEditViewModel
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Employee"
+      asp-action="RolesEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('roles');PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Empno)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit roles</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.Name [ @Model.Empno ]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="AmfiAuth" class="control-label"></label>
+                            <select asp-for="AmfiAuth" class="form-control Select2" asp-items="ViewBag.AmfiAuthList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="AmfiUser" class="control-label"></label>
+                            <select asp-for="AmfiUser" class="form-control Select2" asp-items="ViewBag.AmfiUserList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Costdy" class="control-label"></label>
+                            <select asp-for="Costdy" class="form-control Select2" asp-items="ViewBag.CostdyList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Costhead" class="control-label"></label>
+                            <select asp-for="Costhead" class="form-control Select2" asp-items="ViewBag.CostheadList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Costopr" class="control-label"></label>
+                            <select asp-for="Costopr" class="form-control Select2" asp-items="ViewBag.CostoprList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Dba" class="control-label"></label>
+                            <select asp-for="Dba" class="form-control Select2" asp-items="ViewBag.DbaList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Director" class="control-label"></label>
+                            <select asp-for="Director" class="form-control Select2" asp-items="ViewBag.DirectorList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Dirop" class="control-label"></label>
+                            <select asp-for="Dirop" class="form-control Select2" asp-items="ViewBag.DiropList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Projdy" class="control-label"></label>
+                            <select asp-for="Projdy" class="form-control Select2" asp-items="ViewBag.ProjdyList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Projmngr" class="control-label"></label>
+                            <select asp-for="Projmngr" class="form-control Select2" asp-items="ViewBag.ProjmngrList">
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

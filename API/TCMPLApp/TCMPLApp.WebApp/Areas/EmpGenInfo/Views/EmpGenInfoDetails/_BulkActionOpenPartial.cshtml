@@ -1,0 +1,64 @@
+﻿@model TCMPLApp.WebApp.Models.BulkActionEditViewModel
+
+@Html.AntiForgeryToken()
+
+<div class="row">
+    <div class="col-xl-12 col-md-12">
+        <div class="form-group">
+            <div class="checkbox">
+
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="checkBox-Blue" id="OpenAll">
+                    <label for="OpenAll">
+                        <span>Select All </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="open checkBox-Blue" asp-for="OpenPrimary" value="1" />
+                    <label for="OpenPrimary">
+                        <span>Open Primary </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="open checkBox-Blue" asp-for="OpenSecondary" value="1" />
+                    <label for="OpenSecondary">
+                        <span>Open Secondary </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="open checkBox-Blue" asp-for="OpenNomination" value="1" />
+                    <label for="OpenNomination">
+                        <span>Open Nomination </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="open checkBox-Blue" asp-for="OpenMediclaim" value="1" />
+                    <label for="OpenMediclaim">
+                        <span>Open Mediclaim </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="open checkBox-Blue" asp-for="OpenAadhaar" value="1" />
+                    <label for="OpenAadhaar">
+                        <span>Open Aadhaar </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="open checkBox-Blue" asp-for="OpenPassport" value="1" />
+                    <label for="OpenPassport">
+                        <span>Open Passport </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="open checkBox-Blue" asp-for="OpenGtli" value="1" />
+                    <label for="OpenGtli">
+                        <span>Open Gtli </span>
+                    </label>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+

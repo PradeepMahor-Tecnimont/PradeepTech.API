@@ -1,0 +1,85 @@
+﻿@model TCMPLApp.WebApp.Models.OfficeAtndViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="SWP"
+      asp-action="OfficeAtndCreate"
+      id="formOfficeAtndCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.EmployeeName" />
+    <input type="hidden" asp-for="@Model.Emptype" />
+    <input type="hidden" asp-for="@Model.EmpGrade" />
+    <input type="hidden" asp-for="@Model.Parent" />
+    <input type="hidden" asp-for="@Model.FkSwpAssignworkspace" />
+
+    <div class="modal-header">
+        <h5 class="modal-title"> @localizer["Office workspace "] </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Office workspace"]</h5>
+            </div>
+            <div class="card-block ">
+                <div class="form-group">
+                    <div class="row  p-2">
+                        <div class="col-md-6 ">
+                            <div class="dd-met">
+                                @Html.Raw("[ " + Model.Empno + " ] " + Model.EmployeeName)
+                            </div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <div class="dd-met">@localizer["Employee type : "] @Model.Emptype</div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <div class="dd-met">@localizer["Grade : "] @Model.EmpGrade</div>
+                        </div>
+                    </div>
+                    <div class="row  p-2">
+
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="dd-met">
+                                @localizer["Parent : "] @Html.Raw("[ " + Model.Parent + " ] " + Model.ParentDesc)
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="dd-met">@localizer["Assign : "] @Html.Raw("[ " + Model.Assign + " ] " + Model.AssignDesc)</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Deskid" class="control-label"></label>
+                        <select asp-for="Deskid" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.Desks">
+                            <option selected></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="submit" id="btnconfirm"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Confirm"]">
+                @localizer["Confirm"]
+            </button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+        </div>
+</form>

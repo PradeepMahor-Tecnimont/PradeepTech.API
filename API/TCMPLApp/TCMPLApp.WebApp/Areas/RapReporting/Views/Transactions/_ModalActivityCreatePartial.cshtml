@@ -1,0 +1,89 @@
+﻿@model TCMPLApp.WebApp.Models.ActivityCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Transactions"
+      asp-action="ActivityCreate"     
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"      
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Create activity"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Activity - create"]</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="Costcode" class="control-label"></label>
+                            <select asp-for="Costcode" class="form-control chosen-select selCostcode" data-placeholder=" Please select costcode..." asp-items="ViewBag.Costcodes" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Costcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                           <label asp-for="Activity" class="control-label"></label>
+                           <input asp-for="Activity" class="form-control" type="text" value="@Model.Activity" style="text-transform:uppercase" required/>
+                           <span asp-validation-for="Activity" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                           <label asp-for="Name" class="control-label"></label>
+                           <input asp-for="Name" class="form-control" type="text" value="@Model.Name"  />                           
+                        </div> 
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                           <label asp-for="Tlpcode" class="control-label"></label>
+                           <select asp-for="Tlpcode" class="form-control chosen-select selTlpcode" data-placeholder=" Please select TLP code..." >
+                                <option selected></option>
+                            </select>                          
+                        </div>                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">                        
+                        <div class="col-md-6">
+                           <label asp-for="ActivityType" class="control-label"></label>
+                           <input asp-for="ActivityType" class="form-control" type="text" value="@Model.ActivityType"  />                           
+                        </div>                   
+                        <div class="col-md-6">
+                           <label asp-for="Active" class="control-label"></label>
+                           <select asp-for="Active" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.ActiveList">
+                                <option selected></option>
+                            </select>                                                   
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+

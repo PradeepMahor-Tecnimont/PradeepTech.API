@@ -1,0 +1,145 @@
+﻿@model TCMPLApp.WebApp.Models.LcMainDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionCreateLc))
+            {
+                @if (Model.SendToTreasuryVal != 1 && Model.LcStatusVal == 1)
+                {
+                    <div class="row ">
+                        <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw50"
+                   data-url='@Url.Action("LcBeforeMainEdit", "LetterOfCredit", new { Area = "LC" })'
+                   data-statichtmlsourcedivid=""
+                   data-id="@Model.ApplicationId"
+                   data-modaltitle="Edit letter of credit main"
+                   data-modalheader="Edit letter of credit main">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                    <hr />
+
+                }
+
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionEditLc))
+            {
+                @if (Model.SendToTreasuryVal == 1 && Model.LcStatusVal == 1)
+                {
+                    <div class="row ">
+                        <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw50"
+                   data-url='@Url.Action("LcAfterMainEdit", "LetterOfCredit", new { Area = "LC" })'
+                   data-statichtmlsourcedivid=""
+                   data-id="@Model.ApplicationId"
+                   data-modaltitle="Edit letter of credit main"
+                   data-modalheader="Edit letter of credit main">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                    <hr />
+                }
+            }
+
+            <div class="row p-1">
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.PaymentYyyymm)</div>
+                        <div class="dd-met">@(Model.PaymentYyyymm + " - "+ Model.PaymentYyyymmHalf )</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.CompanyCode)</div>
+                        <div class="dd-met">@(Model.CompanyCode )</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.CompanyShortName)</div>
+                        <div class="dd-met">@(Model.CompanyShortName )</div>
+                    </div>
+                </div>  <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.CompanyFullName)</div>
+                        <div class="dd-met">@(Model.CompanyFullName )</div>
+                    </div>
+                </div>
+
+            </div>
+            @*<hr />*@
+            <div class="row p-1">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Currency)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Currency)</div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Project)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Project)</div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Vendor)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Vendor)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LcAmount)</div>
+                        <div class="dd-met">@( Model.LcAmount)</div>
+                    </div>
+                </div>
+
+
+            </div>
+            @*<hr />*@
+            <div class="row p-1">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LcStatusText)</div>
+                        <div class="dd-met">@( Model.LcStatusText)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ModifiedBy)</div>
+                        <div class="dd-met">@( Model.ModifiedBy) </div>
+                    </div>
+                </div><div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ModifiedOn)</div>
+                        <div class="dd-met">@( Model.ModifiedOn) </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-1">
+
+                <div class="col-xl-12 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Remarks)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Remarks)</div>
+                    </div>
+                </div>
+
+            </div>
+            @*<hr />*@
+
+        </div>
+    </div>
+</div>
+<hr />
+@await Html.PartialAsync("_LcPoSapInvoiceDetailPartial.cshtml",Model)

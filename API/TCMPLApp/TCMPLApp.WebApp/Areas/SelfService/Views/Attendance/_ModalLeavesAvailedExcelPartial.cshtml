@@ -1,0 +1,66 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@Html.AntiForgeryToken()
+
+<form id="xlReportLeavesAvailed" name="xlReportLeavesAvailed"
+      asp-area="SWP"
+      asp-controller="SWP"
+      asp-action="AttendanceStatusExcel"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="onSuccess(null)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+
+    @Html.TextBoxFor(model => model.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    @Html.TextBoxFor(model => model.EndDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Leave availed excel download"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="card" style="min-height: 450px;">
+        <div class="card-header">
+            <h5>@localizer["Leave availed excel download"]</h5>
+        </div>
+        <div class="card-toolbar-modal">
+        </div>
+        <div class="card-block">
+            <div class="tab-content">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane show active" id="tabs-yearlyDetail" role="tabpanel" aria-labelledby="tabs-monthlyDetail-tab">
+                    <div id="pw-yearlyDetail">
+                        <div class="modal-body">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="form-group">
+                                        <label class="control-label">Select month</label>
+                                        <input id="startYearDateFilter" class="form-control datepickerFilter" data-date-format="yyyy"
+                                               placeholder="@localizer["Select year"]" required value="@Model.StartDate?.ToString("DD-MMM-YYYY")" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" id="btnExportLeavesAvailedExcel"
+                                    data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                                    data-text="@localizer["Confirm"]">
+                                @localizer["Confirm"]
+                            </button>
+                            <div id="btnLoader" class="spinner-border text-info text-center hidden "
+                                 style="width: 2.5rem; height: 2.5rem;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

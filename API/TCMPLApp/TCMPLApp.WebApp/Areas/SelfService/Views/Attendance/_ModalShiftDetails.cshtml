@@ -1,0 +1,99 @@
+﻿@model TCMPLApp.WebApp.Models.ShiftDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="Attendance"
+      asp-action=""
+      id="formShiftDetails"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Shiftcode" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Shift Details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Shift Details</h5>
+            </div>
+            <div class="card-block p-4">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.Shiftcode)
+                            </div>
+                            <div class="dd-met">
+                                @Model.Shiftcode : @Model.Shiftdesc
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.TimeinHh)
+                            </div>
+                            <div class="dd-met">
+                                @Model.TimeinHh : @Model.TimeinMn
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.TimeoutHh)
+                            </div>
+                            <div class="dd-met">
+                                @Model.TimeoutHh : @Model.TimeoutMn
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-4 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.LunchMn)
+                            </div>
+                            <div class="dd-met">
+                                @Model.LunchMn
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.Shift4allowance)
+                            </div>
+                            <div class="dd-met">
+                                @Model.Shift4allowanceText
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.OtApplicable)
+                            </div>
+                            <div class="dd-met">
+                                @Model.OtApplicableText
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

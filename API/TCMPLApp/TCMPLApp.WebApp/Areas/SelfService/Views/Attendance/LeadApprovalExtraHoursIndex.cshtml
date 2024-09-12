@@ -1,0 +1,476 @@
+﻿@model TCMPLApp.WebApp.Models.ExtraHoursClaimApprovalViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item"><a asp-action="ApprovalsLeadIndex" asp-controller="Home" asp-area="SelfService">Lead approvals</a></li>
+        <li class="breadcrumb-item active">@localizer["Extra hours claim pending approvals"]</li>
+    </ol>
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+    <!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+    <!-- Material Datepicker css -->
+    @*<link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />*@
+}
+
+@{
+    ViewData["Title"] = "Extra hours claim pending approvals";
+
+}
+
+@*<input type="hidden" asp-for="@Model.FilterDataModel.BusinessEntityId" />
+    <input type="hidden" id="FilterDataModel_StartDateTime" name="FilterDataModel_StartDateTime" value="@Model.FilterDataModel.StartDateTimeString" />
+    <input type="hidden" id="FilterDataModel_EndDateTime" name="FilterDataModel_EndDateTime" value="@Model.FilterDataModel.EndDateTimeString" />
+    <input type="hidden" asp-for="@Model.FilterDataModel.StatusTypeId" />*@
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>@localizer["Extra hours claims"]</p>
+    </div>
+    <div class="d-flex flex-row" style="justify-content:flex-end;">
+        <button name="Confirm" id="Confirm" type="button"
+                class="btn btn-md btn-primary" onclick="onSave()">
+            @localizer["Confirm"]
+        </button>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        @*<div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>*@
+        <table id="tbDataGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th rowspan="2"></th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.Employee)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.ClaimDate)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.ClaimNo)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.ClaimPeriod)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.ClaimedOt)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.ClaimedHhot)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.ClaimedCo)</th>
+                    <th colspan="3" class="text-center">
+                        @localizer["Approval"]
+                    </th>
+                    <th rowspan="2">@localizer["OT Adjustment"]</th>
+                </tr>
+                <tr>
+                    <th class="text-center align-middle">
+                        @localizer["Yes"]
+                        <hr class=" m-1 text-light " />
+                        <div class=" form-group d-inline radio ">
+                            <input type="radio" name="selectAll" id="ApproveYes_selectAll">
+                            <label for="ApproveYes_selectAll" class="cr margin-top-5"></label>
+                        </div>
+                    </th>
+                    <th class="text-center align-middle">
+                        @localizer["No"]
+                        <hr class=" m-1 text-light " />
+                        <div class=" form-group d-inline radio d-inline">
+                            <input type="radio" name="selectAll" id="ApproveNo_selectAll">
+                            <label for="ApproveNo_selectAll" class="cr margin-top-5"></label>
+                        </div>
+                    </th>
+                    <th class="text-center align-middle">
+                        @localizer["Pending"]
+                        <hr class=" m-1  " />
+                        <div class=" form-group d-inline radio radio d-inline">
+                            <input type="radio" name="selectAll" id="ApprovePend_selectAll">
+                            <label for="ApprovePend_selectAll" class="cr margin-top-5"></label>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        function localScript() {
+            modalFormInputListener();
+        }
+
+        function localLoadDataTable() {
+            $('#tbDataGrid').DataTable().destroy();
+
+            $('#tbDataGrid tbody').empty();
+
+            var table = $('#tbDataGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                aaSorting: [[1, 'asc']],
+                ordering: false,
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                  @if ((bool)@Context.Items["isMobile"] == false)
+                    {
+                        <text>
+                ordering: false,
+                //order: [1, "asc"],
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-outline-info btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("ExtraHoursClaimDetail", "Attendance", new { Area = "SelfService" })"' +
+                                ' data-modalpopupwidth="rightw75" ' +
+                                ' data-claimno="' + data.claimNo + '"' +
+                                ' data-modaltitle="Extra hours claim details" ' +
+                                ' data-modalheader="Extra hours claim details" ' +
+                                ' > ' +
+                                ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon"
+                    },
+                    { data: "employee" },
+                    {
+                        width: '3.0rem',
+                        data: null,
+                        render: function (data, type, row) {
+                            return moment(data.claimDate).format("DD-MMM-YYYY");
+                        }
+                    },
+                    { data: "claimNo", width: '2.0rem' },
+                    { data: "claimPeriod", width: '2.0rem' },
+                    {
+                        width: '2.0rem',
+                        data: null,
+                        render: function (data, type, row) {
+                            return minutesToHours(data.claimedOt);
+                        }
+                        //"claimedOt"
+                    },
+                    {
+                        width: '2.0rem',
+                        data: null,
+                        render: function (data, type, row) {
+                            return minutesToHours(data.claimedHhot);
+                        }
+                        //"claimedHhot"
+                    },
+                    {
+                        width: '2.0rem',
+                        data: null,
+                        render: function (data, type, row) {
+                            return minutesToHours(data.claimedCo);
+                        }
+                    },
+                    {
+                        data: null,
+                        width: '3.0rem',
+                        render: function (data, type, row) {
+                            return ' <div class="radio d-inline text-center "> ' +
+                                ' <input type="radio" class="rdoapproval" ' +
+                                ' id="approveYes_' + data.claimNo + '"  name="' + data.claimNo + '"   ' +
+                                ' value="1"  >  ' +
+                                ' <label for="approveYes_' + data.claimNo + '" class="cr margin-top-5"></label>' +
+                                ' </div>';
+                        },
+                        class: ' text-center  align-middle'
+                    },
+                    {
+                        data: null,
+                        width: '3.0rem',
+                        render: function (data, type, row) {
+                            return ' <div class="radio d-inline "> ' +
+                                ' <input type="radio"  class="rdoapproval" ' +
+                                ' id="approveNo_' + data.claimNo + '" name="' + data.claimNo + '"' +
+                                ' value="-1" >  ' +
+                                ' <label for="approveNo_' + data.claimNo + '" name="approveNo_" class="cr margin-top-5"></label>' +
+                                ' </div>';
+                        },
+                        class: ' text-center  align-middle'
+                    },
+                    {
+                        data: null,
+                        width: '3.0rem',
+                        render: function (data, type, row) {
+                            return ' <div class="radio d-inline text-center "> ' +
+                                ' <input type="radio"  class="rdoapproval" ' +
+                                ' id="approvePend_' + data.claimNo + '" name="' + data.claimNo + '"   ' +
+                                '  value="0" checked = "true"    >  ' +
+                                ' <label for="approvePend_' + data.claimNo + '" class="cr margin-top-5"></label>' +
+                                ' </div>';
+                        },
+                        class: ' text-center  align-middle'
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("LeadExtraHoursAdjustment", "Attendance", new { Area = "SelfService" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-applicationId="' + data.claimNo + '"' +
+                                ' data-modaltitle="Extra hours claim details" ' +
+                                ' data-modalheader="Extra hours claim details" ' +
+                                ' > ' +
+                                ' <i class="fa fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon text-center  align-middle"
+                    },
+                ],
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                ordering: false,
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ClaimDate)' + '</dt><dd class="col-lg-8">' + moment(data.claimDate).format('L') + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ClaimNo)' + '</dt><dd class="col-lg-8">' + data.claimNo + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ClaimPeriod)' + '</dt><dd class="col-lg-8">' + data.claimPeriod + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ClaimedOt)' + '</dt><dd class="col-lg-8">' + data.claimedOt + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ClaimedHhot)' + '</dt><dd class="col-lg-8">' + data.claimedHhot + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ClaimedCo)' + '</dt><dd class="col-lg-8">' + data.claimedCo + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.LeadName)' + '</dt><dd class="col-lg-8">' + data.leadName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.LeadApprovalDesc)' + '</dt><dd class="col-lg-8">' + data.leadApprovalDesc + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.HodApprovalDesc)' + '</dt><dd class="col-lg-8">' + data.hodApprovalDesc + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.HrdApprovalDesc)' + '</dt><dd class="col-lg-8">' + data.hrdApprovalDesc + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.HrdApprovedOt)' + '</dt><dd class="col-lg-8">' + data.hrdApprovedOt + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.HrdApprovedHhot)' + '</dt><dd class="col-lg-8">' + data.hrdApprovedHhot + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.HrdApprovedHhot)' + '</dt><dd class="col-lg-8">' + data.hrdApprovedHhot + '</dd></dl>';
+
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+                        </text>
+                    }
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsLeadApprovalExtraHours", "Attendance")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                        d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                        d.startDateTime = null; // $('#FilterDataModel_StartDateTime').val();
+                        d.endDateTime = null; // $('#FilterDataModel_EndDateTime').val();
+                        d.statusTypeId = null; // $('#FilterDataModel_StatusTypeId').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+
+            //dataTableSearch();
+
+        }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+            $("#ApprovePend_selectAll").prop("checked", true).trigger("click");
+        });
+
+        $("#ApproveYes_selectAll").change(function () {
+            var isChecked = this.checked;
+            $('#tbDataGrid td input:radio[id^="approveYes_"]').prop('checked', isChecked);
+        });
+
+        $("#ApproveNo_selectAll").change(function () {
+            var isChecked = this.checked;
+            $('#tbDataGrid td input:radio[id^="approveNo_"]').prop('checked', isChecked);
+            $('#ApprlVals').prop('checked', isChecked);
+        });
+
+        $("#ApprovePend_selectAll").change(function () {
+            var isChecked = this.checked;
+            $('#tbDataGrid td input:radio[id^="approvePend_"]').prop('checked', isChecked);
+        });
+
+
+        function onSave() {
+
+            var table = $('#tbDataGrid').DataTable();
+
+            var paramsApprovals = table.$('input.rdoapproval').serializeArray();
+
+            objApprovals = [];
+
+            $.each(paramsApprovals, function (i, field) {
+                itemApprl = {}
+                itemApprl["appId"] = field.name;
+                itemApprl["apprlVal"] = field.value;
+
+                objApprovals.push(itemApprl);
+            });
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("LeadApprovalExtraHours", "Attendance", new {Area = "SelfService"})',
+                type: 'POST',
+                data: {
+                    approvalApprlVals: objApprovals
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    hideLoader();
+                    if (data.success) {
+                        notify("success", data.response, "Success");
+                        localLoadDataTable();
+                    }
+                    else {
+                        notify("error", data.response, "Error");
+                    }
+
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+
+            return false;
+        }
+
+        function modalFormInputListener() {
+            $("input[id*=LeadApprovedCo]").on("change", function () {
+                validateAdjustmentCO(this);
+            });
+
+            $('input[id*=LeadApprovedOt]').on('change', function () {
+                validateAdjustmentOT(this);
+            });
+
+            $('input[id*=LeadApprovedHhot]').on('change', function () {
+                validateAdjustmentHHOT(this);
+            });
+            $('#btnSaveAdjustment').on("click", function (event) {
+                saveAdjustment(this, event);
+            });
+        }
+        function validateAdjustmentCO(obj) {
+            let errorMessage = "Compensatory Off should be in Multiple of 4hrs and not more than claimed CO.";
+            let inputValue = ($(obj).val()) ? $(obj).val() : 0;
+            let bIsError = false;
+            let maxCO = $("input[id*=ClaimedCo").val() ? $("input[id*=ClaimedCo").val() : 0;
+            let messageDiv = $('div#approvedCOMsg');
+            bIsError = isNaN(inputValue);
+            if (!bIsError) {
+                if ((inputValue % 4) > 0 || inputValue < 0 || (inputValue * 60) > maxCO) {
+                    bIsError = true;
+                }
+            }
+            setInputValidationStatus(obj, bIsError, errorMessage, messageDiv);
+        }
+
+        function validateAdjustmentOT(obj) {
+            let errorMessage = "OT Hours should be in multiple of 2hrs & cannot be more than claimed OT";
+            let inputValue = ($(obj).val()) ? $(obj).val() : 0;
+            let bIsError = false;
+            let maxOT = $("input[id*=ClaimedOt").val() ? $("input[id*=ClaimedOt").val() : 0;
+            let messageDiv = $('div#approvedOTMsg');
+
+            bIsError = isNaN(inputValue);
+            if (!bIsError) {
+                if ((inputValue % 2) > 0 || inputValue < 0 || (inputValue * 60) > maxOT) {
+                    bIsError = true;
+                }
+            }
+            setInputValidationStatus(obj, bIsError, errorMessage, messageDiv);
+        }
+
+        function validateAdjustmentHHOT(obj) {
+            let errorMessage = "Holiday OT Hours should be in multiple of 1hrs, atleast 4hrs & cannot be more than claimed holiday OT";
+            let inputValue = ($(obj).val()) ? $(obj).val() : 0;
+            let bIsError = false;
+            let maxHHOT = $("input[id*=ClaimedHhot").val() ? $("input[id*=ClaimedHhot").val() : 0;
+            let messageDiv = $('div#approvedHHOTMsg');
+            bIsError = isNaN(inputValue);
+            if (!bIsError) {
+                if ((inputValue % 1) > 0 || (inputValue > 0 && inputValue < 4) || (inputValue * 60) > maxHHOT) {
+                    bIsError = true;
+                }
+            }
+            setInputValidationStatus(obj, bIsError, errorMessage, messageDiv);
+        }
+
+        function setInputValidationStatus(obj, bIsError, errorMessage, messageDiv) {
+            if (bIsError) {
+                obj.setCustomValidity(errorMessage);
+                $(obj).addClass("is-invalid");
+                $(messageDiv).text(errorMessage);
+            }
+            else {
+                obj.setCustomValidity("");
+                $(obj).removeClass("is-invalid");
+                $(messageDiv).text("");
+            }
+        }
+
+        function saveAdjustment(obj, event) {
+            var formElementId = $($(obj).closest("form")).attr("id");
+            var form = document.getElementById(formElementId);
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        }
+        
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        
+    </script>
+}  

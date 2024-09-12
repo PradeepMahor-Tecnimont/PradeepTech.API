@@ -1,0 +1,679 @@
+﻿@{
+    ViewData["Title"] = "SelfService - Home";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item active" aria-current="page">HR actions</li>
+    </ol>
+}
+
+@section Styles
+{
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Leave (CL/PL/CO)</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HRApprovalLeaveIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Leave pending requests</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-share-square f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Sick Leave (SL)</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HRApprovalLeaveSLIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Leave pending requests</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-share-square f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Extra hours </h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HRApprovalExtraHoursIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Extra hours pending requests</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas far fa-clock f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>On duty</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HRApprovalOnDutyIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> OnDuty pending requests</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-clock f-20 text-white theme-dark-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Forgetting card approvals</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HRApprovalForgettingCardIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Forgetting card pending requests</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-clock f-20 text-white theme-dark-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Leave claims</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("LeaveClaimsIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Leave claims</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-pen-square f-20 text-white theme-dark-orange"></i>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Report - Leave availed</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#" data-jqueryselector="openmodal" data-modalcontainer="modalcontainer" data-modalpopupwidth="rightw35" data-url="@Url.Action("XLReportLeavesAvailed", "Attendance", new { Area = "SelfService" })" data-modaltitle="Leave availed filter" data-modalheader="Leave availed filter">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Leave availed</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-pen-square f-20 text-white theme-dark-orange"></i>
+
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Upload punch data</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#" data-jqueryselector="openmodal" data-modalcontainer="modalcontainer" data-modalpopupwidth="rightw35" data-url="@Url.Action("PunchUploadData", "Attendance", new { Area = "SelfService" })" data-modaltitle="Leave availed filter" data-modalheader="Punch data upload">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Upload punch data</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-pen-square f-20 text-white theme-dark-orange"></i>
+
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Upload Employee card RFID data</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#" data-jqueryselector="openmodal" data-modalcontainer="modalcontainer" data-modalpopupwidth="rightw35" data-url="@Url.Action("RfidUploadData", "Attendance", new { Area = "SelfService" })" data-modaltitle="Leave availed filter" data-modalheader="Employee Card RFID">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Upload emp card rfid</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-pen-square f-20 text-white theme-dark-orange"></i>
+
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Leave calendar</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("LeaveCalendarHRIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> Leave calendar</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="far fa-calendar-alt f-20 text-white  theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Execute Action</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("ActionMapIndex", "Home", new { Area = "SelfService" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300"> &nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>LoP for Excess Leave</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("LoPForExcessLeaveIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">LoP for Excess Leave</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-pen-square f-20 text-white theme-dark-orange"></i>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Punch details</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("PunchDetailsForHRIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fab fa-leanpub f-20 text-white theme-blue"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3 ">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Shift Master</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("ShiftMasterIndex","Attendance",new {Area="SelfService" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        function localScript() {
+            initFilter();
+            //detachDropZone();
+            initDropZone();
+        }
+        function initFilter() {
+            $('#btnExportLeavesAvailedExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                exportLeavesAvailed();
+
+            });
+
+            $('#startYearDateFilter').datepicker({
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years",
+                autoclose: true
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val();
+
+                $("#StartDate").val(moment("01-01-" + fvDate, 'dd-mm-YYYY').format("DD-MMM-YYYY"));
+                $(this).datepicker('hide');
+            });
+        }
+
+        function exportLeavesAvailed() {
+
+            let vStartDate = $("#xlReportLeavesAvailed input[id=StartDate]").val();
+
+            if (vStartDate == null || vStartDate == '') {
+                toastr.error('Invalid Start Date ');
+                return;
+            }
+
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#xlReportLeavesAvailed input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("XLReportLeavesAvailed", "Attendance", new { Area = "SelfService" })',
+                type: "POST",
+                data: {
+                    startDate: vStartDate
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                    $("#btnExportLeavesAvailedExcel").hide();
+                    $('#btnLoader').removeClass("hidden");
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                    $("#btnExportLeavesAvailedExcel").show();
+                    $('#btnLoader').addClass("hidden");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                    $("#btnExportLeavesAvailedExcel").show();
+                    $('#btnLoader').addClass("hidden");
+                }
+            });
+        }
+
+        function detachDropZone() {
+
+            $("#dropZoneWrapper").hide();
+            $('div#iddropzone2').each(function () {
+                let dropzoneControl = $(this)[0].dropzone;
+                if (dropzoneControl) {
+                    dropzoneControl.destroy();
+                }
+            });
+        }
+
+        Dropzone.autoDiscover = false;
+
+        function initDropZone() {
+            let dropzoneUrl = "";
+            let fileTypes = "";
+            let formId = "";
+            console.log
+            if ($('#btnUploadPunchData').length) {
+                formId = "#formPunchDataUpload";
+                $('#btnUploadPunchData').off('click').on('click', function () {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+                    submitDropZoneForm(formId);
+                });
+                dropZoneUrl = '@Url.Action("PunchUploadData", "Attendance", new { Area = "SelfService" })';
+                fileTypes = ".tas";
+
+                popupDropZone(dropZoneUrl, fileTypes)
+            }
+            else if ($('#btnUploadCardRfid').length) {
+                formId = "#formRfidDataUpload";
+                $('#btnUploadCardRfid').off('click').on('click', function () {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    //submitPunchDataTasFile();
+                    submitDropZoneForm(formId);
+
+                });
+                dropZoneUrl = '@Url.Action("RfidUploadData", "Attendance", new { Area = "SelfService" })';
+                fileTypes = ".txt";
+                popupDropZone(dropZoneUrl, fileTypes)
+            }
+        }
+
+        function popupDropZone(pUrl, pFileTypes) {
+
+            detachDropZone();
+
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+            console.log(pUrl);
+            console.log(pFileTypes);
+            $("div#iddropzone2").dropzone({
+                url: pUrl,
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: pFileTypes,
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+
+                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    // of the sending event because uploadMultiple is set to true.
+                    this.on("processing", function (file) {
+                        console.log($(formId).attr("action"));
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        console.log(data);
+                        if (data.success) {
+                            notify("success", data.response, "File upload successful.");
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        console.log(data);
+                        if (data.success) {
+                            notify("success", data.response, "File upload successful.");
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("error", function (files, data) {
+                        console.log(data);
+                        if (!data.success) {
+                            notify("error", data.response, "File upload failed.");
+                        }
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+
+        }
+
+
+        function initDropZone1() {
+
+            $('#btnUploadPunchData').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                submitPunchDataTasFile();
+            });
+
+            let formId = "#" + $("div#iddropzone2").closest("form").attr("id");
+
+            $("div#iddropzone2").dropzone({
+                url: '@Url.Action("PunchUploadData", "Attendance", new { Area = "SelfService" })',
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                maxFiles: 1,
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: ".tas",
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+
+                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    // of the sending event because uploadMultiple is set to true.
+                    this.on("processing", function (file) {
+                        console.log($(formId).attr("action"));
+                        this.options.url = $(formId).attr("action");
+                    });
+                    this.on("sending", function (file, xhr, formData) {
+
+                        formData.append("file", file);
+                        var data = $(formId).serializeArray();
+
+                        $.each(data, function (key, el) {
+                            formData.append(el.name, el.value);
+                        });
+                        showModalLoader();
+
+                    });
+                    this.on("sendingmultiple", function () {
+                        // Gets triggered when the form is actually being sent.
+                        // Hide the success button or the complete form.
+                    });
+                    this.on("successmultiple", function (files, data) {
+                        console.log(data);
+                        if (data.success) {
+                            notify("success", data.response, "File upload successful.");
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("success", function (files, data) {
+                        console.log(data);
+                        if (data.success) {
+                            notify("success", data.response, "File upload successful.");
+                        }
+                        else
+                            notify("error", data.response, "File upload failed.");
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("error", function (files, data) {
+                        console.log(data);
+                        if (!data.success) {
+                            notify("error", data.response, "File upload failed.");
+                        }
+
+                        hideModalLoader();
+
+                        this.removeAllFiles(true);
+                    });
+                    this.on("errormultiple", function (files, data) {
+                        notify("error", "File not uploaded + " + data.response, "Error");
+                        this.removeAllFiles(true);
+                        hideModalLoader();
+
+                        // Gets triggered when there was an error sending the files.
+                        // Maybe show form again, and notify user of error
+                    });
+                }
+
+            });
+        }
+
+        function submitPunchDataTasFile() {
+
+            var formPunchDataUpload = "#formPunchDataUpload";
+            if ($(formPunchDataUpload).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length == 0) {
+                notify("error", "No files selected.", "Error");
+                return;
+            }
+            oDropZone2.processQueue();
+        }
+
+        function submitDropZoneForm(pFormId) {
+            console.log(pFormId);
+            if ($(pFormId).length == 0) {
+                console.log("Form not found");
+                return;
+            }
+
+            oDropZone2 = Dropzone.forElement("div#iddropzone2");
+            if (oDropZone2.files.length == 0) {
+                notify("error", "No files selected.", "Error");
+                return;
+            }
+            oDropZone2.processQueue();
+        }
+
+    </script>
+}

@@ -1,0 +1,205 @@
+﻿@model TCMPLApp.Domain.Models.HRMasters.EmployeeMasterMain
+
+@{
+    ViewData["Title"] = "Employee modification";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a asp-action="Index" asp-controller="Employee" asp-area="HRMasters">Employee master</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Details</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+
+
+    <div class="col-sm-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Employee name : <b>@Model.Name [ @Model.Empno ] </b>
+                    @if (Model.Status == 0)
+                {
+                    <span class="text-c-red"><b>Left</b></span>
+                }
+            </h5>
+            <a href="~/HRMasters/Employee" title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+                <i class="fas fa-undo"></i>
+                Back
+            </a>
+            @if (Model.Status == 0)
+            {
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.RolePayRollAdmin))
+                {
+                    <a title="Activate employee" class="btn btn-outline-success btn-sm border-none float-right" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ActivateEmployee", "Employee", new { Area = "HRMasters" })'
+               data-statichtmlsourcedivid=""
+               data-id="@Model.Empno"
+               data-modaltitle="Activate employee"
+               data-modalheader="Activate employee">
+                        <i class="fas fa-user-plus"></i> Activate
+                    </a>
+                }
+            }
+            @if (Model.Status == 1)
+            {
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditEmplmast))
+                {
+                    <a title="Deactivate employee" class="btn btn-outline-danger btn-sm border-none float-right" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("DeactivateEmployee", "Employee", new { Area = "HRMasters" })'
+               data-statichtmlsourcedivid=""
+               data-id="@Model.Empno"
+               data-modaltitle="Deactivate employee"
+               data-modalheader="Deactivate employee">
+                        <i class="fas fa-trash" aria-hidden="true"></i> Deactivate
+                    </a>
+                }
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditEmplmast))
+            {
+                <a title="Clone employee" class="btn btn-outline-primary btn-sm border-none float-right" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("CloneEmployee", "Employee", new { Area = "HRMasters" })'
+               data-statichtmlsourcedivid=""
+               data-id="@Model.Empno"
+               data-modaltitle="Clone employee"
+               data-modalheader="Clone employee">
+                    <i class="fas fa-clone"></i> Clone
+                </a>
+            }
+        </div>
+        <div class="card-block">
+            <div class="card-pill">
+                <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-main-tab" data-toggle="pill" href="#tabs-main" role="tab" aria-controls="tabs-main" aria-selected="true">Main</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-organization-tab" data-toggle="pill" href="#tabs-organization" role="tab" aria-controls="tabs-organization" aria-selected="false"
+                           data-url="@Url.Action("OrganizationDetail", "Employee", new { Area = "HRMasters" })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-organization"
+                           data-area="HRMasters"
+                           data-controller="Employee"
+                           data-action="OrganizationDetail">Organization</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-address-tab" data-toggle="pill" href="#tabs-address" role="tab" aria-controls="tabs-address" aria-selected="false"
+                           data-url="@Url.Action("AddressDetail", "Employee", new { Area = "HRMasters" })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-address"
+                           data-area="HRMasters"
+                           data-controller="Employee"
+                           data-action="AddressDetail">Address</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-roles-tab" data-toggle="pill" href="#tabs-roles" role="tab" aria-controls="tabs-roles" aria-selected="false"
+                           data-url="@Url.Action("RolesDetail", "Employee", new { Area = "HRMasters" })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-roles"
+                           data-area="HRMasters"
+                           data-controller="Employee"
+                           data-action="RolesDetail">Roles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-applications-tab" data-toggle="pill" href="#tabs-applications" role="tab" aria-controls="tabs-applications" aria-selected="false"
+                           data-url="@Url.Action("ApplicationsDetail", "Employee", new { Area = "HRMasters" })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-applications"
+                           data-area="HRMasters"
+                           data-controller="Employee"
+                           data-action="ApplicationsDetail">Applications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-misc-tab" data-toggle="pill" href="#tabs-misc" role="tab" aria-controls="tabs-misc" aria-selected="false"
+                           data-url="@Url.Action("MiscellaneousDetail", "Employee", new { Area = "HRMasters" })"
+                           data-id="@Model.Empno"
+                           data-divid="pw-misc"
+                           data-area="HRMasters"
+                           data-controller="Employee"
+                           data-action="MiscellaneousDetail">Miscellaneous</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    @await Html.PartialAsync("_LoaderPartial")
+                    <div class="tab-pane fade show active" id="tabs-main" role="tabpanel" aria-labelledby="tabs-main-tab">
+                        @await Html.PartialAsync("_EmployeeMainDetailPartial.cshtml", Model)
+                    </div>
+                    <div class="tab-pane fade" id="tabs-organization" role="tabpanel" aria-labelledby="tabs-organization-tab">
+                        <div id="pw-organization">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-address" role="tabpanel" aria-labelledby="tabs-address-tab">
+                        <div id="pw-address">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-roles" role="tabpanel" aria-labelledby="tabs-roles-tab">
+                        <div id="pw-roles">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-applications" role="tabpanel" aria-labelledby="tabs-applications-tab">
+                        <div id="pw-applications">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-misc" role="tabpanel" aria-labelledby="tabs-misc-tab">
+                        <div id="pw-misc">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+            localScript();
+        });
+
+        function localScript() {
+            initSelect2();
+
+            $("#TitCd").change(function(e) {
+                var titCd = $('#TitCd').val();
+                if (titCd != null) {
+                    $('#JobTitle').val($("#TitCd option:selected").text());
+                }
+                else {
+                    $('#JobTitle').val(null);
+                }
+            });
+
+
+
+        };
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+
+    </script>
+}

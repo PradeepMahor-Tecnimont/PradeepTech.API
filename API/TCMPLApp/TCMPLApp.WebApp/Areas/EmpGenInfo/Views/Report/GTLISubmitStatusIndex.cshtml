@@ -1,0 +1,207 @@
+﻿@model TCMPLApp.WebApp.Models.EmpGTLINominationSubmitStatusViewModel
+
+@{
+    ViewData["Title"] = "HR - GTLI Nomination Submit Status";
+}
+
+@Html.AntiForgeryToken()
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active" aria-current="page">GTLI Nomination Submit Status </li>
+    </ol>
+
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+<input type="hidden" asp-for="Empno" />
+
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Parent" />
+@*<input readonly type="hidden" asp-for="@Model.FilterDataModel.ExEmpnoStatus" />*@
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.SubmitStatus" />
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>GTLI Nomination Submit Status</p>
+    </div>
+    <div class="d-flex flex-row">
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("GTLINominationFilterGet", "Report", new { Area = "EmpGenInfo" })'
+           data-modaltitle="Filters - Lock Status"
+           data-modalheader="Filters - Lock Status">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="HRGTLINominationStatusDetails"
+           data-url='@Url.Action("ResetFilter", "Report", new { Area = "EmpGenInfo" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("GTLINominationSubmitStatusExcelDownload", "Report", new { Area = "EmpGenInfo" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbGTLINominationStatus" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>Employee</th>
+                    <th>Parent</th>
+                    <th>DOJ</th>
+                    <th>Email</th>
+                    <th>Verified</th>
+                    <th>Date</th>
+                    <th>PRoll-Status</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+        $(document).ready(function () {
+            loadGTLINominationSubmitStatusDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+
+        };
+
+        let vVUloadGTLINominationSubmitStatus = "@Url.Action("GetListsGTLINominationSubmitStatus", "Report")";
+
+        function loadGTLINominationSubmitStatusDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbGTLINominationStatus",
+                pColumns: datatableColumns,
+                pUrl: vVUloadGTLINominationSubmitStatus,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    parent: $('#Parent').val(),
+                    parent: $('#FilterDataModel_Parent').val() ? $('#FilterDataModel_Parent').val() : null,
+                    //exEmpnoStatus: $('#FilterDataModel_ExEmpnoStatus').val() ? $('#FilterDataModel_ExEmpnoStatus').val() : null,
+                    submitStatus: $('#FilterDataModel_SubmitStatus').val() ? $('#FilterDataModel_SubmitStatus').val() : null,
+
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.empno + " - " + data.empName
+                        },
+                    },
+                    { data: "parent" },
+                    { data: "doj" },
+                    { data: "email" },
+                    { data: "hrVerified" },
+                    { data: "hrDate" },
+                    { data: "pRollStatus" },
+                    {
+                        data: null,
+                        className: "td-icon",
+                        render: function (data, type, row) {
+
+                            return ' <button class="btn btn-outline-primary btn-sm border-none sweet-multiple"  ' +
+                                ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-callback="PostSubmitReloadGTLINominationSubmitStatusDataTable"' +
+                                ' data-url="@Url.Action("GTLINominationSubmitStatusEdit", "Report", new { Area = "EmpGenInfo" })" ' +
+                                ' data-id="' + data.empno + '"' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Set the status of Employee Name ' + data.empName + ' " ' +
+                                ' data-confirmationtype="success" data-confirmbuttontext="Confirm" ' +
+                                ' data-confirmbuttonclass="btn-success btn-sm" ' +
+                                ' title="Set GTLI Nomination Status"> ' +
+                                ' <i class="fa fa-edit" aria-hidden="true"></i> ' +
+                                ' </button> ';
+
+                        }
+                    }
+                ];
+
+            </text>
+        };
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadGTLINominationSubmitStatusDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadGTLINominationSubmitStatusDataTable();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadGTLINominationSubmitStatusDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+
+            $("#FilterDataModel_Parent").val(data.parent);
+            //$("#FilterDataModel_ExEmpnoStatus").val(data.exEmpnoStatus);
+            $("#FilterDataModel_SubmitStatus").val(data.submitStatus);
+
+            loadGTLINominationSubmitStatusDataTable();
+            hideLoader();
+        }
+        function PostSubmitReloadGTLINominationSubmitStatusDataTable(data) {
+            if (data.success) {
+                hideLoader();
+                loadGTLINominationSubmitStatusDataTable();
+                notify('success', data.message, 'Success');
+            }
+        }
+    </script>
+}

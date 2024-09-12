@@ -1,0 +1,229 @@
+﻿@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">       
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DigiForm">Digi forms</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Costcode change</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-5">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>@localizer["Costcode change"]</h5>
+                </div>
+                <div class="card-toolbar">
+                    <div role="toolbar">
+                    </div>
+                </div>
+                <div class="card-pill">                                       
+                    @await Html.PartialAsync("_LoaderPartial")
+                    @*------ Human resources tab details ------*@
+                        
+                    <div class="card-deck">
+                        @* <div class="row"> *@
+                        <div class="row col-md-12 col-xl-12">                                                                                                                                      
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferTargetCostCodeHoD))
+                            {
+                                <div class="col-md-3 col-xl-3 pt-2 mt-2">
+                                    <div class="card card-tpl">
+                                        <div class="card-header">
+                                            <h5>Costcode change requests</h5>
+                                            <span class="f-12">0181-040-01</span>
+                                        </div>
+                                        <div class="card-block card-tile">
+                                            <a href="~/DigiForm/HRDigiForm/CostCodeChangeRequestIndex">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 class="mb-2 f-w-300">
+                                                            Request for Costcode change
+                                                        </h7>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-list-alt f-20 text-white theme-light-teal"></i>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }                            
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferTargetCostCodeHoD)
+                            || CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeHR)
+                            || CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeHRHoD))
+                            {
+                                <div class="col-md-3 col-xl-3 pt-2 mt-2">
+                                    <div class="card card-tpl">
+                                        <div class="card-header">
+                                            <h5>Costcode change approvals</h5>
+                                            <span class="f-12">0181-040-01</span>
+                                        </div>
+                                        <div class="card-block card-tile">
+                                            <a href="~/DigiForm/HRDigiForm/CostcodeChangeRequestHODApprovalIndex">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 class="mb-2 f-w-300">
+                                                            Approve costcode change
+                                                        </h7>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-list-alt f-20 text-white theme-light-teal"></i>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }                            
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferTargetCostCodeHoD))
+                            {
+                                <div class="col-md-3 col-xl-3 pt-2 mt-2">
+                                    <div class="card card-tpl">
+                                        <div class="card-header">
+                                            <h5>Temporary employees</h5>
+                                            <span class="f-12">0181-040-01</span>
+                                        </div>
+                                        <div class="card-block card-tile">
+                                            <a href="~/DigiForm/HRDigiForm/TemporaryEmployeesIndex">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 class="mb-2 f-w-300">
+                                                            List of temporary employees
+                                                        </h7>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-list-alt f-20 text-white theme-light-teal"></i>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeHR))
+                            {
+                                <div class="col-md-3 col-xl-3 pt-2 mt-2">
+                                    <div class="card card-tpl">
+                                        <div class="card-header">
+                                            <h5>Site master</h5>
+                                            <span class="f-12">0181-040-01</span>
+                                        </div>
+                                        <div class="card-block card-tile">
+                                            <a href="~/DigiForm/HRDigiForm/SiteMasterIndex">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 class="mb-2 f-w-300">
+                                                            Site master
+                                                        </h7>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-list-alt f-20 text-white theme-light-teal"></i>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeHR) ||
+                                    CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeHRHoD) ||
+                            CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeView))
+                            {
+                                <div class="col-md-3 col-xl-3 pt-2 mt-2">
+                                    <div class="card card-tpl">
+                                        <div class="card-header">
+                                            <h5>HR - Approved requests</h5>
+                                            <span class="f-12">0181-040-01</span>
+                                        </div>
+                                        <div class="card-block card-tile">
+                                            <a href="~/DigiForm/HRDigiForm/HRApprovedApprovalsIndex">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 class="mb-2 f-w-300">
+                                                            HR - list of approved requests
+                                                        </h7>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-list-alt f-20 text-white theme-light-teal"></i>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferTargetCostCodeHoD))
+                            {
+                                <div class="col-md-3 col-xl-3 pt-2 mt-2">
+                                    <div class="card card-tpl">
+                                        <div class="card-header">
+                                            <h5>HoD - Temporary transfers </h5>
+                                            <span class="f-12">0181-040-01</span>
+                                        </div>
+                                        <div class="card-block card-tile">
+                                            <a href="~/DigiForm/HRDigiForm/HodTransferEmployeesIndex">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 class="mb-2 f-w-300">
+                                                            HoD - List of temporary transfers
+                                                        </h7>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-list-alt f-20 text-white theme-light-teal"></i>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeHR) ||
+                                    CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeHRHoD) ||
+                            CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionTransferCostCodeView))
+                            {
+                                <div class="col-md-3 col-xl-3 pt-2 mt-2">
+                                    <div class="card card-tpl">
+                                        <div class="card-header">
+                                            <h5>HR - Temporary transfers</h5>
+                                            <span class="f-12">0181-040-01</span>
+                                        </div>
+                                        <div class="card-block card-tile">
+                                            <a href="~/DigiForm/HRDigiForm/HrTransferEmployeesIndex">
+                                                <div class="row align-items-center justify-content-center stretched-link">
+                                                    <div class="col">
+                                                        <h7 class="mb-2 f-w-300">
+                                                            HR - List of temporary transfers
+                                                        </h7>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-list-alt f-20 text-white theme-light-teal"></i>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>                                
+                    </div>                        
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

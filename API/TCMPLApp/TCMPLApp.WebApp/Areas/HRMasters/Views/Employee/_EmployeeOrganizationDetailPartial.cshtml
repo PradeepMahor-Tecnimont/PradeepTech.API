@@ -1,0 +1,233 @@
+﻿@model TCMPLApp.Domain.Models.HRMasters.EmployeeMasterOrganization
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+            @if (Model.Status == 1)
+            {
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditEmplmast))
+                {
+                    <div class="row">
+                        <a title="Edit employee organization details" class="btn btn-outline-primary btn-sm border-none" href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw50"
+                           data-url='@Url.Action("OrganizationEdit", "Employee", new { Area = "HRMasters" })'
+                           data-statichtmlsourcedivid=""
+                           data-id="@Model.Empno"
+                           data-modaltitle="Edit employee organization details"
+                           data-modalheader="Edit employee organization details">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                    <hr />
+                }
+            }
+            <div class="row">
+                <div class="col-xl-12 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.JobTitleDetailed)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.JobTitleDetailed)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Mngr)</div>
+                        <div class="dd-met">@(Model.Mngr == null ? "-NA-" : Model.Mngr_name + " [ " + Model.Mngr + " ] ")</div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.EmpHod)</div>
+                        <div class="dd-met">@(Model.EmpHod == null ? "-NA-" : Model.Emp_hod_name + " [ " + Model.EmpHod + " ] ")</div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Secretary)</div>
+                        <div class="dd-met">@(Model.Secretary == null ? "-NA-" : Model.SecretaryName + " [ " + Model.Secretary + " ] ")</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Dol)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Dol)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Dor)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Dor)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Location)</div>
+                        <div class="dd-met">@(Model.Location == null ? "-NA-" : Model.Locationdesc + " [ " + Model.Location + "] ")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Sapemp)</div>
+                        <div class="dd-met">@(Model.Sapemp == null ? "-NA-" : Model.Sapemp)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Itno)</div>
+                        <div class="dd-met">@(Model.Itno == null ? "-NA-" : Model.Itno)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ContractEndDate)</div>
+                        <div class="dd-met">@(Model.ContractEndDate == null ? "-NA-" : Model.ContractEndDate)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Subcontract)</div>
+                        <div class="dd-met">@(Model.Subcontract == null ? "-NA-" : Model.Description + " [ " + Model.Subcontract + "] ")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Cid)</div>
+                        <div class="dd-met">@(Model.Cid == null ? "-NA-" : Model.Cid)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Bankcode)</div>
+                        <div class="dd-met">@(Model.Bankcode == null ? "-NA-" : Model.Bankcodedesc + " [ " + Model.Bankcode + "]")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Acctno)</div>
+                        <div class="dd-met">@(Model.Acctno == null ? "-NA-" : Model.Acctno)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Ifscno)</div>
+                        <div class="dd-met">@(Model.Ifscno == null ? "-NA-" : Model.Ifscno)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ReasonId)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.ReasonDesc)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.PlaceDesc)</div>
+                        <div class="dd-met">@(Model.PlaceDesc == null ? "-NA-" : Model.PlaceDesc)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.GraduationDesc)</div>
+                        <div class="dd-met">@(Model.GraduationDesc == null ? "-NA-" : Model.GraduationDesc)</div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.QualificationDesc)</div>
+                        <div class="dd-met">@(Model.QualificationDesc == null ? "-NA-" : Model.QualificationDesc)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.DiplomaYear)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.DiplomaYear)</div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Gradyear)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Gradyear)</div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.PostgraduationYear)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.PostgraduationYear)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Expbefore)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Expbefore)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.QualGroup)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.QualGroup)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Gratutityno)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Gratutityno)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Aadharno)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Aadharno)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Pfno)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Pfno)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Superannuationno)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Superannuationno)</div>
+                    </div>
+                </div>
+                 <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Uanno)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Uanno)</div>
+                    </div>
+                </div>                
+            </div>
+            <div class="row">               
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Pensionno)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Pensionno)</div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-12">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Remarks)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Remarks)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

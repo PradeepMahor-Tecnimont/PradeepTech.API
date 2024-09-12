@@ -1,0 +1,31 @@
+﻿<script type="text/javascript">
+    let vVUloadTSShiftProjectManhoursLogsDataTableList = "@Url.Action("GetListsTSShiftProjectManhoursHours", "Transactions")";
+
+    @if ((bool)@Context.Items["isMobile"] == false)
+    {
+        <text>
+                let datatableTSShiftProjectManhoursLogsColumns = [
+                { data: "yymmFrom" },
+                { data: "projnoFrom" },
+                { data: "projnoTo" },
+                { data: "messageType" },
+                { data: "messageText" },
+                {
+                 data: null,
+                 render: function (data, type, row) {
+                    return '<a class="btn btn-outline-info btn-sm border-none  " ' +
+                            ' href="#" ' +
+                            ' data-jqueryselector="binarydownload" ' +
+                            ' data-url="@Url.Action("TSShiftProjectManhoursExcelDownload", "Transactions", new { Area = "RapReporting" })"' +                            
+                            ' data-id="' + data.logId + '"' +                            
+                            ' > ' +
+                            ' <i class="fas fa-file-excel green-color" aria-hidden="true"></i> ' +
+                            ' </a>'                           
+                },
+                 'className': "td-icon",
+                }
+            ];                    
+
+        </text>
+    }
+</script>

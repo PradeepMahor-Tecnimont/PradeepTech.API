@@ -1,0 +1,162 @@
+﻿@model TCMPLApp.WebApp.Models.FilterDataModel
+
+<form class="form-filter-datetime"
+      id="formReportFilterSet"
+      asp-area="DMS"
+      asp-controller="Reports"
+      asp-action="FilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.IsFiltered" />
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">Filter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Filters setup</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Office" class="control-label"></label>
+                            <select asp-for="Office" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsOfficeList">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Floor" class="control-label"></label>
+                            <select asp-for="Floor" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsFloorList">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Wing" class="control-label"></label>
+                            <select asp-for="Wing" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsWingList">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Grade" class="control-label"></label>
+                            <select asp-for="Grade" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsGradeList">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-xl col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Department" class="control-label"></label>
+                            <select asp-for="Department" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsDepartmentList">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">
+
+                <div class="col-xl col-md-12">
+                <div class="form-group">
+                <label asp-for="Designation" class="control-label"></label>
+                <select asp-for="Designation" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsDesignationList">
+                <option selected></option>
+                </select>
+                </div>
+                </div>
+                </div>*@
+                <div class="row">
+                    <div class="col-xl col-md-12">
+                        <div class="form-group">
+                            <label asp-for="PcModelList" class="control-label"></label>
+                            <select asp-for="PcModelList" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsPcModelList">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl col-md-12">
+                        <div class="form-group">
+                            <label asp-for="MonitorModel" class="control-label"></label>
+                            <select asp-for="MonitorModel" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsMonitorModelList">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="DualMonitor" class="control-label"></label>
+                            <select asp-for="DualMonitor" class="form-control chosen-select" data-placeholder="Please select...">
+                                <option>No</option>
+                                <option value="2">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="VacantDesk" class="control-label"></label>
+                            <select asp-for="VacantDesk" class="form-control chosen-select" data-placeholder="Please select...">
+                                <option selected>No</option>
+                                <option value="1">Yes</option>                           
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @* <div class="row">
+                <div class="col-xl col-md-12">
+                <div class="form-group">
+                <label asp-for="PrinterModel" class="control-label"></label>
+                <select asp-for="PrinterModel" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsPrinterModelList">
+                <option selected></option>
+                </select>
+                </div>
+                </div>
+                </div>
+                <div class="row">
+                <div class="col-xl col-md-12">
+                <div class="form-group">
+                <label asp-for="DocstnModel" class="control-label"></label>
+                <select asp-for="DocstnModel" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DmsDockStationModelList">
+                <option selected></option>
+                </select>
+                </div>
+                </div>
+                </div>*@
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>

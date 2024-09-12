@@ -1,0 +1,170 @@
+﻿@model TCMPLApp.Domain.Models.EmpGenInfo.LoAAddendumConsentDetails
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Addendum to Appointment Letter";
+}
+
+@section styles
+{
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Addendum to Appointment Letter</li>
+    </ol>
+}
+
+<input id="isConsent" type="hidden" asp-for="PAcceptanceStatusVal" />
+<input id="modifiedOn" type="hidden" asp-for="PAcceptanceDate" />
+
+<div class="container-fluid m-auto col-xl-8 p-2">
+    <div class="col-12">
+        <div class="card bg-gray-active border rounded shadow m-auto">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Addendum to Appointment Letter - Circular
+                </h5>
+            </div>
+            <form id="formAppointmentLetter"
+                  asp-area="EmpGenInfo"
+                  asp-controller="EmpGenInfoDetails"
+                  asp-action="AddendumConsentSave">
+
+                <div style="display: none">
+                    <input type="hidden" id="AcceptanceStatusVal" name="AcceptanceStatus" />
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12" style="padding-top:10px;">
+                                    <div class="row justify-content">
+                                        <div class="col-12 scrollbar-cyan" style="max-height:500px!important;position:relative;overflow-y:scroll">
+                                            <p>Dear <b>@ViewBag.EmployeeName (@ViewBag.Empno)</b></p>
+                                            <p>As you are aware, all employees, in addition to the service rules, regulations, and policies of the Company are further governed by the applicable policies and standards and procedure of the Maire Group (&ldquo;the Group&rdquo;), as supplemented/amended or introduced from time to time. This includes, amongst others, the Code of Ethics, Business Integrity Policy, as well as the Group&rsquo;s policy on Market Abuse Regulations.</p>
+                                            <p>Employees may please be aware that the Company is indirectly controlled by Maire Tecnimont S.p.A. (MET), the parent company whose shares are listed and traded on Borsa Italiana, the stock exchange in Milan. Accordingly, your Company is also subject - amongst others - to the mandatory provisions of European Union Regulations no. 596/2014 of the European Parliament and of the Council of 16 April 2014 ("Market Abuse Regulation"). Under the terms thereof, the employees of the Company, amongst others are forbidden to indulge in insider trading of MET shares listed on Borsa Italiana in a way that is influenced by having certain unpublished price sensitive information (UPSI) which is not known to the public at large. By way of an information, a UPSI is any information which is not generally available to the public at large and once published, it might have an effect on the prices of MET shares.</p>
+                                            <p>The Company desires to remind you of all relevant Group policies, rules and regulations that govern your employment with the Company. You are therefore required to carefully study the Group policies and procedures that are provided in the following link which form an integral part of your employment contract.</p>
+                                            <ol>
+                                                <li><a href="https://www.mairetecnimont.com/media/filer_public/ed/1b/ed1b19a0-3f9f-408a-b852-87190403f8af/11_code_of_ethics.pdf" target="_blank">Code of Ethics</a></li>
+                                                <li><a href="https://www.mairetecnimont.com/media/filer_public/ae/20/ae20140e-9f4c-4c1a-a59a-ec26d4fe799c/3_group_met__business_integrity_policy.pdf" target="_blank">Business Integrity Policy</a></li>
+                                                <li><a href="https://www.mairetecnimont.com/media/filer_public/e2/a8/e2a8d412-a46d-449c-8d49-acfa663a369c/9_eng_met_procedure_inside_information_25_january_2018_def.pdf" target="_blank">Policy on Market Abuse Regulations</a></li>
+                                            </ol>
+                                            <p>Employees should also be mindful that if anyone is found to be in breach of the Group policies and procedures, then the same shall be considered a serious breach of your employment contract.</p>
+                                            <p>Against this backdrop, the Company is proposing to introduce certain clauses under the terms of your employment with the Company through an attached addendum to the letter of appointment issued by the Company to the employees.</p>
+                                            <ul>
+                                                <li>
+                                                    <a href="#"
+                                                       name="AddendumtoAppointmentLetter" title="Addendum to Appointment Letter"
+                                                       data-jqueryselector="openmodal"
+                                                       data-modalcontainer="modalcontainer"
+                                                       data-modalpopupwidth="rightw50"
+                                                       data-url="@Url.Action("GetAddendumtoAppointmentLetter", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })"
+                                                       data-modaltitle="Addendum to Appointment Letter"
+                                                       data-modalheader="Addendum to Appointment Letter">Addendum to Appointment Letter</a>
+                                                </li>
+                                            </ul>
+                                            <p>Once you have read the addendum to the appointment letter and the Group policies provided in the weblink above, we kindly request you to acknowledge the same by clicking the &ldquo;accept&rdquo; option provided for in the link at the earliest.</p>
+                                            <p>Please note that in the event we do not receive your acknowledgement to the addendum to the Appointment Letter by [21st date from the date the email is initiated], you shall be deemed to have acknowledged your adherence to the same. </p>
+
+                                            <br />
+                                            @* @if (Model.PAcceptanceStatusVal == 0)
+                                            {
+                                            <input type="checkbox" id="chkConsent" />
+                                            <label class="cr" style="top: 0px;"></label>
+                                            <span style="color:#0047ab; font-size:1rem;font-weight:bold;">I Accept this term & condition</span>
+                                            }
+                                            *@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer" style="padding-bottom:0px">
+                                @if (Model.PAcceptanceStatusVal == 1)
+                                {
+                                    <div class="row justify-content-center p-t-5 p-b-5 text-green" style="font-weight: bold;">
+                                        @Html.Raw(@Model.PAcceptanceText)
+                                    </div>
+                                }
+                                else if (Model.PAcceptanceStatusVal == 2)
+                                {
+                                    <div class="row justify-content-center p-t-5 p-b-5 text-danger" style="font-weight: bold;">
+                                        @Html.Raw(@Model.PAcceptanceText)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary" type="button" id="btnconfirmPopUp" style=""
+                                            name="AddendumtoAppointmentLetter" title="Addendum to Appointment Letter"
+                                            data-jqueryselector="openmodal"
+                                            data-modalcontainer="modalcontainer"
+                                            data-modalpopupwidth="rightw50"
+                                            data-url="@Url.Action("GetAddendumtoAppointmentLetter", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })"
+                                            data-modaltitle="Addendum to Appointment Letter"
+                                            data-modalheader="Addendum to Appointment Letter">
+                                        Click here to Accept
+                                    </button>
+
+                                    <a class="btn btn-secondary" asp-controller="Home" asp-action="Index" title="@localizer["Cancel"]">
+                                        @localizer["Cancel"]
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {
+
+            $('#chkConsent').on('click', function () {
+                if ($("#chkConsent").is(':checked')) {
+
+                    $("#AcceptanceStatusVal").val('1');
+                    $('#btnconfirm').attr('disabled', false);
+                    $('#btnconfirm').css("cursor", "");
+                }
+                else {
+                    $("#AcceptanceStatusVal").val('0');
+                    $('#btnconfirm').attr('disabled', true);
+                    $('#btnconfirm').css("cursor", "not-allowed");
+                }
+
+            });
+            $("#btnconfirm").on("click", function () {
+
+                let vbtn = $("#btnconfirm");
+                vbtn.prop("disabled", true);
+                vbtn.html(vbtn.data('loading-text'));
+                showLoader();
+                if ($("#AcceptanceStatusVal").val() == '1') {
+                    $("#formAppointmentLetter").submit();
+                }
+
+
+            });
+
+        };
+    </script>
+}

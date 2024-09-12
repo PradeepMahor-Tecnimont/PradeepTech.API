@@ -1,0 +1,116 @@
+﻿@model TCMPLApp.WebApp.Models.JobResponsibleApproversEditViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+
+<form asp-controller="JobResponsibleApprovers"
+      asp-action="ResponsibleApproversEdit"
+      data-ajax="true"      
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="onSuccessTab('responsible-approvers');"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Projno)
+    @Html.HiddenFor(m => m.EmpnoR01)
+    @Html.HiddenFor(m => m.EmpnoR05RequiredAttribute)
+    @Html.HiddenFor(m => m.EmpnoR06RequiredAttribute)
+    @Html.HiddenFor(m => m.EmpnoR07RequiredAttribute)
+    @Html.HiddenFor(m => m.EmpnoR08RequiredAttribute)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Update responsible</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Update responsible"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="EmpnoNameR01" class="control-label"></label>
+                            <input asp-for="EmpnoNameR01" class="form-control" readonly required />
+                            <span asp-validation-for="EmpnoR01" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EmpnoR02" class="control-label"></label>
+                            <select asp-for="EmpnoR02" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmpnoR02" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="EmpnoR02" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="EmpnoR03" class="control-label"></label>
+                            <select asp-for="EmpnoR03" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmpnoR03">
+                                <option selected></option>
+                            </select>                            
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EmpnoR04" class="control-label"></label>
+                            <select asp-for="EmpnoR04" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmpnoR04">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="EmpnoR05" class="control-label"></label>
+                            <select asp-for="EmpnoR05" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmpnoR05">
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="EmpnoR05" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EmpnoR06" class="control-label"></label>
+                            <select asp-for="EmpnoR06" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmpnoR06">
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="EmpnoR06" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="EmpnoR07" class="control-label"></label>
+                            <select asp-for="EmpnoR07" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmpnoR07">
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="EmpnoR07" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EmpnoR08" class="control-label"></label>
+                            <select asp-for="EmpnoR08" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.EmpnoR08">
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="EmpnoR08" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+

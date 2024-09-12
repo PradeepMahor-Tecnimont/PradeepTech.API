@@ -1,0 +1,178 @@
+﻿@model TCMPLApp.WebApp.Models.OFBResetApprovalsViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Initiate Off-Boarding";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="OFBIndex" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Reset Approvals</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Off-Boarding Reset Approvals</p>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbOFBResetApprovals" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.Empno)</th>
+                    <th>@Html.DisplayNameFor(m => m.EmpName)</th>
+                    <th>@Html.DisplayNameFor(m => m.Parent)</th>
+                    <th>@Html.DisplayNameFor(m => m.ParentName)</th>
+                    <th>@Html.DisplayNameFor(m => m.Grade)</th>
+                    <th>@Html.DisplayNameFor(m => m.RelievingDate)</th>
+                    <th>@Html.DisplayNameFor(m => m.InitiatorRemarks)</th>
+                    <th>@Html.DisplayNameFor(m => m.ApprovalStatus)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_OFBDetailsDataTableColumnsPartial");
+
+    }
+    <script src="~/js/OFBDetails.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            loadOFBResetApprovalsDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let pvvUrlOFBResetApprovalsList = '@Url.Action("GetListsOFBResetApprovals", "OFB")';
+
+        function loadOFBResetApprovalsDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbOFBResetApprovals",
+                pColumns: datatableColumnsOFBResetApprovals,
+                pUrl: pvvUrlOFBResetApprovalsList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+
+            });
+        }
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumnsOFBResetApprovals = [
+                    { 'data': "empno" },
+                    { 'data': "empName" },
+                    { 'data': "parent" },
+                    { 'data': "parentName" },
+                    { 'data': "grade" },
+                    {
+                        'data': "relievingDate",
+                        'render': function (data) {
+                            return moment(data).format('DD-MMM-YYYY');
+                        }
+                    },
+                    { 'data': "initiatorRemarks" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var approvalStatus = data.approvalStatus;
+                            if (data.isRollbackInitiated == "OK") {
+                                approvalStatus = "Rollback initiated";
+                            }
+                            return '<button name="ApprovalStatus" id="idApprovalStatus" title ="Approval Status" class="btn btn-link btn-sm border-none p-0" href ="#" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-url="@Url.Action("GetAllApprovals", "OFB", new { Area = "OffBoarding" })" ' +
+                                ' data-id="' + data.empno + '"' +
+                                ' data-empname="' + data.employeeName + '"' +
+                                ' data-parent="' + data.parent + '"' +
+                                ' data-deptname="' + data.deptName + '"' +
+                                ' data-relivevingdate="' + data.relievingDate + '"' +
+                                ' data-modaltitle="Approval Details" ' +
+                                ' data-callback="loadApprovalsList" ' +
+                                ' data-modalheader="Approval Details"> ' + approvalStatus + '</button>';
+                        },
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button title="Reset" class="btn btn-outline-primary btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("ResetApproval", "OFB", new { Area = "OffBoarding" })"' +
+                                ' data-id="' + data.empno +  '" ' +
+                                ' data-actionid="' + data.actionId + '" ' +
+                                ' data-PostResetReLoadDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to Reset Approval of ' + data.empno + ' - ' + data.employeeName +  ' " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Reset OFB Approval" ' +
+                                ' data-confirmbuttontext="Reset OFB Approval" > ' +
+                                ' <i class="fas fa-arrow-circle-left" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        },
+                        className: "td-icon",
+                    }
+                ];
+
+            </text>
+        }
+
+            $("#GenericSearch").keypress(function (event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearch").length) {
+                        loadOFBResetApprovalsDataTable();
+                    }
+                }
+            });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadOFBResetApprovalsDataTable();
+            }
+        });
+        function PostResetReLoadDataTables(data) {
+            if (data.success) {
+                loadOFBResetApprovalsDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+        function PostSave(data) {
+            if (data.success) {
+                loadOFBResetApprovalsDataTable();
+                hideLoader();
+                $("#modalcontainer").modal('hide');
+                notify('success', data.message, 'Success');
+            }
+        };
+    </script>
+}

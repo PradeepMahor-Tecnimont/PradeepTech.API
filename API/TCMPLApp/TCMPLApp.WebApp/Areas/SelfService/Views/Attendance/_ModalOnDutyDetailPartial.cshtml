@@ -1,0 +1,129 @@
+﻿@model TCMPLApp.WebApp.Models.OnDutyDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="modal-header">
+    <h5 class="modal-title">@localizer["On duty application"]</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["On duty application"]</h5>
+        </div>
+        <div class="card-block">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.EmpName)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.EmpName)</div>
+                    </div>
+
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.ApplicationId)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.ApplicationId)</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.OnDutyType) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.OnDutyType)</div>
+                    </div>
+
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.OnDutySubType) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.OnDutySubType)</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.StartDate) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.StartDate)</div>
+                    </div>
+
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.EndDate) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.EndDate)</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.StartTime) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.StartTime)</div>
+                    </div>
+
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.EndTime) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.EndTime)</div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Reason) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Reason)</div>
+                    </div>
+
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met"></div>
+                        <div class="dd-met"></div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-12 col-xl-6">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LeadName) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.LeadName)</div>
+                    </div>
+                    <div class="col-md-12 col-xl-6">
+
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.LeadApproval) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.LeadApproval)</div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-mb-6 col-xl-6">
+
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.HodApproval) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.HodApproval)</div>
+
+                    </div>
+                    <div class="col-mb-6 col-xl-6">
+
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.HRApproval) </div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.HRApproval)</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+</div>

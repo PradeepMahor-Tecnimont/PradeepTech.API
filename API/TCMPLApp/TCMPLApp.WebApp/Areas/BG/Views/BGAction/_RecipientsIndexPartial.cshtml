@@ -1,0 +1,20 @@
+﻿@model TCMPLApp.WebApp.Models.BGRecipientsDataTableListViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<div class="card">
+    <div class="vertical-space-5"></div>    
+    <div id="idRecipientsIndex" class="table-responsive p-r-10">
+        <table id="dataTableRecipients" class="table table-striped table-bordered table-responsive-lg">
+            <thead class="bg-info text-white">
+                <tr>                    
+                    <th>@localizer[Html.DisplayNameFor(model => model.Grpname)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Empno)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Name)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Email)]</th>                    
+                </tr>
+            </thead>
+        </table>                    
+    </div>
+</div>

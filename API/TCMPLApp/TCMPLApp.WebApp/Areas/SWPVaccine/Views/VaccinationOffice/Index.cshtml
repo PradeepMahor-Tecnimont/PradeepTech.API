@@ -1,0 +1,91 @@
+﻿@model TCMPLApp.WebApp.Models.VaccinationOfficeCreateViewModel
+
+@{
+    ViewData["Title"] = "TCMPL Vaccination Drive";
+}
+<div class="container col-xl-5 col-md-8">
+    <div class="card bg-light mb-4 shadow-3">
+        <div class="card-header app-h4 app-card-header">
+            TCMPL Vaccination Drive - Registration
+        </div>
+        <div class="card-body">
+
+            <div class="row mb-2 border-bottom border-1">
+                <div class="col-6 ">
+                    <label class="control-label required" asp-for="JabNumber"></label>
+                </div>
+                <div class="col-6 text-info font-weight-bold">
+                    @Html.DisplayFor(m => m.JabNumber)
+                </div>
+            </div>
+            <div class="row mb-2 border-bottom border-1">
+                <div class="col-6 ">
+                    <label class="control-label required" asp-for="CowinRegistered"></label>
+                </div>
+                <div class="col-6 text-info font-weight-bold">
+                    @( (bool)Model.CowinRegistered ? "Yes" : "No" )
+                </div>
+            </div>
+            <div class="row mb-2 border-bottom border-1">
+                <div class="col-6 ">
+                    <label>Mobile No (Regtrd on Cowin APP / Primary)</label>
+                </div>
+                <div class="col-6 mb-2 text-info font-weight-bold">
+                    @Html.DisplayFor(m => m.CowinRegisteredMobile)
+                </div>
+            </div>
+
+
+            <div class="row mb-2 border-bottom border-1">
+                <div class="col-6 ">
+                    <label class="control-label" asp-for="CompanyBus"></label>
+                </div>
+                <div class="col-6 mb-2 text-info font-weight-bold">
+                    @( (bool)Model.CompanyBus ? "Office Bus" : "Own Arrangements" )
+                </div>
+            </div>
+            @if ((bool)Model.CompanyBus)
+            {
+                <div id="idCompanyBusRoute" class="row mb-2 border-bottom border-1 ">
+                    <div class="col-6 ">
+                        <label class="control-label" asp-for="CompanyBusRoute"></label>
+                    </div>
+                    <div class="col-6 mb-2 text-info font-weight-bold font-weight-bold">
+                        @Html.DisplayFor(m => m.CompanyBusRoute)
+
+                    </div>
+                </div>
+            }
+
+            <div class="row mb-2 border-bottom border-1">
+                <div class="col-6 ">
+                    <label class="control-label" asp-for="IsAttendingForJab"></label>
+                </div>
+                <div class="col-6 text-info font-weight-bold">
+                    @( (bool)Model.IsAttendingForJab ? "Yes" : "No" )
+                </div>
+            </div>
+            @if ((bool)Model.IsAttendingForJab == false)
+            {
+                <div id="idReasonForNotAttendingJab" class="row mb-2 border-bottom border-1 ">
+
+                    <div class="col-6 ">
+                        <label class="control-label" asp-for="ReasonForNotAttendingJab"></label>
+                    </div>
+                    <div class="col-6 text-info font-weight-bold">
+                        @Html.DisplayFor(m => m.ReasonForNotAttendingJab)
+                    </div>
+                </div>
+            }
+            <div class="row mb-2 border-bottom border-1">
+                <div class="col-6 ">
+                    <label class="control-label" >Note</label>
+                </div>
+                <div class="col-6 text-danger font-weight-bold">
+                    Your Vaccination schedule, Transport mode (if opted for office bus) shall be intimated to you shortly.
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

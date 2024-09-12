@@ -1,0 +1,424 @@
+﻿@model TCMPLApp.WebApp.Areas.RapReporting.RapViewModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Transactions Home Page";
+    const string actionName = "Index";
+    const string controllerName = "Home";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Manage</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid.table td, #tbGrid.table th {
+            padding: 0.2rem !important;
+        }
+    </style>
+}
+
+<input id="Yyyy" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyy" />
+<input id="YearMode" readonly type="hidden" asp-for="@Model.FilterDataModel.YearMode" />
+<input id="Yyyymm" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+<input id="CostCode" readonly type="hidden" asp-for="@Model.FilterDataModel.CostCode" />
+<input id="Projno" readonly type="hidden" asp-for="@Model.FilterDataModel.Projno" />
+
+<div class="card-toolbar p-l-15">
+    <div role="toolbar">
+        <button id="filterGet" type="button" class="btn btn-secondary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("FilterGet", "Home", new { Area = "RapReporting" })'
+                data-modaltitle="Filter"
+                data-modalheader="Filter">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyy))
+            {
+                @Html.Raw(localizer["Year : "] + Model.FilterDataModel.Yyyy)
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.YearMode))
+            {
+                @Html.Raw(localizer[", Year mode : "] + (Model.FilterDataModel.YearMode == "A" ? "April - March" : "January - December"))
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.Yyyymm))
+            {
+                @Html.Raw(localizer[", Year month : "] + (Model.FilterDataModel.Yyyymm.Substring(4, 2) == "01" ? "Jan " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "02" ? "Feb " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "03" ? "Mar " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "04" ? "Apr " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "05" ? "May " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "06" ? "Jun " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "07" ? "Jul " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "08" ? "Aug " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "09" ? "Sep " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "10" ? "Oct " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : Model.FilterDataModel.Yyyymm.Substring(4, 2) == "11" ? "Nov " + Model.FilterDataModel.Yyyymm.Substring(0, 4)
+                         : "Dec " + Model.FilterDataModel.Yyyymm.Substring(0, 4)))
+                ;
+            }
+
+        </button>
+        <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-20 divSitemap">
+            <a class="btn btn-secondary btn-sm border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ShowSitemap", "Home", new { Area = "RapReporting" })'
+               data-modaltitle="Sitemap"
+               data-modalheader="Sitemap"
+               title="Sitemap">
+                <i class="fas fa-sitemap"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="m-2"></div>
+<a asp-action="Index" id="RapHomePage" asp-controller="Home" asp-area="RapReporting" class="hidden">Rap Reporting</a>
+@*CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionCostCodeEdit) ||
+CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionHoDFormsEdit) ||
+CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoMastersEdit) ||*@
+
+@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionProcoTrans))
+{
+
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Download Report</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a id="lEmplMhrsNotPosted" href="#"
+                           data-inprogress="0"
+                           data-jqueryselector="generatereport"
+                           data-url="@Url.Action("Empl_mhrs_not_posted", "Reports", new
+                            {
+                                Area = "RapReporting",
+                                yymm = @Model.FilterDataModel.Yyyymm
+                            })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 id="lEmplMhrsNotPosted_Text" class="mb-2 f-w-300">List of Manhours not posted.</h7>
+                                    <div class="text-center">
+                                        <div id="lEmplMhrsNotPosted_Loader" class="spinner-border text-info text-center hidden "
+                                             style="width: 2.5rem; height: 2.5rem;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    &#160;
+                                </div>
+                                <div id="lEmplMhrsNotPosted_Icon" class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Update Employee Count (Script)</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                           onclick="showDeleteConfirmationPopup(event,this);"
+                           data-url="@Url.Action("UpdateEmployee", "Transactions", new { Area = "RapReporting" })"
+                           data-postsavereloaddatatable="OK"
+                           data-yymm="@Model.FilterDataModel.Yyyymm"
+                           data-modaltitle="Please Confirm!"
+                           data-confirmationtext="Are you sure you want to update employee ?"
+                           data-confirmationtype="warning"
+                           data-confirmbuttontext="Update employee">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"> </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>
+                            Shifting manhours
+                        </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("TSShiftProjectManHoursIndex", "Transactions", new
+                            { Area = "RapReporting",
+                              yyyymm = @Model.FilterDataModel.Yyyymm
+                            })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Shifting manhours booked and posted in previous months from one Job to other</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (ViewBag.MsgType == "OK")
+            {
+                <div class="col-md-4 col-xl-3 hidden">
+                    <div class="card card-tpl">
+                        <div class="card-header">
+                            <h5>Repost and Move Month</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="#"
+                               onclick="showDeleteConfirmationPopup(event,this);"
+                               data-url="@Url.Action("RepostAndUpdateProcessingMonth", "Transactions", new { Area = "RapReporting" })"
+                               data-postsavereloaddatatable="OK"
+                               data-yymm="@Model.FilterDataModel.Yyyymm"
+                               data-modaltitle="Please Confirm!"
+                               data-confirmationtext="Are you sure you want to mark current month as Posted and proceed to next month ?"
+                               data-confirmationtype="warning"
+                               data-confirmbuttontext="Move Month">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300"> Proceed to next month. You can not revert it once done.</h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-4 col-xl-3 hidden" style="cursor:not-allowed!important">
+                    <div class="card   border  rounded-sm  theme-dark-grey ">
+                        <div class="card-header">
+                            <h5>Repost and Move Month</h5>
+                        </div>
+                        <div class="card-block card-tile">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300 "> @ViewBag.MsgText</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Timesheet Posted Hours </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("TimesheetPostedHoursIndex", "Transactions", new { Area = "RapReporting" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">Timesheet Posted Hours </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionRAPAdmin))
+            {
+                @if (ViewBag.MsgType == "OK")
+                {
+                    <div class="col-md-4 col-xl-3 hidden">
+                        <div class="card card-tpl">
+                            <div class="card-header">
+                                <h5>Lock Repost and Move Month</h5>
+                            </div>
+                            <div class="card-block card-tile">
+                                <a href="#"
+                                   onclick="showDeleteConfirmationPopup(event,this);"
+                                   data-url="@Url.Action("LockRepostAndUpdateProcessingMonth", "Transactions", new { Area = "RapReporting" })"
+                                   data-postsavereloaddatatable="OK"
+                                   data-yymm="@Model.FilterDataModel.Yyyymm"
+                                   data-modaltitle="Please Confirm!"
+                                   data-confirmationtext="Are you sure you want to Force-Lock Repost and Move Month ?"
+                                   data-confirmationtype="warning"
+                                   data-confirmbuttontext="Force-Lock Repost">
+                                    <div class="row align-items-center justify-content-center stretched-link">
+                                        <div class="col">
+                                            <h7 class="mb-2 f-w-300"> Force-Lock Repost and Move Month</h7>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-cogs f-20 text-white theme-red"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-4 col-xl-3 hidden">
+                        <div class="card card-tpl">
+                            <div class="card-header">
+                                <h5>Unlock Repost and Move Month</h5>
+                            </div>
+                            <div class="card-block card-tile">
+                                <a href="#"
+                                   onclick="showDeleteConfirmationPopup(event,this);"
+                                   data-url="@Url.Action("UnLockRepostAndUpdateProcessingMonth", "Transactions", new { Area = "RapReporting" })"
+                                   data-postsavereloaddatatable="OK"
+                                   data-yymm="@Model.FilterDataModel.Yyyymm"
+                                   data-modaltitle="Please Confirm!"
+                                   data-confirmationtext="Are you sure you want to Force-Unlock Repost and Move Month ?"
+                                   data-confirmationtype="warning"
+                                   data-confirmbuttontext="Force-Unlock Repost ">
+                                    <div class="row align-items-center justify-content-center stretched-link">
+                                        <div class="col">
+                                            <h7 class="mb-2 f-w-300"> Force-Unlock Repost and Move Month</h7>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-cogs f-20 text-white theme-green"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+
+    </div>
+}
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/site-rap.js" asp-append-version="true"></script>
+    <script>
+
+        $(document).ready(function () {
+
+
+
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#YearMode').val() == null || $('#YearMode').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                $("#filterGet").click();
+            }
+        });
+
+        function localScript() {
+            initSelect2();
+
+            var yearMonthListUrl = "@Url.Action("GetYearMonthList", "Home", new { Area = "RapReporting" })";
+            callRapReportingFilterListeners(yearMonthListUrl);
+
+            if ($('#Yyyy').val() == null || $('#Yyyy').val() == '' ||
+                $('#YearMode').val() == null || $('#YearMode').val() == '' ||
+                $('#Yyyymm').val() == null || $('#Yyyymm').val() == '') {
+                hideFilterCancelButton('HIDE');
+            }
+            else {
+                hideFilterCancelButton('SHOW');
+            }
+
+            var cancelButtonRedirectUrl = "@Url.Action("RedirectPage", "Home", new
+            {
+                Area = "RapReporting",
+                actionName = @actionName,
+                controllerName = @controllerName
+            })";
+            callCancelButtonListeners(cancelButtonRedirectUrl);
+
+            callFilterDefaultsListeners();
+
+            $("#Costcode").change(function () {
+
+                var costcode = $(this).val();
+
+                if (costcode == '') {
+                    return;
+                }
+                $.ajax({
+                    url: '@Url.Action("GetNumberOfEmployeeFromAPI", "Transactions")',
+                    data: {
+                        'costcode': costcode
+                    },
+                    type: 'GET',
+                    beforeSend: function () {
+                        showLoader();
+                        $("#btnconfirm").hide();
+                    },
+                    success: function (data, status, xhr, response) {
+                        var disposition = xhr.getResponseHeader('Content-Disposition');
+                        var items = [];
+                        var arreObj = data.data.value;
+                        if (data.status == "OK") {
+
+                            $("#noofemps").val(arreObj[0].noofemps);
+                            $("#Noofemps").val(arreObj[0].noofemps);
+                            $("#Changednemps").val(arreObj[0].changednemps);
+
+                            $("#btnconfirm").show();
+                        }
+                        else {
+                            toastr.error(data.status + " - " + data.messageCode);
+                        }
+
+                        hideLoader();
+                    },
+                    error: function (result) {
+                        hideLoader();
+                        errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                        notify("error", errorText, 'Error');
+                    }
+                });
+            });
+
+
+        }
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+                // var link = document.createElement('a');
+                // link.href = $("#RapHomePage").attr("href");
+                // link.click();
+
+
+
+            }
+        }
+
+    </script>
+}

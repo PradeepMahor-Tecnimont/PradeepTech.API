@@ -1,0 +1,179 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.EmployeeCreateViewMainModel
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Employee"
+      asp-action="EmployeeCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onDataTableReloadSuccess;PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">New employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            @*<div class="card-header">
+                    <h5>Create</h5>
+                </div>*@
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Empno" class="control-label"></label>
+                            <input asp-for="Empno" class="form-control" placeholder="Employee no" required />
+                            <span asp-validation-for="Empno" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Abbr" class="control-label"></label>
+                            <input asp-for="Abbr" class="form-control" placeholder="Abbrivation" required />
+                            <span asp-validation-for="Abbr" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Emptype" class="control-label"></label>
+                            <select asp-for="Emptype" class="form-control Select2 " asp-items="ViewBag.EmptypeList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Emptype" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Office" class="control-label"></label>
+                            <select asp-for="Office" class="form-control Select2" asp-items="ViewBag.OfficeList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Office" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Lastname" class="control-label"></label>
+                            <input asp-for="Lastname" class="form-control" placeholder="Last name" required />
+                            <span asp-validation-for="Lastname" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Firstname" class="control-label"></label>
+                            <input asp-for="Firstname" class="form-control" placeholder="First name" required />
+                            <span asp-validation-for="Firstname" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Middlename" class="control-label"></label>
+                            <input asp-for="Middlename" class="form-control" placeholder="Middle name"  />
+                            <span asp-validation-for="Middlename" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" placeholder="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Personid" class="control-label"></label>
+                            <input asp-for="Personid" class="form-control" placeholder="Group person id" required />
+                            <span asp-validation-for="Personid" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Metaid" class="control-label"></label>
+                            <input asp-for="Metaid" class="form-control" placeholder="Meta id" required />
+                            <span asp-validation-for="Metaid" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Parent" class="control-label"></label>
+                            <select asp-for="Parent" class="form-control Select2" asp-items="ViewBag.CostcenterList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Parent" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Grade" class="control-label"></label>
+                            <select asp-for="Grade" class="form-control Select2" asp-items="ViewBag.GradeList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Grade" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <label asp-for="Desgcode" class="control-label"></label>
+                            <select asp-for="Desgcode" class="form-control Select2" asp-items="ViewBag.DesgList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Desgcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="DoB" class="control-label"></label>
+                            <input asp-for="DoB" class="form-control" type="date" placeholder="dd-mm-yyyy" required />
+                            <span asp-validation-for="DoB" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="DoJ" class="control-label"></label>
+                            <input asp-for="DoJ" class="form-control" type="date" placeholder="dd-mm-yyyy" required />
+                            <span asp-validation-for="DoJ" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Category" class="control-label"></label>
+                            <select asp-for="Category" class="form-control Select2" asp-items="ViewBag.CategoryList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Sex" class="control-label"></label>
+                            <select asp-for="Sex" class="form-control Select2" asp-items="ViewBag.GenderList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Sex" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Married" class="control-label"></label>
+                            <select asp-for="Married" class="form-control Select2" asp-items="ViewBag.MarriedList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Married" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Company" class="control-label"></label>
+                            <select asp-for="Company" class="form-control Select2" asp-items="ViewBag.CompanyList" required>
+                                <option value="" hidden disabled selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Company" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>

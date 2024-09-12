@@ -1,0 +1,169 @@
+﻿@model TCMPLApp.WebApp.Models.RolesViewModel
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="CoreSettings">Core Settings</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="UserAccess" asp-area="CoreSettings">User Access</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Roles</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Roles</p>
+    </div>
+    <div class="d-flex flex-row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.CoreSettings.CoreSettingsHelper.ActionEditUserAccess))
+        {
+            <a title="New Role" class="btn btn-outline-primary btn-sm border border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("RolesCreate", "UserAccess", new { Area = "CoreSettings" })'
+               data-statichtmlsourcedivid=""
+               data-modaltitle="New Role"
+               data-modalheader="New Role">
+                <i class="fas fa-plus"></i> Create
+            </a>
+        }
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+
+                    <th>Role Id</th>
+                    <th>Role Name</th>
+                    <th>Role Description</th>
+                    <th>Role Flag</th>
+                    <th>Role IsActive</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadRoleDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let vUrlRolesList = "@Url.Action("GetListsRoles", "UserAccess")";
+        let canEdit = @(CurrentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.CoreSettings.CoreSettingsHelper.ActionEditUserAccess) ? "true" : "false");
+
+        function loadRoleDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbGrid",
+                pColumns: datatableColumns,
+                pUrl: vUrlRolesList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+
+            <text>
+
+                let datatableColumns = [
+                    { 'data': "roleId" },
+                    { 'data': "roleName" },
+                    { 'data': "roleDesc" },
+                    { 'data': "roleFlag" },
+                    { 'data': "roleIsActive" },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+                            if (canEdit == true) {
+                            if (data.deleteAllowed == 0) {
+                                return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                            ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                            ' data-jqueryselector = "showconfirmationmodal" ' +
+                            ' data-url="@Url.Action("RolesDelete", "UserAccess", new { Area = "CoreSettings" })"' +
+                            ' data-id="' + data.roleId + '"' +
+                            ' data-PostDeleteReLoadDataTables="OK" ' +
+                            ' data-modaltitle="Please Confirm!" ' +
+                            ' data-confirmationtext="Do you want to delete Role (' + data.roleName + ' - ' + data.roleDesc + ') ?" ' +
+                            ' data-confirmationtype="warning" ' +
+                            ' title="Delete Role" ' +
+                            ' data-confirmbuttontext="Delete Role" > ' +
+                                    ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                    ' </button>';
+                            } else {
+                                return '';
+                            }
+                            } else {
+                                return '';
+                            }
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                ];
+            </text>
+        };
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadRoleDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                loadRoleDataTable();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadRoleDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadRoleDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        };
+    </script>
+}

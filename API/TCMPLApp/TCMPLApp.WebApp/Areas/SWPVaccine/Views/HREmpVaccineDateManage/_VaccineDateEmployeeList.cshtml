@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.SWPVaccine.SwpVuEmpVaccineDate>
+
+<div class="  bg-gray-active border rounded p-2 m-2 shadow ">
+    <table id="empVaccineDateTab" class="table table-striped table-bordered  table-responsive-lg " style="width:100%;">
+        <thead class="bg-info text-white">
+            <tr>
+                <th>Empno</th>
+                <th>Name</th>
+                <th>Parent</th>
+                <th>Grade</th>
+                <th>Vaccine Type</th>
+                <th>First Jab</th>
+                <th>First Jab Sponsor</th>
+                <th>Second Jab</th>
+                <th>Second Jab Sponsor</th>
+                <th>BoosterJab</th>
+                <th>Edit</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var empVaccineDate in Model)
+            {
+                <tr>
+                    <td>@empVaccineDate.Empno</td>
+                    <td>@empVaccineDate.Name</td>
+                    <td>@empVaccineDate.Parent</td>
+                    <td>@empVaccineDate.Grade </td>
+                    <td>@empVaccineDate.VaccineType </td>
+                    <td>@(empVaccineDate.Jab1Date.ToString("dd-MMM-yyyy") )</td>
+                    <td>@empVaccineDate.FirstJabSponsor </td>
+                    <td>@(empVaccineDate.Jab2Date?.ToString("dd-MMM-yyyy"))</td>
+                    <td>@empVaccineDate.SecondJabSponsor </td>
+                    <td>@(empVaccineDate.BoosterJabDate?.ToString("dd-MMM-yyyy")) </td>
+                    <td style="text-align:center">
+                        @if (empVaccineDate.CanEdit == "OK")
+                        {
+                        <button class="btn btn-outline-primary btn-sm border-none"
+                                data-jqueryselector="openmodal"
+                                data-modalcontainer="modalcontainer"
+                                data-url="@Url.Action("EditEmpVaccineDetails", "HREmpVaccineDateManage", new { Area = "SWPVaccine" })"
+                                data-modalpopupwidth="rightw35"
+                                data-empno="@empVaccineDate.Empno"
+                                data-modaltitle="Edit vaccine details"
+                                data-modalheader="Edit vaccine details">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
+                        </button>
+                        }
+                    </td>
+                    <td style="text-align:center">
+
+
+                        <button class="btn btn-sm btn-outline-danger " id="idRemoveEntry"
+                                data-url="@Url.Action( "DeleteEmpVaccineDates","HREmpVaccineDateManage")"
+                                data-empno="@empVaccineDate.Empno"
+                                data-confirmationtext="Remove Vaccine details of - @(empVaccineDate.Empno + " - " + empVaccineDate.Name)?">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="result"></div>
+</div>

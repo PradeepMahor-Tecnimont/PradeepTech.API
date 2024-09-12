@@ -1,0 +1,277 @@
+﻿@model TCMPLApp.WebApp.Models.MovementsCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = @localizer["Edit bulk employee / taskforce movement request"];
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Movements" asp-area="DMS">Movements</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<form asp-controller="Movements" asp-action="Edit" id="formMovementEdit">
+
+    <div style="display:none">
+        <input class="hidden" id="SessionId" name="SessionId" value="@ViewData["SessionId"]">
+    </div>    
+ 
+    <div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Movement request no"] - [ @ViewData["SessionId"] ]</h5>
+                <span class="p-l-50">&nbsp;</span>
+                @*@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITAdm))
+                {*@
+                    <button class="btn btn-sm btn-primary f-w-600 m-r-30 pull-right btn-glow-blink"
+                        onclick="showDeleteConfirmationPopup(event,this);"
+                        data-jqueryselector="showconfirmationmodal"
+                        data-url='@Url.Action("MovementApprove", "Movements", new { Area = "DMS" })'
+                        data-id="@ViewBag.SessionId"
+                        data-redirecturl="@Url.Action("Index", "Movements", new { Area = "DMS" })"
+                        data-modaltitle="Please Confirm!"
+                        data-confirmationtext="@("Do you want to approve request no. " + @ViewBag.SessionId + " ?")"
+                        data-confirmationtype="warning"
+                        data-confirmbuttontext="Approve movements"
+                        title="Approve movements">
+                        <i class="fas fa-thumbs-up" aria-hidden="true"></i> &nbsp;
+                        @localizer["Approve"]
+                    </button>
+                @*}*@
+            </div>
+            <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                @*$("#sourceDeskIndexPartial").load('@Url.Action("SourceDeskIndex", "Movements")?id=' + $("#SessionId").val());*@
+
+                <li class="nav-item">
+                    <!--<a class="nav-link active" id="tab-deskselection-tab" data-toggle="pill" href="#tab-deskselection" role="tab" aria-controls="tab-deskselection" aria-selected="true">@localizer["Desk selection"]</a>-->
+                    <a class="nav-link active" id="tab-deskselection-tab" data-toggle="pill" href="#tab-deskselection" role="tab" aria-controls="tab-deskselection" aria-selected="true"
+                       data-url="@Url.Action("SourceDeskIndex", "Movements", new { Area = "DMS" })"
+                       data-id="@Model.Sid"
+                       data-divid="sourceDeskIndexPartial"
+                       data-area="DMS"
+                       data-controller="Movements"
+                       data-action="SourceDeskIndex">@localizer["Desk selection"]</a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-assignments-tab" data-toggle="pill" href="#tab-assignments" role="tab" aria-controls="tab-assignments" aria-selected="false"
+                       data-url="@Url.Action("MovementAssignmentIndex", "Movements", new { Area = "DMS" })"
+                       data-id="@Model.Sid"
+                       data-divid="pw-assignments"
+                       data-area="DMS"
+                       data-controller="Movements"
+                       data-action="MovementAssignmentIndex">@localizer["Movement assignments"]</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="tab-tabContent">
+                <div class="tab-pane fade show active" id="tab-deskselection" role="tabpanel" aria-labelledby="tab-deskselection-tab">
+                    <div class="col-sm-12">        
+                        <div class="row ">
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="card-deck" style="min-height:570px;">
+                                    <div class="card shadow col-md-12 col-xl-12">
+                                        <div class="card-block pl-0 pr-0">
+                                            <div class="card-header header-flex" style="height: 50px!important; padding-left: 15px;padding-top: 0px; border-bottom-width: 0px;">
+                                                <h5 class="card-title"><b>Source desk</b></h5>                                                
+                                                <a title="Desk" class="btn btn-outline-primary btn-sm border border-white float-right" href="#"
+                                                    data-jqueryselector="openmodal"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw35"
+                                                    data-url='@Url.Action("SourceDeskCreate", "Movements", new { Area = "DMS" })'
+                                                    data-id="@Model.Sid"
+                                                    data-statichtmlsourcedivid=""
+                                                    data-modaltitle="Add source desk"
+                                                    data-modalheader="Add source desk">
+                                                    <i class="fas fa-plus"></i>
+                                                    @localizer["Add source desk"]
+                                                </a>
+                                            </div>                                            
+                                            <div class="row m-0 p-0 w-100">
+                                                <div id="sourceDeskIndexPartial" class="w-100">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="card-deck" style="min-height:570px;">
+                                    <div class="card shadow col-md-12 col-xl-12">
+                                        <div class="card-block pl-0 pr-0">
+                                            <div class="card-header header-flex" style="height: 50px!important; padding-left: 15px;padding-top: 0px; border-bottom-width: 0px;">
+                                                <h5 class="card-title"><b>Target desk</b></h5>
+                                                @*<br />*@
+                                                <a title="Desk" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                                    data-jqueryselector="openmodal"
+                                                    data-modalcontainer="modalcontainer"
+                                                    data-modalpopupwidth="rightw35"
+                                                    data-url='@Url.Action("TargetDeskCreate", "Movements", new { Area = "DMS" })'
+                                                    data-id="@Model.Sid"
+                                                    data-statichtmltargetdivid=""
+                                                    data-modaltitle="Add target desk"
+                                                    data-modalheader="Add target desk">
+                                                    <i class="fas fa-plus"></i>
+                                                    @localizer["Add target desk"]
+                                                </a>
+                                            </div>
+                                            @*<div class="card-toolbar border-none">
+                                                <div role="toolbar">
+                                                    <a title="Desk" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                                       data-jqueryselector="openmodal"
+                                                       data-modalcontainer="modalcontainer"
+                                                       data-modalpopupwidth="rightw35"
+                                                       data-url='@Url.Action("TargetDeskCreate", "Movements", new { Area = "DMS" })'
+                                                       data-id="@Model.Sid"
+                                                       data-statichtmltargetdivid=""
+                                                       data-modaltitle="Add target desk"
+                                                       data-modalheader="Add target desk">
+                                                        <i class="fas fa-plus"></i>
+                                                        @localizer["Add target desk"]
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <br />*@
+                                            <div class="row m-0 p-0 w-100">
+                                                <div id="targetDeskIndexPartial" class="w-100">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-assignments" role="tabpanel" aria-labelledby="tab-assignments-tab">
+                    <div id="pw-assignments">
+                            <div class="card-deck" style="min-height:570px;">
+                            <div class="card shadow col-md-12 col-xl-12">
+                                <div class="card-block pl-0 pr-0">
+                                    <div class="card-header" style="height: 40px!important; padding-left: 15px;padding-top: 5px;">
+                                        <h5 class="card-title"><b>Movement assignments</b></h5>
+                                        <br />
+                                    </div>
+                                   @* <div class="card-toolbar border-none">
+                                        <div role="toolbar">
+                                            <a title="Desk" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                               data-jqueryselector="openmodal"
+                                               data-modalcontainer="modalcontainer"
+                                               data-modalpopupwidth="rightw35"
+                                               data-url='@Url.Action("TargetDeskCreate", "Movements", new { Area = "DMS" })'
+                                               data-id="@Model.Sid"
+                                               data-statichtmltargetdivid=""
+                                               data-modaltitle="Add target desk"
+                                               data-modalheader="Add target desk">
+                                                <i class="fas fa-plus"></i>
+                                                @localizer["Add target desk"]
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <br />*@
+                                    <div class="row m-0 p-0 w-100">
+                                        <div id="movementAssignmentsIndexPartial" class="w-100">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</form>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-costcenter.js"></script>
+    <script>
+        function localScript() {
+            initSelect2();
+
+            $("#Desklist").change(function (e) {
+                $("#Deskid").val($(this).val());
+                console.log($(this).val());
+            });
+        };
+        
+        $(document).ready(function () {            
+            initDataTableSourceDesk();
+            initDataTableTargetDesk();            
+        });        
+
+        function initDataTableSourceDesk() {
+            $("#sourceDeskIndexPartial").load('@Url.Action("SourceDeskIndex", "Movements")?id=' + $("#SessionId").val());
+            $(".source-desk-table").DataTable({
+                destroy: true,
+                pagination: false,
+                autoWidth: false,
+                fixedHeader: {
+                    header: true,
+                },
+            });
+            hideLoader();
+        }  
+        
+        function initDataTableTargetDesk() {           
+            $("#targetDeskIndexPartial").load('@Url.Action("TargetDeskIndex", "Movements")?id=' + $("#SessionId").val());            
+            $(".target-desk-table").DataTable({
+                destroy: true,
+                pagination: false,
+                autoWidth: false,
+                fixedHeader: {
+                    header: true,
+                },
+            });   
+            hideLoader();
+        }
+
+        function initDataTableMovementAssignment() {
+            console.log("initDataTableMovementAssignment")
+                $("#pw-assignments").load('@Url.Action("MovementAssignmentIndex", "Movements")?id=' + $("#SessionId").val());
+            
+                $(".tbMovementAssignment").DataTable({
+                destroy: true,
+                pagination: false,
+                autoWidth: false,
+                fixedHeader: {
+                    header: true,
+                },
+            });
+            hideLoader();
+        }
+
+        function PostSave(data) {
+                hideLoader();
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                notify('success', data.response, 'Success');
+            }
+            else if(data.success = false){
+                notify('success', data.response, 'Success');
+            }
+                //console.log('hitting');
+                //$('#nav-tab a[href="#tab-assignments"]').trigger('click');
+                //$("#sourceDeskIndexPartial").load('@Url.Action("SourceDeskIndex", "Movements")?id=' + $("#SessionId").val());
+                //$("#targetDeskIndexPartial").load('@Url.Action("TargetDeskIndex", "Movements")?id=' + $("#SessionId").val());
+        }
+    </script>
+    }

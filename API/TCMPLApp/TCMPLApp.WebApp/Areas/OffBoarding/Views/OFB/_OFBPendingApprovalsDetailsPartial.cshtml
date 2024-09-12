@@ -1,0 +1,57 @@
+﻿@model TCMPLApp.WebApp.Models.OFBInitViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+<form asp-controller="OFB"
+      asp-action="OFBHistoryDetails"
+      id="formApprovalDetails">
+
+    <input type="hidden" asp-for="Empno" name="id" id="Empno" />
+</form>
+<div class="bg-gray-active rounded ">
+    <div class="card-toolbar">                       
+        <a style="width:auto;float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("OFBPendingAppHistorySummaryExcelDownload", "OFB", new { Area = "OffBoarding" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export with summary
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("OFBPendingAppHistoryExcelDownload", "OFB", new { Area = "OffBoarding" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="input-group pt-1 pl-1 pr-1 ">
+        <input type="text" class="form-control form-control-sm border" id="OFBPendingApprovalsHistorySearch" name="GenericSearch"
+               onkeypress="genericSearchKeypress('OFBPendingApprovalsHistorySearch')" placeholder="Search...">
+        <div class="input-group-append">
+            <button class="btn btn-sm btn-outline-info" type="button" id="buttonOFBPendingApprovalsHistory" onclick="genericSearchOnClick('OFBPendingApprovalsHistorySearch')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-table">
+
+        <div class="table-responsive">
+            <table id="tbOFBPendingApprovalsHistory" class="table table-striped table-bordered table-responsive-lg">
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>@Html.DisplayNameFor(m => m.Empno)</th>
+                            <th>@Html.DisplayNameFor(m => m.EmpName)</th>
+                            <th>@Html.DisplayNameFor(m => m.Parent)</th>
+                            <th>@Html.DisplayNameFor(m => m.ParentName)</th>
+                            <th>@Html.DisplayNameFor(m => m.Grade)</th>
+                            <th>@Html.DisplayNameFor(m => m.RelievingDate)</th>
+                            <th>@Html.DisplayNameFor(m => m.Remarks)</th>
+                            <th>@Html.DisplayNameFor(m => m.ApprovalStatus)</th>
+                        </tr>
+                    </thead>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,83 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeePassportAndAadhaarDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+<input type="hidden" asp-for="Empno" />
+
+    <div class="col-sm-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-body" style="min-height: 450px;">
+                <div class="app-h4 app-card-header mb-2">
+                   
+                    <p>Employee Details</p>
+
+                </div>
+                
+                <div class="card-deck" style="margin-top: 20px">
+                    <div class="card shadow col-md-12 col-xl-6">
+                        <div class="app-h4 app-card-header p-2">@localizer["Aadhaar Details"]</div>
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AdhaarNo)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.AdhaarNo)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AdhaarName)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.AdhaarName)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="card shadow col-md-12 col-xl-6">
+                        <div class="app-h4 app-card-header p-2">@localizer["Passport Details"]</div>
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dt-met">@Html.DisplayNameFor(model => model.Surname)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.Surname)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.GivenName)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.GivenName)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.PassportNo)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.PassportNo)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.IssuedAt)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.IssuedAt)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.IssueDate)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.IssueDate)</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.ExpiryDate)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.ExpiryDate)</div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

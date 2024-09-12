@@ -1,0 +1,268 @@
+﻿@model TCMPLApp.WebApp.Models.OscMasterViewModel
+
+@{
+    ViewData["Title"] = "PO";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+        <li class="breadcrumb-item "><a asp-action="TransactionsIndex" asp-controller="Transactions" asp-area="RapReporting">Transactions</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Outside subcontracts</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<input type="hidden" id="actionSubcontractPrengAdmin" value="@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin).ToString()"/>
+<input type="hidden" id="actionSubcontractDeptMono" value="@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractDeptMono).ToString()"/>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Outside subcontract list</p>
+    </div>
+    <div class="d-flex flex-row">
+        @if(CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin) || 
+            CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractDeptMono))
+        {    
+            <a title="New Contract" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("OscMasterCreate", "Transactions", new { Area = "RapReporting" })'
+                data-statichtmlsourcedivid=""
+                data-modaltitle="New Contract"
+                data-modalheader="New Contract">
+                <i class="fas fa-plus"></i> Create
+            </a>
+           @* <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+                href='@Url.Action("OscMasterExcelDownload", "Transactions", new { Area = "RapReporting" })'>
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>*@    
+         }
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    @*<th>@Html.DisplayNameFor(model => model.OscmDate)</th>*@
+                    <th>@Html.DisplayNameFor(model => model.Projno5)</th>
+                    <th>@Html.DisplayNameFor(model => model.Projno5Desc)</th>
+                    <th>@Html.DisplayNameFor(model => model.PoNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.PoDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.PoAmt)</th>
+                    <th>@Html.DisplayNameFor(model => model.CurPoAmt)</th>
+                    <th>@Html.DisplayNameFor(model => model.OscmVendor)</th>
+                    <th>@Html.DisplayNameFor(model => model.OscmVendorDesc)</th>
+                    <th>@Html.DisplayNameFor(model => model.LockOrigBudgetDesc)</th>                                       
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            loadDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+        }
+          
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#poDate").on("change", function (event, date) {
+                $("#PoDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+            if ($('#PoDate').val()) {
+                $('#poDate').bootstrapMaterialDatePicker('setDate', new Date($("PoDate").val()));
+            }        
+
+            if ($("#PoDate").val()) {
+                $('#poDate').val(moment($("#PoDate").val(),"DD-MMM-YYYY").format('DD-MMM-YYYY'));
+            }
+        }
+
+        function loadDataTable() {
+            dataTable = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                pageLength: 25,
+                 responsive: true,
+                autoWidth: false,
+                lengthMenu: [25,50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    return '<a class="btn btn-sm-icon"  href="./OscMasterDetails/' + data.oscmId + '" title="Detail"><i class="far fa-eye"></i></a>';
+                                    //return '<button title="Detail" class="btn btn-outline-info btn-sm border-none" ' +                                        
+                                    //    ' data-url="@Url.Action("OscMasterDetails", "Transactions", new { Area = "RapReporting" })"' +                                        
+                                    //    ' data-id="' + data.oscmId + '" >' +
+                                    //    ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                    //    ' </button>';
+                                },
+                                className: "td-icon",
+                            },
+                            //{ 'data': "oscmDate" },
+                            { 'data': "projno5" },
+                            { 'data': "projno5Desc" },
+                            { 'data': "poNumber" },
+                            { 'data': "poDate" },
+                            { 'data': "poAmt" },
+                            { 'data': "curPoAmt" },
+                            { 'data': "oscmVendor" },
+                            { 'data': "oscmVendorDesc" },
+                            { 'data': "lockOrigBudgetDesc" },                            
+                            {                                
+                                'data': null,
+                                render: function (data, type, row) {
+                                    if (data.lockOrigBudgetDesc == 'Open') {
+                                        if ((data.oscmType == 'MONO' && ($('#actionSubcontractPrengAdmin').val() == "True" || $('#actionSubcontractDeptMono').val() == "True")) ||
+                                         (data.oscmType == 'MULTI' && $('#actionSubcontractPrengAdmin').val() == "True")) {
+                                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                                    ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                                    ' data-jqueryselector = "showconfirmationmodal" ' +
+                                                    ' data-url="@Url.Action("OscMasterDelete", "Transactions", new { Area = "RapReporting" })"' +
+                                                    ' data-id="' + data.oscmId + '"' +
+                                                    ' data-redirecturl="@Url.Action("OscMasterIndex", "Transactions", new { Area = "RapReporting" })"' +
+                                                    ' data-modaltitle="Please Confirm!" ' +
+                                                    ' data-confirmationtext=\'Do you want to delete PO? for "' + data.poNumber + '" ?\' ' +
+                                                    ' data-confirmationtype="warning" ' +
+                                                    ' title="Delete PO" ' +
+                                                    ' data-confirmbuttontext="Delete PO" > ' +
+                                                    ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                                ' </button>';                                           
+                                        } else {
+                                            return '';
+                                        }
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                                'className': "td-icon text-center  align-middle",
+                            }
+                        ]
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        ordering: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row) {
+                                    var item = '<div class="card">';
+                                    item += '<div class="card-mobiledatatable">';
+
+                                    item += '</div></div>';
+                                    return item
+                                },
+                                sortable: false,
+                                searchable: false,
+                                className: "datatable-td-mobile"
+                            }
+                        ]
+                    </text>
+                },
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsOscMaster", "Transactions")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = $('#GenericSearch').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        }
+
+        $("#GenericSearch").keypress(function(event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+         });
+        
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadDataTable();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+    </script>
+}

@@ -1,0 +1,159 @@
+﻿@model TCMPLApp.WebApp.Models.LeaveOnDutyTab1ViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Attendance"
+      asp-action="OnDutyCreateTab1"
+      id="formNewOnDutyCreate1"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSaveReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.StartDate" />
+    <input type="hidden" asp-for="@Model.FromHRS" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">On duty application</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h6>@localizer["Late Come (Uptp 1 Hrs) / Miss Punch(Single) / Short Lv(LateRepo & EarlyGo)"]</h6>
+            </div>
+            <div class="card-block">
+                <div class="card-pill">
+                    <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tabs-detail1-tab" data-toggle="pill" href="#tabs-detail1" role="tab" aria-controls="tabs-detail1" aria-selected="true">
+                                @localizer["LCome/Ego/MP"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <button id="btndetails2" name="submit" type="submit" formnovalidate="" value="Details2" class="nav-link bg-white" aria-selected="false">
+                                @localizer["Forgetting Punch"]
+                            </button>
+                        </li>
+                        <li class="nav-item">
+
+                            <button id="btndetails3" name="submit" type="submit" formnovalidate="" value="Details3" class="nav-link bg-white" aria-selected="false">
+                                @localizer["On Duty"]
+                            </button>
+                        </li>
+                        <li class="nav-item">
+
+                            <button id="btndetails4" name="submit" type="submit" formnovalidate="" value="Details4" class="nav-link bg-white" aria-selected="false">
+                                @localizer["Deput/On Tour"]
+                            </button>
+                        </li>
+                        @if (ViewBag.IsEmpInSmartWork)
+                        {
+                            <li class="nav-item">
+                                <button id="btndetails5" name="submit" type="submit" formnovalidate="" value="Details5" class="nav-link bg-white" aria-selected="false">
+                                    @localizer["Smart Work"]
+                                </button>
+                            </li>
+                        }
+                        <environment include="Development,Staging">
+                            <li class="nav-item">
+                                <button id="btndetails6" name="submit" type="submit" formnovalidate="" value="Details6" class="nav-link bg-white" aria-selected="false">
+                                    @localizer["Missed Corework Hours"]
+                                </button>
+                            </li>
+                        </environment>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tabs-detail1" role="tabpanel" aria-labelledby="tabs-detail1-tab">
+                        <div id="pw-detail1">
+                            @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleAttendanceAdmin))
+                            {
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12 col-xl-8">
+                                            <label asp-for="Empno" class="control-label"></label>
+                                            <select asp-for="Empno" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.EmployeeList" required>
+                                                <option selected></option>
+                                            </select>
+                                            <span asp-validation-for="Empno" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                                @Html.HiddenFor(m => m.Empno)
+
+
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label asp-for="OndutyType" class="control-label"></label>
+                                        <select asp-for="OndutyType" class="form-control Select2" asp-items="ViewBag.LeaveOnDutyTypes" required>
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                        <span asp-validation-for="OndutyType" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label asp-for="StartDate" class="control-label"></label>
+                                        <input id="startDate" class="form-control datepicker" placeholder="@localizer["Start date"]" value="" required />
+                                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label asp-for="Approvers" class="control-label"></label>
+                                        <select asp-for="Approvers" class="form-control Select2" asp-items="ViewBag.Approvers" required>
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                        <span asp-validation-for="Approvers" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label asp-for="FromHRS" class="control-label"></label>
+                                        <input id="fromHRS" class="form-control timepicker" placeholder="@localizer["HH:mm"]" value="" required />
+                                        <span asp-validation-for="FromHRS" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label asp-for="Reason" class="control-label"></label>
+                                        <textarea asp-for="Reason" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Reason" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm" name="submit" value="Confirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+@*@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@

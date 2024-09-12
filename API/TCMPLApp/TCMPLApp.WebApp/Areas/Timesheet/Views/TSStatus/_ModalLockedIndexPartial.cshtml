@@ -1,0 +1,126 @@
+﻿@model TCMPLApp.WebApp.Models.TimesheetStatusPartialIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    var paramId = @Model.FilterDataModel.Yyyymm + @Html.Raw("!-!") + @ViewBag.Costcode;
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@localizer["Timesheet locked for costcode "] @ViewBag.Costcode</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["Timesheet locked for costcode "] @ViewBag.Costcode</h5>
+        </div>
+        <div class="card-block">
+            <div id="idLockedIndex" class="table-responsive p-r-10">                
+                <div id="lockedButtons" class="text-right hidden">
+                    <div style="float:left" class="p-l-10">
+                        <label class="control-label f-w-700">Actual working hours: </label> <span class="text-dark-green f-w-700">@ViewBag.ActualHours</span>
+                    </div>
+                    <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+                        id="xlsLockedPartialStatus"
+                        href="#"
+                        data-jqueryselector="binarydownload"
+                        data-url="@(Url.Action("TimesheetDepartmentDownload", "TSStatus", new { Area = "Timesheet" }))"
+                        data-id="@Model.FilterDataModel.Yyyymm@Html.Raw("!-!")@ViewBag.Costcode@Html.Raw("!-!Locked!-!")">
+                            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+                    </a> 
+                    @if (ViewBag.IsTSFreeze == 1)
+                    {
+                        @if (ViewBag.ProcMnthStatus == "IsVisible")
+                        {                           
+                            <a style="float:right" class="btn btn-outline-primary btn-sm border border-white mx-2 ml-auto"
+                               id="approveAllStatus"
+                               href="#"
+                               onclick="showDeleteConfirmationPopup(event,this);"
+                               data-jqueryselector="showconfirmationmodal"
+                               data-url="@(Url.Action("TimesheetBulkAction", "TSStatus", new { Area = "Timesheet" }))"
+                               data-id="@Model.FilterDataModel.Yyyymm@Html.Raw("!-!")@ViewBag.Costcode@Html.Raw("!-!Approved!-!ApproveAll")"
+                               data-callback="PostSaveReLoad"
+                               data-redirecturl="@Url.Action("DepartmentIndex", "TSStatus", new { Area = "Timesheet", costcode = ViewBag.Costcode })"
+                               data-modaltitle="Please Confirm!"
+                               data-confirmationtext="Do you want to APPROVE ALL timesheet for @ViewBag.Costcode"
+                               data-confirmationtype="warning"
+                               title="Approve all timesheet"
+                               data-confirmbuttontext="Approve all timesheet">
+                                <i class="fas fa-user-check"></i>&nbsp;Approve all
+                            </a>
+                            <a style="float:right" class="btn btn-outline-danger btn-sm border border-white mx-2 ml-auto"
+                               id="unLockAllStatus"
+                               href="#"
+                               onclick="showDeleteConfirmationPopup(event,this);"
+                               data-jqueryselector="showconfirmationmodal"
+                               data-url="@(Url.Action("TimesheetBulkAction", "TSStatus", new { Area = "Timesheet" }))"
+                               data-id="@Model.FilterDataModel.Yyyymm@Html.Raw("!-!")@ViewBag.Costcode@Html.Raw("!-!Locked!-!UnlockAll")"
+                               data-PostSaveReLoadDataTable="OK"
+                               data-redirecturl="@Url.Action("DepartmentIndex", "TSStatus", new { Area = "Timesheet", costcode = ViewBag.Costcode })"
+                               data-modaltitle="Please Confirm!"
+                               data-confirmationtext="Do you want to UNLOCK ALL timesheet for @ViewBag.Costcode"
+                               data-confirmationtype="warning"
+                               title="Unlock all timesheet"
+                               data-confirmbuttontext="Unlock all timesheet">
+                                <i class="fas fa-lock-open"></i>&nbsp;Unlock all
+                            </a>
+                        }
+                    } 
+                    else
+                    {
+                        <span class="pr-1 f-12 badge badge-danger" style="text-align: left">
+                            Timesheet under processing, can't UNLOCK / APPROVE
+                        </span>
+                    }
+                </div>
+                <div class="m-3"></div>
+                <div class="input-group pt-1 pl-1 pr-1 ">
+                    <input type="text" class="form-control form-control-sm border" id="TimesheetLockedPartialSearch" name="TimesheetLockedPartialSearch"
+                           onkeypress="genericSearchKeypress('TimesheetLockedPartialSearch')" placeholder="Search...">
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-outline-info" type="button" id="buttonTimesheetLockedPartialSearch" onclick="genericSearchOnClick('TimesheetLockedPartialSearch')">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="m-2"></div>
+                <table id="tbLockedPartialGrid" class="table table-striped table-bordered table-responsive-lg">
+                    <thead class="bg-info text-white">
+                        <tr>                            
+                            <th>@localizer[Html.DisplayNameFor(model => model.Empno)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Empname)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Emptype)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Hours)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.OtHours)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.CcHours)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.CcOtHours)]</th>
+                            <th>Status</th> 
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">    
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+</div>
+<div id="results" style="display:none">@TempData["Message"]</div>
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            var tabLock = $('#tbLockedPartialGrid').DataTable();
+
+            if (tabLock.data().length>0)
+                $('#lockedButtons').removeClass("hidden");
+
+        }, 1000);
+    });
+</script>

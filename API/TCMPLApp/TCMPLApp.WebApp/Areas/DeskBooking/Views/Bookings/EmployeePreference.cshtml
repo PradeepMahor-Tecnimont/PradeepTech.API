@@ -1,0 +1,379 @@
+﻿@model TCMPLApp.WebApp.Models.DeskBookingPreferencesDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+@{
+    ViewData["Title"] = "Deskbooking - My preference";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DeskBooking">Desk Booking</a></li>
+        <li class="breadcrumb-item active">My preferences</li>
+    </ol>
+}
+
+@section styles
+{
+    <style>
+        #calendar .fc-day-sun, #calendar .fc-day-sat {
+            /* background-color: #FBE9E7; */
+        }
+
+        .fc-small-font-size {
+            /* font-weight: bold; */
+        }
+
+        .fc .fc-col-header-cell {
+            background-color: #EFEBE9;
+        }
+
+        .fc-event {
+            cursor: pointer;
+        }
+
+        fc-event-time {
+            display: none;
+        }
+
+        .fc-time {
+            display: none;
+        }
+
+        .fc-day-grid-event .fc-time {
+            display: none;
+        }
+    </style>
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />
+}
+<input readonly type="hidden" asp-for="@Model.Empno" />
+<div class="container-fluid m-auto col-xl-10 p-2">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-block ">
+
+            
+            <div class="card-deck " style="margin-top: 20px">
+
+                <div class="card shadow col-sm-12 col-md-12 col-xl-12">
+                    <div class="app-h4 app-card-header p-2">
+                        @localizer["Auto desk booking preferences"]
+                        @if (Model.KeyId == null)
+                        {
+                            <a style="float:right"
+                               class="btn btn-outline-primary btn-sm border-white"
+                               data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("DeskBookingPreferencesCreate", "Bookings", new { Area = "DeskBooking" })'
+                               data-modaltitle="Create"
+                               data-modalheader="Create">
+                                <i class="fas fa-plus"></i>&nbsp;@localizer["Create"]
+                            </a>
+                        }
+                        else
+                        {
+                            <a style="float:right"
+                               class="btn btn-outline-primary btn-sm border-white"
+                               data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("DeskBookingPreferencesEdit", "Bookings", new { Area = "DeskBooking" })'
+                               data-modaltitle="Edit"
+                               data-modalheader="Edit">
+                                <i class="fas fa-edit"></i>&nbsp;@localizer["Edit"]
+                            </a>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <div class="row p-2">
+                            <div class="form-group dd-met col-mb-6 col-xl-12">
+                                Employee Auto desk booking preference
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.EmployeeName)</div>
+                                    <div class="dd-met">
+                                        @(Model.Empno + " - " + Model.EmployeeName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.ParentDesc)</div>
+                                    <div class="dd-met">
+                                        @(Model.Parent + " - " + Model.ParentDesc)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AssignDesc)</div>
+                                    <div class="dd-met">
+                                        @(Model.Assign + " - " + Model.AssignDesc)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.CurrentOfficeLocation)</div>
+                                    <div class="dd-met">
+                                        @(Model.CurrentOfficeLocation)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.DeskOffice)</div>
+                                    <div class="dd-met">@Html.DisplayFor(model => model.DeskOffice)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Shift)</div>
+                                    <div class="dd-met">@(Model.Shift + " - " + Model.ShiftDesc)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.DeskArea)</div>
+                                    <div class="dd-met">@(Model.DeskArea + " - " + Model.DeskAreaDesc)</div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-12">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        <label id="lblTags" class="control-label">Tags</label>
+                                    </div>
+                                    <div class="dd-met">
+                                        <label id="bTags"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+        // <script src="~/lib/fullcalendar/index.global.js"></script>
+        // <script src="~/lib/fullcalendar/index.global.min.js"></script>
+        <script src="~/lib/fullcalendar/index.global.js"></script>
+        // <script src="~/lib/fullcalendar/index.min.js"></script>
+    }
+
+    <script type="text/javascript">
+        // var date = new Date();
+        // var vdate = moment(date).format('DD-MMM-YYYY');
+        // var vcalendartype = "Month";//Month,Week
+
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+            OfficeChange();
+            ShiftChange();
+
+            var employee = $('#Empno').val();
+            if (employee == null || employee === '') {
+                $('#bTags').text('');
+            }
+            else {
+                $.ajax({
+                    url: "@Url.Action("GetOfficeListForHod", "Bookings", new { Area = "DeskBooking" })",
+                    type: 'GET',
+                    data: {
+                        employee: employee,
+                    },
+                    beforeSend: function () {
+                        showModalLoader();
+                    },
+                    success: function (data) {
+
+                        var tagsList = '';
+
+                        $(data.tagList).each(function () {
+                            tagsList = this.dataTextField + ' ,' + tagsList;
+                        });
+
+                        if (tagsList != '') {
+                            tagsList = tagsList.replace(/,*$/, '');
+
+                            $('#bTags').text(tagsList);
+                            $('#bTag').text(tagsList);
+                            
+                        } else {
+
+                            $('#bTags').text('NA');
+                            $('#bTag').text('NA');
+                        }
+                        hideModalLoader();
+                    },
+                    error: function (result) {
+                        hideModalLoader();
+                        showError(result);
+                    }
+                });
+            }
+        };
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true
+            });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMinDate', date);
+                $("#FromDate").val(date.format('DD-MMM-YYYY'));
+
+            });
+
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#ToDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            if ($('#FromDate').val()) {
+                $('#startDateFilter').val($("#FromDate").val());
+                $('#startDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#FromDate").val()));
+            }
+            if ($('#ToDate').val()) {
+                $('#endDateFilter').val($("#ToDate").val());
+                $('#endDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#ToDate").val()));
+            }
+
+        }
+        function PostSaveReLoad(data) {
+
+            if (data.messageType == "OK") {
+                $("#modalcontainer").modal('hide');
+                window.location.reload();
+            }
+        }
+        function OfficeChange() {
+
+            $('#ObjId').change(function () {
+
+                var selectedoffice = $(this).val();
+                var shift = $('#Shift').val();
+
+                if (selectedoffice == null || selectedoffice === '') {
+                    $('#Shift').empty();
+                    $('#DeskArea').empty();
+
+                }
+                else {
+                    $.ajax({
+                        url: "@Url.Action("GetShiftList", "Bookings", new { Area = "DeskBooking" })",
+                        type: 'GET',
+                        data: {
+                            office: selectedoffice,
+                        },
+                        beforeSend: function () {
+                            showModalLoader();
+                        },
+                        success: function (data) {
+                            let dropdown = $('#Shift');
+                            dropdown.empty();
+                            var flag = false;
+                            var phase = null;
+                            var options = '';
+                            options += '<option> </option>';
+                            $(data).each(function () {
+                                flag = true;
+                                options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                            });
+                            dropdown.html(options);
+
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideModalLoader();
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+            });
+        }
+
+        function ShiftChange() {
+
+            $('#Shift').change(function () {
+                var employee = $('#Empno').val();
+                var selectedShift = $(this).val();
+                var office = $('#Office').val();
+                if (selectedShift == null || selectedShift === '') {
+                    $('#DeskArea').empty();
+
+                }
+                else {
+                    $.ajax({
+                        url: "@Url.Action("GetDeskAreaLists", "Bookings", new { Area = "DeskBooking" })",
+                        type: 'GET',
+                        data: {
+                            office: office,
+                            employee: employee
+                        },
+                        beforeSend: function () {
+                            showModalLoader();
+                        },
+                        success: function (data) {
+                            let dropdown = $('#DeskArea');
+                            dropdown.empty();
+                            var flag = false;
+                            var phase = null;
+
+                            var options = '';
+                            options += '<option> </option>';
+                            $(data).each(function () {
+                                flag = true;
+                                options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                            });
+                            dropdown.html(options);
+
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideModalLoader();
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

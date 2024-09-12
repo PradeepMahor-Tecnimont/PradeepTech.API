@@ -1,0 +1,46 @@
+﻿@model TCMPLApp.WebApp.Models.JobNotesDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="card">
+    <span id="spanDescriptionNotesStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+
+    <div class="card-toolbar">
+        <div role="toolbar">
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobEditNotesDesc) 
+                            && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobEditNotesDesc))
+            {
+
+            <a class="btn btn-outline-primary btn-sm border-white"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw35"
+                   data-url='@Url.Action("NotesEdit", "JOB", new { Area = "JOB" })'
+                   data-id="@ViewBag.Projno"
+                   data-modaltitle="Update description & notes"
+                   data-modalheader="Update description & notes">
+                <i class="fas fa-edit"></i>&nbsp;@localizer["Edit"]
+            </a>
+            }
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="card-deck">
+                <div class="card shadow col-md-12 col-xl-12" id="div-notes">
+                     <div class="row">
+                        <div class="form-group col-mb-6 col-xl-6">
+                            <label asp-for="PDescription" class="control-label"></label>
+                            <textarea asp-for="PDescription" class="form-control" rows="8" readonly disabled></textarea>
+                        </div>
+                        <div class="form-group col-mb-6 col-xl-6">
+                            <label asp-for="PNotes" class="control-label"></label>
+                            <textarea asp-for="PNotes" class="form-control" rows="8" readonly disabled></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>

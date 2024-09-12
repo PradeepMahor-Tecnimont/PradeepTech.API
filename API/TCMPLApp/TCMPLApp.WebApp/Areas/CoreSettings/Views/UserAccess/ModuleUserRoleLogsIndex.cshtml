@@ -1,0 +1,188 @@
+﻿@model TCMPLApp.WebApp.Models.ModuleUserRolesViewModel
+
+@{
+    ViewData["Title"] = "Module User Role Logs";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="CoreSettings">Core Settings</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="UserAccess" asp-area="CoreSettings">User Access</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Module User Role Logs</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.ModuleId" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.RoleId" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Empno" />
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Module User Role Logs</p>
+    </div>
+    <div class="d-flex flex-row">
+
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("ModuleUserRoleLogsFilterGet", "UserAccess", new { Area = "CoreSettings" })'
+           data-modaltitle="Filters"
+           data-modalheader="Filters">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="UserAccesssModuleUserRoleLogsIndex"
+           data-url='@Url.Action("ResetFilter", "UserAccess", new { Area = "CoreSettings" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+
+        <a   class="btn btn-outline-primary btn-sm border-white  "
+           href='@Url.Action("ModuleUserRolesIndex", "UserAccess", new { Area = "CoreSettings" })'>
+            <i class="fas fa-list"></i>&nbsp;Goto - module user roles
+        </a>
+
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Module)</th>
+                    <th>@Html.DisplayNameFor(model => model.Role)</th>
+                    <th>@Html.DisplayNameFor(model => model.Employee)</th>
+                    @*<th>@Html.DisplayNameFor(model => model.ModuleRoleKeyId)</th>*@
+                    <th>@Html.DisplayNameFor(model => model.Status)</th>
+                    <th>@Html.DisplayNameFor(model => model.ModifiedBy)</th>
+                    <th>@Html.DisplayNameFor(model => model.ModifiedOn)</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+            loadModuleUserRoleLogsDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+
+        let vModuleUserRoleList = "@Url.Action("GetListsModuleUserRoleLogs", "UserAccess")";
+
+        function loadModuleUserRoleLogsDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbGrid",
+                pColumns: datatableColumns,
+                pUrl: vModuleUserRoleList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    moduleId: $('#FilterDataModel_ModuleId').val() ? $('#FilterDataModel_ModuleId').val() : null,
+                    roleId: $('#FilterDataModel_RoleId').val() ? $('#FilterDataModel_RoleId').val() : null,
+                    empno: $('#FilterDataModel_Empno').val() ? $('#FilterDataModel_Empno').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                PStateSave: false
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    { 'data': "module" },
+                    { 'data': "role" },
+                    { 'data': "employee" },
+                    //{ 'data': "moduleRoleKeyId" },
+                    { 'data': "status" },
+                    { 'data': "modifiedBy" },
+                    {
+                        data: "modifiedOn",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            return moment(data).format("DD-MMM-YYYY HH:mm:ss")
+                           }
+                    },
+                ];
+
+
+            </text>
+        };
+
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadModuleUserRoleLogsDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadModuleUserRoleLogsDataTable();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadModuleUserRoleLogsDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadModuleUserRoleLogsDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        };
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+
+
+            $("#FilterDataModel_ModuleId").val(data.moduleId);
+            $("#FilterDataModel_RoleId").val(data.roleId);
+            $("#FilterDataModel_Empno").val(data.empno);
+
+            loadModuleUserRoleLogsDataTable();
+            hideLoader();
+        }
+    </script>
+}

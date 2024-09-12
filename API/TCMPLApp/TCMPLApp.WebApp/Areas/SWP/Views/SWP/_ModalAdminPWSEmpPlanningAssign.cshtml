@@ -1,0 +1,194 @@
+﻿@model TCMPLApp.WebApp.Models.PrimaryWorkSpaceAdminEditViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="SWP"
+      asp-action="AdminPWSEmpPlanningAssign"
+      id="adminPWSEmpPlanningAssign"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSaveReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Empno)
+    @Html.HiddenFor(m => m.Assign)
+    @Html.HiddenFor(m => m.Deskid)
+    @Html.HiddenFor(m => m.Email)
+    @Html.HiddenFor(m => m.EmpGrade)
+    @Html.HiddenFor(m => m.EmployeeName)
+    @Html.HiddenFor(m => m.Emptype)
+    @Html.HiddenFor(m => m.IsDualMonitorUser)
+    @Html.HiddenFor(m => m.IsDualMonitorUserText)
+    @Html.HiddenFor(m => m.IsLaptopUser)
+    @Html.HiddenFor(m => m.IsLaptopUserText)
+    @Html.HiddenFor(m => m.IsSwpEligible)
+    @Html.HiddenFor(m => m.IsSwpEligibleDesc)
+    @Html.HiddenFor(m => m.WorkArea)
+    @Html.HiddenFor(m => m.PrimaryWorkspace)
+    @Html.HiddenFor(m => m.Parent)
+    @Html.HiddenFor(m => m.Pending)
+    @Html.HiddenFor(m => m.StartDate)
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">Primary workspace</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Assign primary workspace"]</h5>
+            </div>
+            <div class="card-toolbar">
+                <div role="toolbar">
+                    <button class="btn btn-outline-primary btn-sm border-none" type="button" id="btnBackToPwsPlanningList"
+                            data-empno="@Model.Empno" data-text="Back">
+                        &nbsp;&nbsp;<i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmployeeName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Empno + " - " + Model.EmployeeName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Assign)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Assign)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Parent)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Parent)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Emptype)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Emptype)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmpGrade)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmpGrade)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.IsLaptopUserText)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.IsLaptopUserText)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.IsSwpEligibleDesc)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.IsSwpEligibleDesc)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.IsDualMonitorUserText)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.IsDualMonitorUserText)
+                                </div>
+                            </div>
+                        </div><div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.PrimaryWorkspaceText)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.PrimaryWorkspaceText)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+
+                            <div class="form-group">
+                                <label asp-for="StartDate" class="control-label"></label>
+                                <input id="startDate" class="form-control datepickerFilter"
+                                       placeholder="@localizer["Start date"]" value="@Model.StartDate?.ToString("DD-MMM-YYYY")" required />
+                            </div>
+
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="form-group">
+                                <label asp-for="NewPrimaryWorkspace" class="control-label"></label>
+                                <select asp-for="NewPrimaryWorkspace" class="form-control chosen-select" data-placeholder="Please select..."
+                                asp-items="ViewBag.SWPTypes" required>
+                                    <option value="" hidden disabled selected>Please select...</option>
+                                </select>
+                                <span asp-validation-for="NewPrimaryWorkspace" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnsubmit"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

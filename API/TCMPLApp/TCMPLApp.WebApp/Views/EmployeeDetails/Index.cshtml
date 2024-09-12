@@ -1,0 +1,97 @@
+﻿@{
+
+    ViewData["Title"] = "Employee Details";
+
+}
+
+
+
+<div class="container-fluid parentcontent-div col-lg-8 mx-lg-auto">
+
+    <div class="card bg-light mb-3 shadow-3">
+        <div class="card-header app-h4 app-card-header">
+            Employee details
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="form-group col-lg-8">
+                    <label for="ddlEmployeeList">Select Employee</label>
+                    <select class="form-control col-lg-6 " placeholder="Please select" id="ddlFilterList" name="ddlEmployeeList">
+                    </select>
+                </div>
+                <div class="childcontent-div" id="div-empdetails">
+                    <div id="pv-empdetails">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts
+{
+
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            loadEmployeeList();
+
+        });
+
+        function loadEmployeeList() {
+            var url = "@Url.Action("GetAllActiveEmployeeList", "EmployeeDetails")";
+            var selectId = "#ddlFilterList";
+            ajaxDSSelect2({ 
+                pSelect2Id: selectId, 
+                pUrl: url,
+                pRequestVerificationToken: "" ,
+                pPreSelectedId: "", 
+                pFilter1: "", 
+                pFilter2: "" 
+            }) ;
+        }
+
+        $("#ddlFilterList").change(function () {
+            var divid = $("#pv-empdetails");
+            var empno = $(this).val();
+            if (empno == '') {
+                divid.empty();
+                $("#div-empdetails").removeClass("active");
+                return;
+            }
+            else
+                $("#div-empdetails").addClass("active");
+
+            $.ajax({
+                url: 'EmployeeDetails/GetEmployeeDetails',
+                data: {
+                    'empno': empno
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divid.html(data);
+
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+        });
+
+
+    </script>
+}

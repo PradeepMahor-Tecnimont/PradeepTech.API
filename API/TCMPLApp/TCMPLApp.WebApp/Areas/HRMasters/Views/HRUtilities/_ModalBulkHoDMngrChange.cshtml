@@ -1,0 +1,79 @@
+﻿@model TCMPLApp.WebApp.Models.BulkHoDMngrChangeViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form id="formBulkHoDMngrChange"
+      asp-controller="HRUtilities"
+      asp-action="BulkHoDMngrChange"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"      
+      data-ajax-success="onSuccess();onDataTableReloadSuccess()"
+      data-ajax-failure="onError"       
+      accept-charset="UTF-8">           
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Bulk HoD / Manager Change"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Bulk HoD / Manager Change"]</h5>
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="Changetype" class="control-label"></label>
+                            <select asp-for="Changetype" class="form-control chosen-select" data-placeholder=" Please select..." required>
+                                <option Selected></option>
+                                <option Value="H" >HoD</option>
+                                <option Value="M" >Manager</option>
+                            </select>
+                            <span asp-validation-for="Changetype" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="HodMngrOld" class="control-label"></label>
+                            <select asp-for="HodMngrOld" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.HoDMngr" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="HodMngrOld" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="HodMngrNew" class="control-label"></label>
+                            <select asp-for="HodMngrNew" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.HoDMngr" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="HodMngrNew" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+
+

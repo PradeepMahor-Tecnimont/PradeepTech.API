@@ -1,0 +1,49 @@
+﻿@model IEnumerable<TCMPLApp.Domain.Models.Attendance.PunchDetailsDayPunchList>
+
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="modal-header">
+    <h5 class="modal-title">@localizer["Day punch list"]</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["Day punch list"]</h5>
+        </div>
+        <div class="card-toolbar-modal">
+            @*@if (Model.IsFiltered == true)
+                {
+                    <a class="btn btn-outline-danger btn-sm border-white"
+                       data-action="ResetFilterSession"
+                       href="/DynamicForm/Template/ResetFilterSession?controllerName=Template"
+                       onclick="resetFilter(event, this);">
+                        <i class="fas fa-filter"></i>
+                        @localizer["Reset"]
+                    </a>
+                }*@
+        </div>
+        <div class="card-block">
+            <table id="tbGrid" class="table  table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        <th>Punch list for @ViewBag.PunchListDate.ToString("dd-MMM-yyyy")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var m in Model)
+                    {
+                        <tr>
+                            <td>@m.PunchTime<sup>@m.Office</sup></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div id="result"></div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+</div>

@@ -1,0 +1,242 @@
+﻿@model TCMPLApp.WebApp.Models.LeaveCreateReviewViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+
+<form asp-controller="Attendance"
+      asp-action="LeaveCreateReviewSave"
+      id="formNewLeaveReview"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin($('btneditleave'))"
+      data-ajax-complete="onComplete(null);localScript();loadScript()"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.StartDate)
+    @Html.HiddenFor(m => m.EndDate)
+    @Html.HiddenFor(m => m.HalfDayDay)
+    @Html.HiddenFor(m => m.OfficeLocation)
+    @Html.HiddenFor(m => m.Project)
+    @Html.HiddenFor(m => m.Appover)
+    @Html.HiddenFor(m => m.CareTaker)
+    @Html.HiddenFor(m => m.LeaveType)
+    @Html.HiddenFor(m => m.LeavePeriod)
+    @Html.HiddenFor(m => m.CalcLeavePeriod)
+    @Html.HiddenFor(m => m.StdNumber)
+    @Html.HiddenFor(m => m.PhoneNumber)
+    @Html.HiddenFor(m => m.Address)
+    @Html.HiddenFor(m => m.Discrepancies)
+    @Html.HiddenFor(m => m.IsLeaveApplicationOk)
+    @Html.HiddenFor(m => m.LastReporting)
+    @Html.HiddenFor(m => m.MedicalCertificate)
+    @Html.HiddenFor(m => m.Reason)
+    @Html.HiddenFor(m => m.ResumingDuty)
+
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Leave application"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Leave application"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dd-met">@(ViewBag.EmployeeDetails.Empno + " - " + ViewBag.EmployeeDetails.Name)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.OfficeLocation) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.OfficeLocation)</div>
+                        </div>
+
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Project) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Project)</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Appover) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Appover)</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.CareTaker) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.CareTaker)</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveType) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveType)</div>
+
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeavePeriod) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.CalcLeavePeriod)</div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.StartDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.StartDate)</div>
+
+                        </div>
+
+                        <div class="col-mb-6 col-xl-6">
+
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.EndDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.EndDate)</div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col">
+                            <div id="divHalfDay">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.HalfDayDay) </div>
+                                <div class="dd-met">@Html.DisplayFor(model => model.HalfDayDay)</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LastReporting) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LastReporting)</div>
+
+                        </div>
+
+                        <div class="col-mb-6 col-xl-6">
+
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.ResumingDuty) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.ResumingDuty)</div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.PhoneNumber) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.PhoneNumber)</div>
+
+
+                        </div>
+
+                        <div class="col-md-12 col-xl-6">
+
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.StdNumber) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.StdNumber)</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Address) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Address)</div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.MedicalCertificate) </div>
+                            <div class="dd-met">@(Model.MedicalCertificate? "Yes" : "No")</div>
+
+                        </div>
+                    </div>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Discrepancies))
+                {
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+
+                                <div class="dt-met">Your application contains following discrepancies</div>
+                                <div class="dd-met">@(Model.Discrepancies)</div>
+                                @if (!Model.IsLeaveApplicationOk)
+                                {
+                                    <div class="dd-met text-danger">Your leave application cannot be sanctioned</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (ViewBag.MedicalCertRequired)
+                {
+                    <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                        <div class="dz-details">
+                            <div class="dz-filename"><span data-dz-name></span></div>
+                            <div class="dz-size" data-dz-size></div>
+                            <img data-dz-thumbnail />
+                            <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                        </div>
+                        <div class="dz-default dz-message" data=""><span>Drop medical certificate file here to upload</span></div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        @if (Model.IsLeaveApplicationOk)
+        {
+            <button class="btn btn-primary" type="submit" id="btnreviewsubmit"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Confirm"]">
+                @localizer["Confirm"]
+            </button>
+        }
+        <button class="btn btn-outline-primary" type="button" id="btneditleave"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Edit leave"]">
+            @localizer["Edit leave"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

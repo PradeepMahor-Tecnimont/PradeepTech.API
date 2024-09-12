@@ -1,0 +1,111 @@
+﻿@model TCMPLApp.WebApp.Models.InvTransactionCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="INV"
+      asp-action="InvTransactionCreate"
+      id="formInvTransactionCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"      
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript();initToastrMessage()" 
+      data-ajax-success="PostCreate(null);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+      <input type="hidden" asp-for="@Model.TransDate" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Issue to employee create"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Transaction create</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TransDate" class="control-label"></label>
+                            <input id="transDate" class="form-control datepicker" placeholder="@localizer["Transaction date"]" value="" required />
+                            <span asp-validation-for="TransDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TransTypeId" class="control-label"></label>
+                            <select asp-for="TransTypeId" class="form-control Select2" asp-items="ViewBag.TransTypeIdList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="TransTypeId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Empno" class="control-label"></label>
+                            <select asp-for="Empno" class="form-control Select2" asp-items="ViewBag.EmployeeList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Empno" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ItemTypeCode" class="control-label"></label>
+                            <select asp-for="ItemTypeCode" class="form-control Select2" asp-items="ViewBag.ItemTypeFullList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ItemTypeCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ItemId" class="control-label"></label>
+                            <select asp-for="ItemId" class="form-control Select2" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ItemId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        @* <button id="btnCancel" class="btn btn-secondary" type="button" data-dismiss="modal"
+            data-actionmode="redirect"
+            data-redirecturl="@Url.Action("InvTransactionIndex", "INV", new { Area = "DMS" })"              
+            data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Wait...'
+            data-text="Cancel">@localizer["Cancel"]        
+        </button> *@
+        <a title="Cancel" class="btn btn-secondary" href="InvTransactionIndex">
+            @localizer["Cancel"]
+        </a>
+        <div id="results" style="display:none">@TempData["Message"]</div>
+    </div>
+</form>
+

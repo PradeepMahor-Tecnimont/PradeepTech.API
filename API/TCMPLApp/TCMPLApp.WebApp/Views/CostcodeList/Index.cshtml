@@ -1,0 +1,144 @@
+﻿@model TCMPLApp.WebApp.Models.CostcodeListViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Costcode list";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="">Home</a></li>
+        <li class="breadcrumb-item" aria-current="page">Utilities</li>
+        <li class="breadcrumb-item active" aria-current="page">Costcode list</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />   
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-9 p-2 m-t-5">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Costcode list</p>
+    </div>    
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>                    
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Costcode)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Name)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Abbr)</th>                    
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Sapcc)</th> 
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Hod)</th>                   
+                </tr>               
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+
+    <script>
+        function localScript() {
+            initSelect2();
+        };
+
+        $(document).ready(function () {            
+            loadCostcodeListDataTable();
+        });
+
+        function loadCostcodeListDataTable() {
+            dataTable = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                destroy: true,
+                order: [[1, "asc"]],
+                sort: false,
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                'columnDefs': [
+                    { orderable: false, targets: 0 }
+                ],
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <text>
+                        columns: [
+                            { 'data': "costcode", 'className': "text-center" },
+                            { 'data': "name", 'className': "text-left" },
+                            { 'data': "abbr", 'className': "text-left" },
+                            { 'data': "sapcc", 'className': "text-center" },
+                            { 'data': "hod", 'className': "text-left" }
+                        ],
+                    </text>
+                }
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetCostcodeListDataTable", "CostcodeList")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = $('#GenericSearch').val();
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+        };
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+        
+    </script>
+}

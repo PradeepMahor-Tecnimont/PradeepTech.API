@@ -1,0 +1,279 @@
+﻿@model TCMPLApp.WebApp.Models.OFBInitCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Off-Boarding - Create Init form";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="OFBIndex" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a asp-action="OFBInitIndex" asp-controller="OFB" asp-area="OffBoarding">Init Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create</li>
+    </ol>
+}
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+}
+@Html.AntiForgeryToken()
+
+<form asp-action="OFBInitCreate"
+      asp-controller="OFB"
+      asp-area="OffBoarding"
+      id="idCreateEmpOffBoarding"
+      method="post"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.EndByDate" />
+    <input type="hidden" asp-for="@Model.RelievingDate" value="@Model.RelievingDate?.ToString("dd-MMM-yyyy")" />
+    <input type="hidden" asp-for="@Model.ResignationDate" value="@Model.ResignationDate?.ToString("dd-MMM-yyyy")" />
+
+    <div class="m-auto py-2 col-xl-11">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Off-Boarding - Init Off-Boarding
+                </h5>
+            </div>
+            <div class="card-block ">
+
+                <div class="card-deck">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="card-body">
+                            <div class="row p-2">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Empno" class="control-label"></label>
+                                        @*<select asp-for="Empno" class="form-control chosen-select" data-placeholder=" Please select..." id="Empno" asp-items="ViewBag.EmployeeList" required>
+                                        <option selected></option>
+                                        </select>
+                                        <span asp-validation-for="Empno" class="text-danger"></span>*@
+
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.EmployeeName)
+                                            <a title="Change employee" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                               data-jqueryselector="openmodal"
+                                               data-modalcontainer="modalcontainer"
+                                               data-modalpopupwidth="rightw25"
+                                               data-url='@Url.Action("SelectEmployee", "OFB", new { Area = "OffBoarding" })'
+                                               data-statichtmlsourcedivid=""
+                                               data-modaltitle="Change employee"
+                                               data-modalheader="Change employee">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Hod" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Hod + " - " + Model.HodName)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PersonId" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.PersonId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="DesgCode" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.DesgCode + " - " + Model.DesgName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CostName" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.CostName)
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Grade" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Grade)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmpType" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.EmpType)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Doj" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Doj.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Remarks" class="control-label"></label>
+                                        <textarea rows="2" class="form-control" asp-for="Remarks" required></textarea>
+                                        <span asp-validation-for="Remarks" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*                            <div class="row p-2">
+                            <div class="col-xl-6 col-md-6">
+                            <div class="form-group">
+                            <label asp-for="HRNote" class="control-label"></label>
+                            <textarea rows="2" class="form-control" asp-for="HRNote" required></textarea>
+                            <span asp-validation-for="HRNote" class="text-danger"></span>
+                            </div>
+                            </div>
+                            </div>*@
+                            <div class="row p-2">
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="ResignationDate" class="control-label"></label>
+                                        <input id="resignationDate" class="form-control datepicker" placeholder="@localizer["dd-MM-yyyy"]" required />
+                                        <span asp-validation-for="ResignationDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="RelievingDate" class="control-label"></label>
+                                        <input id="relievingDate" class="form-control datepicker" placeholder="@localizer["dd-MM-yyyy"]" required />
+                                        <span asp-validation-for="RelievingDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Address" class="control-label"></label>
+                                        <textarea rows="2" class="form-control" asp-for="Address"></textarea>
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EndByDate" class="control-label"></label>
+                                        <input id="endByDate" class="form-control datepicker" placeholder="@localizer["dd-MM-yyyy"]" required />
+                                        <span asp-validation-for="EndByDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmailId" class="control-label"></label>
+                                        <input class="form-control" asp-for="EmailId" type="email" required />
+                                        <span asp-validation-for="EmailId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="MobilePrimary" class="control-label"></label>
+                                        <input class="form-control" asp-for="MobilePrimary" />
+                                        <span asp-validation-for="MobilePrimary" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="AlternateNumber" class="control-label"></label>
+                                        <input class="form-control" asp-for="AlternateNumber" />
+                                        <span asp-validation-for="AlternateNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" id="btnConfirm"
+                        data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                        data-text="@localizer["Confirm"]">
+                    @localizer["Confirm"]
+                </button>
+                <a class="btn btn-secondary" asp-controller="OFB" asp-action="OFBInitIndex" title="@localizer["Cancel"]">
+                    @localizer["Cancel"]
+                </a>
+            </div>
+        </div>
+
+    </div>
+</form>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+            if ($('#RelievingDate').val()) {
+                $('#relievingDate').val($("#RelievingDate").val());
+                $('#relievingDate').bootstrapMaterialDatePicker('setDate', new Date($("#RelievingDate").val()));
+            }
+            if ($('#ResignationDate').val()) {
+                $('#resignationDate').val($("#ResignationDate").val());
+                $('#resignationDate').bootstrapMaterialDatePicker('setDate', new Date($("#ResignationDate").val()));
+            }
+        };
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true
+            });
+
+            $('#endByDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndByDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#relievingDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#RelievingDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#resignationDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#ResignationDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+        }
+    </script>
+}

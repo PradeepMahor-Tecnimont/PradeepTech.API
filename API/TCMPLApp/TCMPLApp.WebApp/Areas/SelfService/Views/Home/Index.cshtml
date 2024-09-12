@@ -1,0 +1,479 @@
+﻿@{
+    ViewData["Title"] = "SelfService - Home";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">SelfService</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        #tbGrid1.table td, #tbGrid.table th {
+            padding: 0.15rem !important;
+        }
+    </style>
+}
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-5">
+        <a href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/Selfservice%20v2%20manual.pdf" target="_blank">
+            <i class="fas fa-info-circle fa-2x"></i>
+        </a>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="row">
+        <!--Large Col-->
+        <div class="col-md-4 col-xl-3">
+            <div style="height:310px" class="card card-tpl ">
+                <div class="card-header">
+                    <h5>Desk Details</h5>
+                </div>
+                <div style="font-size:.8rem;" class="card-block card-tile">
+                    <div class="row align-items-center justify-content-center stretched-link">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-6 mb-1">
+                                    <div class="dt-met">DeskId</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PDeskId) ? "-" : ViewBag.DeskDetails.PDeskId)</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="dt-met">PC Name</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PCompName) ? "-" : ViewBag.DeskDetails.PCompName)</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="dt-met">PC Id</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PComputer) ? "-" : ViewBag.DeskDetails.PComputer)</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="dt-met">PC Model</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PPcModel) ? "-" : ViewBag.DeskDetails.PPcModel)</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-1">
+                                    <div class="dt-met">Monitor 1</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PMonitor1) ? "-" : ViewBag.DeskDetails.PMonitor1)</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="dt-met">Monitor1 Model</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PMonitor1Model) ? "-" : ViewBag.DeskDetails.PMonitor1Model)</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-1">
+                                    <div class="dt-met">Monitor 2</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PMonitor2) ? "-" : ViewBag.DeskDetails.PMonitor2)</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="dt-met">Monitor2 Model</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PMonitor2Model) ? "-" : ViewBag.DeskDetails.PMonitor2Model)</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-1">
+                                    <div class="dt-met">Telephone</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PTelephone) ? "-" : ViewBag.DeskDetails.PTelephone)</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="dt-met">Telephone Model</div>
+                                    <div class="dd-met">@(string.IsNullOrEmpty(ViewBag.DeskDetails.PTelephoneModel) ? "-" : ViewBag.DeskDetails.PTelephoneModel)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Punch details</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("PunchDetailsIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fab fa-leanpub f-20 text-white theme-blue"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Leave</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("LeaveIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-share-square f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <!--Guest attendance-->
+            <div class="card card-tpl cardToRealign3">
+                <div class="card-header">
+                    <h5>Guest attendance</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("GuestAttendanceIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Leave ledger</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("LeaveLedgerIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-line f-20 text-white theme-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--ONDuty-->
+        <div class="col-md-4 col-xl-3 ">
+
+            <div class="card card-tpl cardToRealign2">
+                <div class="card-header">
+                    <h5>On duty</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("OnDutyIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-clock f-20 text-white theme-dark-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!--Holiday Attendance-->
+            <!--<div class="col-md-4 col-xl-3 ">-->
+            <div class="card card-tpl cardToRealign1">
+                <div class="card-header">
+                    <h5>Holiday attendance</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("HolidayAttendanceIndex","Attendance",new {Area="SelfService" } )">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-briefcase f-20 text-white theme-dark-orange"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!--</div>-->
+        </div>
+
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.WebApp.Classes.ActionFeatureHelper.ActionFeatureVpp))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Flexi Punch details</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("FlexiPunchDetailsIndex","Attendance",new {Area="SelfService" } )">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fab fa-leanpub f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Flexi Extra hours claims </h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ExtraHoursFlexiClaimsIndex","Attendance",new {Area="SelfService" } )">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fab fa-leanpub f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!--Extra hours claim-->
+        @if (ViewBag.EligibleForExtraHours == IsOk)
+        {
+            <div class="col-md-4 col-xl-3 ">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Extra hours claim</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ExtraHoursClaimsIndex","Attendance",new {Area="SelfService" } )">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas far fa-clock f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!--Guest Attendance Admin View-->
+        @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.ActionViewGuestAttendanceAdmin))
+        {
+            <div class="col-md-4 col-xl-3 ">
+                <div class="card card-tpl cardToRealign3">
+                    <div class="card-header">
+                        <h5>Guest attendance admin view</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("GuestAttendanceAdminIndex","Attendance",new {Area="SelfService" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">&nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<hr />
+<div class="col-sm-12">
+    <div class="row">
+
+        @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleAttendanceAdmin
+|| pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleManagerHoD
+|| pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleManagerHoDOnBeHalf
+|| pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleSecretary
+))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div style="white-space:nowrap; overflow:hidden" class="card-header">
+                        <h5>HoD Reports (Oracle reports)</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="http://tploraas01.ticb.comp:9001/forms/frmservlet?config=ss_hod" target="_blank">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"> &nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-shield f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleAttendanceAdmin
+))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>HR Reports (Oracle reports)</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="http://tploraas01.ticb.comp:9001/forms/frmservlet?config=ss_hr" target="_blank">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"> &nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-shield f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleLead))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Lead Approvals</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ApprovalsLeadIndex", "Home", new { Area = "SelfService" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"> &nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-shield f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleManagerHoD))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>HoD Area</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ApprovalsHoDIndex", "Home", new { Area = "SelfService" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"> &nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-shield f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleManagerHoDOnBeHalf))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>OnBeHalf Approvals</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ApprovalsOnBeHalfIndex", "Home", new { Area = "SelfService" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"> &nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-shield f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleAttendanceAdmin))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Actions HR</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ActionsHRIndex", "Home", new { Area = "SelfService" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"> &nbsp;</h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-shield f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // run test on initial page load
+            rearrangeTiles();
+
+            // run test on resize of the window
+            $(window).resize(function () {
+                rearrangeTiles();
+            });
+        });
+        function rearrangeTiles() {
+            return;
+            if (window.matchMedia('(min-width: 1200px)').matches) {
+                $("div[class*=cardToRealign]").unwrap();
+                $("div[class*=cardToRealign]").wrap('<div class="col-md-4 col-xl-3 ">');
+            }
+            else {
+                return;
+                $("div[class*=cardToRealign]").unwrap();
+                $(".cardToRealign1, .cardToRealign2").wrapAll('<div class="col-md-4 col-xl-3 ">');
+                $(".cardToRealign3, .cardToRealign4").wrapAll('<div class="col-md-4 col-xl-3 ">');
+            }
+            return;
+        }
+    </script>
+}

@@ -1,0 +1,309 @@
+﻿@model TCMPLApp.WebApp.Models.AnnualEvaluationEditViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "HOD - Annual evaluation form";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DigiForm">Digi forms</a></li>
+        <li class="breadcrumb-item"><a asp-action="HODAnnualEvaluationPendingIndex" asp-controller="HRDigiForm" asp-area="DigiForm">Annual evaluation list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Annual evaluation Edit</li>
+    </ol>
+}
+@section styles
+{
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        @@media (-webkit-min-device-pixel-ratio: 1.25) {
+            .openbal .col-xl-1, .closebal .col-xl-1 {
+                flex: 0 0 12% !important;
+                max-width: 12% !important;
+            }
+        }
+    </style>
+}
+@Html.AntiForgeryToken()
+
+<form asp-action="HODAnnualEvaluationEdit"
+      asp-controller="HRDigiForm"
+      asp-area="DigiForm"
+      id="formHODAnnualEvaluationEdit"
+      method="post"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.KeyId" />
+
+    <div class="m-auto py-2 col-xl-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Annual evaluation form
+                </h5>
+            </div>
+            <div class="card-block ">
+
+                <div class="card-deck">
+                    <div class="card col-md-12 col-xl-12">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmployeeName" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @(Model.Empno + " - " + Model.EmployeeName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Parent" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Parent)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Desgcode" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.DesgName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Location" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Location)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Doj" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Doj?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EvaluationPeriod" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Model.Doj?.ToString("dd-MMM-yyyy")  to  @Model.EvaluationPeriod
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Attendance" class="control-label"></label>
+                                        <div class="dd-met">
+                                            <input asp-for="Attendance" class="form-control" required />
+                                        </div>
+                                        <span asp-validation-for="Attendance" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="card-deck " style="margin-top: 20px">
+                    <div class=" card shadow col-sm-12 col-md-12 col-xl-6">
+                        <div class="app-h4 app-card-header p-2">
+                            @localizer["Training"]
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training1" class="control-label"></label>
+                                        <textarea asp-for="Training1" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Training1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training2" class="control-label"></label>
+                                        <textarea asp-for="Training2" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Training2" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training3" class="control-label"></label>
+                                        <textarea asp-for="Training3" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Training3" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training4" class="control-label"></label>
+                                        <textarea asp-for="Training4" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Training4" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Training5" class="control-label"></label>
+                                        <textarea asp-for="Training5" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Training5" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-6">
+                        <div class="app-h4 app-card-header p-2">
+                            @localizer["Feedback"]
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Strengths:</label>
+                                        <textarea asp-for="Feedback1" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Feedback1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Specific achievement during the Training period :  </label>
+                                        <textarea asp-for="Feedback2" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Feedback2" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Areas of improvements & Action plan for improvement :  </label>
+                                        <textarea asp-for="Feedback3" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Feedback3" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">General Behavior OR Approach towards:</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Superior:</label>
+                                        <textarea asp-for="Feedback4" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Feedback4" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Colleagues:</label>
+                                        <textarea asp-for="Feedback5" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Feedback5" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Recommendation for Confirmation/Extension of Training Period and Remark (If any):  :
+                                        </label>
+                                        <textarea asp-for="Feedback6" class="form-control" rows="2" required></textarea>
+                                        <span asp-validation-for="Feedback6" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" id="btnConfirm"
+                        data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                        data-text="@localizer["Save Draft"]">
+                    @localizer["Save Draft"]
+                </button>
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionProgEvalSendToHr))
+                {
+                    <button class="btn btn-success"
+                            type="button"
+                            id="passModelButton"
+                            onclick="SendtoHR()"
+                            data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                            data-text="@localizer["Send To HR"]">
+                        @localizer["Send To HR"]
+                    </button>
+                }
+
+                <a class="btn btn-secondary" asp-controller="HRDigiForm" asp-action="HODAnnualEvaluationPendingIndex" title="@localizer["Cancel"]">
+                    @localizer["Cancel"]
+                </a>
+            </div>
+        </div>
+    </div>
+
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+
+        };
+
+        function SendtoHR() {
+
+            var formAction = "AnnualEvaluationSendToHR";
+            $("#formHODAnnualEvaluationEdit").attr("action", formAction);
+
+            var frm = $('#formHODAnnualEvaluationEdit');
+            frm.submit();
+
+        }
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            let charCode = (evt.which) ? evt.which : evt.keyCode;
+            return !(charCode > 31 && (charCode < 48 || charCode > 57));
+        }
+    </script>
+}

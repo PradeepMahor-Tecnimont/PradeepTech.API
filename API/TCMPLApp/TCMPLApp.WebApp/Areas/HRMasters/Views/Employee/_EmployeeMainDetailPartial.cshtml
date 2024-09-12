@@ -1,0 +1,158 @@
+﻿@model TCMPLApp.Domain.Models.HRMasters.EmployeeMasterMain
+
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+            @if(Model.Status == 1)
+            {
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditEmplmast))
+                {
+                    <div class="row">
+                        <a title="Edit employee main" class="btn btn-outline-primary btn-sm border-none" href="#"
+                           data-jqueryselector="openmodal"
+                           data-modalcontainer="modalcontainer"
+                           data-modalpopupwidth="rightw65"
+                           data-url='@Url.Action("EmployeeMainEdit", "Employee", new { Area = "HRMasters" })'
+                           data-statichtmlsourcedivid=""
+                           data-id="@Model.Empno"
+                           data-modaltitle="Edit employee main"
+                           data-modalheader="Edit employee main">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                    <hr />
+                }
+            }
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Abbr)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Abbr)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Emptype)</div>
+                        <div class="dd-met">@(Model.EmptypeDesc + " [ " + Model.Emptype + " ] ")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Office)</div>
+                        <div class="dd-met">@(Model.OfficeName + " [ " + Model.Office + " ] ")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Email)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Email)</div>
+                    </div>
+                </div>
+            </div>
+            @*<hr />*@
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Personid)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Personid)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Metaid)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Metaid)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Parent)</div>
+                        <div class="dd-met">@(Model.Parent + " - " + Model.ParentAbbr) </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Assign)</div>
+                        <div class="dd-met">@(Model.Assign + " - " + Model.AssignAbbr)</div>
+                    </div>
+                </div>
+            </div>
+            @*<hr />*@
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Grade)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Grade)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Desgcode)</div>
+                        <div class="dd-met">@(Model.Desg + " [ " + Model.Desgcode + " ] ")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.SapParent)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.SapParent)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.SapAssign)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.SapAssign)</div>
+                    </div>
+                </div>
+            </div>
+            @*<hr />*@
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.DoB)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.DoB)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.DoJ)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.DoJ)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Category)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.Category)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Sex)</div>
+                        <div class="dd-met">@(Model.GenderDesc + " [ " + Model.Sex + " ] ")</div>
+                    </div>
+                </div>                
+            </div>
+            @*<hr />*@
+            <div class="row">                
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.Married)</div>
+                        <div class="dd-met">@(Model.Married == "Y" ? "Yes" : "No")</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.DoC)</div>
+                        <div class="dd-met">@Html.DisplayFor(model => model.DoC)</div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="form-group">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

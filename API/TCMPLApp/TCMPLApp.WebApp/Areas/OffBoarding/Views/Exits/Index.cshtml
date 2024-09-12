@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewData["Title"] = "Off-Boarding - Exits";
+
+    Html.AntiForgeryToken();
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Exits</li>
+    </ol>
+}
+
+
+<div class="container-fluid bg-gray-active border rounded shadow m-auto col-xl-11 p-1 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Off-Boarding - Initiate Exits</p>
+    </div>
+    <div class="text-right">
+        <div class="text-right">
+            @*<button name="AddExit" id="idAddExit" title="New Exit" class="btn btn-sm btn-primary mx-2"
+                        data-jqueryselector="openmodal"
+                        data-modalcontainer="modalcontainer"
+                        data-modalpopupwidth="rightw35"
+                        data-url='@Url.Action("Create","Exits",new { Area = "OffBoarding"})'
+                        data-statichtmlsourcedivid=""
+                        data-modaltitle="Off-Boarding"
+                        data-modalheader="Create Exit">
+                    <i class="fas fa-plus "></i>
+
+                </button>*@
+            <a asp-action="Create" asp-controller="Exits" asp-area="OffBoarding"
+               name="AddExit" id="idAddExit" title="New Exit" class="btn btn-sm btn-primary mx-2"> <i class="fas fa-plus "></i></a>
+            <button name="ExcelDownload" id="idExcelDownload" title="Excel Download" class=" btn btn-sm btn-success mx-2"
+                    data-jqueryselector="openmodal"
+                    data-modalcontainer="modalcontainer"
+                    data-modalpopupwidth="rightw35"
+                    data-url='@Url.Action("InitiatorExcelDownload", "Exits", new { Area = "OffBoarding" })'
+                    data-statichtmlsourcedivid=""
+                    data-modaltitle="Download Excel - OffBoardings"
+                    data-modalheader="Download Excel">
+                <i class="far fa-file-excel green-color "></i>
+            </button>
+        </div>
+    </div>
+    <hr class="m-1" />
+    <div class="childcontent-div" id="div-exitslist">
+        <div id="pv-exitslist">
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/datatables-plugins/sorting/datetime-moment.min.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            loadExitsList();
+        });
+        function localScript() {
+            //$("#ddlFilterList").off("change").on("change", employeeSelected);
+            //console.log('LocalScript');
+            initSelect2();
+            $("#getexcel").off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                SendExcelToClient();
+            });
+            //employeeSelected();
+
+        }
+
+
+        function loadExitsList() {
+            var divid = $("#pv-exitslist");
+
+            if ($(divid).length == 0)
+                return;
+
+            $.ajax({
+                url: '@Url.Action("GetExitsList", "Exits", new {Areas = "OffBoarding"})',
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divid.html(data);
+                    initDataTable();
+                    hideLoader();
+                    initToastrMessage();
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    showError(xhr)
+                    //errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    //notify("error", errorText, 'Error');
+                }
+            });
+        }
+
+        function initDataTable() {
+            $.fn.dataTable.moment('DD-MMM-YYYY');
+            var oTable = $("#tbOffBoardingExits").DataTable({
+                "columnDefs": [{
+                    "targets": 5,
+                    "render": function (data, type, row, meta) {
+                        return moment(data, 'DD-MMM-YYYY').format('DD-MMM-YYYY');
+                    }
+                }],
+                "aaSorting": [[5, "desc"]],
+                'pagingType': 'full',
+                "drawCallback": function (settings) {
+                    loadScript();
+                },
+            });
+        }
+
+        function failedAddNew(xhr) {
+            showError(xhr)
+
+        //    errorText = xhr.responseText.indexOf("divErrorMessage") == -1 ? xhr.responseText : ($(xhr.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+
+
+        //    notify("error", errorText, 'Error');
+        }
+
+        function SendExcelToClient() {
+            var startDate = $('#initiatorExcelDownload input[id="StartDate"]').val();
+            var endDate = $('#initiatorExcelDownload input[id="EndDate"]').val();
+            let isValidDateRange = false;
+            if (startDate && endDate) {
+                if (moment(endDate) > moment(startDate))
+                    isValidDateRange = true;
+            }
+            if (!isValidDateRange) {
+                toastr.error("Invalid date range.","Error");
+                return;
+            }
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#initiatorExcelDownload input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("InitiatorExcelDownloadFile", "Exits", new {Area = "OffBoarding" })',
+                type: "POST",
+                data: {
+                    startDate: $('#initiatorExcelDownload input[id="StartDate"]').val(),
+                    endDate: $('#initiatorExcelDownload input[id="EndDate"]').val()
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showModalLoader();
+                },
+                success: function (blob, status, xhr) {
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    else {
+                        toastr.error("Error while downloading file.","Error");
+                        return;
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideModalLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                complete: function () {
+                    hideModalLoader();
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideModalLoader();
+                }
+            });
+        }
+
+
+
+
+    </script>
+}

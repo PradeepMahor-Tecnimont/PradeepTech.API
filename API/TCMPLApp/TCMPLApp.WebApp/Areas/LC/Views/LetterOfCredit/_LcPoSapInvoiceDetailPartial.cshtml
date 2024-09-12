@@ -1,0 +1,154 @@
+﻿@model TCMPLApp.WebApp.Models.LcMainDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-block">
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionCreateLc))
+            {
+                @if (Model.SendToTreasuryVal != 1 && Model.LcStatusVal == 1)
+                {
+                    <div class="row">
+                        <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw35"
+                   data-url='@Url.Action("LcBeforePoSapInvoiceCreate", "LetterOfCredit", new { Area = "LC" })'
+                   data-statichtmlsourcedivid=""
+                   data-id="@Model.ApplicationId"
+                   data-modaltitle="Add Lc PO,SAP,Invoice "
+                   data-modalheader="Add PO,SAP,Invoice ">
+                            <i class="fas fa-plus"></i> Create PO,SAP,Invoice  
+                        </a>
+                    </div>
+                    <hr>
+                }
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionEditLc))
+            {
+                @if (Model.SendToTreasuryVal == 1 && Model.LcStatusVal == 1)
+                {
+                    <div class="row">
+                        <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw35"
+                   data-url='@Url.Action("LcAftrePoSapInvoiceCreate", "LetterOfCredit", new { Area = "LC" })'
+                   data-statichtmlsourcedivid=""
+                   data-id="@Model.ApplicationId"
+                   data-modaltitle="Add Lc PO,SAP,Invoice "
+                   data-modalheader="Add PO,SAP,Invoice ">
+                            <i class="fas fa-plus"></i> Create PO,SAP,Invoice  
+                        </a>
+                    </div>
+                    <hr>
+                }
+            }
+            <div class="">
+                <div class="bg-gray-active rounded ">
+                    <table id="tbGridLcPoSapInvoice" class="table table-striped table-bordered table-responsive-lg">
+                        <thead class="bg-info text-white">
+                            <tr role="row">
+
+                                <th class="hidden">@localizer["AppId"]</th>
+                                <th class="hidden">@localizer["LcId"]</th>
+                                <th>@localizer["Purchase order"]</th>
+                                <th>@localizer["Sap doc no"]</th>
+                                <th>@localizer["Invoice no"]</th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var items in Model.lcMainPoSapInvoiceDataTableList)
+                            {
+                                <tr>
+
+                                    <td class="hidden">@items.ApplicationId</td>
+                                    <td class="hidden">@items.LcKeyId</td>
+                                    <td>@items.Po</td>
+                                    <td>@items.Sap</td>
+                                    <td>@items.Invoice</td>
+
+                                    <td class="align-middle text-center">
+                                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionCreateLc))
+                                        {
+                                            @if (Model.SendToTreasuryVal != 1 && Model.LcStatusVal == 1)
+                                            {
+                                                <button class="btn btn-outline-danger btn-sm border-none "
+                                            onclick="showDeleteConfirmationPopup(event,this);"
+                                            data-url="@Url.Action("LcBeforePoSapInvoiceDelete", "LetterOfCredit", new { Area = "LC" })"
+                                            data-redirecturl="Detail?ApplicationId=@items.LcKeyId"
+                                            data-postsavereloaddatatable="OK"
+                                            data-applicationid="@items.ApplicationId"
+                                            data-lcKeyId="@items.LcKeyId"
+                                            data-modaltitle="Please Confirm!"
+                                            data-confirmationtext="Delete PO - @items.Po , SAP - @items.Sap , Invoice - @items.Invoice"
+                                            data-confirmationtype="warning" data-confirmbuttontext="Delete ">   
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            }
+                                        }
+                                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.LC.LCHelper.ActionEditLc))
+                                        {
+                                            @if (Model.SendToTreasuryVal == 1 && Model.LcStatusVal == 1)
+                                            {
+                                                <button class="btn btn-outline-danger btn-sm border-none"
+                                            onclick="showDeleteConfirmationPopup(event,this);"
+                                            data-url="@Url.Action("LcAftrePoSapInvoiceDelete", "LetterOfCredit", new { Area = "LC" })"
+                                            data-redirecturl="Detail?ApplicationId=@items.LcKeyId"
+                                            data-postsavereloaddatatable="OK"
+                                            data-applicationid="@items.ApplicationId"
+                                            data-lcKeyId="@items.LcKeyId"
+                                            data-modaltitle="Please Confirm!"
+                                            data-confirmationtext="Delete PO - @items.Po , SAP - @items.Sap , Invoice - @items.Invoice"
+                                            data-confirmationtype="warning" data-confirmbuttontext="Delete ">   
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            }
+                                        }
+
+
+
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="result"></div>
+
+        </div>
+    </div>
+</div>
+
+@*
+    <script>
+    $(document).ready(function () {
+
+    intDataTabletbPoSapInvoice();
+
+    });
+
+    function intDataTabletbPoSapInvoice(){
+    $("#tbGridLcPoSapInvoice").DataTable({
+    destroy: true,
+    autoWidth: false,
+    pageLength: 10,
+    lengthMenu: [5,10],
+    processing: true,
+    serverSide: false,
+    stateSave: false,
+    info: true,
+    filter: true,
+    aaSorting: [[1, 'asc']], // start to sort data in second column
+    aaSorting: [[1, 'asc']], // start to sort data in second column
+    pagingType:'full'
+    });
+    }
+    </script>
+
+*@

@@ -1,0 +1,43 @@
+﻿@model TCMPLApp.WebApp.Models.EmpPensionFundMarriedMemberViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<input type="hidden" asp-for="Empno" />
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-body" style="min-height: 450px;">
+            <div class="app-h4 app-card-header mb-2">
+
+                <p>Employee Details</p>
+
+            </div>
+            <div class="card-deck">
+                <div class="card shadow col-md-12 col-xl">
+                    <div class="app-h4 app-card-header p-2">@localizer["Employees Pension Fund (for married members only)"]</div>
+                    <div class="card-body">
+                        <table id="tbEmpPensionFundMarriedGrid" class="table table-striped table-bordered table-responsive-lg ">
+                            <thead class="bg-info text-white">
+                                <tr>
+                                    <th>Nominee Name</th>
+                                    <th>Nominee Address</th>
+                                    <th>Relation</th>
+                                    <th>Birth Date</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck float-right" style="margin-top: 20px; margin-right: 20px">
+                <div class="form-group">
+                    <button class="btn btn-success f-right" type="submit" id="btnprint"
+                        data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                        data-text="@localizer["Print"]">
+                        @localizer["Print"]
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

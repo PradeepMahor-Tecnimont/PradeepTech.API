@@ -1,0 +1,159 @@
+﻿@model TCMPLApp.WebApp.Models.MediclaimDetailsCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlMediclaimAdd = isOnBehalf == IsOk ? ("OnBehalfMediclaimDetailsAdd") : ("MediclaimDetailsAdd");
+
+}
+@Html.AntiForgeryToken()
+
+<form asp-controller="EmpGenInfoDetails"
+      asp-action=@urlMediclaimAdd
+      id="formMediclaimDetails"
+      data-id="@Model.Empno"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);loadEmpMediclaimListDataTable()"
+      data-ajax-success="PostSave(data);onDataTableReloadSuccess;"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.Dob" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Add Mediclaim Details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add Mediclaim Details</h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="form-group dd-met col-mb-6 col-xl-12">
+                        (Please enter one record for self details)
+                    </div>
+                </div>
+                 @if(Model.FamilyRelation == "5")
+                {
+                    <input type="hidden" asp-for="@Model.Member" />
+                    <input type="hidden" asp-for="@Model.FamilyRelation" />
+                    <input type="hidden" asp-for="@Model.Occupation" />
+
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Member" class="control-label"></label>
+                                <input asp-for="Member" class="form-control text-uppercase" disabled  />
+                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Dob" class="control-label"></label>
+                                <input id="birthDate" class="form-control datepicker" placeholder="@localizer["Date of Birth"]" value="@Model.Dob?.ToString("dd-MMM-yyyy")" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+
+                                <label asp-for="FamilyRelation" class="control-label"></label>
+                                <select asp-for="FamilyRelation" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.RelationList" disabled>
+                                    <option selected></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Occupation" class="control-label"></label>
+                                <select asp-for="Occupation" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.OccupationList" disabled >
+                                    <option selected></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="PreExistingDiseases" class="control-label"></label>
+                                <input asp-for="PreExistingDiseases" class="form-control" required />
+                                <span asp-validation-for="PreExistingDiseases" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Member" class="control-label"></label>
+                            <input asp-for="Member" class="form-control text-uppercase" required />
+                            <span asp-validation-for="Member" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Dob" class="control-label"></label>
+                            <input id="birthDate" class="form-control datepicker" placeholder="@localizer["Date of Birth"]" value="" required />
+                            <span asp-validation-for="Dob" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="FamilyRelation" class="control-label"></label>
+                            <select asp-for="FamilyRelation" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.RelationList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="FamilyRelation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Occupation" class="control-label"></label>
+                            <select asp-for="Occupation" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.OccupationList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Occupation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="PreExistingDiseases" class="control-label"></label>
+                            <input asp-for="PreExistingDiseases" class="form-control" required />
+                            <span asp-validation-for="PreExistingDiseases" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

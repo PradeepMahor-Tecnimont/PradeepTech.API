@@ -1,0 +1,335 @@
+﻿@{
+    ViewData["Title"] = "Report home page";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Reports</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<input type="hidden" id="StartDate" />
+<input type="hidden" id="EndDate" />
+<input type="hidden" id="MonthDate" />
+<input type="hidden" id="ReportActionName" />
+
+<div class="col-sm-12">
+    <div class="row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.RoleAttendanceAdmin))
+        {           
+            <div class="col-xl-4 col-md-6">
+                <div class="card statistial-visit" style="height: 300px">
+                    <div class="card-header theme-green">
+                        <h5 class="text-white">Reports</h5>
+                        <i class="fas fa-cloud-download-alt f-20 text-white f-right"></i>
+                    </div>
+                    <div class="card-block">
+                        <div class="row lnk-bgcolor">
+                            <a class="col-12 p-t-5 p-b-5"
+                               href="#"
+                               data-jqueryselector="binarydownload"
+                               data-url="@(Url.Action("GetCategorywiseemployeeCount", "Reports", new { Area = "HRMasters" }))">
+                                <span class="mb-2 f-14">Categorywise employee count</span>
+                                <i class="fas fa-download text-gray f-25 f-right"></i>
+                            </a>
+                            <a class="col-12 p-t-5 p-b-5"
+                               href="#"
+                               data-jqueryselector="binarydownload"
+                               data-url="@(Url.Action("GetContractEmployee", "Reports", new { Area = "HRMasters" }))">
+                                <span class="mb-2 f-14">Contract employee list</span>
+                                <i class="fas fa-download text-gray f-25 f-right"></i>
+                            </a>
+                            <a class="col-12 p-t-5 p-b-5"
+                               href="#"
+                               data-jqueryselector="binarydownload"
+                               data-url="@(Url.Action("GetCostcodewiseemployeeCount", "Reports", new { Area = "HRMasters" }))">
+                                <span class="mb-2 f-14">Costcodewise employee count</span>
+                                <i class="fas fa-download text-gray f-25 f-right"></i>
+                            </a>
+                            <a class="col-12 p-t-5 p-b-5"
+                               href="#"
+                               data-jqueryselector="binarydownload"
+                               data-url="@(Url.Action("GetEmployeewiseReporting", "Reports", new { Area = "HRMasters" }))">
+                                <span class="mb-2 f-14">Employee wise reporting</span>
+                                <i class="fas fa-download text-gray f-25 f-right"></i>
+                            </a>
+                            <a class="col-12 p-t-5 p-b-5"
+                               href="#"
+                               data-jqueryselector="binarydownload"
+                               data-url="@(Url.Action("GetSubcontractEmployee", "Reports", new { Area = "HRMasters" }))">
+                                <span class="mb-2 f-14">Subcontract employee list (Payroll is True)</span>
+                                <i class="fas fa-download text-gray f-25 f-right"></i>
+                            </a>
+                            <a class="col-12 p-t-5 p-b-5"
+                               href="#"
+                               data-jqueryselector="binarydownload"
+                               data-url="@(Url.Action("GetSubcontractActiveEmployee", "Reports", new { Area = "HRMasters" }))">
+                                <span class="mb-2 f-14">Subcontract employee list (Only active)</span>
+                                <i class="fas fa-download text-gray f-25 f-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6">
+                <div class="card statistial-visit" style="height: 300px">
+                    <div class="card-header theme-light-teal">
+                        <h5 class="text-white">Reports with filter</h5>
+                        <i class="fas fa-file-export f-20 text-white f-right"></i>
+                    </div>
+                    <div class="card-block">
+                        <div class="row lnk-bgcolor">
+                            <a data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("FilterSet", "Reports", new { Area = "HRMasters", Param = "Period",  Title = "Joined list", Actionname = "GetEmployeeJoined" })'
+                               data-modaltitle="Report filters"
+                               data-modalheader="Report filter"
+                               class="col-12 p-t-5 p-b-5">
+                                <span class="mb-2 f-14">Joined List</span>
+                                <i class="fas fa-ellipsis-h text-gray f-25 f-right"></i>
+                            </a>
+                            <a data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("FilterSet", "Reports", new { Area = "HRMasters", Param = "Period", Title = "Resigned list", Actionname = "GetEmployeeResigned" })'
+                               data-modaltitle="Report filters"
+                               data-modalheader="Report filter"
+                               class="col-12 p-t-5 p-b-5">
+                                <span class="mb-2 f-14">Resignee List</span>
+                                <i class="fas fa-ellipsis-h text-gray f-25 f-right"></i>
+                            </a>
+                            <a data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("FilterSet", "Reports", new { Area = "HRMasters", Param = "YearMonth", Title = "Outsource employee list", Actionname = "GetOutsourceEmployee" })'
+                               data-modaltitle="Report filters"
+                               data-modalheader="Report filter"
+                               class="col-12 p-t-5 p-b-5">
+                                <span class="mb-2 f-14">Outsource employee list</span>
+                                <i class="fas fa-ellipsis-h text-gray f-25 f-right"></i>
+                            </a>
+                            <a data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("FilterSet", "Reports", new { Area = "HRMasters", Param = "YearMonth", Title = "Subcontract employee list for pivot", Actionname = "GetSubcontractEmployeePivot" })'
+                               data-modaltitle="Report filters"
+                               data-modalheader="Report filter"
+                               class="col-12 p-t-5 p-b-5">
+                                <span class="mb-2 f-14">Subcontract employee list for pivot</span>
+                                <i class="fas fa-ellipsis-h text-gray f-25 f-right"></i>
+                            </a>
+                            <a data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("FilterSet", "Reports", new { Area = "HRMasters", Param = "YearMonth",  Title = "Parent costcode wise subcontract", Actionname = "GetParentSubcontractEmployee" })'
+                               data-modaltitle="Report filters"
+                               data-modalheader="Report filter"
+                               class="col-12 p-t-5 p-b-5">
+                                <span class="mb-2 f-14">Parent costcode wise subcontract</span>
+                                <i class="fas fa-ellipsis-h text-gray f-25 f-right"></i>
+                            </a>
+                            <a data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("FilterSet", "Reports", new { Area = "HRMasters", Param = "YearMonth",  Title = "Monthly consolidated", Actionname = "GetMonthlyConsolidated" })'
+                               data-modaltitle="Report filters"
+                               data-modalheader="Report filter"
+                               class="col-12 p-t-5 p-b-5">
+                                <span class="mb-2 f-14">Monthly consolidated</span>
+                                <i class="fas fa-ellipsis-h text-gray f-25 f-right"></i>
+                            </a>
+                            <a data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw35"
+                               data-url='@Url.Action("FilterSet", "Reports", new { Area = "HRMasters", Param = "YearMonth",  Title = "Monthly consolidated ENGG", Actionname = "GetMonthlyConsolidatedEngg" })'
+                               data-modaltitle="Report filters"
+                               data-modalheader="Report filter"
+                               class="col-12 p-t-5 p-b-5">
+                                <span class="mb-2 f-14">Monthly consolidated ENGG</span>
+                                <i class="fas fa-ellipsis-h text-gray f-25 f-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+        function localScript() {
+            initFilter();
+            initDatePicker();
+            $("#ReportActionName").val($("#ActionName").val());
+        }
+
+        function generateRedirectUrl() {
+            var parameters;
+            var ctx = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
+            var urltext = ctx + "/HRMasters/Reports";
+            console.log($("#ActionName").val());
+
+            switch ($("#ActionName").val()) {
+                case "GetEmployeeResigned":
+                case "GetEmployeeJoined":
+                    parameters = "?startDate=" + $("#StartDate").val() + "&endDate=" + $("#EndDate").val();
+                    urltext = urltext + "/" + $("#ActionName").val() + parameters;
+                    break;
+                case "GetOutsourceEmployee":
+                case "GetParentSubcontractEmployee":
+                case "GetSubcontractEmployeePivot":
+                    parameters = "?yyyymm=" + $("#MonthDate").val();
+                    urltext = urltext + "/" + $("#ActionName").val() + parameters;
+                    break;
+                case "GetMonthlyConsolidated":
+                case "GetMonthlyConsolidatedEngg":
+                    parameters = "?yyyymm=" + $("#MonthDate").val();
+                    urltext = urltext + "/" + $("#ActionName").val() + parameters;
+                    break;
+                default:
+                    urltext = "ReportIndex";
+                    break;
+            }
+
+            urltext = urltext.replace("HRMasters/HRMasters", "HRMasters");
+
+            $("#reportFilterSet").attr('data-ajax-success', 'onSuccessRedirect("' + urltext + '")');
+            $("#UrlText").val(urltext);
+        }
+
+        function initDatePicker() {
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#endDate").on("change", function (event, date) {
+                $("#EndDate").val($(this).val());
+                generateRedirectUrl();
+            });
+            $("#startDate").on("change", function (event, date) {
+
+                $("#StartDate").val($(this).val());
+                if ($("#endDate").val()) {
+                    let startDate = moment($(this).val(), "DD-MMM-YYYY");
+                    let endDate = moment($("#endDate").val(), "DD-MMM-YYYY");
+                    if (endDate < startDate) {
+                        $("#endDate").val('');
+                        $('#endDate').val(moment(startDate).format("DD-MMM-YYYY"));
+                    }
+                }
+                else {
+                    $("#endDate").val($(this).val());
+                }
+                generateRedirectUrl();
+
+                $("#endDate").bootstrapMaterialDatePicker('setDate', $(this).val());
+                $("#endDate").trigger('change');
+            });
+            $('#startDate').val($('#StartDate').val());
+            $('#endDate').val($('#EndDate').val());
+
+            $('.datepicker2').datepicker({
+                format: "MM-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $('#monthDateFilter').datepicker({
+                format: 'MM-yyyy',
+                changeYear: true,
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val();
+                $("#MonthDate").val(moment(fvDate, 'MMMM-YYYY').format("YYYYMM"));
+                $(this).datepicker('hide');
+
+                generateRedirectUrl();
+            });
+            if ($("#MonthDate").val()) {
+                $('#monthDateFilter').val(moment($("#MonthDate").val()).format('MMMM-YYYY'));
+            }
+
+        }
+
+        function initFilter() {
+
+            var currYear = moment().year();
+            var curYearLastDate = new Date(currYear, 11, 31);
+            var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+            $('.datepickerFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                time: false,
+                useCurrent: false
+            });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                time: false
+            }).on('change', function (e, date) {
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMinDate', date);
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMaxDate', curYearLastDate);
+
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+                //$("#EndDate").val(date.format('DD-MMM-YYYY'));
+                //$("#endDateFilter").val(date.format('DD-MMM-YYYY'));
+
+                var endofmonth = moment(date).endOf('month');
+
+                $("#EndDate").val(endofmonth.format('DD-MMM-YYYY'));
+                $("#endDateFilter").val(endofmonth.format('DD-MMM-YYYY'));
+
+                generateRedirectUrl();
+            });
+
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+
+                generateRedirectUrl();
+            });
+
+
+            if ($("#MonthDate").val()) {
+                $('#monthDateFilter').val(moment($("#MonthDate").val()).format('MMMM-YYYY'));
+                generateRedirectUrl();
+            }
+
+        }
+    </script>
+}
+

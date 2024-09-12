@@ -1,0 +1,273 @@
+﻿@{
+    ViewData["Title"] = "TCMPL Vaccination Batch details";
+}
+
+@section Styles
+{
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<div class=" bg-gray-active border rounded p-2 m-2 shadow m-auto ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>TCMPL Vaccination Drive - Batch schedule</p>
+    </div>
+    <div class="childcontent-div p-2" id="div-registrationlist">
+        <div id="pv-batchEmployeeList">
+        </div>
+    </div>
+    <div id="result"></div>
+</div>
+
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            showLoader();
+            loadOpenBatchDetails();
+            hideLoader();
+        });
+
+        function localScript() {
+            //initDropzoneForm();
+            initMyDropzone();
+        }
+
+        function loadOpenBatchDetails() {
+            var divid = $("#pv-batchEmployeeList");
+            $.ajax({
+                url: '@Url.Action("GetOpenBatchDetails", "TPLVaccineBatch")',
+                data: {
+                },
+                type: 'GET',
+                beforeSend: function () {
+                },
+                success: function (data) {
+                    divid.html(data);
+                    //$("#registrations").DataTable({
+                    //});
+                    $("#idDataGrid").DataTable({
+                        "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                        pagingType:'full'
+                    });
+
+                    loadGridEvents();
+                    loadScript();
+                },
+                error: function (result) {
+                    hideLoader();
+                    notify("error", result.responseText, 'danger');
+                }
+            });
+        }
+
+        function loadGridEvents() {
+            $('#registrations tbody').on('click', 'td #idRemove', function () {
+                deleteGridItem(this);
+            });
+        }
+
+
+        function deleteGridItem(object) {
+
+            var confirmationtext = $(object).data('confirmationtext');
+            var jsUrl = $(object).data('url');
+
+            var dataParams = $(object).data();
+
+            delete dataParams["url"];
+            delete dataParams["confirmationtext"];
+
+
+
+            swal({
+                title: "Are you sure you want to delete?",
+                text: confirmationtext,
+                type: "error",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                closeOnconfirm: true
+            }, function () {
+                $.ajax({
+                    type: "POST",
+                    url : jsUrl,
+                    data: dataParams,
+                    beforeSend: function () {
+                        showLoader();
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            loadRegistrations();
+                            hideLoader();
+                            toastr.success(data.message);
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    }
+                });
+            });
+        }
+
+
+        function initDropzoneForm() {
+             Dropzone.autoDiscover = false;
+            //Simple Dropzonejs
+            $("#dropzoneForm").dropzone({
+                url: '@Url.Action("ImportBatchEmployees", "TPLVaccineBatch")',
+                paramName: "file",
+                maxFilesize: 2, //MB
+                maxFiles:1,
+                acceptedFiles: ".xls,.xlsx",
+                addRemoveLinks: true,
+                success: function (file, response) {
+                    var imgName = response;
+                    file.previewElement.classList.add("dz-success");
+                 },
+                error: function (file, response) {
+                    file.previewElement.classList.add("dz-error");
+                 }
+            });
+
+            @*Dropzone.options.dropzoneFormdropzoneForm = {
+                url: '@Url.Action("ImportBatchEmployees", "TPLVaccineBatch")',
+                paramName: 'file',
+                maxFilesize: 2, // MB
+                maxFiles: 1,
+                dictDefaultMessage: 'Drag an image here to upload, or click to select one',
+                //headers: {
+                //    'x-csrf-token': document.querySelectorAll('meta[name=csrf-token]')[0].getAttributeNode('content').value,
+                //},
+                acceptedFiles: '*',
+                init: function () {
+                    this.on('success', function (file, resp) {
+ 
+                    });
+                    this.on('thumbnail', function (file) {
+                        if (file.accepted !== false) {
+                            if (file.width < 640 || file.height < 480) {
+                                file.rejectDimensions();
+                            }
+                            else {
+                                file.acceptDimensions();
+                            }
+                        }
+                    });
+                },
+                accept: function (file, done) {
+                    file.acceptDimensions = done;
+                    file.rejectDimensions = function () {
+                        done('The image must be at least 640 x 480px')
+                    };
+                }
+            };*@
+
+        }
+
+
+        function initMyDropzone() {
+ 
+            try {
+                //Initialization of Dropzone, myDropzone is the id of form
+                $("#myDropzone ").dropzone({
+
+                    //Specify the path to upload pictures
+                    //url: "",
+
+                    //Add link to upload cancel and delete preview image, not added by default
+                    addRemoveLinks: true,
+
+                    //Specify the parameter name for file binary data
+                    paramName: 'file',
+
+                    //Turn off the automatic upload function, the default will be true and upload automatically
+                    //That is to add a picture to send a request to the server
+                    autoProcessQueue: false,
+
+                    //Allow uploading multiple photos
+                    uploadMultiple: false,
+
+                    //The maximum number of files uploaded each time, the default is 2 after testing, pit
+                    //Remember to modify the section of web.config to limit the size of uploaded files
+                    parallelUploads: 1,
+
+                    init: function () {
+                        var submitButton = document.querySelector("#submit-all")
+                        myDropzone = this; // closure
+
+                        //Add a click event for the upload button
+                        submitButton.addEventListener("click", function () {
+                            //Manually upload all pictures
+                            myDropzone.processQueue();
+                        });
+
+                        //When the event is added, the upload button will be available again
+                        this.on("addedfile", function () {
+                            $("#submit-all").removeAttr("disabled");
+                        });
+
+                        //When the upload is complete, the received data is in JSON format
+                        this.on("complete", function (data) {
+                            if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                                 var res = eval('(' + data.xhr.responseText + ')');
+                                 toastr.success(res);
+                            }
+                        });
+                        this.on("error", function (data) {
+                            var res = data.xhr.responseText;
+                            this.removeAllFiles();
+                            toastr.error(res, "Error", { closeButton:true} );
+
+                        });
+                        //Deleting the picture event, when the uploaded picture is empty, make the upload button unavailable
+                        this.on("removedfile", function () {
+                            if (this.getAcceptedFiles().length === 0) {
+                                $("#submit-all").attr("disabled", true);
+                            }
+                        });
+                    }
+                });
+            }
+            catch (err) {
+ 
+                toastr.error(err.message);
+            }
+        }
+
+
+        @*$('#idExcelDownload').click(function () {
+            $.ajax({
+
+                url: '@Url.Action("ExcelDownload", "VaccinationOffice")',
+                type: "GET",
+                cache: false,
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+
+                    link.href = window.URL.createObjectURL(data);
+                    link.download = "Registrations.xlsx";
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    notify("error", result.responseText, 'danger');
+                }
+            });
+        });*@
+    </script>
+
+}

@@ -1,0 +1,53 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAssetDetailViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<div class="modal-header">
+    <h5 class="modal-title">@localizer["Desk"] - @ViewBag.DeskId</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>Desk asset list</h5>
+        </div>
+        <div class="card-block">
+            <table id="tbDeskAsset" class="table table-hover table-bordered source-desk-table border">
+                <thead class="bg-info text-white">
+                    <tr>                        
+                        <th>Asset</th>
+                        <th>Name</th>                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (@Model.DeskAssetDataTableLists.Any())
+                    {
+                        @foreach (var sourcedesks in Model.DeskAssetDataTableLists)
+                        {
+                            <tr>                                
+                                <td class="col-md-3">
+                                    @sourcedesks.AssetId
+                                    <i class="fas @sourcedesks.Iconname f-12 float-right"></i>
+                                </td>
+                                <td class="col-md-6">@sourcedesks.Name</td>                                
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>No data found</td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            <div id="result"></div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">    
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+</div>

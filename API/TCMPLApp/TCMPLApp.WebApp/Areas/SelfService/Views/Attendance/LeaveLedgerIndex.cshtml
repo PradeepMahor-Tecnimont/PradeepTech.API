@@ -1,0 +1,408 @@
+﻿@model TCMPLApp.WebApp.Models.LeaveLedgerViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreLeaveCreateEditDeleteId = 173;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+    var routeName = ViewContext.RouteData.Values["area"].ToString() + "_" + ViewContext.RouteData.Values["controller"].ToString() + "_" + ViewContext.RouteData.Values["action"].ToString();
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item active">Leave ledger</li>
+    </ol>
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        @@media (-webkit-min-device-pixel-ratio: 1.25) {
+            .openbal .col-xl-1, .closebal .col-xl-1 {
+                flex: 0 0 12% !important;
+                max-width: 12% !important;
+            }
+        }
+    </style>
+    <!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+    <!-- Material Datepicker css -->
+    @*<link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />*@
+
+}
+
+@{
+    ViewData["Title"] = "Leave ledger";
+
+}
+<div style="display:none">
+    <input readonly type="datetime" asp-for="@Model.FilterDataModel.StartDate" />
+    <input readonly type="datetime" asp-for="@Model.FilterDataModel.EndDate" />
+    <input readonly type="datetime" asp-for="@Model.FilterDataModel.Empno" />
+</div>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Leave ledger</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("LeaveLedgerFilterGet", "Attendance", new { Area = "SelfService" })'
+               data-modaltitle="Filters - Leave ledger"
+               data-modalheader="Filters - Leave ledger">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="LeaveLedgerIndex"
+               data-url='@Url.Action("ResetFilter", "Attendance", new { Area = "SelfService" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+        </div>
+    </div>
+
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+
+        @*<div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>*@
+
+        <div id="openingBalance" class="d-none">@ViewBag.OpeningBalance</div>
+        <div class="openbal"></div>
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.ApplicationDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.AppNo)</th>
+                    <th>@Html.DisplayNameFor(model => model.LeaveType)</th>
+                    <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.NoOfDaysDb)</th>
+                    <th>@Html.DisplayNameFor(model => model.NoOfDaysCr)</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="closebal"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        function localScript() {
+            initSelect2();
+            initFilter();
+        }
+
+        function initFilter() {
+            var currYear = moment().year();
+            var curYearLastDate = new Date(currYear, 11, 31);
+            var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+            $('.datepickerFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                useCurrent: false
+            });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMinDate', date);
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMaxDate', curYearLastDate);
+
+                var selDate = date ? date : new moment($(this).val(), "DD-MMM-YYYY");
+                $("#StartDate").val(selDate.format("DD-MMM-YYYY"));
+
+                $("#EndDate").val(moment(curYearLastDate).format('DD-MMM-YYYY'));
+                $("#endDateFilter").val(moment(curYearLastDate).format('DD-MMM-YYYY'));
+
+            });
+
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                var selDate = date ? date : new moment($(this).val(), "DD-MMM-YYYY");
+                $("#EndDate").val(selDate.format("DD-MMM-YYYY"));
+            });
+            var startDate = moment($("#FilterDataModel_StartDate").val());
+            $('#startDateFilter').val(startDate.format("DD-MMM-YYYY"));
+            $('#startDateFilter').trigger('change');
+
+            var endDate = moment($("#FilterDataModel_EndDate").val());
+            $('#endDateFilter').val(endDate.format("DD-MMM-YYYY"));
+            $('#endDateFilter').trigger('change');
+
+            $($('form[id*=leaveLedgerFilterSet]').find("#Empno")).val($("#FilterDataModel_Empno").val());
+            $($('form[id*=leaveLedgerFilterSet]').find("#Empno")).trigger("change");
+        }
+
+        $(document).ready(function () {
+
+                loadFilters()
+                localLoadDataTable();
+                loadOpenCloseBalances();
+                setOpenCloseBalDivCSS();
+
+            });
+
+        function localLoadDataTable() {
+            $('#tbGrid').DataTable().destroy();
+
+            $('#tbGrid tbody').empty();
+
+            var table = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                //dom: '<"openbal">rt<"row"<"col-1"l><"col"p>><"clear"><"closebal">',
+                layout: { topStart: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+                  @if ((bool)@Context.Items["isMobile"] == false)
+                    {
+                        <text>
+                ordering: false,
+                //order: [1, "asc"],
+                columns: [
+                    {
+                        data: "applicationDate",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            return moment(data).format("DD-MMM-YYYY");
+                        }
+                    },
+                    { data: "appNo", width: '15.0rem' },
+                    { data: "leaveType" },
+                    {
+                        data: "startDate",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            return moment(data).format("DD-MMM-YYYY");
+                        }
+                    },
+                    {
+                        data: "endDate",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            if (data == null)
+                                return '';
+                            else
+                                return moment(data).format("DD-MMM-YYYY");
+                        }
+                    },
+                    { data: "description", width: '20.0rem' },
+                    { data: "noOfDaysDb" },
+                    { data: "noOfDaysCr" },
+                ],
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                ordering: false,
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApplicationDate)' + '</dt><dd class="col-lg-8">' + moment(data.applicationDate).format('L') + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.AppNo)' + '</dt><dd class="col-lg-8">' + data.appNo + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.LeaveType)' + '</dt><dd class="col-lg-8">' + data.leaveType + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.StartDate)' + '</dt><dd class="col-lg-8">' + moment(data.startDate).format('L') + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EndDate)' + '</dt><dd class="col-lg-8">' + moment(data.endDate).format('L') + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Description    )' + '</dt><dd class="col-lg-8">' + data.leavePeriod + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.NoOfDaysDb)' + '</dt><dd class="col-lg-8">' + data.leadApprovalDesc + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.NoOfDaysCr)' + '</dt><dd class="col-lg-8">' + data.lead + '</dd></dl>';
+
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+                        </text>
+                    }
+                ajax: {
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsLeaveLedger", "Attendance",new { Area = "SelfService" })',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                        d.columns = null;
+                        d.order = null;
+                        d.search = null;
+                        d.genericSearch = null;
+                        d.businessEntityId = "Test";
+                        d.startDate = ($('#FilterDataModel_StartDate').val());
+                        d.endDate = ($('#FilterDataModel_EndDate').val());
+                        d.empno = ($('#FilterDataModel_Empno').val());
+                    },
+                    error: function (request, status, error) {
+                        notify('error', request.responseText, 'danger');
+                    }
+                }
+            });
+
+            //dataTableSearch();
+
+        }
+
+        function loadOpenCloseBalances() {
+            $.ajax({
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("LeaveLedgerGetBalance", "Attendance",new { Area = "SelfService" })',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                beforeSend: function () {
+                    showLoader();
+                },
+                data: {
+                    startDate: ($('#FilterDataModel_StartDate').val()),
+                    endDate: ($('#FilterDataModel_EndDate').val()),
+                    empno: ($('#FilterDataModel_Empno').val())
+                },
+                success: function (data) {
+                    if (data.error) {
+                     }
+                    else {
+
+                        var vOPTable = "";
+                        vOPTable += '<div class="col-sm-12 p-0 m-0">';
+                        vOPTable += '<div class="card"> <div class="card-header">  <h6 class="w-100">';
+                        vOPTable += '<strong  class="text-left" style="float: left;" > Opening balance as on  <span class="font-weight-bold text-left " style=" margin-top: 20px;">' + data.openingBalanceAsOn + '</span></strong>  <strong class="text-right " style="float: right;"> <span class="font-weight-bold text-right">' + data.employeeName + ' [ '+ data.empno + ' ] ' +'</span></strong></h6> </div>               ';
+                        vOPTable += '<div class="card-body"> <div class="row"> ';
+
+                        vOPTable += '<div class="col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2 mt-2"> <div class="card card-tile m-0"> <div class="card-block border rounded-sm theme-light-cyan" style=" padding: 5px 10px 5px 10px;">';
+                        vOPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Casual </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.ocl + ' </h4> </div> </div> </div> </div>   ';
+
+                        vOPTable += ' <div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"><div class="card card-tile m-0">';
+
+                        vOPTable += '<div class="card-block  border rounded-sm   theme-light-orange" style=" padding: 5px 10px 5px 10px;"> ';
+                        vOPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Sick </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.osl + ' </h4> </div>  </div> </div> </div>   ';
+                        vOPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border rounded-sm   theme-light-green" style=" padding: 5px 10px 5px 10px;"> ';
+                        vOPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300">  Privilege </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.opl + ' </h4> </div> </div> </div> </div>   ';
+                        vOPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-yellow" style=" padding: 5px 10px 5px 10px;"> ';
+                        vOPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300">  Excess </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.oex + ' </h4> </div> </div> </div> </div>    ';
+                        vOPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-blue" style=" padding: 5px 10px 5px 10px;"> ';
+                        vOPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Comp. Off </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.oco + ' </h4> </div> </div> </div> </div>   ';
+                        vOPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-grey" style=" padding: 5px 10px 5px 10px;"> ';
+                        vOPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Optional </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.oho + ' </h4> </div> </div> </div> </div>   ';
+                        vOPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-purple" style=" padding: 5px 10px 5px 10px;"> ';
+                        vOPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Leave </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.olv + ' </h4> </div> </div> </div> </div>   ';
+
+                        vOPTable += '</div>';
+
+                        var vCPTable = "";
+                        vCPTable += '<div class="col-sm-12 p-0 m-0">';
+                        vCPTable += '<div class="card"> <div class="card-header">  <h6 class="w-100">';
+                        vCPTable += '<strong  class="text-left" style="float: left;" > Closing balance as on  <span class="font-weight-bold text-left " style=" margin-top: 20px;">' + data.closingBalanceAsOn + '</span></strong> </h6> </div>               ';
+
+                        vCPTable += '<div class="card-body"> <div class="row"> ';
+
+                        vCPTable += '<div class="col-6 col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-cyan" style=" padding: 5px 10px 5px 10px;"> ';
+                        vCPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Casual </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.ccl + ' </h4> </div> </div> </div> </div>    ';
+
+                        vCPTable += ' <div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"><div class="card card-tile m-0">';
+
+                        vCPTable += '<div class="card-block  border  rounded-sm  theme-light-orange" style=" padding: 5px 10px 5px 10px;"> ';
+                        vCPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Sick </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.csl + ' </h4> </div> </div> </div> </div>    ';
+                        vCPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-green" style=" padding: 5px 10px 5px 10px;"> ';
+                        vCPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300">  Privilege </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.cpl + ' </h4> </div> </div> </div> </div>   ';
+                        vCPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-yellow" style=" padding: 5px 10px 5px 10px;"> ';
+                        vCPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300">  Excess </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.cex + ' </h4> </div> </div> </div> </div> ';
+                        vCPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-blue" style=" padding: 5px 10px 5px 10px;"> ';
+                        vCPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Comp. Off   </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.cco + ' </h4> </div> </div> </div> </div>  ';
+                        vCPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-grey" style=" padding: 5px 10px 5px 10px;"> ';
+                        vCPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Optional </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.cho + ' </h4> </div> </div> </div> </div> ';
+                        vCPTable += '<div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-1 mt-2"> <div class="card card-tile m-0"> <div class="card-block border  rounded-sm  theme-light-purple" style=" padding: 5px 10px 5px 10px;"> ';
+                        vCPTable += '<div class="col m-0 p-0"> <h6 class="mb-2 f-w-300"> Leave </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;">' + data.clv + ' </h4> </div> </div> </div> </div>   ';
+
+                        vCPTable += '</div>';
+
+                        $("div.openbal").html(vOPTable);
+                        $("div.closebal").html(vCPTable);
+
+                    }
+                    hideLoader();
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                    hideLoader();
+                }
+            });
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+            //let routeName = "@routeName";
+
+            //localStorage.setItem(routeName, JSON.stringify(data));
+            //var obj = JSON.parse(localStorage.getItem(routeName));
+            $("#FilterDataModel_StartDate").val(data.startDate);
+            $("#FilterDataModel_EndDate").val(data.endDate);
+            $("#FilterDataModel_Empno").val(data.empno);
+
+            localLoadDataTable();
+            loadOpenCloseBalances();
+            setOpenCloseBalDivCSS();
+            hideLoader();
+        }
+
+        function setOpenCloseBalDivCSS() {
+            $("div.openbal, div.closebal").addClass("m-1");
+        }
+
+        function loadFilters() {
+            return;
+            var routeName = "@routeName";
+            var storageValue = localStorage.getItem(routeName);
+            var obj = JSON.parse(storageValue);
+            if (obj) {
+                $("#FilterDataModel_StartDate").val(obj.startDate);
+                $("#FilterDataModel_EndDate").val(obj.endDate);
+                $("#FilterDataModel_Empno").val(obj.empno);
+            }
+        }
+    </script>
+}

@@ -1,0 +1,124 @@
+﻿@model TCMPLApp.WebApp.Areas.ERS.HRVacancyCreateViewModel;
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@*@Html.AntiForgeryToken()*@
+
+<form asp-controller="HR"
+      asp-action="VacancyCreate"
+      id="formVacancyCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="onDataTableReloadSuccess(null);PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.JobStatus)
+    @Html.HiddenFor(m => m.JobOpenDate)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Create vacancy</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Create vacancy"]</h5>
+            </div>
+            <div class="card-block">       
+                <div class="row">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="Costcode" class="control-label"></label>
+                            <select asp-for="Costcode" class="form-control Select2" asp-items="ViewBag.CostcodeList" data-placeholder="Please select..." required>
+                            <option selected></option>
+                            </select>
+                            <span asp-validation-for="Costcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="JobReferenceCode" class="control-label"></label>
+                            <input asp-for="JobReferenceCode" class="form-control" placeholder="Reference code" maxlength="5" required />
+                            <span asp-validation-for="JobReferenceCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <label asp-for="JobOpenDate" class="control-label"></label>
+                        <input id="jobOpenDate" class="form-control datepicker" required />
+                        <span asp-validation-for="JobOpenDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="JobType" class="control-label"></label>
+                            <select asp-for="JobType" class="form-control Select2" data-placeholder="Please select..." required>
+                                <option selected></option>
+                                <option value="Permanent">Permanent</option>
+                                <option value="Temporary">Temporary</option>
+                            </select>
+                            <span asp-validation-for="JobType" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="JobLocation" class="control-label"></label>                           
+                            <select asp-for="JobLocation" class="form-control Select2" asp-items="ViewBag.LocationList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="JobLocation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="ShortDesc" class="control-label"></label>
+                            <input asp-for="ShortDesc " class="form-control" placeholder="Job title" maxlength="100" required />
+                            <span asp-validation-for="ShortDesc" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="JobDesc01" class="control-label"></label>
+                            <textarea asp-for="JobDesc01" class="form-control" rows="2" maxlength="4000" required></textarea>
+                            <span asp-validation-for="JobDesc01" class="text-danger"></span>
+                        </div>
+                    </div>
+                 </div>
+                <div class="row">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="JobDesc02" class="control-label"></label>
+                            <textarea asp-for="JobDesc02" class="form-control" rows="2" maxlength="4000"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="JobDesc03" class="control-label"></label>
+                            <textarea asp-for="JobDesc03" class="form-control" rows="2" maxlength="4000"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

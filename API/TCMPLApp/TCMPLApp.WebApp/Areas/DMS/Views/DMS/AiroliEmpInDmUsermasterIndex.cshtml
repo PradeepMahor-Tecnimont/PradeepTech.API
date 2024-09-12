@@ -1,0 +1,152 @@
+﻿@model TCMPLApp.WebApp.Models.AiroliEmpInDmUsermasterViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Airoli Employee in DmUserMaster</li>
+    </ol>
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+}
+
+@{
+    ViewData["Title"] = "Airoli Employee in DmUserMaster";
+
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Airoli Employee in DmUserMaster</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <button title="Clear Airoli Emp In DmUsermaster" class="btn btn-outline-danger btn-sm border-none "
+                    onclick="showDeleteConfirmationPopup(event,this);"
+                    data-jqueryselector="showconfirmationmodal"
+                    data-url="@Url.Action("ClearAllAiroliEmpInDmUsermaster", "DMS", new { Area = "DMS" })"
+                    data-id=""
+                    data-PostReLoadDataTables="OK"
+                    data-redirecturl="@Url.Action("AiroliEmpInDmUsermasterIndex", "DMS", new { Area = "DMS" })"
+                    data-modaltitle="Please Confirm!"
+                    data-confirmationtype="warning"
+                    data-confirmationtext="Do you want clear all empnoyee from dm usermaster ?"
+                    data-confirmbuttontext="Delete">
+                <i class="fas fa-trash" aria-hidden="true"></i> Clear All
+            </button>
+
+
+        </div>
+    </div>
+
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbAiroliEmpInDmUsermaster" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.EmpName)</th>
+                    <th>@Html.DisplayNameFor(model => model.CostcodeName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Deskid)</th>
+                 </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script type="text/javascript">
+        function localScript() {
+
+        }
+
+        $(document).ready(function () {
+            loadAiroliEmpInDmUsermasterDataTable();
+        });
+
+        let vVUloadAiroliEmpInDmUsermasterList = "@Url.Action("GetListAiroliEmpInDmUsermaster", "DMS")";
+
+        function loadAiroliEmpInDmUsermasterDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbAiroliEmpInDmUsermaster",
+                pColumns: datatableColumns,
+                pUrl: vVUloadAiroliEmpInDmUsermasterList,
+                PStateSave: false,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.empno + " - " + data.empName
+                        },
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.costcode + " - " + data.costcodeName
+                        },
+                    },
+                    { data: "deskid" },
+
+                ];
+            </text>
+        }
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadAiroliEmpInDmUsermasterDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadAiroliEmpInDmUsermasterDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadAiroliEmpInDmUsermasterDataTable();
+            }
+        });
+    </script>
+}

@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Bank guarantee</li>
+</ol>
+}
+
+@section Styles {
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-sm-12">
+
+    <div class="row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.BG.BGHelper.ActionBGViewer))
+        {
+        <div class="col-md-3 col-xl-3 i-block">
+            <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5 class="card-title">Bank Guarantees</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/BGMain/Index">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage Bank Guarantees
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                <i class="fas fa-rupee-sign f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }        
+    </div>
+    <hr />
+    <div class="row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.BG.BGHelper.ActionBGApprover))
+        {
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Bank Guarantees action</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/BGAction/BankGuaranteeActionIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Perform actions on Bank Guarantee
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                <i class="fas fa-user-check f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.BG.BGHelper.ActionBGAdmin))
+            {
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header header-flex">
+                            <h5>Masters</h5>
+                            <span class="f-14 f-w-700"> &#10148; </span>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="~/BG/Masters/Index">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h7 class="mb-2 f-w-300">
+                                            Manage mater data source
+                                        </h7>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-cogs f-20 text-white theme-light-teal"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+    </div>
+</div>
+
+

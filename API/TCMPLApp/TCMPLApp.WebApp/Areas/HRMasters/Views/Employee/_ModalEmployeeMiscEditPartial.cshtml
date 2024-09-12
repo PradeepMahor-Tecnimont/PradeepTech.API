@@ -1,0 +1,300 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.EmployeeMasterMiscEditViewModel
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Employee"
+      asp-action="MiscellaneousEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('misc');PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Empno)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit miscellaneous details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.Name [ @Model.Empno ]</h5>
+            </div>
+            <div class="card-block">
+                <div class="card-pill">
+                    <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tabs-detail1-tab" data-toggle="pill" href="#tabs-detail1" role="tab" aria-controls="tabs-detail1" aria-selected="true">Details 1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-detail2-tab" data-toggle="pill" href="#tabs-detail2" role="tab" aria-controls="tabs-detail2" aria-selected="true">Details 2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-detail3-tab" data-toggle="pill" href="#tabs-detail3" role="tab" aria-controls="tabs-detail3" aria-selected="true">Details 3</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-detail4-tab" data-toggle="pill" href="#tabs-detail4" role="tab" aria-controls="tabs-detail4" aria-selected="true">Details 4</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tabs-detail1" role="tabpanel" aria-labelledby="tabs-detail1-tab">
+                        <div id="pw-detail1">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="DeptCode" class="control-label"></label>
+                                        <input asp-for="DeptCode" class="form-control" placeholder="DeptCode" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Eow" class="control-label"></label>
+                                        <input asp-for="Eow" class="form-control" placeholder="Eow" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="EowDate" class="control-label"></label>
+                                        <input asp-for="EowDate" class="form-control" type="date" placeholder="dd-mmm-yyyy" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="EowWeek" class="control-label"></label>
+                                        <input asp-for="EowWeek" class="form-control" placeholder="EowWeek" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="EsiCover" class="control-label"></label>
+                                        <input asp-for="EsiCover" class="form-control" placeholder="EsiCover" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Ipadd" class="control-label"></label>
+                                        <input asp-for="Ipadd" class="form-control" placeholder="Ipadd" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Jobcategoorydesc" class="control-label"></label>
+                                        <input asp-for="Jobcategoorydesc" class="form-control" placeholder="Jobcategoorydesc" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Jobcategory" class="control-label"></label>
+                                        <input asp-for="Jobcategory" class="form-control" placeholder="Jobcategory" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Jobsubcategory" class="control-label"></label>
+                                        <input asp-for="Jobsubcategory" class="form-control" placeholder="Jobsubcategory" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Jobsubcategorydesc" class="control-label"></label>
+                                        <input asp-for="Jobsubcategorydesc" class="form-control" placeholder="Jobsubcategorydesc" />
+                                    </div>                                    
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-detail2" role="tabpanel" aria-labelledby="tabs-detail2-tab">
+                        <div id="pw-detail2">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12">
+                                        <label asp-for="Jobgroup" class="control-label"></label>
+                                        <select asp-for="Jobgroup" class="form-control Select2" asp-items="ViewBag.JobgroupList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>                                        
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12">
+                                        <label asp-for="Jobdiscipline" class="control-label"></label>
+                                        <select asp-for="Jobdiscipline" class="form-control Select2" asp-items="ViewBag.JobdisciplineList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Jobsubdiscipline" class="control-label"></label>
+                                        <input asp-for="Jobsubdiscipline" class="form-control" placeholder="Jobsubdiscipline" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Jobsubdisciplinedesc" class="control-label"></label>
+                                        <input asp-for="Jobsubdisciplinedesc" class="form-control" placeholder="Jobsubdisciplinedesc" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12">
+                                        <label asp-for="JobtitleCode" class="control-label"></label>
+                                        <select asp-for="JobtitleCode" class="form-control Select2" asp-items="ViewBag.JobtitleCodeList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                    </div>                                                                       
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Lastday" class="control-label"></label>
+                                        <input asp-for="Lastday" class="form-control" type="date" placeholder="dd-mmm-yyyy" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-detail3" role="tabpanel" aria-labelledby="tabs-detail3-tab">
+                        <div id="pw-detail3">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="LocId" class="control-label"></label>
+                                        <input asp-for="LocId" class="form-control" placeholder="LocId" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="NoTcmUpd" class="control-label"></label>                                        
+                                        <select asp-for="NoTcmUpd" class="form-control Select2" asp-items="ViewBag.NoTcmUpdList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Oldco" class="control-label"></label>
+                                        <input asp-for="Oldco" class="form-control" placeholder="Oldco" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Ondeputation" class="control-label"></label>                                       
+                                        <select asp-for="Ondeputation" class="form-control Select2" asp-items="ViewBag.OndeputationList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Pfslno" class="control-label"></label>
+                                        <input asp-for="Pfslno" class="form-control" placeholder="Pfslno" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Projno" class="control-label"></label>
+                                        <input asp-for="Projno" class="form-control" placeholder="Projno" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Pwd" class="control-label"></label>
+                                        <input asp-for="Pwd" class="form-control" placeholder="Pwd" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Reporting" class="control-label"></label>                                        
+                                        <select asp-for="Reporting" class="form-control Select2" asp-items="ViewBag.ReportingList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-detail4" role="tabpanel" aria-labelledby="tabs-detail4-tab">
+                        <div id="pw-detail4">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Reporto" class="control-label"></label>
+                                        <input asp-for="Reporto" class="form-control" placeholder="Reporto" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Secretary" class="control-label"></label>                                        
+                                        <select asp-for="Secretary" class="form-control Select2" asp-items="ViewBag.SecretaryList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="TransIn" class="control-label"></label>
+                                        <input asp-for="TransIn" class="form-control" type="date" placeholder="dd-mmm-yyyy" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="TransOut" class="control-label"></label>
+                                        <input asp-for="TransOut" class="form-control" type="date" placeholder="dd-mmm-yyyy" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="UserDomain" class="control-label"></label>
+                                        <input asp-for="UserDomain" class="form-control" placeholder="UserDomain" />
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="Userid" class="control-label"></label>
+                                        <input asp-for="Userid" class="form-control" placeholder="Userid" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="WebItdecl" class="control-label"></label>
+                                        <select asp-for="WebItdecl" class="form-control Select2" asp-items="ViewBag.WebItdeclList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        <label asp-for="WinidReqd" class="control-label"></label>                                        
+                                        <select asp-for="WinidReqd" class="form-control Select2" asp-items="ViewBag.WinidreqList">
+                                            <option value="" hidden disabled selected>Please select...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

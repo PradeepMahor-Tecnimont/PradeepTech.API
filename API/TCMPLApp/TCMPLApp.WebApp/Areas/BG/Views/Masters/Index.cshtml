@@ -1,0 +1,300 @@
+﻿@{
+    ViewData["Title"] = "Masters";
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="BG">BG</a></li>
+        <li class="breadcrumb-item ">Masters</li>
+</ol>
+}
+
+@section Styles {
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-sm-12">
+    <div class="row">
+        @*@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.BG.BGHelper.ActionReadBG))
+        {*@
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Acceptable</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/AcceptableIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage BG acceptable options
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                <i class="fas fa-cogs f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @*}
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.BG.BGHelper.ActionReadMasters))
+        {*@
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Bank</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/BankIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage banks
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Company</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/CompanyIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage companies
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-dark-orange"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Currency</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/CurrencyIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage currencies
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Guarantee type</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/GuaranteeTypeIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage guarantee types
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Payable</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/PayableIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage payable users
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+           @* <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Projects</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/ProjectIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>*@
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Project control</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/ProjectControlIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage project conrol users
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>PPC</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/PPCIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage project procurement coordinator (PPC)
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>PPM</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/PPMIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage project procurement manager (PPM)
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-dark-orange"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Project Director</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/ProjectDriIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage project director
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Vendor</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/VendorIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage vendors
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Vendor type</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/BG/Masters/VendorTypeIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300">
+                                        Manage vendor types
+                                    </h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        @*}*@
+    </div>
+</div>
+
+

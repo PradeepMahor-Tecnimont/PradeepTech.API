@@ -1,0 +1,115 @@
+﻿@model TCMPLApp.WebApp.Models.HolidayAttendanceCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Attendance"
+      asp-action="HolidayAttendanceCreate"
+      id="formNewHolidayAttendanceCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @*@Html.HiddenFor(m => m.MeetingPlace)*@
+    @Html.HiddenFor(m => m.HolidayAttendanceDate)
+    @Html.HiddenFor(m => m.StartTime)
+    @Html.HiddenFor(m => m.EndTime)
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Holiday attendance"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Holiday attendance "]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12  ">
+                            <label asp-for="Office" class="control-label"></label>
+                            <select asp-for="Office" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.Office" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Office" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12  ">
+                            <label asp-for="Approvers" class="control-label"></label>
+                            <select asp-for="Approvers" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.Approvers" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Approvers" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12  ">
+                            <label asp-for="Project" class="control-label"></label>
+                            <select asp-for="Project" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.Projects" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Project" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label asp-for="HolidayAttendanceDate" class="control-label"></label>
+                            <input id="holidayAttendanceDate" class="form-control" placeholder="@localizer["Date"]" required />
+                            <span asp-validation-for="HolidayAttendanceDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="StartTime" class="control-label"></label>
+                            <input id="startTime" class="form-control" placeholder="@localizer["HH:mm"]" required />
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="EndTime" class="control-label"></label>
+                            <input id="endTime" class="form-control" placeholder="@localizer["HH:mm"]"  required />
+                            <span asp-validation-for="EndTime" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" rows="2" placeholder="Remarks" required ></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+ 

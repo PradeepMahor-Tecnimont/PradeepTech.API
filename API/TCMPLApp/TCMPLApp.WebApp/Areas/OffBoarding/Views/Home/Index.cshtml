@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Off-Boarding</li>
+    </ol>
+}
+<div class="container-fluid">
+    <div class="row my-3">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.RoleInitiator))
+        {
+            <div class="col-md-4 mb-3">
+                <div class="nav-card-bg py-2 text-center h-100" style="background-color: #456275; color: rgb(255, 192, 0) ">
+                    <div class="card-block">
+                        <h4 class="card-title">Initiate Off-Boarding</h4>
+                        <h2><i class="fas fa-door-open fa-3x"></i></h2>
+                    </div>
+                    <div class="row mt-2 px-2 no-gutters">
+                        <span class="small mt-3 text-center">Initialize off-boarding process and send mail to the concerned</span>
+                    </div>
+                    <a asp-area="OffBoarding" asp-controller="Exits" asp-action="Index">
+                    </a>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.RoleMakerApprover))
+        {
+            <div class="col-md-4 mb-3">
+                <div class="nav-card-bg py-2 text-center h-100 text-primary">
+                    <div class="card-block">
+                        <h4 class="card-title">Approve Off-Boarding</h4>
+                        <h2><i class="fab fa-buysellads fa-3x "></i></h2>
+                    </div>
+                    <div class="row mt-2 px-2 no-gutters">
+                        <span class="small mt-3 text-center">Approve off-boarding - First Approver</span>
+                    </div>
+                    <a asp-area="OffBoarding" asp-controller="Exits" asp-action="MakerExitsPending">
+                    </a>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.RoleCheckerApprover))
+        {
+            <div class="col-md-4 mb-3">
+                <div class="nav-card-bg py-2 text-center h-100 text-info">
+                    <div class="card-block">
+                        <h4 class="card-title">Approve Off-Boarding</h4>
+                        <h2><i class="fas fa-thumbs-up  fa-3x "></i></h2>
+                        @*<h2><i class="fa fa-check-square fa-3x "></i></h2>*@
+                    </div>
+                    <div class="row p-2 no-gutters rounded">
+                        <span class="small mt-3 text-center">Approve off-boarding - FINAL Approval</span>
+                    </div>
+                    <a asp-area="OffBoarding" asp-controller="Exits" asp-action="CheckerExitsPending">
+                    </a>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.RoleOffBoardingFinalApprover))
+        {
+
+            <div class="col-md-4 mb-3">
+                <div class="nav-card-bg py-2 text-center h-100" style="background-color: #44c2fd;color:white">
+                    <div class="card-block">
+                        <h4 class="card-title">Approve Off-Boarding</h4>
+                        <h2><i class="fa fa-check-double fa-3x "></i></h2>
+                    </div>
+                    <div class="row p-2 no-gutters rounded">
+                        <span class="small mt-3 text-center">Approve off-boarding - HR-Manager</span>
+                    </div>
+                    <a asp-area="OffBoarding" asp-controller="Exits" asp-action="HRManagerExitsPending">
+                    </a>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.RoleOffBoardingEmployee))
+        {
+            <div class="col-md-4 mb-3">
+                <div class="nav-card-bg py-2 text-center text-warning h-100">
+                    <div class="card-block">
+                        <h4 class="card-title">Employee Contact Information</h4>
+                        <h2>
+                            <i class="fas fa-info-circle fa-3x"></i>
+                        </h2>
+                    </div>
+                    <div class="row p-2 no-gutters rounded">
+                        <span class="small mt-3 text-center">Provide contact Information - Off-Boarding Employee</span>
+                    </div>
+                    <a asp-area="OffBoarding" asp-controller="Exits" asp-action="EmployeeSelfOffBoardingInfo">
+                    </a>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.RoleOffBoardingEmployeeHoD))
+        {
+            <div class="col-md-4 mb-3">
+                <div class="nav-card-bg py-2 text-center h-100" style="color: #456275; ">
+                    <div class="card-block">
+                        <h4 class="card-title">Approve Off-Boarding</h4>
+                        <h2><i class="fas fa-calendar-check fa-3x"></i></h2>
+                    </div>
+                    <div class="row p-2 no-gutters rounded">
+                        <span class="small mt-3 text-center">Approve Off-Boarding - HoD</span>
+                    </div>
+                    <a asp-area="OffBoarding" asp-controller="Exits" asp-action="HoDExitsPending">
+                    </a>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.RoleManageRoles))
+        {
+            <div class="col-md-4 mb-3">
+                <div class="nav-card-bg py-2 text-center h-100" style="color: #456275; ">
+                    <div class="card-block">
+                        <h4 class="card-title">User Management</h4>
+                        <h2><i class="fas fa-calendar-check fa-3x"></i></h2>
+                    </div>
+                    <div class="row p-2 no-gutters rounded">
+                        <span class="small mt-3 text-center">Assign access to users</span>
+                    </div>
+                    <a asp-area="OffBoarding" asp-controller="UserManagement" asp-action="Index">
+                    </a>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

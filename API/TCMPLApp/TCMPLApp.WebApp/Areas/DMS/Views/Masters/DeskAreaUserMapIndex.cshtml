@@ -1,0 +1,467 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAreaUserMapViewModel
+
+@{
+    ViewData["Title"] = "Employee - Area mapping";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Masters" asp-area="DMS">Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Employee - Area mapping</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.AreaId" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.CostCode" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.OfficeLocationCode" />
+
+<form class="form-filter-datetime"
+      id="formDeskAreaUserMapFilterSet"
+      asp-area="DMS"
+      asp-controller="Masters"
+      asp-action="DeskAreaUserMapFilterSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="PostFilterReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" id="OfficeLocationCode" name="OfficeLocationCode" />
+
+</form>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee - Area mapping</p>
+    </div>
+    <div class="d-flex flex-row p-1">
+        <span id="filterGet ">
+            <i class="fas fa-filter"></i>&nbsp;Filter ::
+
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.OfficeLocationCode))
+            {
+                if (Model.FilterDataModel.OfficeLocationCode == "01")
+                {
+                    @Html.Raw("Office Location : ") <b>Malad</b>
+                    ;
+                }
+                if (Model.FilterDataModel.OfficeLocationCode == "02")
+                {
+                    @Html.Raw("Office Location : ") <b>Airoli</b>
+                    ;
+                }
+                if (Model.FilterDataModel.OfficeLocationCode == "03")
+                {
+                    @Html.Raw("Office Location : ") <b>Delhi</b>
+                    ;
+                }
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.CostCode))
+            {
+                @Html.Raw(", Department : " + (Model.FilterDataModel.CostCode))
+                ;
+            }
+            @if (!string.IsNullOrEmpty(Model.FilterDataModel.AreaId))
+            {
+                @Html.Raw(", AreaId : " + (Model.FilterDataModel.AreaId))
+                ;
+            }
+
+        </span>
+
+    </div>
+    <hr />
+    <div class="d-flex flex-row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITAdm))
+        {
+            <a title="New Employee - Area mapping" class="btn btn-outline-primary btn-sm border border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("DeskAreaUserMapCreate", "Masters", new { Area = "DMS" })'
+               data-statichtmlsourcedivid=""
+               data-modaltitle="New Desk Area User Map"
+               data-modalheader="New Desk Area User Map">
+                <i class="fas fa-plus"></i> Create
+            </a>
+        }
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("DeskAreaUserMapFilterGet", "Masters", new { Area = "DMS" })'
+           data-modaltitle="Filters - Desk Area User Mapping"
+           data-modalheader="Filters - Desk Area User Mapping">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="DeskAreaUserMapIndex"
+           data-url='@Url.Action("ResetFilter", "Masters", new { Area = "DMS" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+        <button class="btn btn-outline-primary btn-sm  border-white" id="t" onclick="OfficeSetofficeFilter('02')">Airoli Office</button>
+        <button class="btn btn-outline-primary btn-sm border-white " id="t" onclick="OfficeSetofficeFilter('01')">Malad Office</button>
+        <button class="btn btn-outline-primary btn-sm border-white " id="t" onclick="OfficeSetofficeFilter('03')">Delhi Office</button>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("DeskAreaUserMapExcelDownload", "Masters", new { Area = "DMS" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbDeskAreaUserMap" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@Html.DisplayNameFor(model => model.EmpName)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeptName)</th>
+                    <th>@Html.DisplayNameFor(model => model.OfficeLocation)</th>
+                    <th>@Html.DisplayNameFor(model => model.AreaId)</th>
+
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadDeskAreaUserMapDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+            EmployeeChange();
+            OfficeChange();
+            //AreaIdChange();
+        }
+        function EmployeeChange() {
+
+            $('#Employee').change(function () {
+
+                var employee = $(this).val();
+                if (employee == null || employee === '') {
+                    $('#OfficeCode').empty();
+                    $('#AreaId').empty();
+                    $('#BaseOfficeLocation').text('');
+                    $('#bTags').text('');
+
+                }
+                else {
+                    $.ajax({
+                        url: "@Url.Action("GetOfficeList", "Masters", new { Area = "DMS" })",
+                        type: 'GET',
+                        data: {
+                            employee: employee,
+                        },
+                        beforeSend: function () {
+                            showModalLoader();
+                        },
+                        success: function (data) {
+
+                            let dropdown = $('#OfficeCode');
+                            dropdown.empty();
+                            $('#OfficeCode').empty();
+                            $('#AreaId').empty();
+                            var flag = false;
+                            var phase = null;
+                            var options = '';
+                            var tagsList = '';
+                            options += '<option> </option>';
+                            $('#BaseOfficeLocation').text(data.baseOfficeLocation);
+                            $(data.officeList).each(function () {
+                                flag = true;
+                                options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                            });
+
+                            $(data.tagList).each(function () {
+                                tagsList = this.dataTextField + ' ,' + tagsList;
+                            });
+
+                            if (tagsList != '') {
+                                tagsList = tagsList.replace(/,*$/, '');
+
+                                $('#bTags').text(tagsList);
+                            } else {
+
+                                $('#bTags').text('NA');
+                            }
+
+                            dropdown.html(options);
+
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideModalLoader();
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            showError(result);
+                        }
+                    });
+                }
+            });
+        }
+
+        function OfficeChange() {
+
+            $('#OfficeCode').change(function () {
+                var employee = $('#Employee').val();
+                var office = $(this).val();
+                if (office == null || office === '') {
+                    $('#AreaId').empty();
+                }
+                else {
+                    $.ajax({
+                        url: "@Url.Action("GetAreaListForEmpAreaMap", "Masters", new { Area = "DMS" })",
+                        type: 'GET',
+                        data: {
+                            office: office,
+                            employee: employee,
+                        },
+                        beforeSend: function () {
+                            showModalLoader();
+                        },
+                        success: function (data) {
+
+                            let dropdown = $('#AreaId');
+                            dropdown.empty();
+                            var flag = false;
+                            var phase = null;
+                            var options = '';
+                            options += '<option> </option>';
+                            $(data).each(function () {
+                                flag = true;
+                                options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                            });
+                            dropdown.html(options);
+
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideModalLoader();
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+            });
+        }
+
+        function initDatePicker() {
+            var date = new Date();
+            var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            var end = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true,
+                minDate: new Date(),
+                maxDate: new Date()
+
+            });
+
+            $('#fromDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                startDate: today,
+                endDate: end,
+            }).on('change', function (e, date) {
+                $("#FromDate").val(date.format('DD-MMM-YYYY'));
+
+
+            });
+
+            if ($('#FromDate').val()) {
+                $('#fromDate').bootstrapMaterialDatePicker('setDate', new Date($("#FromDate").val()));
+            }
+
+        }
+
+        let vVUloadDeskAreaUserMapList = "@Url.Action("GetListsDeskAreaUserMap", "Masters")";
+
+        function loadDeskAreaUserMapDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbDeskAreaUserMap",
+                pColumns: datatableDeskAreaUserMapColumns,
+                pUrl: vVUloadDeskAreaUserMapList,
+                PStateSave: false,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    areaId: $('#FilterDataModel_AreaId').val() ? $('#FilterDataModel_AreaId').val() : null,
+                    officeLocationCode: $('#FilterDataModel_OfficeLocationCode').val() ? $('#FilterDataModel_OfficeLocationCode').val() : null,
+                    costCode: $('#FilterDataModel_CostCode').val() ? $('#FilterDataModel_CostCode').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableDeskAreaUserMapColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.keyId == null || data.keyId == '') {
+                                return '';
+                            } else {
+                                return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" ' +
+                                    ' data-url="@Url.Action("DeskAreaUserMapDetails", "Masters", new { Area = "DMS" })"' +
+                                    ' data-modalpopupwidth="rightw35" ' +
+                                    ' data-id="' + data.keyId + '"' +
+                                    ' data-modaltitle="Desk Area User Map Detail" ' +
+                                    ' data-modalheader="Desk Area User Map Detail" ' +
+                                    ' > ' +
+                                    ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                    ' </button>'
+                            }
+                        },
+                        'className': "td-icon",
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.empno + " - " + data.empName
+                        },
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.deptCode + " - " + data.deptName
+                        }
+                    },
+                    { data: "officeLocation" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (data.office == null || data.office == '' || data.areaDesc == null || data.areaDesc == '') {
+                                return '';
+                            } else {
+                                return data.office + " : " + data.areaDesc
+                            }
+                        }
+                    },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+                            if (data.keyId == null || data.keyId == '') {
+                                return '';
+                            } else {
+                                return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                    ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                    ' data-jqueryselector = "showconfirmationmodal" ' +
+                                    ' data-url="@Url.Action("DeskAreaUserMapDelete", "Masters", new { Area = "DMS" })"' +
+                                    ' data-id="' + data.keyId + '"' +
+                                    ' data-PostDeleteReLoadDataTables="OK" ' +
+                                    ' data-modaltitle="Please Confirm!" ' +
+                                    ' data-confirmationtext="Do you want to Delete Desk Area User Map details :-' + data.areaId + ' - ' + data.empName + ' " ' +
+                                    ' data-confirmationtype="warning" ' +
+                                    ' title="Delete Desk Area User Map" ' +
+                                    ' data-confirmbuttontext="Delete" > ' +
+                                    ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                    ' </button>';
+                            }
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    },
+                ];
+
+            </text>
+        }
+            function PostSave(data) {
+                if (data.success) {
+                    $("#modalcontainer").modal('hide');
+                    hideLoader();
+                    loadDeskAreaUserMapDataTable();
+                    notify('success', data.response, 'Success');
+                }
+            }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadDeskAreaUserMapDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadDeskAreaUserMapDataTable();
+            }
+        });
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadDeskAreaUserMapDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+            $("#FilterDataModel_AreaId").val(data.areaId);
+            $("#FilterDataModel_OfficeLocationCode").val(data.officeLocationCode);
+            $("#FilterDataModel_CostCode").val(data.costCode);
+
+            //loadDeskAreaUserMapDataTable();
+            hideLoader();
+            location.reload();
+        }
+        function OfficeSetofficeFilter(office) {
+            $("#OfficeLocationCode").val(office);
+            var frm = $("#formDeskAreaUserMapFilterSet");
+            frm.submit();
+            location.reload();
+        }
+
+
+    </script>
+}

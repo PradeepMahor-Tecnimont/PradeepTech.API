@@ -1,0 +1,112 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.CostCenterCostControlCreateViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Cost center edit";
+}
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<form asp-controller="CostCenter"
+      asp-action="CostControlTabEdit"
+      id="idCostControlTabEditCostCenter"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="POST"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('costcontrol');PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.CostCodeId)
+    @Html.HiddenFor(m => m.CostCode)
+
+    <div class="modal-header">
+        <h5 class="modal-title">Edit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Cost center - @Model.CostCode</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="Tm01Id" class="control-label"></label>
+                            <select asp-for="Tm01Id" class="form-control Select2" asp-items="ViewBag.Tm01GrpId" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Tm01Id" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="TmaId" class="control-label"></label>
+                            <select asp-for="TmaId" class="form-control Select2" asp-items="ViewBag.TmaGrpId" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="TmaId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="Activity" class="control-label"></label>
+                            <select asp-for="Activity" class="form-control Select2" asp-items="ViewBag.ActivityList" required>
+                            </select>
+                            <span asp-validation-for="Activity" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="GroupChart" class="control-label"></label>
+                            <select asp-for="GroupChart" class="form-control Select2" asp-items="ViewBag.GroupChartList" required>
+                            </select>
+                            <span asp-validation-for="GroupChart" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+                            <label asp-for="ItalianName" class="control-label"></label>
+                            <input asp-for="ItalianName" class="form-control" placeholder="ItalianName" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="CmId" class="control-label"></label>
+                            <select asp-for="CmId" class="form-control Select2" asp-items="ViewBag.CompReportId">
+                                <option selected></option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="Phase" class="control-label"></label>
+                            <select asp-for="Phase" class="form-control Select2" asp-items="ViewBag.JobPhasesId">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>Waiting...'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

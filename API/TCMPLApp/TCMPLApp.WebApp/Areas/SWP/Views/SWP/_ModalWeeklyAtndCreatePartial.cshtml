@@ -1,0 +1,187 @@
+﻿@model TCMPLApp.WebApp.Models.SmartAttendancePlanningCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="SWP"
+      asp-action="WeeklyAtndCreateModel"
+      id="formNewWeeklyAtndCreateModel"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.EmployeeName" />
+    <input type="hidden" asp-for="@Model.Emptype" />
+    <input type="hidden" asp-for="@Model.EmpGrade" />
+    <input type="hidden" asp-for="@Model.Parent" />
+    @*<input type="hidden" asp-for="@Model.Projno" />*@
+    <input type="hidden" asp-for="@Model.FkSwpAssignworkspace" />
+
+    <input type="hidden" asp-for="@Model.MondayDate" value="@Model.WeekDays[0].ToString()" />
+    <input type="hidden" asp-for="@Model.TuesdayDate" value="@Model.WeekDays[1].ToString()" />
+    <input type="hidden" asp-for="@Model.WednesdayDate" value="@Model.WeekDays[2].ToString()" />
+    <input type="hidden" asp-for="@Model.ThursdayDate" value="@Model.WeekDays[3].ToString()" />
+    <input type="hidden" asp-for="@Model.FridayDate" value="@Model.WeekDays[4].ToString()" />
+
+    <div class="modal-header">
+        <h5 class="modal-title"> @localizer["Weekly attendance "] </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer[" Planning of week days "]@Html.Raw(" ( " + Model.WeekDays[0].ToString() + " - " + Model.WeekDays[4].ToString() + " ) ")</h5>
+            </div>
+            <div class="card-block ">
+                <div class="form-group">
+                    <div class="row  p-2">
+                        <div class="col-md-6 ">
+                            <div class="dd-met">
+                                @Html.Raw("[ " + Model.Empno + " ] " + Model.EmployeeName)
+                            </div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <div class="dd-met">@localizer["Employee type : "] @Model.Emptype</div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <div class="dd-met">@localizer["Grade : "] @Model.EmpGrade</div>
+                        </div>
+                    </div>
+                    <div class="row  p-2">
+
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="dd-met">
+                                @localizer["Parent : "] @Html.Raw("[ " + Model.Parent + " ] " + Model.ParentDesc)
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="dd-met">@localizer["Assign : "] @Html.Raw("[ " + Model.Assign + " ] " + Model.AssignDesc)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table  w-100" style="width:100%!important">
+                    <thead class="bg-light">
+                        <tr>
+                            <td>Date</td>
+                            <td>Day</td>
+                            <td>Attendance</td>
+                            <td style="width:40%">Desk</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="align-middle">
+                                <label class="control-label m-t-10 "> @Html.Raw(Model.WeekDays[0].ToString())</label>
+                            </td>
+                            <td class="align-middle">
+                                <label asp-for="ChkMonday" class="control-label "></label>
+                            </td>
+                            <td class="align-middle">
+                                <input type="checkbox" asp-for="ChkMonday" />
+                                <label for="Mon" class="cr"></label>
+                            </td>
+                            <td style="width:40%" class="align-middle">
+                                <select asp-for="DeskMon" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DeskMons">
+                                    <option selected></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <label class="control-label m-t-10 ">   @Html.Raw(Model.WeekDays[1].ToString())  </label>
+                            </td>
+                            <td class="align-middle">
+                                <label asp-for="ChkTuesday" class="control-label "></label>
+                            </td>
+
+                            <td class="align-middle">
+                                <input type="checkbox" asp-for="ChkTuesday" />
+                                <label for="Tue" class="cr"></label>
+                            </td>
+                            <td class="align-middle">
+                                <select asp-for="DeskTue" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DeskTues">
+                                    <option selected></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <label class="control-label m-t-10 ">   @Html.Raw(Model.WeekDays[2].ToString())  </label>
+                            </td>
+                            <td class="align-middle">
+                                <label asp-for="ChkWednesday" class="control-label "></label>
+                            </td>
+
+                            <td class="align-middle">
+                                <input type="checkbox" asp-for="ChkWednesday" />
+                                <label for="Wed" class="cr"></label>
+                            </td>
+                            <td class="align-middle">
+                                <select asp-for="DeskWed" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DeskWeds">
+                                    <option selected></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <label class="control-label m-t-10 ">  @Html.Raw(Model.WeekDays[3].ToString())  </label>
+                            </td>
+                            <td class="align-middle">
+                                <label asp-for="ChkThursday" class="control-label "></label>
+                            </td>
+
+                            <td class="align-middle">
+                                <input type="checkbox" asp-for="ChkThursday" />
+                                <label for="Thu" class="cr"></label>
+                            </td>
+                            <td class="align-middle">
+                                <select asp-for="DeskThu" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DeskThus">
+                                    <option selected></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <label class="control-label m-t-10 ">  @Html.Raw(Model.WeekDays[4].ToString()) </label>
+                            </td>
+                            <td class="align-middle">
+                                <label asp-for="ChkFriday" class="control-label "></label>
+                            </td>
+
+                            <td class="">
+                                <input type="checkbox" asp-for="ChkFriday" />
+                                <label for="Fri" class="cr"></label>
+                            </td>
+                            <td style="width:200px;">
+                                <select asp-for="DeskFri" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DeskFris">
+                                    <option selected></option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

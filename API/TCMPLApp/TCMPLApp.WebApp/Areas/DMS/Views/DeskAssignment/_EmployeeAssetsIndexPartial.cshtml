@@ -1,0 +1,76 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeeAssetsViewModel
+
+@{
+    ViewData["Title"] = "EmployeeAssets";
+}
+
+@Html.AntiForgeryToken()
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+
+<div class="m-1"></div>
+<div class="bg-gray-active rounded ">
+
+    <div class="row pr-2 pl-2">
+        <div class="form-group col-md-12">
+            <div class="dt-met">Employee</div>
+            <div class="dd-met">@Model.Empno - @Model.Employee</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">Grade</div>
+            <div class="dd-met"> @Model.Grade</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">Parent</div>
+            <div class="dd-met"> @Model.Parent</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">Assign</div>
+            <div class="dd-met">@Model.Assign </div>
+        </div>
+    </div>
+    <hr style="margin-top:-15px" />
+    <table id="tbEmpAssetsGrid" class="table table-hover table-bordered ">
+        <thead class="bg-info text-white">
+            <tr>
+                <th>Asset id</th>
+                <th>Code</th>
+                <th>Asset name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (@Model.employeeAssetsDataTableList.Any())
+            {
+                @foreach (var assets in Model.employeeAssetsDataTableList)
+                {
+                    <tr>
+                        <td>@assets.AssetId </td>
+                        <td>@assets.AssetCode </td>
+                        <td>@assets.AssetName </td>
+                        <td>@assets.Description </td>
+                     </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No data found</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    <div id="result"></div>
+
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

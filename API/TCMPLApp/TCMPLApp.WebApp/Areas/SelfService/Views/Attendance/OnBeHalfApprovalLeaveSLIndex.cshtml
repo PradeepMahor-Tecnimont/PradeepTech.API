@@ -1,0 +1,295 @@
+﻿@model TCMPLApp.WebApp.Models.LeaveApprovalViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item"><a asp-action="ApprovalsOnBeHalfIndex" asp-controller="Home" asp-area="SelfService">OnBeHalf approvals</a></li>
+        <li class="breadcrumb-item active">Sick leave pending approvals</li>
+    </ol>
+}
+
+    @section styles
+    {
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+    <!-- DataTable -->
+    @*<link rel="stylesheet" href="~/assets/plugins/data-tables/css/datatables.min.css" asp-append-version="true">*@
+    <!-- Material Datepicker css -->
+    @*<link rel="stylesheet" href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" asp-append-version="true" />*@
+    }
+
+    @{
+    ViewData["Title"] = "Leave pending approvals";
+
+}
+
+@*<input type="hidden" asp-for="@Model.FilterDataModel.BusinessEntityId" />
+    <input type="hidden" id="FilterDataModel_StartDateTime" name="FilterDataModel_StartDateTime" value="@Model.FilterDataModel.StartDateTimeString" />
+    <input type="hidden" id="FilterDataModel_EndDateTime" name="FilterDataModel_EndDateTime" value="@Model.FilterDataModel.EndDateTimeString" />
+    <input type="hidden" asp-for="@Model.FilterDataModel.StatusTypeId" />*@
+
+<form asp-action="OnBeHalfApprovalLeave" asp-area="SelfService" asp-controller="Attendance" method="post"
+      id="OnBeHalfApprovalLeaveIndex" name="OnBeHalfApprovalLeaveIndex">
+
+    <div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Sick Leave pending approvals</p>
+        </div>
+        <div class="m-1"></div>
+        <div class="bg-gray-active rounded ">
+            <input type="text" class="hidden" id="ApprlHoDRemarks" name="ApprlHoDRemarks" placeholder="">
+            <input type="text" class="hidden" id="ApprlApprovals" name="ApprlApprovals" placeholder="">
+
+            <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+                <thead class="bg-info text-white">
+                    <tr role="row">
+                        <th rowspan="1">@Html.DisplayNameFor(model => model.EmployeeName)</th>
+                        <th rowspan="1">@Html.DisplayNameFor(model => model.ApplicationDate)</th>
+                        <th rowspan="1">@Html.DisplayNameFor(model => model.StartDate)</th>
+                        <th rowspan="1">@Html.DisplayNameFor(model => model.EndDate)</th>
+                        <th rowspan="1">@Html.DisplayNameFor(model => model.LeaveType)</th>
+                        <th rowspan="1">@Html.DisplayNameFor(model => model.LeavePeriod)</th>
+                        <th rowspan="1">@Html.DisplayNameFor(model => model.MedCertFileName)</th>
+                        <th rowspan="1">@Html.DisplayNameFor(model => model.LeadName)</th>
+                        <th rowspan="1"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        function localScript() {
+
+            initSelect2();
+            initModalFormListners();
+
+        }
+
+        function localLoadDataTable() {
+            $('#tbDataGrid').DataTable().destroy();
+
+            $('#tbDataGrid tbody').empty();
+
+            var table = $('#tbDataGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                ordering: false,
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "employeeName", width: '15.0rem' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return moment(data.applicationDate).format("DD-MMM-YYYY");
+                        },
+                        width: '5.0rem'
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return moment(data.startDate).format("DD-MMM-YYYY");
+                        },
+                        width: '5.0rem'
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return moment(data.endDate).format("DD-MMM-YYYY");
+                        },
+                        width: '5.0rem'
+                    },
+                    { data: "leaveType", width: '2.0rem' },
+                    { data: "leavePeriod", width: '2.0rem' },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+
+                            if (data.medCertFileName != null) {
+                                return '<a href="#" onclick="ofbfileDownload(event, this);"' +
+                            'data-url="@Url.Action("DownloadMedicalCertificateFile", "Attendance", new { Area = "SelfService" })"' +
+                            'data-keyid="' + data.appNo + '"' +
+                            'data-clientfilename="' + data.appNo + '_MedCert.pdf"' +
+                            '>MedCert ' +
+                                    //'<i class="fas fa-file-download" ></i >' +
+                                    '</a > ';
+                            }
+                            else return '';
+                        },
+                        'className': "td-icon",
+                    },
+                    { data: "leadName", width: '15.0rem' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<a class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url="@Url.Action("LeaveDetailsSLOnBehalf", "Attendance", new { Area = "SelfService" })"' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-applicationid="' + data.applicationId + '"' +
+                        ' data-empno="' + data.empNo + '"' +
+                        ' data-modaltitle="Leave details" ' +
+                        ' data-modalheader="Leave details" ' +
+                        ' > ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </a>'
+                        },
+                        'className': "td-icon",
+                    },
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApplicationId)' + '</dt><dd class="col-lg-8">' + data.applicationId + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.ApplicationDate)' + '</dt><dd class="col-lg-8">' + moment(data.applicationDate).format('L') + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.StartDate)' + '</dt><dd class="col-lg-8">' + moment(data.startDate).format('L') + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EndDate)' + '</dt><dd class="col-lg-8">' + moment(data.endDate).format('L') + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.LeaveType)' + '</dt><dd class="col-lg-8">' + data.leaveType + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.LeavePeriod)' + '</dt><dd class="col-lg-8">' + data.office + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.MedCertFileName)' + '</dt><dd class="col-lg-8">' + data.medCertFileName + '</dd></dl>';
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListsOnBeHalfApprovalLeaveSL", "Attendance")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                    d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                    d.startDateTime = null; // $('#FilterDataModel_StartDateTimeFilter').val();
+                    d.endDateTime = null; // $('#FilterDataModel_EndDateTimeFilter').val();
+                    d.statusTypeId = null; // $('#FilterDataModel_StatusTypeId').val();
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                    });
+
+                }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+
+        });
+
+
+
+        function initModalFormListners() {
+            console.log("Listner");
+            $("#formSLLeaveReview button[id=btnapprove]").on("click", function () {
+                doSLApproval(this);
+            });
+
+            $("#formSLLeaveReview button[id=btnreject]").on("click", function () {
+                doSLRejection(this);
+            });
+        }
+
+
+        function doSLApproval(btnObj) {
+            var approved = 1;
+            SubmitApproval(approved);
+        }
+
+        function doSLRejection(btnObj) {
+            var rejected = -1;
+            SubmitApproval(rejected);
+        }
+
+        function SubmitApproval(aprovalType) {
+            var applicationId = $("#formSLLeaveReview input[id=ApplicationId]").val();
+            var remarks = $("#formSLLeaveReview input[id=Remarks]").val();
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#formSLLeaveReview input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("OnBehalfApprovalLeaveSL", "Attendance", new {Area = "SelfService"})',
+                type: 'POST',
+                data: {
+                    applicationId: applicationId,
+                    remarks: remarks,
+                    approvalType: aprovalType
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    hideLoader();
+                    if (data.success) {
+                        $("#modalcontainer").modal('hide');
+                        localLoadDataTable();
+                        notify("success", data.response, "Success");
+                    }
+                    else
+                        notify("error", data.response, "Error");
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+
+        }
+
+
+    </script>
+}

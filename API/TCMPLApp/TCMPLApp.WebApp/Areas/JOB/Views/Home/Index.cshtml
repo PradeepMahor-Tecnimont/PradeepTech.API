@@ -1,0 +1,197 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Job Form</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-12">
+    <div class="d-flex justify-content-end p-r-2 m-b-10 m-r-5">
+        <a href="http://portal.ticb.comp/OtherDoc/Information%20%20User%20Manuals/JobForm%20v2%20manual.pdf" target="_blank">
+            <i class="fas fa-info-circle fa-2x"></i>
+        </a>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionReadJob))
+        {
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Jobs list</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/JOB/JOB/Index">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-list f-20 text-white theme-blue"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobApprovalMd))
+        {
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Jobs Approval CMD</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/JOB/JOB/ApprovalCMDIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-thumbs-up f-20 text-white theme-brown"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobApprovalAfc))
+        {
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Jobs Approval AFC</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/JOB/JOB/ApprovalAFCIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-thumbs-up f-20 text-white theme-capri"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobApprovalSponsor))
+        {
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Jobs Approval JS</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/JOB/JOB/ApprovalJSIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-thumbs-up f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobFormAdmin))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Change project manager</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/JOB/JOB/ChangePMJSIndex?roleName=JS">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-circle f-20 text-white theme-dark-orange"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Change job sponsor</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/JOB/JOB/ChangePMJSIndex?roleName=PM">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-cog f-20 text-white theme-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Masters</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/JOB/Masters/Index">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-red"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobReport))
+        {
+            <div class="col-md-4 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Reports</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/JOB/JobReport/Index">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

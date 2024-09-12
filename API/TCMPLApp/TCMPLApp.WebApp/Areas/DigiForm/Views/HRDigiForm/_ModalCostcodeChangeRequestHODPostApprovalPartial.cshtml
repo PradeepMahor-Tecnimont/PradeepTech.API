@@ -1,0 +1,253 @@
+﻿@model TCMPLApp.WebApp.Models.CostcodeChangeRequestDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="HRDigiForm"
+      asp-action="CostcodeChangeRequestHODPostApproval"
+      id="formCostcodeChangeRequestHODEditApproval"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.KeyId" />
+
+    @Html.TextBoxFor(model => model.TransferDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    @Html.TextBoxFor(model => model.TransferEndDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Costcode HoD Post Approval"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5><b> @Html.Raw(Model.TransferType) </b></h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Employee)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Employee)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Grade)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Grade)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentDesignation)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentDesignation)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentJobTitle)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentJobTitle)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TransferType)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TransferType)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.CurrentCostCode)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.CurrentCostCode)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TargetCostCode)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TargetCostCode)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    <label id="TrDate" class="control-label">Travel date</label>
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.TransferDate?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="TransferEndDate" class="control-label"></label>
+                                <input id="transferEndDate" class="form-control datepicker" placeholder="@localizer["dd-Mon-yyyy"]" required />
+                                <span asp-validation-for="TransferEndDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Remarks)
+                                </div>
+                                <div class="dd-met">
+                                    @if (Model.Remarks != null)
+                                        @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.Remarks).Replace("\n", "<br/>"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.TargetHodRemarks)
+                                </div>
+                                <div class="dd-met">
+                                    @if (Model.TargetHodRemarks != null)
+                                        @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.TargetHodRemarks).Replace("\n", "<br/>"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.HrRemarks)
+                                </div>
+                                <div class="dd-met">
+                                    @if (Model.HrRemarks != null)
+                                        @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.HrRemarks).Replace("\n", "<br/>"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
+                    
+                    @if (Model.ExtensionDetailsList.Count() > 0)
+                    {
+                        <hr />
+                        @localizer["Extension details"]
+                        <hr />
+                        @for (int s = 0; s < Model.ExtensionDetailsList.Count; s++)
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            @Html.DisplayNameFor(model => model.ExtensionDetailsList[s].TransferEndDate)
+                                        </div>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.ExtensionDetailsList[s].TransferEndDate?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            @Html.DisplayNameFor(model => model.ExtensionDetailsList[s].Remarks)
+                                        </div>
+                                        <div class="dd-met">
+                                            @if (!String.IsNullOrEmpty(Model.ExtensionDetailsList[s].Remarks))
+                                            {
+                                                @Html.Raw(System.Web.HttpUtility.HtmlEncode(Model.ExtensionDetailsList[s].Remarks).Replace("\n", "<br/>"))
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            @Html.DisplayNameFor(model => model.ExtensionDetailsList[s].ModifiedByName)
+                                        </div>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.ExtensionDetailsList[s].ModifiedBy) - @Html.Raw(Model.ExtensionDetailsList[s].ModifiedByName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <div class="dt-met">
+                                            @Html.DisplayNameFor(model => model.ExtensionDetailsList[s].ModifiedOn)
+                                        </div>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.ExtensionDetailsList[s].ModifiedOn?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        }
+                    }
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label asp-for="ApprovalRemarks" class="control-label"></label>
+                                <textarea asp-for="ApprovalRemarks" class="form-control" placeholder="@localizer["Remarks"]" rows="2"></textarea>
+                                <span asp-validation-for="ApprovalRemarks" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

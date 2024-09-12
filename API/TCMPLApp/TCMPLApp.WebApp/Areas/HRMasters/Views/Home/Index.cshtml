@@ -1,0 +1,411 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">HR Masters</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionViewHRMasters))
+{
+    <div class="col-sm-12">
+        <div class="row">
+
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/HRMasters/Employee">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> @ViewBag.EmployeeCount</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Costcenter</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/HRMasters/Costcenter">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> @ViewBag.CostcodeCount</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-building f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee - Office Location</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("EmpOfficeLocationIndex", "EmpOfficeLocation", new { Area = "HRMasters" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-chair f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header header-flex">
+                        <h5>Reports</h5>
+                        <span class="f-14 f-w-700"> &#10148; </span>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/HRMasters/Home/ReportIndex">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300">&nbsp;</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-list f-20 text-white theme-dark-orange"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionEditHRMasters))
+            {
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header header-flex">
+                            <h5>Others</h5>
+                            <span class="f-14 f-w-700"> &#10148; </span>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="~/HRMasters/Home/Index2">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h3 class="mb-2 f-w-300">&nbsp;</h3>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-archive f-20 text-white theme-brown"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                        <div class="card-header header-flex">
+                            <h5>Utilities</h5>
+                            <span class="f-14 f-w-700"> &#10148; </span>
+                        </div>
+                        <div class="card-block card-tile">
+                            <a href="~/HRMasters/Home/UtilityIndex">
+                                <div class="row align-items-center justify-content-center stretched-link">
+                                    <div class="col">
+                                        <h3 class="mb-2 f-w-300">&nbsp;</h3>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-tools f-20 text-white theme-capri"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            }
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Region Master</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("RegionsIndex", "HRMaster", new { Area = "HRMasters" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-chair f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Holidays</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("RegionHolidaysIndex", "HRMaster", new { Area = "HRMasters" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-bell f-20 text-white theme-dark-orange"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="row">
+    <div class="col-md-6 col-xl-3">
+    <a href="~/HRMasters/Home/Index2">
+    <div class="card card-tpl">
+    <div class="card-block">
+    <div class="row align-items-center justify-content-center min-height-125">
+    <div class="col">
+    <h2 class="mb-2 f-w-300"> &nbsp; </h2>
+    <h5 class="text-muted mb-0">Others</h5>
+    </div>
+    <div class="col-auto">
+    <i class="fas fa-archive text-white f-30 theme-brown"></i>
+    </div>
+    </div>
+    </div>
+    </div>
+    </a>
+    </div>
+    </div>*@
+    </div>
+}
+
+@if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISFeature))
+{
+    <div class="col-sm-12">
+        <div class="row">
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISProspectiveReadAll))
+            {
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Prospective Employees</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ProspectiveEmployeesIndex", "HRMIS", new { Area = "HRMasters" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISTransfersReadAll))
+            {
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Internal Transfers</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("InternalTransfersIndex", "HRMIS", new { Area = "HRMasters" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISResignedReadAll))
+            {
+                <div class="col-md-3 col-xl-3">
+                    <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Resigned Employee</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("ResignedEmployeeIndex", "HRMIS", new { Area = "HRMasters" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user-alt f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Joining + Resigning List  - Report</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="#"
+                        data-jqueryselector="openmodal"
+                        data-modalcontainer="modalcontainer"
+                        data-modalpopupwidth="rightw35"
+                        data-url='@Url.Action("HRMISExcelDownload", "HRMIS", new { typeId = "JoinResignList" })'>
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"> </h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-cogs f-20 text-white theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+@*            <environment include="Development">
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Employee - Office Location</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="@Url.Action("EmpOfficeLocationIndex", "EmpOfficeLocation", new { Area = "HRMasters" })">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h7 class="mb-2 f-w-300"></h7>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-chair f-20 text-white theme-light-teal"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </environment>
+*@        </div>
+    </div>
+}
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/HRMasters.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+            $('#btnExportExcel').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                var url = '@Url.Action("HRMISExcelDownload", "HRMIS", new {Area = "HRMasters" })';
+                exportExcel(url);
+            });
+        }
+
+        function initDatePicker() {
+
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true
+            });
+
+
+            $('#startDateXl').datepicker({
+                format: "dd-MM-yyyy",
+                autoclose: true
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val()
+
+                $("#StartDate").val(fvDate)
+
+                $(this).datepicker('hide')
+            })
+
+            $('#endDateXl').datepicker({
+                format: "dd-MM-yyyy",
+                autoclose: true
+            }).on('change', function (e, date) {
+
+                var fvDate = $(this).val()
+                $("#EndDate").val(fvDate)
+
+                $(this).datepicker('hide')
+
+            });
+
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+                var vStartDate = moment(date);
+                var futureMonthEnd = moment(vStartDate).endOf('month');
+
+                $('#endDateFilter').bootstrapMaterialDatePicker('setDate', futureMonthEnd);
+                $('#endDateFilter').val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+                $("#EndDate").val(moment(futureMonthEnd).format('DD-MMM-YYYY'));
+
+            });
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+
+        }
+    </script>
+}

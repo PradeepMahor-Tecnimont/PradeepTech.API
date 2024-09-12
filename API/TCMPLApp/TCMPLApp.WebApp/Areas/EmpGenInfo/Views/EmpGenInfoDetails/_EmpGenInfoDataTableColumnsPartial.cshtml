@@ -1,0 +1,446 @@
+﻿@model TCMPLApp.WebApp.Models.GetLockStatusDetailViewModel
+@{
+    string isOnBehalf = ViewData["IsOnBehalf"]?.ToString() ?? "";
+
+    string urlGratuity = isOnBehalf == IsOk ? Url.Action("OnBehalfGetListsGratuity", "EmpGenInfoDetails") : Url.Action("GetListsGratuity", "EmpGenInfoDetails");
+    string urlSuperAnnuation = isOnBehalf == IsOk ? Url.Action("OnBehalfGetListsSuperannuation", "EmpGenInfoDetails") : Url.Action("GetListsSuperannuation", "EmpGenInfoDetails");
+    string urlEPF = isOnBehalf == IsOk ? Url.Action("OnBehalfGetListsEmpProFundDetails", "EmpGenInfoDetails") : Url.Action("GetListsEmpProFundDetails", "EmpGenInfoDetails");
+    string urlGTLI = isOnBehalf == IsOk ? Url.Action("OnBehalfGetListsGTLIDetails", "EmpGenInfoDetails") : Url.Action("GetListsGTLIDetails", "EmpGenInfoDetails");
+    string urlPensionFundMarried = isOnBehalf == IsOk ? Url.Action("OnBehalfGetListsEmpPensionFundMarried", "EmpGenInfoDetails") : Url.Action("GetListsEmpPensionFundMarried", "EmpGenInfoDetails");
+    string urlPensionFund = isOnBehalf == IsOk ? Url.Action("OnBehalfGetListsEmpPensionFund", "EmpGenInfoDetails") : Url.Action("GetListsEmpPensionFund", "EmpGenInfoDetails");
+    string urlMediclaim = isOnBehalf == IsOk ? Url.Action("OnBehalfGetListsMediclaimDetails", "EmpGenInfoDetails") : Url.Action("GetListsMediclaimDetails", "EmpGenInfoDetails");
+
+    string urlGratuityEdit = isOnBehalf == IsOk ? Url.Action("OnBehalfGratuityNominationEdit", "EmpGenInfoDetails") : Url.Action("GratuityNominationEdit", "EmpGenInfoDetails");
+    string urlGratuityDelete = isOnBehalf == IsOk ? Url.Action("OnBehalfGratuityNominationDelete", "EmpGenInfoDetails") : Url.Action("GratuityNominationDelete", "EmpGenInfoDetails");
+
+    string urlSuperAnnuationEdit = isOnBehalf == IsOk ? Url.Action("OnBehalfSupperannuationNominationEdit", "EmpGenInfoDetails") : Url.Action("SupperannuationNominationEdit", "EmpGenInfoDetails");
+    string urlSuperAnnuationDelete = isOnBehalf == IsOk ? Url.Action("OnBehalfSupperannuationNominationDelete", "EmpGenInfoDetails") : Url.Action("SupperannuationNominationDelete", "EmpGenInfoDetails");
+
+    string urlEmpProFundEdit = isOnBehalf == IsOk ? Url.Action("OnBehalfEmpProFundNomineeEdit", "EmpGenInfoDetails") : Url.Action("EmpProFundNomineeEdit", "EmpGenInfoDetails");
+    string urlEmpProFundDelete = isOnBehalf == IsOk ? Url.Action("OnBehalfEmpProFundNomineeDelete", "EmpGenInfoDetails") : Url.Action("EmpProFundNomineeDelete", "EmpGenInfoDetails");
+
+    string urlPensionFundMarriedEdit = isOnBehalf == IsOk ? Url.Action("OnBehalfEmpPensionFundMarriedMemEdit", "EmpGenInfoDetails") : Url.Action("EmpPensionFundMarriedMemEdit", "EmpGenInfoDetails");
+    string urlPensionFundMarriedDelete = isOnBehalf == IsOk ? Url.Action("OnBehalfEmpPensionFundMarriedMemDelete", "EmpGenInfoDetails") : Url.Action("EmpPensionFundMarriedMemDelete", "EmpGenInfoDetails");
+
+    string urlPensionFundEdit = isOnBehalf == IsOk ? Url.Action("OnBehalfEmpPensionFundEdit", "EmpGenInfoDetails") : Url.Action("EmpPensionFundEdit", "EmpGenInfoDetails");
+    string urlPensionFundDelete = isOnBehalf == IsOk ? Url.Action("OnBehalfEmpPensionFundDelete", "EmpGenInfoDetails") : Url.Action("EmpPensionFundDelete", "EmpGenInfoDetails");
+
+    string urlMediclaimEdit = isOnBehalf == IsOk ? Url.Action("OnBehalfMediclaimDetailsEdit", "EmpGenInfoDetails") : Url.Action("MediclaimDetailsEdit", "EmpGenInfoDetails");
+    string urlMediclaimDelete = isOnBehalf == IsOk ? Url.Action("OnBehalfMediclaimDetailsDelete", "EmpGenInfoDetails") : Url.Action("MediclaimDetailsDelete", "EmpGenInfoDetails");
+
+    string urlGTLIEdit = isOnBehalf == IsOk ? Url.Action("OnBehalfGTLIDetailsEdit", "EmpGenInfoDetails") : Url.Action("GTLIDetailsEdit", "EmpGenInfoDetails");
+    string urlGTLIDelete = isOnBehalf == IsOk ? Url.Action("OnBehalfGTLIDetailsDelete", "EmpGenInfoDetails") : Url.Action("GTLIDetailsDelete", "EmpGenInfoDetails");
+}
+<script>
+
+    let pvvUrlGratuityList = "@urlGratuity";
+    let pvvUrlSuperannuationList = "@urlSuperAnnuation"
+    let pvvUrlEmpProFundList = "@urlEPF";
+    let pvvUrlGTLIList = "@urlGTLI";
+    let pvvUrlEmpPensionFundMarriedList = "@urlPensionFundMarried";
+    let pvvUrlEmpPensionFundList = "@urlPensionFund";
+    let pvvUrlEmpMediclaimList = "@urlMediclaim";
+
+    var isNominationOpen = @(Model.IsNominationOpen == "OK" ? "true" : "false");
+    var isMediclaimOpen = @(Model.IsMediclaimOpen == "OK" ? "true" : "false");
+    var isAadhaarOpen = @(Model.IsAadhaarOpen == "OK" ? "true" : "false");
+    var isPassportOpen = @(Model.IsPassportOpen == "OK" ? "true" : "false");
+    var isGtliOpen = @(Model.IsGtliOpen == "OK" ? "true" : "false");
+
+    var validateTabsUrl = "@Url.Action("GetEmpGenInfoValidateStatus", "EmpGenInfoDetails")";
+
+    @if ((bool)@Context.Items["isMobile"] == false)
+    {
+        <text>
+            let datatableColumnsGratuity = [
+                { data: "nomName" },
+                { data: "nomAdd1" },
+                { data: "relation" },
+                { data: "nomDob" },
+                { data: "sharePcnt" }
+            ];
+
+        let datatableColumnsGratuityEdit = [
+            { data: "nomName" },
+            { data: "nomAdd1" },
+            { data: "relation" },
+            { data: "nomDob" },
+            { data: "sharePcnt" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url=@urlGratuityEdit ' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + row.keyId + '"' +
+                        ' data-modaltitle="Edit Gratuity Details" ' +
+                        ' data-modalheader="Edit Gratuity Details"> ' +
+                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                        ' </button>'
+
+                },
+                className: "td-icon",
+            },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+
+                    return ' <button class="btn btn-outline-danger btn-sm border-none sweet-multiple"  ' +
+                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-callback="PostDeleteReloadGratuityListDataTable"' +
+                        ' data-url=@urlGratuityDelete ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-empno="' + data.empno + '"' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                        ' data-confirmationtext="Delete Gratuity Nominee Name ' + data.nomName + ' " ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Delete" ' +
+                        ' title="Delete Gratuity Details"> ' +
+                        ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                        ' </button> ';
+
+                }
+            }
+
+        ];
+
+        let datatableColumnsSuperannuation = [
+            { data: "nomName" },
+            { data: "nomAdd1" },
+            { data: "relation" },
+            { data: "nomDob" },
+            { data: "sharePcnt" }
+        ];
+
+        let datatableColumnsSuperannuationEdit = [
+            { data: "nomName" },
+            { data: "nomAdd1" },
+            { data: "relation" },
+            { data: "nomDob" },
+            { data: "sharePcnt" },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+                    return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url=@urlSuperAnnuationEdit' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + row.keyId + '"' +
+                        ' data-modaltitle="Edit Superannuation Details" ' +
+                        ' data-modalheader="Edit Superannuation Details" ' +
+                        ' > ' +
+                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                        ' </button>'
+
+                }
+            },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+
+                    return ' <button class="btn btn-outline-danger btn-sm border-none sweet-multiple"  ' +
+                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-callback="PostDeleteReloadSuperannuationListDataTable"' +
+                        ' data-url=@urlSuperAnnuationDelete ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-empno="' + data.empno + '"' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                        ' data-confirmationtext="Delete Superannuation Nominee Name ' + data.nomName + ' " ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Delete" ' +
+                        ' title="Delete Superannuation Details"> ' +
+                        ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                        ' </button> ';
+
+                }
+            }
+        ];
+
+        let datatableColumnsEmpProFund = [
+            { data: "nomName" },
+            { data: "relation" },
+            { data: "nomDob" },
+            { data: "sharePcnt" },
+            { data: "guardianName" },
+            { data: "guardianRelation" }
+
+        ];
+
+        let datatableColumnsEmpProFundEdit = [
+            { data: "nomName" },
+            { data: "relation" },
+            { data: "nomDob" },
+            { data: "sharePcnt" },
+            { data: "guardianName" },
+            { data: "guardianRelation" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url=@urlEmpProFundEdit' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + row.keyId + '"' +
+                        ' data-modaltitle="Employee Provident Fund Details" ' +
+                        ' data-modalheader="Employee Provident Fund Details"> ' +
+                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                        ' </button>'
+
+                },
+                className: "td-icon",
+            },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+
+                    return ' <button class="btn btn-outline-danger btn-sm border-none sweet-multiple"  ' +
+                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-callback="PostDeleteReloadEmpProFundListDataTable"' +
+                        ' data-url=@urlEmpProFundDelete ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-empno="' + data.empno + '"' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                        ' data-confirmationtext="Delete Employee Provident Fund Nominee Name ' + data.nomName + ' " ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Delete" ' +
+                        ' title="Delete Employee Provident Fund Details"> ' +
+                        ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                        ' </button> ';
+
+                }
+            }
+
+        ];
+
+        let datatableColumnsEmpPensionFundMarried = [
+            { data: "nomName" },
+            { data: "nomAdd1" },
+            { data: "relation" },
+            { data: "nomDob" }
+        ];
+
+        let datatableColumnsEmpPensionFundMarriedEdit = [
+            { data: "nomName" },
+            { data: "nomAdd1" },
+            { data: "relation" },
+            { data: "nomDob" },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+                    return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url=@urlPensionFundMarriedEdit' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + row.keyId + '"' +
+                        ' data-modaltitle="Edit Employee Pension Fund Details" ' +
+                        ' data-modalheader="Edit Employee Pension Fund Details" ' +
+                        ' > ' +
+                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                        ' </button>'
+
+                }
+            },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+
+                    return ' <button class="btn btn-outline-danger btn-sm border-none sweet-multiple"  ' +
+                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-callback="PostDeleteReloadEmpPensionFundMarriedListDataTable"' +
+                        ' data-url=@urlPensionFundMarriedDelete ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-empno="' + data.empno + '"' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                        ' data-confirmationtext="Delete Employee Pension Fund Nominee Name ' + data.nomName + ' " ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Delete" ' +
+                        ' title="Delete Employee Pension Fund Details"> ' +
+                        ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                        ' </button> ';
+
+                }
+            }
+
+        ];
+
+        let datatableColumnsEmpPensionFund = [
+            { data: "nomName" },
+            { data: "nomAdd1" },
+            { data: "relation" },
+            { data: "nomDob" }
+        ];
+
+        let datatableColumnsEmpPensionFundEdit = [
+            { data: "nomName" },
+            { data: "nomAdd1" },
+            { data: "relation" },
+            { data: "nomDob" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url=@urlPensionFundEdit' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + row.keyId + '"' +
+                        ' data-modaltitle="Employee Pension Fund Details" ' +
+                        ' data-modalheader="Employee Pension Fund Details"> ' +
+                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                        ' </button>'
+
+                },
+                className: "td-icon",
+            },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+
+                    return ' <button class="btn btn-outline-danger btn-sm border-none sweet-multiple"  ' +
+                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-callback="PostDeleteReloadEmpPensionFundListDataTable"' +
+                        ' data-url=@urlPensionFundDelete ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-empno="' + data.empno + '"' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                        ' data-confirmationtext="Delete Employee Pension Fund Nominee Name ' + data.nomName + ' " ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Delete" ' +
+                        ' title="Delete Employee Pension Fund Details"> ' +
+                        ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                        ' </button> ';
+
+                }
+            }
+
+        ];
+
+        let datatableColumnsEmpMediclaim = [
+            { data: "member" },
+            { data: "dob" },
+            { data: "relationText" },
+            { data: "occupationText" },
+            { data: "remarks" }
+
+        ];
+
+        let datatableColumnsEmpMediclaimEdit = [
+            { data: "member" },
+            { data: "dob" },
+            { data: "relationText" },
+            { data: "occupationText" },
+            { data: "remarks" },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+                    return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+                        ' data-url=@urlMediclaimEdit' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + row.keyId + '"' +
+                        ' data-modaltitle="Edit Mediclaim Details" ' +
+                        ' data-modalheader="Edit Mediclaim Details" ' +
+                        ' > ' +
+                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                        ' </button>'
+
+                }
+            },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+
+                    if (data.relationVal == 5) {
+
+                        return ''  ;
+                    }
+                    else {
+                        return ' <button class="btn btn-outline-danger btn-sm border-none sweet-multiple"  ' +
+                            ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                            ' data-callback="PostDeleteReloadEmpMediclaimListDataTable"' +
+                            ' data-url=@urlMediclaimDelete ' +
+                            ' data-id="' + data.keyId + '"' +
+                            ' data-empno="' + data.empno + '"' +
+                            ' data-modaltitle="Please Confirm!" ' +
+                            ' data-confirmationtext="Delete Mediclaim Nominee Name ' + data.member + ' " ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Delete" ' +
+                            ' title="Delete Mediclaim Details"> ' +
+                            ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                            ' </button> ';
+                    }
+                }
+            }
+
+        ];
+
+        let datatableColumnsGTLI = [
+            { data: "nomName" },
+            { data: "relation" },
+            { data: "nomDob" },
+            { data: "sharePcnt" },
+            { data: "nomMinorGuardName" },
+            { data: "nomMinorGuardRelation" }
+        ];
+
+        let datatableColumnsGTLIEdit = [
+            { data: "nomName" },
+            { data: "relation" },
+            { data: "nomDob" },
+            { data: "sharePcnt" },
+            { data: "nomMinorGuardName" },
+            { data: "nomMinorGuardRelation" },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+                    return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                        ' data-jqueryselector="openmodal" ' +
+                        ' data-modalcontainer="modalcontainer" ' +
+
+                        ' data-url=@urlGTLIEdit' +
+                        ' data-modalpopupwidth="rightw35" ' +
+                        ' data-id="' + row.keyId + '"' +
+                        ' data-modaltitle="Edit Employee GTLI Details" ' +
+                        ' data-modalheader="Edit Employee GTLI Details" ' +
+                        ' > ' +
+                        ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                        ' </button>'
+
+                }
+            },
+            {
+                data: null,
+                className: "td-icon",
+                render: function (data, type, row) {
+
+                    return ' <button class="btn btn-outline-danger btn-sm border-none sweet-multiple"  ' +
+                        ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                        ' data-callback="PostDeleteReloadGTLIListDataTable"' +
+                        ' data-url=@urlGTLIDelete ' +
+                        ' data-id="' + data.keyId + '"' +
+                        ' data-empno="' + data.empno + '"' +
+                        ' data-modaltitle="Please Confirm!" ' +
+                        ' data-confirmationtext="Delete Employee GTLI Nominee Name ' + data.nomName + ' " ' +
+                        ' data-confirmationtype="warning" data-confirmbuttontext="Delete" ' +
+                        ' title="Delete Employee GTLI Details"> ' +
+                        ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                        ' </button> ';
+
+                }
+            }
+
+        ];
+        </text>
+    }
+
+</script>

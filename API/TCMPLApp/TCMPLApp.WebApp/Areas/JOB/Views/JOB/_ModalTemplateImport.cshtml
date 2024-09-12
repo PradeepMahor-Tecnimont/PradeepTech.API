@@ -1,0 +1,77 @@
+﻿@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="JOB"
+      asp-action="JobBudgetXLTemplateUpload"
+      asp-area="JOB"
+      data-id="@ViewBag.Project"
+      id="formJobmasterBudgetXLUpload"
+      data-projno="@ViewBag.Project"       
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"      
+      data-ajax-complete="onComplete(null);loadScript()"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input id="ProjectImport" type="hidden" value="@ViewBag.Project" /> 
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Import / export budget"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h6>@ViewBag.ProjectName [ @ViewBag.Project ]</h6>
+            </div>
+            <div class="card-block">               
+                 <div class="form-group">
+                    <label class="control-label">Opening month</label>
+                    <input id="monthDate" class="form-control datepicker2" data-date-format="MMM-yyyy" placeholder="@localizer["Month"]" value="@ViewBag.OpeningMonth"
+                    @if (ViewBag.Revision != "0")
+                    {
+                        @Html.Raw("disabled")
+                    }
+                    @*else
+                    {
+                        @if (ViewBag.OpeningMonth != "")
+                        {
+                            @Html.Raw("disabled")
+                        }
+                    }*@ />
+                </div>
+                <div class="row p-1"></div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6"> 
+                            <button type="button" id="btnJobmasterBudgetXLTemplate" name="btnJobmasterBudgetXLTemplate" title="Excel Download"
+                                    class="btn btn-sm btn-success mx-2">
+                                <i class="far fa-file-excel"></i>&nbsp; @localizer["Download template"]
+                            </button>                            
+                        </div>
+                    </div>
+                </div>
+                <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                    <div class="dz-details">
+                        <div class="dz-filename"><span data-dz-name></span></div>
+                        <div class="dz-size" data-dz-size></div>
+                        <img data-dz-thumbnail />
+                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                    </div>
+                    <div class="dz-default dz-message" data=""><span>Drop excel file here to import</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" id="btnjobmasterBudgetUpdateXL"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Import"]">
+            @localizer["Import"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

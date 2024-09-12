@@ -1,0 +1,82 @@
+﻿@model TCMPLApp.Domain.Models.OffBoarding.OffBoardingEmployeeContactInfo
+@{
+    ViewData["Title"] = "Employee contact information";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Contact information</li>
+    </ol>
+}
+
+<form asp-action="EmployeeContactInfo"
+      asp-controller="Exits"
+      asp-area="OffBoarding"
+      method="post"
+      accept-charset="UTF-8">
+
+    <div class="container-fluid border rounded shadow m-auto py-2 col-md-6 col-xl-3">
+        <div class="app-h4 app-card-header mb-2">
+            <p>Off-Boarding - Employee contact information</p>
+        </div>
+        <div class="d-flex flex-row">
+            <a name="DeptApprovalStatus" id="idDeptApprovalStatus" title="Dept approval status" class="btn btn-sm btn-outline-primary ml-auto" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw50"
+               data-url='@Url.Action("GetAllApprovals", "Exits", new { Area = "OffBoarding" })'
+               data-statichtmlsourcedivid=""
+               data-offboardingempno="@Model.Empno"
+               data-modaltitle="Off-Boarding"
+               data-modalheader="Department Approvals">
+                Check approval status
+            </a>
+        </div>
+        <hr class="m-1" />
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    @Html.HiddenFor(m => m.Empno)
+
+                    @Html.DisplayNameFor(m => m.Address)
+                    <textarea rows="3" class="form-control" asp-for="Address"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.MobilePrimary)
+                    <input class="form-control" asp-for="MobilePrimary" />
+                    <span asp-validation-for="MobilePrimary" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.AlternateNumber)
+                    <input class="form-control" asp-for="AlternateNumber" />
+                    <span asp-validation-for="AlternateNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save fa-1x"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,79 @@
+﻿@model TCMPLApp.WebApp.Models.DMSOrphanAssetDetailViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{   
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<form asp-controller="DMSAsset"
+      asp-action="PostListConfirmOrphanAsset"
+      id="formConfirmOrphanAsset"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Unqid" />
+    <input type="hidden" asp-for="@Model.Empno" />    
+    <input type="hidden" asp-for="@Model.Deskid" />
+
+    <div class="modal-header">
+        <h5 class="modal-title"> @localizer["Confirm orphan asset"] </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Html.Raw(" Desk: " + ViewBag.Deskid)</h5>
+            </div>
+            <div class="card-block ">
+                <div class="form-group">
+                    <div class="row p-2">
+                        <div class="col-md-12 ">
+                            <div class="dd-met">
+                                @Html.Raw(ViewBag.EmpName + " [ " + ViewBag.Empno + " ] ")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="overflow:auto">
+                    <table id="tbDataGridOrphan" class="table table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr class="font-weight-bold">
+                                <td rowspan="2">@Html.DisplayNameFor(model => model.AssetType)</td>
+                                <td rowspan="2">@Html.DisplayNameFor(model => model.Assetid)</td>
+                                <td rowspan="2">@Html.DisplayNameFor(model => model.Description)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center align-middle">
+                                    @localizer["Yes"]
+                                </td>
+                                <td class="text-center align-middle">
+                                    @localizer["No"]
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        @*<button class="btn btn-primary" type="submit" id="btnconfirm"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Confirm"]">
+                @localizer["Confirm"]
+            </button>*@
+        <button class="btn btn-primary" type="button" id="btnconfirm" onclick="onSave()"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        &nbsp;&nbsp;&nbsp;
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

@@ -1,0 +1,298 @@
+﻿@model TCMPLApp.WebApp.Models.SiteMapFilterFieldsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@using System.Linq
+@Html.AntiForgeryToken()
+
+@{
+    var isrequired = "";
+}
+
+<form id="formActionExecute"
+      asp-area="@Model.ControllerArea"
+      asp-controller="@Model.ControllerName"
+      asp-action="@Model.ControllerMethod"
+      data-ajax="true"
+      data-ajax-method="@Model.RequestMethodType"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@Model.ActionDesc - Filter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Model.ActionDesc - Filter</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0001")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0001"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Single line text 1
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId"
+                                       class="form-control action-parameter "
+                                       data-controllerparamname="@field.ControllerMethodParamName"
+                                @isrequired />
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0002")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0002"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Single line text 2
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId"
+                                       class="form-control action-parameter "
+                                       data-controllerparamname="@field.ControllerMethodParamName"
+                                @isrequired />
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0003")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0003"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Single line text 3
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId"
+                                       class="form-control action-parameter "
+                                       data-controllerparamname="@field.ControllerMethodParamName"
+                                @isrequired />
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0004")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0004"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Single line text 4
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId"
+                                       class="form-control action-parameter "
+                                       data-controllerparamname="@field.ControllerMethodParamName"
+                                @isrequired />
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0005")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0005"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Date 1
+                    <div class="row">
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId" class="form-control action-parameter  datepicker" placeholder="@localizer["dd-Mon-yyyy"]" value=""
+                                       data-controllerparamname="@field.ControllerMethodParamName"
+                                @isrequired />
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0006")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0006"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Date 2
+                    <div class="row">
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId" class="form-control action-parameter  datepicker" placeholder="@localizer["dd-Mon-yyyy"]" value=""
+                                       data-controllerparamname="@field.ControllerMethodParamName"
+                                @isrequired />
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0007")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0007"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Date 3
+                    <div class="row">
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId" class="form-control action-parameter  datepicker" placeholder="@localizer["dd-Mon-yyyy"]" value=""
+                                       data-controllerparamname="@field.ControllerMethodParamName"
+                                @isrequired />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0008")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0008"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // YYYY 1
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId" class="form-control action-parameter  selectYearFilter"
+                                       data-date-format="yyyy" placeholder="@localizer["Select Year"]" value=""
+                                       data-controllerparamname="@field.ControllerMethodParamName" @isrequired />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0009")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0009"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // YYYY 2
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId" class="form-control action-parameter  selectYearFilter"
+                                       data-date-format="yyyy" placeholder="@localizer["Select Year"]" value=""
+                                       data-controllerparamname="@field.ControllerMethodParamName" @isrequired />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0010")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0010"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // YYYY-MM 1
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId" class="form-control action-parameter  selectMonthYearFilter"
+                                       data-date-format="mm/yyyy" placeholder="@localizer["Select Month/Year"]" value=""
+                                       data-controllerparamname="@field.ControllerMethodParamName" @isrequired />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0011")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0011"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // YYYY-MM 2
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <input id="@field.FieldId" class="form-control action-parameter  selectMonthYearFilter"
+                                       data-date-format="mm/yyyy" placeholder="@localizer["Select Month/Year"]" value=""
+                                       data-controllerparamname="@field.ControllerMethodParamName" @isrequired />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0012")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0012"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Dropdown 1
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <select asp-for="@field.FieldId" class="form-control action-parameter  chosen-select" data-placeholder="Please select..."
+                                        data-controllerparamname="@field.ControllerMethodParamName" asp-items="ViewBag.ListF0012" required="@isrequired">
+                                    <option selected></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0013")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0013"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Dropdown 2
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <select asp-for="@field.FieldId" class="form-control action-parameter  chosen-select" data-placeholder="Please select..."
+                                        data-controllerparamname="@field.ControllerMethodParamName">
+                                    <option selected></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.FilterFormFields.Any(p => p.FieldId.Contains("F0014")))
+                {
+                    var field = (Model.FilterFormFields.First(p => p.FieldId == "F0014"));
+                    isrequired = field.IsRequired == IsOk ? "required" : "";
+
+                // Multiline Text
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">@field.FunctionalDescription</label>
+                                <textarea id="@field.FieldId" class="form-control" rows="2"
+                                          data-controllerparamname="@field.ControllerMethodParamName"
+                                @isrequired></textarea>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" id="btnExecuteAction" title="@localizer["Confirm"]"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <div id="exportExcel_Loader" class="spinner-border text-info text-center hidden "
+             style="width: 2.5rem; height: 2.5rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

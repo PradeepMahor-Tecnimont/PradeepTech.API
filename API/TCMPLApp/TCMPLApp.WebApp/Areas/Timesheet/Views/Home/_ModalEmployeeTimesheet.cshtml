@@ -1,0 +1,139 @@
+﻿@model TCMPLApp.WebApp.Models.EmployeeTimesheetDetail
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Home"
+      asp-action=""
+      id="formEmployeeTimesheet"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Employee Timesheet"]</h5>
+        <button type="button" class="close" data-dismiss="modal" id="closeBtn" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Employee Timesheet <label id="Exceed" class="control-label" style="color:red;font-weight:bold"></label></h5>
+                
+            </div>
+            <div class="card-block">
+                <div>
+                    <div class="row mb-3">
+                        <div class="col-xl-4 col-md-6">
+                            <div>
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.Name)</div>
+                                <div class="dd-met">
+                                    @(Model.Empno + " - " + Model.Name)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6">
+                            <div>
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.Parent)</div>
+                                <div class="dd-met">
+                                    @(Model.Parent + " - " + Model.CostName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6">
+                            <div>
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.DesgCode)</div>
+                                <div class="dd-met">
+                                    @(Model.DesgCode + " - " + Model.DesgName)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="row">
+                        <div class="col-xl-4 col-md-6">
+                            <div class="form-group">
+                                <div class="dt-met">Month-Year</div>
+                                <div class="dd-met">
+                                    <label id="monthYear"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6">
+                            <div class="form-group">
+                                <div class="dt-met">@Html.DisplayNameFor(model => model.TimesheetStatus)</div>
+                                <div class="dd-met">
+                                    <label id="TimesheetStatus" class="control-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 ">
+                            <label asp-for="AssignCostcode" class="control-label"></label>
+                            <select asp-for="AssignCostcode" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.DepartmentList" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="AssignCostcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div id="timesheetTable" class="hidden"></div>
+                    </div>
+                </div>
+                <div class="form-group hidden" id="timesheetdetails">
+                    <div class="row p-2">
+                        <div class="col-xl-6 col-md-12">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Remarks)</div>
+                            <div class="dd-met">
+                                <label id="Remarks" class="control-label"></label>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-12">
+                            <label>
+                                <b> 1	1	1	1	4	0	0</b> - Vacation
+                            </label><br />
+                            <label>
+                                <b>2	2	2	2	4	0	0</b> - Illness
+                            </label><br />
+                            <label>
+                                <b>5	5	5	5	4	0	0</b> - Available Hours
+                            </label><br />
+                            <label>
+                                <b> 6	6	6	6	4	0	0</b> - Training & Courses
+                            </label><br />
+                        </div>
+                        <div class="col-xl-3 col-md-12">
+                            <label>
+                                WP - Work Position
+                            </label><br />
+                            <label>
+                                <b>1 </b> - Home Office
+                            </label><br />
+                            <label>
+                                <b>2</b> - Site
+                            </label><br />
+                            <label>
+                                <b>3</b> - Vendors/ Clients Place etc
+                            </label><br />
+                            <label>
+                                <b>4</b> - Adjustment for precious month
+                            </label><br />
+                            <label>
+                                <b>5</b> - Project Specific requirement
+                            </label><br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" id="cancelBtn" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

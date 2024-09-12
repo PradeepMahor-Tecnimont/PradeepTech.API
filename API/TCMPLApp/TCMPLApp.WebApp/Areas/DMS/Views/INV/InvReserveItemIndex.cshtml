@@ -1,0 +1,152 @@
+﻿@model TCMPLApp.WebApp.Models.InvTransactionViewModel
+
+@{
+    ViewData["Title"] = "Reserve Items";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+            <li class="breadcrumb-item "><a asp-action="Index" asp-controller="INV" asp-area="DMS">Inventory</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Transactions - Reserve item list</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+<form asp-controller="Inv"
+      asp-action="InvTransactionReserveItemsDetailIndex"
+      id="formTransactionDetails">
+
+    <input type="hidden" asp-for="TransId" name="id" id="TransId" />
+</form>
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Transactions - Reserve item list</p>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbReserveItems" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@Html.DisplayNameFor(model => model.TransDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.EmpName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Parent)</th>
+                    <th>@Html.DisplayNameFor(model => model.ParentName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Assign)</th>
+                    <th>@Html.DisplayNameFor(model => model.AssignName)</th>
+                    <th>@Html.DisplayNameFor(model => model.TransTypeDesc)</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            loadReserveItemDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+        }
+
+        let vVUloadReserveItemList = "@Url.Action("GetListsReserveItems", "INV")";
+
+        function loadReserveItemDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbReserveItems",
+                pColumns: datatableColumns,
+                pUrl: vVUloadReserveItemList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var transId = "'" + data.transId + "'";
+                            return '<button class="btn btn-sm-icon" href="#" onclick="GotoDetails(' + transId + ')" title="Detail"><i class="far fa-eye"></i></button>';
+                        },
+                        className: "td-icon",
+                    },
+                    {
+                        data: "transDate",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            if (data)
+                                return moment(data).format("DD-MMM-YYYY");
+                            else
+                                return '';
+                        }
+                    },
+                    { 'data': "empno" },
+                    { 'data': "empName" },
+                    { 'data': "parent" },
+                    { 'data': "parentName" },
+                    { 'data': "assign" },
+                    { 'data': "assignName" },
+                    { 'data': "transTypeDesc" }
+                ];
+
+
+            </text>
+        }
+        
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                        loadReserveItemDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadReserveItemDataTable();
+            }
+        });
+       function PostSave(data) {
+            if (data.success) {
+                loadReserveItemDataTable();
+                hideLoader();
+                $("#modalcontainer").modal('hide');
+                notify('success', data.response, 'Success');
+            }
+        };
+
+        function GotoDetails(id) {
+
+            $('#TransId').val(id);
+            var frm = $('#formTransactionDetails');
+            frm.submit();
+        }
+    </script>
+}

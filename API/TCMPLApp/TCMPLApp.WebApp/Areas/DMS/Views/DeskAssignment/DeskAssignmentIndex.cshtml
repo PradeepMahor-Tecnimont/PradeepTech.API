@@ -1,0 +1,571 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAssignmentViewModel
+@{
+    ViewData["Title"] = "Desk Assignment";
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Desk Assignment</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<form asp-controller="DeskAssignment"
+      asp-action="DeskAssignmentIndex"
+      id="formDeskAssignmentIndex">
+    <input type="hidden" asp-for="SearchByDeskNoOrEmp" />
+
+
+    <input class="hidden" id="Emp1" name="Emp1" value="@Model.Emp1">
+    <input class="hidden" id="Emp2" name="Emp2" value="@Model.Emp2">
+    <input class="hidden" id="DeskNo" name="DeskNo" value="@Model.DeskNo">
+
+    <div class="col-sm-12">
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="input-group pt-1 pr-1 ">
+                    <input class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" value="@Model.SearchByDeskNoOrEmp"
+                           placeholder="Search EmpNo / DeskNo...">
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row col-12 p-1 m-1">
+            @if (Model.IsBlocked == IsOk)
+            {
+                <span id="spanReasoneDeskBlocked" class="pr-1 f-12 badge badge-danger" style="text-align: left">
+                    @Html.Raw(@Model.BlockedReason)
+                </span>
+            }
+        </div>
+
+        <div class="row ">
+            <div class="col-xl-4 col-md-6 col-sm-12 ">
+                <div class=" mt-1 ml-1 mr-1 ">
+                    <div class="card-deck" style="min-height:570px;">
+                        <div class="card shadow col-md-12 col-xl-12 ">
+                            <div class="card-block pl-0 pr-0">
+                                <div class="card-header" style="height: 40px!important;padding-left: 15px;padding-top: 5px;">
+                                    <h5 class="card-title">
+                                        <b>
+                                            Assets on desk @if (!string.IsNullOrEmpty(Model.DeskNo))
+                                                @Html.Raw("- [ " + @Model.DeskNo+ " ]")
+
+                                            </b>
+                                        </h5>
+                                        <br />
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(@Model.DeskNo))
+                                {
+                                    <div class="card-toolbar">
+                                        <div role="toolbar">
+                                            <a title="Desktop" id="lDesktop" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                               data-jqueryselector="openmodal"
+                                               data-modalcontainer="modalcontainer"
+                                               data-modalpopupwidth="rightw35"
+                                               data-url='@Url.Action("AssetsOnDeskAdd", "DeskAssignment", new { Area = "DMS" })'
+                                               data-deskno="@Model.DeskNo"
+                                               data-itemTypeCode="PC"
+                                               data-statichtmlsourcedivid=""
+                                               data-modaltitle="Desktop"
+                                               data-modalheader="Desktop">
+                                                <i class="fas fa-plus"></i> Add / Modification
+                                            </a>
+
+                                            @* <a title="Desktop" id="lDesktop" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                        data-jqueryselector="openmodal"
+                                        data-modalcontainer="modalcontainer"
+                                        data-modalpopupwidth="rightw35"
+                                        data-url='@Url.Action("AssetsOnDeskAdd", "DeskAssignment", new { Area = "DMS" })'
+                                        data-deskno="@Model.DeskNo"
+                                        data-itemTypeCode="PC"
+                                        data-statichtmlsourcedivid=""
+                                        data-modaltitle="Desktop"
+                                        data-modalheader="Desktop">
+                                        <i class="fas fa-plus"></i> Desktop
+                                        </a>
+                                        <a title="Monitor" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                        data-jqueryselector="openmodal"
+                                        data-modalcontainer="modalcontainer"
+                                        data-modalpopupwidth="rightw35"
+                                        data-url='@Url.Action("AssetsOnDeskAdd", "DeskAssignment", new { Area = "DMS" })'
+                                        data-deskno="@Model.DeskNo"
+                                        data-itemTypeCode="MO"
+                                        data-statichtmlsourcedivid=""
+                                        data-modaltitle="Monitor"
+                                        data-modalheader="Monitor">
+                                        <i class="fas fa-plus"></i> Monitor
+                                        </a>
+                                        <a title="IPT Phone" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                        data-jqueryselector="openmodal"
+                                        data-modalcontainer="modalcontainer"
+                                        data-modalpopupwidth="rightw35"
+                                        data-url='@Url.Action("AssetsOnDeskAdd", "DeskAssignment", new { Area = "DMS" })'
+                                        data-deskno="@Model.DeskNo"
+                                        data-itemTypeCode="IP"
+                                        data-statichtmlsourcedivid=""
+                                        data-modaltitle="IPT Phone"
+                                        data-modalheader="IPT Phone">
+                                        <i class="fas fa-plus"></i> IPT Phone
+                                        </a>
+                                        <a title="Desk Printer" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                        data-jqueryselector="openmodal"
+                                        data-modalcontainer="modalcontainer"
+                                        data-modalpopupwidth="rightw35"
+                                        data-url='@Url.Action("AssetsOnDeskAdd", "DeskAssignment", new { Area = "DMS" })'
+                                        data-deskno="@Model.DeskNo"
+                                        data-itemTypeCode="DP"
+                                        data-statichtmlsourcedivid=""
+                                        data-modaltitle="Desk Printer"
+                                        data-modalheader="Desk Printer">
+                                        <i class="fas fa-plus"></i> Desk Printer
+                                        </a>*@
+                                        </div>
+                                    </div>
+
+                                    <br />
+                                    <div class="row m-0 p-0 w-100">
+                                        <div id="assetsOnDeskIndexPartial" class="w-100">
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.Raw("No data found")
+                                    ;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-4 col-md-6 col-sm-12 ">
+                <div class=" mt-1 ml-1 mr-1 ">
+                    <div class="card-deck" style="min-height:570px;">
+                        <div class="card shadow col-md-12 col-xl-12">
+                            <div class="card-block pl-0 pr-0">
+                                <div class="card-header" style="height: 40px!important;padding-left: 15px;padding-top: 5px;">
+                                    <h5 class="card-title">
+                                        <b>
+                                            Employee 1 @if (!string.IsNullOrEmpty(Model.DeskNo))
+                                                @Html.Raw("- [ " + @Model.DeskNo+ " ]")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            </b>
+                                        </h5>
+                                        <br />
+                                    </div>
+
+                                    <div class="card-toolbar">
+                                        <div role="toolbar">
+                                            @if (!string.IsNullOrEmpty(@Model.DeskNo))
+                                        {
+                                            @if (string.IsNullOrEmpty(@Model.Emp1))
+                                            {
+                                                <a title="Employee 1" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                                   data-jqueryselector="openmodal"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw35"
+                                                   data-url='@Url.Action("AddEmpToDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                   data-empno="@Model.Emp1"
+                                                   data-deskno="@Model.DeskNo"
+                                                   data-statichtmlsourcedivid=""
+                                                   data-modaltitle="Employee 1"
+                                                   data-modalheader="Employee 1">
+                                                    <i class="fas fa-plus"></i> Add Employee 1
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <button style="" type="button" class="btn btn-outline-danger  btn-sm border border-white "
+                                                        onclick="showDeleteConfirmationPopup(event,this);"
+                                                        data-jqueryselector="showconfirmationmodal"
+                                                        data-url='@Url.Action("DeleteEmpFromDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                        data-redirecturl="@Url.Action("DeskAssignmentIndex", "DeskAssignment", new { Area = "DMS" , search = Model.SearchByDeskNoOrEmp})"
+                                                        data-PostSave="PostSave(true)"
+                                                        data-empno="@Model.Emp1"
+                                                        data-deskno="@Model.DeskNo"
+                                                        data-modaltitle="Please Confirm!"
+                                                        data-confirmationtext="Do you want to delete Employee 1 (@Model.Emp1) ?"
+                                                        data-confirmationtype="warning"
+                                                        title="Delete Employee 1"
+                                                        data-confirmbuttontext="Delete Employee 1">
+                                                    <i class="fas fa-trash"></i> Remove Employee 1
+                                                </button>
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+
+                                <br />
+                                @if (!string.IsNullOrEmpty(@Model.Emp1))
+                                {
+                                    <div class="row m-0 p-0 w-100">
+                                        <div id="employee1AssetsIndexPartial" class="w-100">
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.Raw("No data found")
+                                    ;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-4 col-md-6 col-sm-12 ">
+                <div class=" mt-1 ml-1 mr-1 ">
+                    <div class="card-deck" style="min-height:570px;">
+                        <div class="card shadow col-md-12 col-xl-12">
+                            <div class="card-block pl-0 pr-0">
+                                <div class="card-header" style="height: 40px!important;padding-left: 15px;padding-top: 5px;">
+                                    <h5 class="card-title">
+                                        <b>
+                                            Employee 2 @if (!string.IsNullOrEmpty(Model.DeskNo))
+                                                @Html.Raw("- [ " + @Model.DeskNo+ " ]")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            </b>
+                                        </h5>
+                                        <br />
+                                    </div>
+
+                                    <div class="card-toolbar">
+                                        <div role="toolbar">
+                                            @if (!string.IsNullOrEmpty(@Model.DeskNo))
+                                        {
+                                            @if (string.IsNullOrEmpty(@Model.Emp2))
+                                            {
+                                                <a title="Add Employee 2" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                                   data-jqueryselector="openmodal"
+                                                   data-modalcontainer="modalcontainer"
+                                                   data-modalpopupwidth="rightw35"
+                                                   data-url='@Url.Action("AddEmpToDesk", "DeskAssignment", new { Area = "DMS" })'
+                                                   data-empno="@Model.Emp2"
+                                                   data-deskno="@Model.DeskNo"
+                                                   data-statichtmlsourcedivid=""
+                                                   data-modaltitle="Employee 2"
+                                                   data-modalheader="Employee 2">
+                                                    <i class="fas fa-plus"></i> Add Employee 2
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <button style="" type="button" class="btn btn-outline-danger  btn-sm border border-white"
+                                                        onkeydown="return (event.keyCode!=13);"
+                                                        onclick="showDeleteConfirmationPopup(event,this);"
+                                                        data-jqueryselector="showconfirmationmodal"
+                                                        data-url='@Url.Action("DeleteEmpFromDesk", "DeskAssignment", new { Area = "DMS"})'
+                                                        data-redirecturl="@Url.Action("DeskAssignmentIndex", "DeskAssignment", new { Area = "DMS" , search = Model.SearchByDeskNoOrEmp})"
+                                                        data-PostSave="OK"
+                                                        data-empno="@Model.Emp2"
+                                                        data-deskno="@Model.DeskNo"
+                                                        data-modaltitle="Please Confirm!"
+                                                        data-confirmationtext="Do you want to delete Employee 1 (@Model.Emp2) ?"
+                                                        data-confirmationtype="warning"
+                                                        title="Delete Employee 2"
+                                                        data-confirmbuttontext="Delete Employee 2">
+                                                    <i class="fas fa-trash"></i> Remove Employee 2
+                                                </button>
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+                                <br />
+                                @if (!string.IsNullOrEmpty(@Model.Emp2))
+                                {
+                                    <div class="row m-0 p-0 w-100">
+                                        <div id="employee2AssetsIndexPartial" class="w-100">
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.Raw("No data found")
+                                    ;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-costcenter.js"></script>
+    <script>
+        $(document).ready(function () {
+            localScript();
+
+            if ($("#DeskNo").val() != "" || $("#DeskNo").val() != '') {
+
+                $("#assetsOnDeskIndexPartial").load('@Url.Action("AssetsOnDeskIndexPartial", "DeskAssignment")?id=@Model.DeskNo');
+            }
+
+            if ($("#Emp1").val() != "" || $("#Emp1").val() != '') {
+
+                $("#employee1AssetsIndexPartial").load('@Url.Action("EmployeeAssetsIndexPartial", "DeskAssignment")?id=@Model.Emp1');
+            }
+
+            if ($("#Emp2").val() != "" || $("#Emp2").val() != '') {
+
+                $("#employee2AssetsIndexPartial").load('@Url.Action("EmployeeAssetsIndexPartial", "DeskAssignment")?id=@Model.Emp2');
+            }
+
+            loadScript();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            reloadLocation();
+
+            $("#AssetCategory").change(function (e) {
+                var selected = $('#AssetCategory').find(':selected');
+                var assetCategory = selected[0].value;
+                var assetId = $('#AssetId').val();
+
+                $.ajax({
+                    url: '@Url.Action("GetAssetList", "DeskAssignment")',
+                    data: {
+                        'assetCategory': assetCategory
+                    },
+                    type: 'GET',
+                    beforeSend: function () {
+                        showLoader();
+                        $("#btnconfirm").hide();
+                    },
+                    success: function (data) {
+                        let dropdown = $('#AssetId');
+                        dropdown.empty();
+                        var flag = false;
+                        var jsondata = JSON.parse(data);
+
+                        $(jsondata).each(function () {
+
+                            $('<option value="' + this.DataValueField + '">' + this.DataTextField + '</option>').appendTo(dropdown);
+                        });
+
+                        if (flag == false) {
+                            assetId = null;
+                        }
+
+                        dropdown.val(assetId);
+                        dropdown.trigger("change");
+                        hideLoader();
+                    },
+                    error: function (result) {
+                        hideLoader();
+                        notify('Error', result.responseText, 'danger');
+                    }
+
+                });
+
+            });
+        };
+
+        function PostSave(data) {
+
+            if (data.success) {
+
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                notify('success', data.response, 'Success');
+
+                if ($("#DeskNo").val() != "" || $("#DeskNo").val() != '') {
+
+                    $("#assetsOnDeskIndexPartial").load('@Url.Action("AssetsOnDeskIndexPartial", "DeskAssignment")?id=@Model.DeskNo');
+                }
+
+                if ($("#Emp1").val() != "" || $("#Emp1").val() != '') {
+
+                    $("#employee1AssetsIndexPartial").load('@Url.Action("EmployeeAssetsIndexPartial", "DeskAssignment")?id=@Model.Emp1');
+                }
+
+                if ($("#Emp2").val() != "" || $("#Emp2").val() != '') {
+
+                    $("#employee2AssetsIndexPartial").load('@Url.Action("EmployeeAssetsIndexPartial", "DeskAssignment")?id=@Model.Emp2');
+                }
+            }
+
+            $('#SearchByDeskNoOrEmp').val($('#GenericSearch').val());
+            var frm = $('#formDeskAssignmentIndex');
+            frm.submit();
+        }
+
+
+        function PostSaveForDesk(data) {
+
+
+            hideLoader();
+            notify('success', data.response, 'Success');
+
+            if ($(data).val() != "" || $(data).val() != '') {
+
+                $('#SearchByDeskNoOrEmp').val($(data).val());
+
+                deskOnAsset = 1;
+
+                if ($(data).val() != "" || $(data).val() != '') {
+                    $("#assetsOnDeskIndexPartial").load('@Url.Action("AssetsOnDeskIndexPartial", "DeskAssignment")?id=@Model.DeskNo');
+                    document.querySelector("#lDesktop").click();
+                }
+
+
+                //location.reload();
+
+                //var frm = $('#formDeskAssignmentIndex');
+                //frm.submit();
+
+
+            };
+
+        }
+
+
+        function reloadLocation() {
+            $("#closeBtn").off('click').on('click', function () {
+
+                $('#SearchByDeskNoOrEmp').val($('#GenericSearch').val());
+                var frm = $('#formDeskAssignmentIndex');
+                frm.submit();
+            });
+
+            $("#cancelBtn").off('click').on('click', function () {
+
+                $('#SearchByDeskNoOrEmp').val($('#GenericSearch').val());
+                var frm = $('#formDeskAssignmentIndex');
+                frm.submit();
+            });
+        }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").val() != "" || $("#GenericSearch").val() != '') {
+                    $('#SearchByDeskNoOrEmp').val($('#GenericSearch').val());
+                    var frm = $('#formDeskAssignmentIndex');
+                    frm.submit();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").val() != "" || $("#GenericSearch").val() != '') {
+                $('#SearchByDeskNoOrEmp').val($('#GenericSearch').val());
+                var frm = $('#formDeskAssignmentIndex');
+                frm.submit();
+            }
+        });
+    </script>
+    }

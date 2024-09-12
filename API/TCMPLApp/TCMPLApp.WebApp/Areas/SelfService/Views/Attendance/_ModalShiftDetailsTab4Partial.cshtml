@@ -1,0 +1,99 @@
+﻿@model TCMPLApp.WebApp.Models.ShiftLunchDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Attendance"
+      asp-action="ShiftDetailsTab4"
+      id="formShiftEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="Shiftcode" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Shift Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Model.Shiftcode - @Model.Shiftdesc</h5>
+            </div>
+            <div class="card-block">
+                <div class="card-pill">
+                    <ul class="nav nav-tabs " id="tabs-tab" role="tablist">
+                        <li class="nav-item">
+
+                            <button id="btndetails1" name="submit" type="submit" formnovalidate="" value="Details1" class="nav-link bg-white" aria-selected="false">
+                                @localizer["Shift Details"]
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="btndetails2" name="submit" type="submit" formnovalidate="" value="Details2" class="nav-link bg-white" aria-selected="false">
+                                @localizer["Shift Config Details"]
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="btndetails3" name="submit" type="submit" formnovalidate="" value="Details3" class="nav-link bg-white" aria-selected="false">
+                                @localizer["Shift Half Day Details"]
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tabs-detail4-tab" data-toggle="pill" href="#tabs-detail4" role="tab" aria-controls="tabs-detail4" aria-selected="true">
+                                @localizer["Shift Lunch Time Details"]
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tabs-detail1" role="tabpanel" aria-labelledby="tabs-detail1-tab">
+                        <div id="pw-detail2">
+                            <div class="modal-body">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="row">
+
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        @Html.DisplayNameFor(model => model.LunchStartMi)
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Model.LunchStartMi
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="form-group">
+                                                    <div class="dt-met">
+                                                        @Html.DisplayNameFor(model => model.LunchEndMi)
+                                                    </div>
+                                                    <div class="dd-met">
+                                                        @Model.LunchEndMi
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+    <div id="results" style="display:none">@TempData["Message"]</div>
+</form>

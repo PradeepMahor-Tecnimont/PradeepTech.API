@@ -1,0 +1,200 @@
+﻿@model TCMPLApp.WebApp.Models.ExcludeViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Exclude Employee</li>
+    </ol>
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+    <style>
+        tr.group,
+        tr.group:hover {
+            background-color: #ddd !important;
+            font-weight: 500;
+            color: #007bff !important
+        }
+    </style>
+}
+
+@{
+    ViewData["Title"] = "Exclude Employee";
+
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Exclude Employee</p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <a class="btn btn-outline-primary btn-sm border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("ExcludeUpload", "DMS", new { Area = "DMS" })'
+               data-modaltitle="Upload Exclude"
+               data-modalheader="Upload Exclude">
+                <i class="fa fa-upload"></i>&nbsp;Upload Exclude
+            </a>
+            <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+               href="#"
+               data-jqueryselector="binarydownload"
+               data-url="@(Url.Action("ExcludeEmployeeExcelDownload", "DMS", new { Area = "DMS" }))">
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+        </div>
+    </div>
+
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbExclude" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.ModifiedBy)</th>
+                    <th>@Html.DisplayNameFor(model => model.ModifiedOn)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        function localScript() {
+            initSelect2();
+
+        }
+
+        $(document).ready(function () {
+            loadExcludeDataTable();
+        });
+
+        let vVUloadExcludeList = "@Url.Action("GetListsExclude", "DMS")";
+
+        function loadExcludeDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbExclude",
+                pColumns: datatableColumns,
+                pUrl: vVUloadExcludeList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.empno + " - " + data.empname
+                        },
+                    },
+                    { data: "modifiedBy" },
+                    {
+                        data: "modifiedOn",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            if (data)
+                                return moment(data).format("DD-MMM-YYYY");
+                            else
+                                return '';
+                        }
+                    },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+
+                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("ExcludeEmpDelete", "DMS", new { Area = "DMS" })"' +
+                                ' data-id="' + data.empno + '"' +
+                                ' data-PostDeleteReLoadDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to delete Employee No ' + data.empname + ' " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Delete Exclude Employee" ' +
+                                ' data-confirmbuttontext="Delete Exclude Employee" > ' +
+                                ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                ' </button>';
+
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+
+                ];
+
+
+            </text>
+        }
+            function PostDeleteReLoadDataTables(data) {
+                if (data.success) {
+                    loadExcludeDataTable();
+                    hideLoader();
+                    notify('success', data.message, 'Success');
+                }
+            }
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadExcludeDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadExcludeDataTable();
+            }
+        });
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadExcludeDataTable();
+                notify('success', data.response, 'Success');
+            }
+        }
+    </script>
+}  

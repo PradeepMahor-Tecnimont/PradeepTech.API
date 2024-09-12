@@ -1,0 +1,91 @@
+﻿
+<script type="text/javascript">
+
+    let pvvUrlModuleRolesList = '@Url.Action("GetListsModuleRoles", "UserAccess")';
+    let pvvUrlModuleRolesActionsList = '@Url.Action("GetListsModuleRolesActions", "UserAccess")';
+    let pvvUrlModuleUserRolesList = '@Url.Action("GetListsModuleUserRoles", "UserAccess")';
+    let pvvUrlModuleUserRolesActionList = '@Url.Action("GetListsVUModuleUserRoleActions", "UserAccess")';
+    let vUrlModuleRoleLogsList = "@Url.Action("GetListsModuleUserRoleLogs", "UserAccess")";
+    let pvvUrlModuleDelegateList = "@Url.Action("GetListsDelegate", "UserAccess")";
+    let pvvUrlModuleDelegateLogsList = "@Url.Action("GetListsDelegateLogs", "UserAccess")";
+    let pvvUrlModuleUserRoleCostCodeList = "@Url.Action("GetListsModuleUserRoleCostcode", "UserAccess")";
+
+    @if ((bool)@Context.Items["isMobile"] == false)
+    {
+        <text>
+            let datatableColumnsModuleRoles = [
+                { 'data': "roleId" },
+                { 'data': "roleName" },
+                { 'data': "roleDesc" },
+                { 'data': "moduleRoleKeyId" }
+            ];
+
+            let datatableColumnsModuleRolesActions = [
+                { 'data': "role" },
+                { 'data': "action" },
+                { 'data': "moduleRoleActionKeyId" },
+                { 'data': "moduleRoleKeyId" }
+            ];
+
+        let datatableColumnsModuleUserRoles = [
+            { 'data': "role" },
+            { 'data': "employee" },
+            { 'data': "personId" },
+            { 'data': "moduleRoleKeyId" }
+        ];
+
+        let datatableColumnsModuleUserRolesAction = [
+            { 'data': "employee" },
+            { 'data': "personId" },
+            { 'data': "role" },
+            { 'data': "roleDesc" },
+            { 'data': "action" },
+            { 'data': "actionDesc" }
+        ];
+
+        let datatableColumnsModuleUserRoleLogs = [
+            { 'data': "role" },
+            { 'data': "employee" },
+            { 'data': "status" },
+            { 'data': "modifiedBy" },
+            {
+                data: "modifiedOn",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    return moment(data).format("DD-MMM-YYYY HH:mm:ss")
+                }
+            },
+        ];
+
+        let datatableColumnsDelegate = [
+            { 'data': "principalEmp" },
+            { 'data': "onBehalfEmp" }
+            
+        ];
+        let datatableColumnsDelegateLogs = [
+            { 'data': "principalEmp" },
+            { 'data': "onBehalfEmp" },
+            { 'data': "logStatus" },
+            { 'data': "modifiedBy" },
+            {
+                data: "modifiedOn",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    return moment(data).format("DD-MMM-YYYY HH:mm:ss")
+                }
+            },
+
+        ];
+        let datatableColumnsModuleUserRoleCostCode = [
+            { 'data': "moduleText" },
+            { 'data': "roleText" },
+            { 'data': "parentText" },
+            { 'data': "employee" },
+            
+        ];
+        </text>
+    }
+
+        
+
+</script>

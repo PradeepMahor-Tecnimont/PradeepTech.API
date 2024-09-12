@@ -1,0 +1,149 @@
+﻿@model TCMPLApp.WebApp.Models.VaccineSelfEditViewModel
+@{
+
+    ViewData["Title"] = "Vaccine Jab Date";
+
+    Html.AntiForgeryToken();
+}
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Vaccine details</li>
+    </ol>
+
+    <div class=" col-md-6 col-sm-12">
+        <div class="card bg-light mb-3 shadow-3">
+            <div class="card-header ">
+                <h5>Update Jab Details</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <div class="row p-1">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @if (Model.VaccineType == null)
+                            {
+                                <div class="form-group required">
+                                    <label class="control-label" asp-for="VaccineType"></label>
+                                    <select asp-for="VaccineType" id="vaccineType" required class="Select2 form-control" asp-items="ViewBag.VaccineTypes">
+                                        <option></option>
+                                    </select>
+                                    <span asp-validation-for="VaccineType" class="text-danger"></span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        @Html.DisplayNameFor(model => model.VaccineType)
+                                    </div>
+                                    <div class="dd-met">
+                                        @Html.HiddenFor(model => model.VaccineType)
+                                        @Html.Raw(Model.VaccineType)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                @Html.DisplayNameFor(model => model.FirstJab)
+                            </div>
+                            <div class="dd-met">
+                                @Html.HiddenFor(model => model.FirstJab)
+                                @Html.Raw(Model.FirstJab.ToString("dd-MMM-yyyy"))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-1">
+                    <div class="col-6">
+
+                        @Html.HiddenFor(m=> m.IsSecondJabNull)
+                        @Html.HiddenFor(m=> m.DummySecondJabDate)
+
+
+                        @if (!Model.IsSecondJabNull)
+                        {
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.SecondJab)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.HiddenFor(model => model.SecondJab)
+                                    @Html.Raw(Model.SecondJab?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group required">
+                                <label class="control-label" asp-for="SecondJab"></label>
+                                <input type="date" class="form-control " id="secondJabDate" asp-for="SecondJab" required>
+                                <span asp-validation-for="SecondJab" class="text-danger"></span>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-6">
+                        @if (@Model.BoosterJab.ToString().Length > 0)
+                        {
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.BoosterJab)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.HiddenFor(model => model.BoosterJab)
+                                    @Html.Raw(Model.BoosterJab?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    <label class="control-label" asp-for="BoosterJab"></label>
+                                </div>
+                                <div class="dd-met">
+                                    <input type="date" class="form-control " id="boosterJabDate" asp-for="BoosterJab">
+                                    <span asp-validation-for="BoosterJab" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <hr />
+                <div class="row p-1">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="dt-met text-right ">
+                                @*<button type="button" id="btnReset" class="btn btn-sm btn-secondary">Reset</button>*@
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $("#btnReset").click(function() {
+            $("#secondJabDate").val("");
+        });
+    </script>
+}

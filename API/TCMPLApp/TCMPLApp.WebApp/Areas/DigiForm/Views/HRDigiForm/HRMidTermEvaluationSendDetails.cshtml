@@ -1,0 +1,489 @@
+﻿@model TCMPLApp.WebApp.Models.MidEvaluationDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "HR - Mid term evaluation Details";
+
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DigiForm">Digi forms</a></li>
+        <li class="breadcrumb-item"><a asp-action="HRMidEvaluationPendingIndex" asp-controller="HRDigiForm" asp-area="DigiForm">Mid term evaluation list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Evaluation Details</li>
+
+    </ol>
+}
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <style>
+        @@media (-webkit-min-device-pixel-ratio: 1.25) {
+            .openbal .col-xl-1, .closebal .col-xl-1 {
+                flex: 0 0 12% !important;
+                max-width: 12% !important;
+            }
+        }
+    </style>
+}
+@Html.AntiForgeryToken()
+<form asp-action="MidTermEvaluationSendToHOD"
+      asp-controller="HRDigiForm"
+      asp-area="DigiForm"
+      id="HRMidTermEvaluationDetails"
+      method="post"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.KeyId" />
+
+    <div class="m-auto py-2 col-xl-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header">
+                <h5 class="card-title">
+                    HR - Mid Term Evaluation Details
+                </h5>
+            </div>
+            <div class="card-block ">
+
+                <div class="card-deck">
+                    <div class="card col-md-12 col-xl-12">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmployeeName" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.EmployeeName)
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Empno" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Empno)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="DesgCode" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.DesgName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CostName" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.CostName)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Doj" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Doj?.ToString("dd-MMM-yyyy"))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EvaluationPeriod" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Model.Doj?.ToString("dd-MMM-yyyy")  to  @Model.EvaluationPeriod
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Location" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Location)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Attendance" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Attendance)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="card-deck " style="margin-top: 20px">
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-6">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-5 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Skill1" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill1)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Skill1RatingVal" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill1RatingText)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Skill1Remark" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill1Remark)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill2)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill2RatingText)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill2Remark)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill3)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill3RatingText)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill3Remark)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill4)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill4RatingText)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill4Remark)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill5)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill5RatingText)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Skill5Remark)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow col-sm-12 col-md-12 col-xl-6  ">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Que2RatingVal" class="control-label"></label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Que2Remark" class="control-label"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Quest for enhancing knowledge and its application</label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que2RatingText)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que2Remark)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Initiative & Involvement in work </label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que3RatingText)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que3Remark)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Interpersonal & Communication Skills </label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que4RatingText)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que4Remark)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Attitude & behavior / approach towards Superior/Colleagues</label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que5RatingText)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que5Remark)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Discipline</label>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que6RatingText)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-5 col-md-6">
+                                    <div class="form-group">
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Que6Remark)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-deck" style="margin-top: 20px">
+                    <div class="card shadow col-md-12 col-xl">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Observations" class="control-label"></label>
+                                        <div class="dd-met">
+                                            @Html.Raw(Model.Observations)
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionProgEvalPrint))
+                {                    
+                    <button class="btn btn-outline-primary f-right" type="button" id="btnprint"
+                            data-jqueryselector="binarydownload"
+                            data-keyid="@Model.KeyId"
+                            data-url="@(Url.Action("MidTermEvaluationXmlPrint", "HRDigiForm", new { Area = "DigiForm" }))">
+                        <i class="fas fa-file-word blue-color"></i>
+                        @localizer["Print"]
+                    </button>                    
+
+                   @*  <button class="btn btn-outline-primary f-right" type="button" id="btnprint"
+                            data-jqueryselector="binarydownload"
+                            data-keyid="@Model.KeyId"
+                            data-url="@(Url.Action("MidTermEvaluationPrint", "HRDigiForm", new { Area = "DigiForm" }))">
+                        <i class="fas fa-file-pdf red-color"></i>
+
+                        @localizer["Print"]
+                    </button> *@
+
+                }
+
+                @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DigiForm.DigiFormHelper.ActionProgEvalSendToHod))
+                {
+                    <button class="btn btn-warning"
+                            type="button"
+                            id="passModelButton"
+                            onclick="SendBackToHOD()"
+                            data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                            data-text="@localizer["Send Back HOD"]">
+                        @localizer["Send Back HOD"]
+                    </button>
+                }
+
+                <a class="btn btn-secondary" asp-controller="HRDigiForm" asp-action="HRMidEvaluationHistoryIndex" title="@localizer["Cancel"]">
+                    @localizer["Cancel"]
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            localScript();
+
+        });
+
+        function localScript() {
+
+        };
+
+        function SendBackToHOD() {
+
+            var frm = $('#HRMidTermEvaluationDetails');
+            frm.submit();
+
+        }
+        function printMidTermEvaluation() {
+
+            var formAction = "MidTermEvaluationPrint";
+            $("#HRMidTermEvaluationDetails").attr("action", formAction);
+
+            var frm = $('#HRMidTermEvaluationDetails');
+            frm.submit();
+
+        }
+    </script>
+}

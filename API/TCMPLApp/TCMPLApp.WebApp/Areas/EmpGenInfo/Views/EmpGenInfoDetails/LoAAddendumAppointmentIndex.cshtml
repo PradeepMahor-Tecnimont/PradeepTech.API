@@ -1,0 +1,169 @@
+﻿@model TCMPLApp.WebApp.Models.LoAAddendumAppointmentViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "LoA Addendum Appointment";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="EmpGenInfo">Employee General information</a></li>
+        <li class="breadcrumb-item active" aria-current="page">LoA Addendum Appointment</li>
+    </ol>
+}
+
+<div class="container-fluid bg-white border card rounded shadow m-auto col-xl-11 p-2">
+    <div class="app-h4 app-card-header mb-2">
+        <p>LoA Addendum Appointment</p>
+    </div>
+    <div class="d-flex flex-row">
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("LoAAddendumAppointmentExcelDownload", "EmpGenInfoDetails", new { Area = "EmpGenInfo" }))">
+            <i class="fas fa-file-excel green-color"></i> Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbLoAAddendumAppointment" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th>@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th>@Html.DisplayNameFor(model => model.Parent)</th>
+                    <th>@Html.DisplayNameFor(model => model.Assign)</th>
+                    <th>@Html.DisplayNameFor(model => model.Emptype)</th>
+                    <th>@Html.DisplayNameFor(model => model.AcceptanceStatusText)</th>
+                    <th>@Html.DisplayNameFor(model => model.AcceptanceDate)</th>
+                    <th>Email Status</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadLoAAddendumAppointmentDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let vVUloadLoAAddendumAppointmentDataTableList = "@Url.Action("GetListsLoAAddendumAppointmentList", "EmpGenInfoDetails")";
+
+        function loadLoAAddendumAppointmentDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbLoAAddendumAppointment",
+                pColumns: datatableColumnsLoAAddendumAppointmentDetails,
+                pUrl: vVUloadLoAAddendumAppointmentDataTableList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+
+        };
+
+        let datatableColumnsLoAAddendumAppointmentDetails = [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.empno + " - " + data.empName
+                },
+            },
+            { 'data': "parent" },
+            { 'data': "assign" },
+            { 'data': "emptype" },
+            { 'data': "acceptanceStatusText" },
+            {
+                data: "acceptanceDate",
+                width: '10.0rem',
+                render: function (data, type, row) {
+                    if (data)
+                        return moment(data).format("DD-MMM-YYYY");
+                    else
+                        return '';
+                }
+            }
+            ,
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.emailStatus == "No") {
+                        return '<lable class="text-danger" style="font-weight: 500;">' +
+                            ' No ' +
+                            ' </lable>';
+                    }
+                    else if (data.emailStatus == "Yes") {
+                        return '<lable class="text-green" style="font-weight: 500;">' +
+                            ' Yes ' +
+                            ' </lable>';
+                    }
+                    else {
+                        return '';
+                    }
+                },
+             },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.acceptanceStatusVal == 1 || data.acceptanceStatusVal==2) {
+                        return '<button title="Download" class="btn btn-outline-danger btn-sm border-none" ' +
+                            'data-jqueryselector="binarydownload"' +
+                            ' data-url="@Url.Action("LoaAddendumAcceptancePrint", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })"' +
+                            ' data-empno="' + data.empno + '" >' +
+                            ' <i class="fas fa-file-pdf" aria-hidden="true"></i> ' +
+                            ' </button>';
+                    }
+                    else
+                    {return ''}
+
+                },
+                className: "td-icon",
+            }
+        ];
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadLoAAddendumAppointmentDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            if ($("#GenericSearch").length) {
+                loadLoAAddendumAppointmentDataTable();
+            }
+        });
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+
+            loadLoAAddendumAppointmentDataTable();
+            hideLoader();
+        }
+    </script>
+}

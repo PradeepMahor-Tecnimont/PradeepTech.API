@@ -1,0 +1,100 @@
+﻿@model TCMPLApp.WebApp.Models.InvItemReturnViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="INV"
+      asp-action="SubmitReturn"
+      id="submitReturn"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="Empno" />
+    <input type="hidden" asp-for="TransactionDate" />
+    <input type="hidden" asp-for="ItemList" />
+    <input type="hidden" asp-for="JSonObject" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Return items"]</h5>
+        <button type="button" class="close" data-dismiss="modal" id="closeBtn" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Return items</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 p-1">
+                            <label asp-for="TransactionDate" class="control-label"></label>
+                            <input id="transDate" class="form-control  datepicker" placeholder="@localizer["Transaction date"]"  required />
+                            <span asp-validation-for="TransactionDate" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 p-1 ">
+                            <label asp-for="TransactionRemarks" class="control-label"></label>
+                            <textarea asp-for="TransactionRemarks" class="form-control w-100" title="TransactionRemarks" rows="3" required></textarea>
+                        </div>
+                        <div class="col-md-12 p-1 ">
+                            <br />
+                            <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+                                <thead class="bg-info text-white">
+                                    <tr>
+                                        <th>Transaction Date</th>
+                                        <th>Barcode</th>
+                                        <th>ItemTypeDesc</th>
+                                        <th>ItemId</th>
+                                        <th>ItemDetails</th>
+                                        <th>Usable</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.ItemList)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.TransDateString
+                                                </td>
+                                                <td>
+                                                    @item.Barcode
+                                                </td>
+                                                <td>
+                                                    @item.ItemTypeDesc
+                                                </td>
+                                                <td>
+                                                    @item.ItemId
+                                                </td>
+                                                <td>
+                                                    @item.ItemDetails
+                                                </td>
+                                                <td>
+                                                    @item.UsableTypeDesc
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" id="cancelBtn" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

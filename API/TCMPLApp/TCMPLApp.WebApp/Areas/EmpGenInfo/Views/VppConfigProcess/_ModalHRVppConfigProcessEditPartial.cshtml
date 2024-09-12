@@ -1,0 +1,153 @@
+﻿@model TCMPLApp.WebApp.Models.HRVppConfigProcessUpdateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="VppConfigProcess"
+      asp-action="VppConfigProcessEdit"
+      id="formVppConfigProcess"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.StartDate" />
+    <input type="hidden" asp-for="@Model.keyid" />
+    <input type="hidden" asp-for="@Model.EndDate" />
+    <input type="hidden" asp-for="@Model.IsDraft" />
+    <input type="hidden" asp-for="@Model.EmpJoiningDate" />
+    <input type="hidden" asp-for="@Model.IsDisplayPremium" />
+    
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Edit Configuration Process"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Edit Configuration Process</h5>
+                
+            </div>
+            <div class="card-block">
+
+                <div class="row">
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group ">
+                            <label asp-for="EndDate" class="control-label"></label>
+                            <input id="endDateFilter" class="form-control datepickerFilter" placeholder="Close date" value="@Model.EndDate?.ToString("dd-MMM-yyyy")" required/>
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsApplicableToAll" class="control-label"></label>
+                            @if (Model.IsDraft == 0)
+                            {
+                                <input type="hidden" asp-for="@Model.IsApplicableToAll" />
+                                <select asp-for="IsApplicableToAll" class="form-control Select2" required disabled>
+                                    <option value="" selected>Please select...</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            }
+                            else
+                            {
+                                <select asp-for="IsApplicableToAll" class="form-control Select2" required>
+                                    <option value="" selected>Please select...</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            }
+                            <span asp-validation-for="IsApplicableToAll" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                @* <div class="row"> *@
+                    @* <div class="col-xl-6 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="IsDisplayPremium" class="control-label"></label>
+                            @if (Model.IsDraft == 1)
+                            {
+                                <select asp-for="IsDisplayPremium" class="form-control Select2" required disabled>
+                                    <option value="" selected>Please select...</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+
+                            }
+                            else
+                            {
+                                <select asp-for="IsDisplayPremium" class="form-control Select2" required>
+                                    <option value="" selected>Please select...</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            }
+                            <span asp-validation-for="IsDisplayPremium" class="text-danger"></span>
+                        </div>
+                    </div> *@
+                    @* <div class="form-group">
+                    <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                    <div class="dz-details">
+                    <div class="dz-filename"><span data-dz-name></span></div>
+                    <div class="dz-size" data-dz-size></div>
+                    <img data-dz-thumbnail />
+                    <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                    </div>
+                    <div class="dz-default dz-message" data=""><span>Drop excel file here to upload</span></div>
+                    </div>
+                    </div> *@
+
+                    
+                @* </div> *@
+                <div id="divJoiningDate" class="hidden">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="form-group">
+                                <label asp-for="EmpJoiningDate" class="control-label"></label>
+                                @if (Model.IsDraft == 0)
+                                {
+                                    <input id="empJoiningDate" class="form-control " placeholder="@localizer["Joining Date"]" value="@Model.EmpJoiningDate?.ToString("dd-MMM-yyyy")" disabled/>
+                                }
+                                else
+                                {
+                                    <input id="empJoiningDate" class="form-control datepickerFilter" placeholder="@localizer["Joining Date"]" value="@Model.EmpJoiningDate?.ToString("dd-MMM-yyyy")" />
+                                }
+                                
+                                <span asp-validation-for="EmpJoiningDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        @if (Model.IsDraft == 1)
+        {
+            <button class="btn btn-primary" type="button" id="btnSaveEditDraft" onclick="SaveAsEditDraft()"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Save Draft"]">
+                @localizer["Save Draft"]
+            </button>
+        }
+        else
+        {
+            <button class="btn btn-primary" type="submit" id="btnconfirm"
+                    data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                    data-text="@localizer["Confirm"]">
+                @localizer["Confirm"]
+            </button>
+        }
+       
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

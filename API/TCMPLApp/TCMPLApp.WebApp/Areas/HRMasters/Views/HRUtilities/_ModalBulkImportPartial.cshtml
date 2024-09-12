@@ -1,0 +1,78 @@
+﻿
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form id="formCustomXLUpload"
+      asp-controller="HRUtilities"
+      asp-action="CustomXLUpload"
+      asp-area="HRMasters"      
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"      
+      data-ajax-complete="onComplete(null);loadScript()"
+      data-ajax-success=""
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Bulk employee details import"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Bulk employee details import"]</h5>
+            </div>
+            <div class="card-block">               
+                 @*<div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <label class="control-label">Fields</label>
+                            <select id="FieldList" class="form-control Select2" placeholder="Select..." multiple="multiple" >                                
+                                <option value="Category">Category</option>
+                                <option value="doc">Date of confirmation</option>
+                                <option value="Desgcode">Designation code</option>
+                                <option value="Emp_hod">Employee HOD</option>
+                                <option value="Grade">Grade</option> 
+                                <option value="Mngr">Manager</option>
+                                <option value="Gratutityno">Gratutity no</option>
+                                <option value="Aadharno">Aadhaar no</option>
+                                <option value="Pfno">PF no</option>
+                                <option value="Superannuationno">Superannuation no</option>
+                                <option value="Uanno">UAN no</option>
+                                <option value="Pensionno">Pension no</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">                            
+                            <button type="button" id="btnCustomBulkXLTemplate" title="Excel Download" class=" btn btn-sm btn-success mx-2">
+                                <i class="far fa-file-excel "></i> Download template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                    <div class="dz-details">
+                        <div class="dz-filename"><span data-dz-name></span></div>
+                        <div class="dz-size" data-dz-size></div>
+                        <img data-dz-thumbnail />
+                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                    </div>
+                    <div class="dz-default dz-message" data=""><span>Drop excel file here to import</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" id="btnImportCustomXL"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Bulk import details"]">
+            @localizer["Import"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

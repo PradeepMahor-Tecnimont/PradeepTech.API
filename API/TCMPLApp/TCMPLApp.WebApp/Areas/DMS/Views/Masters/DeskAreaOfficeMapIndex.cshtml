@@ -1,0 +1,187 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAreaOfficeMapViewModel
+
+@{
+    ViewData["Title"] = "Desk Area Office Map";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Masters" asp-area="DMS">Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Desk Area Office Map</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Desk Area Office Map</p>
+    </div>
+    <div class="d-flex flex-row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITAdm))
+        {
+            <a title="New Desk Area Office Map" class="btn btn-outline-primary btn-sm border border-white" href="#"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("DeskAreaOfficeMapCreate", "Masters", new { Area = "DMS" })'
+               data-statichtmlsourcedivid=""
+               data-modaltitle="New Desk Area Office Map"
+               data-modalheader="New Desk Area Office Map">
+                <i class="fas fa-plus"></i> Create
+            </a>
+        }
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("DeskAreaOfficeMapExcelDownload", "Masters", new { Area = "DMS" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbDeskAreaOfficeMap" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@Html.DisplayNameFor(model => model.Office)</th>
+                    <th>@Html.DisplayNameFor(model => model.AreaId)</th>
+                    <th>@Html.DisplayNameFor(model => model.AreaDesc)</th>
+                    <th>@Html.DisplayNameFor(model => model.AreaInfo)</th>
+                    <th>@Html.DisplayNameFor(model => model.AreaCatgCode)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadDeskAreaOfficeMapDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+        }
+
+        let vVUloadDeskAreaOfficeMapList = "@Url.Action("GetListsDeskAreaOfficeMap", "Masters")";
+
+        function loadDeskAreaOfficeMapDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbDeskAreaOfficeMap",
+                pColumns: datatableDeskAreaOfficeMapColumns,
+                pUrl: vVUloadDeskAreaOfficeMapList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableDeskAreaOfficeMapColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("DeskAreaOfficeMapDetails", "Masters", new { Area = "DMS" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.areaId + '"' +
+                                ' data-code="' + data.office + '"' +
+                                ' data-modaltitle="Desk Area Office Map Detail" ' +
+                                ' data-modalheader="Desk Area Office Map Detail" ' +
+                                ' > ' +
+                                ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon",
+                    },
+                    { data: "office" },
+                    { data: "areaId" },
+                    { data: "areaDesc" },
+                    { data: "areaInfo" },
+                    { data: "areaCatgCode" },
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+
+                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("DeskAreaOfficeMapDelete", "Masters", new { Area = "DMS" })"' +
+                                ' data-id="' + data.areaId + '"' +
+                                ' data-code="' + data.office + '"' +
+                                ' data-PostDeleteReLoadDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to Delete Desk Area Office Map details :-' + data.office + ' " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Delete Office" ' +
+                                ' data-confirmbuttontext="Delete Office" > ' +
+                                ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                ' </button>';
+
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    },
+                ];
+
+            </text>
+        }
+            function PostSave(data) {
+                if (data.success) {
+                    $("#modalcontainer").modal('hide');
+                    hideLoader();
+                    loadDeskAreaOfficeMapDataTable();
+                    notify('success', data.response, 'Success');
+                }
+            }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadDeskAreaOfficeMapDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadDeskAreaOfficeMapDataTable();
+            }
+        });
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadDeskAreaOfficeMapDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+    </script>
+}

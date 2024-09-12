@@ -1,0 +1,259 @@
+﻿@model TCMPLApp.WebApp.Models.BGMasterCreateViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "New bank guarantee";
+}
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["New bank gurantee"]</h5>
+        </div>
+        <div class="card-block">
+            <form asp-action="Create">
+                <input type="hidden" asp-for="Amendmentnum" value="001"/>
+                @Html.HiddenFor(m => m.Bgdate)
+                @Html.HiddenFor(m => m.Bgclmdt)
+                @Html.HiddenFor(m => m.Bgvaldt)
+                @Html.HiddenFor(m => m.Reldt)
+                @Html.HiddenFor(m => m.Bgrecdt)
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bgnum" class="control-label"></label>
+                            <input asp-for="Bgnum" class="form-control" placeholder="BG number" maxlength="25" required />
+                            <span asp-validation-for="Bgnum" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bgdate" class="control-label"></label>
+                            <input id="bgdate" class="form-control datepicker" placeholder="dd-Mon-yyyy" required />
+                            <span asp-validation-for="Bgdate" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bgtype" class="control-label"></label>
+                            <select asp-for="Bgtype" class="form-control Select2" required>
+                                <option value="" selected>Please select...</option>>
+                                <option value="Advance">Advance</option>
+                                <option value="Peformance">Peformance</option>
+                            </select>
+                            <span asp-validation-for="Bgtype" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Compid" class="control-label"></label>
+                            <select asp-for="Compid" class="form-control Select2" asp-items="ViewBag.CompanyList" required>
+                                <option value="" selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Compid" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Ponum" class="control-label"></label>
+                            <input asp-for="Ponum" class="form-control" placeholder="PO number" maxlength="35" required/>
+                            <span asp-validation-for="Ponum" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Projnum" class="control-label"></label>
+                            <select asp-for="Projnum" class="form-control Select2" asp-items="ViewBag.ProjectList" required>
+                                <option value="" selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Projnum" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Issuebyid" class="control-label"></label>
+                            <select asp-for="Issuebyid" class="form-control Select2" asp-items="ViewBag.IssuedbyList" required>
+                                <option value="" selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Issuebyid" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Issuetoid" class="control-label"></label>
+                            <select asp-for="Issuetoid" class="form-control Select2" asp-items="ViewBag.IssuedtoList" required>
+                                <option value="" selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Issuetoid" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bankid" class="control-label"></label>
+                            <select asp-for="Bankid" class="form-control Select2" asp-items="ViewBag.BankList" required>
+                                <option value="" selected>Please select...</option>
+                            </select>
+                            <span asp-validation-for="Bankid" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bgvaldt" class="control-label"></label>
+                            <input id="bgvaldt" class="form-control datepicker" placeholder="dd-Mon-yyyy" required/>
+                            <span asp-validation-for="Bgvaldt" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bgclmdt" class="control-label"></label>
+                            <input id="bgclmdt" class="form-control datepicker" placeholder="dd-Mon-yyyy" required />
+                            <span asp-validation-for="Bgclmdt" class="text-danger"></span>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bgrecdt" class="control-label"></label>
+                            <input id="bgrecdt" class="form-control datepicker" placeholder="dd-Mon-yyyy" required/>
+                            <span asp-validation-for="Bgrecdt" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" placeholder="@localizer["Remarks"]" rows="2" maxlength="250"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Released" class="control-label"></label>
+                            <select asp-for="Released" class="form-control Select2" data-placeholder="@localizer["Optional"]">
+                                <option value="" selected>Please select...</option>
+                                <option value="Y">Yes</option>
+                                <option value="N">No</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Reldt" class="control-label"></label>
+                            <input id="reldt" class="form-control datepicker" placeholder="dd-Mon-yyyy" />
+                        </div>
+                        <div class="col-xl-6 col-md-12">
+                            <label asp-for="Reldetails" class="control-label"></label>
+                            <textarea asp-for="Reldetails" class="form-control" placeholder="@localizer["Release details"]" rows="1" maxlength="250"></textarea>
+                        </div>
+                    </div>
+                </div>               
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Currid" class="control-label"></label>
+                            <select asp-for="Currid" class="form-control Select2" asp-items="ViewBag.CurrencyList">
+                                <option value="" selected></option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bgamt" class="control-label"></label>
+                            <input asp-for="Bgamt" class="form-control" placeholder="Amount" maxlength="15" />
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Convrate" class="control-label"></label>
+                            <input asp-for="Convrate" class="form-control" placeholder="Converion rate" maxlength="7" />
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <label asp-for="Bgaccept" class="control-label"></label>
+                            <select asp-for="Bgaccept" class="form-control Select2" data-placeholder="@localizer["Optional"]" asp-items="ViewBag.AcceptableList">
+                                <option value="" selected></option>
+                            </select>                           
+                        </div>                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <label asp-for="Bgacceptrmk" class="control-label"></label>
+                            <textarea asp-for="Bgacceptrmk" class="form-control" placeholder="@localizer["Accepted remarks"]" rows="1" maxlength="200"></textarea>
+                        </div>                                               
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a class="btn btn-secondary f-right" asp-controller="BGMain" asp-action="Index" title="@localizer["Cancel"]">
+                        @localizer["Cancel"]
+                    </a>
+                    <span class="f-right">&nbsp; &nbsp;</span>
+                    <button class="btn btn-primary f-right" type="submit" id="btnconfirm"
+                            data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                            data-text="@localizer["Confirm"]">
+                        @localizer["Confirm"]
+                    </button>
+                    @*<button type="submit" class="btn btn-primary f-right">@localizer["Create"]</button>
+                    <spna class="f-right">&nbsp;</spna>
+                    <a class="btn btn-secondary f-right" asp-controller="BGMain" asp-action="Index" title="Cancel">
+                        @localizer["Cancel"]
+                    </a>*@
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {
+            initSelect2();
+
+            $('#bgdate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#Bgdate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#bgclmdt').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#Bgclmdt").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#bgvaldt').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#Bgvaldt").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#reldt').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#Reldt").val(date.format('DD-MMM-YYYY'));
+            });
+
+            $('#bgrecdt').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#Bgrecdt").val(date.format('DD-MMM-YYYY'));
+            });
+
+            
+
+        }
+    </script>
+
+}
+
+
+

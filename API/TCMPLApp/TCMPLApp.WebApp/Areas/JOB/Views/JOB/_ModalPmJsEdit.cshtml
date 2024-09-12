@@ -1,0 +1,71 @@
+﻿@model TCMPLApp.WebApp.Models.JobEditPmJsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="JOB"
+      asp-action="EditPmJs"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccess(null);PostFilterReLoadDataTable(data); notifySuccess(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.Projno)
+    @Html.HiddenFor(m => m.RoleName)
+
+    <div class="modal-header">
+        <h5 class="modal-title">@ViewBag.Title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@ViewBag.Title</h5>
+            </div>
+            <div class="card-block">
+                @if(Model.RoleName == "JS")
+                {
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label asp-for="PmEmpno" class="control-label"></label>
+                                <select asp-for="PmEmpno" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.ERPPMList" required>
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="PmEmpno" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.RoleName == "PM")
+                {
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label asp-for="JsEmpno" class="control-label"></label>
+                                <select asp-for="JsEmpno" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.JSList" required>
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="JsEmpno" class="text-danger"></span>
+                            </div>
+                        </div>                    
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+
+

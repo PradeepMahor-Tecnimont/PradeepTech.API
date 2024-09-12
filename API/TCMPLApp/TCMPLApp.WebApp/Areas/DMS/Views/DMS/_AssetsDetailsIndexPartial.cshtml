@@ -1,0 +1,103 @@
+﻿@model TCMPLApp.WebApp.Models.AssetsDetailsViewModel
+
+@{
+    ViewData["Title"] = "Assets Details";
+}
+
+@Html.AntiForgeryToken()
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+
+<div class="m-1"></div>
+<div class="bg-gray-active rounded ">
+    <div class="m-3"></div>
+
+    <div class="row pr-2 pl-2">
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.AssetId)</div>
+            <div class="dd-met">@Html.Raw(Model.AssetId)</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.AssetType)</div>
+            <div class="dd-met">@Html.Raw(Model.AssetType)</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.Model)</div>
+            <div class="dd-met">@Html.Raw(Model.Model)</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.SerialNum)</div>
+            <div class="dd-met">@Html.Raw(Model.SerialNum)</div>
+        </div>
+
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.WarrantyEnd)</div>
+            <div class="dd-met">@Html.Raw(Model.WarrantyEnd)</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.SapAssetCode)</div>
+            <div class="dd-met">@Html.Raw(Model.SapAssetCode)</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.SubAssetType)</div>
+            <div class="dd-met">@Html.Raw(Model.SubAssetType)</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.Scrap)</div>
+            <div class="dd-met">@Html.Raw(Model.Scrap)</div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.ScrapDate)</div>
+            <div class="dd-met">@Html.Raw(Model.ScrapDate)</div>
+        </div>
+    </div>
+    <hr style="margin-top:-15px">
+    <table id="tbAssetsDetailsGrid" class="table table-hover table-bordered table-responsive-lg ">
+        <thead class="bg-info text-white">
+            <tr>
+                <th style="width:30%">Category</th>
+                <th>value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>Desk</b></td>
+                <td>
+                    <a asp-area="DMS" asp-controller="DeskAssignment" target="_blank"
+                       asp-action="DeskAssignmentNewIndex" asp-route-search="@Model.DeskId">
+                        @Html.Raw(Model.DeskId)
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Employee</b></td>
+                <td>
+                    <a asp-area="DMS" asp-controller="DeskAssignment" target="_blank"
+                       asp-action="DeskAssignmentNewIndex" asp-route-search="@Model.Empno">
+                        @if (!string.IsNullOrEmpty(Model.Empno))
+                        {
+                            @Html.Raw(Model.Empno + " : " + Model.Employee)
+                        }
+
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Blocked/Locked</b></td>
+                <td>@Html.Raw(Model.Status)<br />@Html.Raw(Model.Remarks)</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="result"></div>
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

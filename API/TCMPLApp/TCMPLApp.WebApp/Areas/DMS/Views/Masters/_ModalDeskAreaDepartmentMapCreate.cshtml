@@ -1,0 +1,96 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAreaDepartmentMapCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="Masters"
+      asp-action="DeskAreaDepartmentMapCreate"
+      id="formDeskAreaDepartmentMapCreate"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="AreaId" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Desk Area Department Map create"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Desk Area Department Map create</h5>
+            </div>
+            <div class="card-toolbar">
+                <div role="toolbar">
+                    <a title="Back" id="idBack"
+                       class="btn btn-outline-primary btn-sm border-none" href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw50"
+                       data-url='@Url.Action("DeskAreaDepartmentMapList", "Masters", new { Area = "DMS" })'
+                       data-id="@Model.AreaId"
+                       data-modaltitle="Back"
+                       data-modalheader="Back"
+                       data-callback="openModalListner">
+                        &nbsp;&nbsp;<i class="fas fa-arrow-left"></i>
+                        @localizer["Back"]
+                    </a>
+                </div>
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.AreaId)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.AreaId + " - " + Model.AreaDesc)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.AreaCatgDesc)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.AreaCatgCode + " - " + Model.AreaCatgDesc)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="CostCode" class="control-label"></label>
+                            <select asp-for="CostCode" class="form-control chosen-select" asp-items="ViewBag.CostCodeList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="CostCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

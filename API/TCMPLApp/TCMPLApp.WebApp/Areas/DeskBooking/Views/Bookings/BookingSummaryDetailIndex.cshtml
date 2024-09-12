@@ -1,0 +1,271 @@
+﻿@model TCMPLApp.WebApp.Models.BookingSummaryDetailsViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Booking Summary Details";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="DeskBooking">Desk Booking</a></li>
+        <li class="breadcrumb-item"><a asp-action="BookingSummaryIndex" asp-controller="Bookings" asp-area="DeskBooking">Booking Summary</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Booking Summary Details</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<input type="hidden" asp-for="AreaId" />
+<input type="hidden" asp-for="Office" />
+<input type="hidden" asp-for="BookingDate" />
+<input type="hidden" asp-for="Costcode" />
+<input type="hidden" asp-for="ActionId" />
+<input type="hidden" asp-for="bookingDate" />
+
+<div class="card bg-gray-active border rounded shadow m-auto col-xl-11 p-2">
+    <div class="card-header" style="padding:10px 18px;">
+        <h5 class="card-title">
+            @localizer["Booking Summary Details"]
+        </h5>
+
+        <a href='@Url.Action("BookingSummaryIndex", "Bookings", new { Area = "DeskBooking" })' title="Back" class="btn btn-outline-info btn-sm border-none float-right">
+            <i class="fas fa-undo"></i>
+            @localizer["Back"]
+        </a>
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("DeptBookingSummaryExcelDownload", "Bookings", new { Area = "DeskBooking" }))"
+           data-id="@Model.ActionId"
+           data-areaId="@Model.AreaId"
+           data-bookingDate="@Model.bookingDate"
+           data-office="@Model.Office"
+           data-costcode="@Model.Costcode">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="card-block ">
+
+        <div class="card-deck">
+            <div class="card col-md-12 col-xl-12">
+                <div class="card-body">
+                    <div id="divBookingSummaryDetails">
+                        <div class="row p-2">
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.AreaId)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.AreaId + " - " + Model.AreaDesc)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Office)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.Office)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.Costcode)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.Costcode)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.DeskCount)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.DeskCount)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.DeptEmpnoCount)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.DeptEmpnoCount)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.BookedDesks)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.BookedDesks)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">@Html.DisplayNameFor(model => model.BookingDate)</div>
+                                    <div class="dd-met">
+                                        @Html.Raw(Model.BookingDate.ToString("dd-MM-yyyy"))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row">
+        </div>
+        <div class="card-pill" style="margin-top: 20px">
+            <ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-EmpBookedDeskList-tab" data-toggle="pill" href="#tabs-EmpBookedDeskList" role="tab" aria-controls="tabs-EmpBookedDeskList" aria-selected="false"
+                       data-url="@Url.Action("EmpBookedDeskListDetailsIndex", "Bookings", new { Area = "DeskBooking" })"
+                       @* data-id="@Model.AreaId" *@
+                       data-divid="pw-EmpBookedDeskList"
+                       data-callback="loadEmpBookedDeskListDataTable();"
+                       data-area="DeskBooking"
+                       data-controller="Bookings"
+                       data-action="EmpBookedDeskListIndex">
+                        Employee Booked Desks
+                    </a>
+                </li>
+                <li class="nav-item" style="display:none">
+                    <a class="nav-link" id="tabs-DeskList-tab" data-toggle="pill" href="#tabs-DeskList" role="tab" aria-controls="tabs-DeskList" aria-selected="true"
+                       data-url="@Url.Action("DeskListDetailIndex", "Bookings", new { Area = "DeskBooking" })"
+                       @* data-id="@Model.AreaId" *@
+                       data-divid="pw-DeskList"
+                       data-callback="loadDeskListDataTable();"
+                       data-area="DeskBooking"
+                       data-controller="Bookings"
+                       data-action="DeskListIndex">
+                        Desk List
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                @await Html.PartialAsync("_LoaderPartial")
+                <div class="tab-pane fade" id="tabs-EmpBookedDeskList" role="tabpanel" aria-labelledby="tabs-EmpBookedDeskList-tab">
+                    <div id="pw-EmpBookedDeskList">
+                    </div>
+                </div>
+                <div class="tab-pane fade show active" id="tabs-DeskList" role="tabpanel" aria-labelledby="tabs-DeskList-tab">
+                    <div id="pw-DeskList">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+            $('#tabs-EmpBookedDeskList-tab').click();
+        });
+
+        function localScript() {
+            initSelect2();
+        };
+
+        let pvvUrlDeskList = '@Url.Action("GetListsDeskList", "Bookings")';
+
+        let pvvUrlEmpBookedDeskList = '@Url.Action("GetListsEmpBookedDeskList", "Bookings")';
+
+        function loadDeskListDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbDeskList",
+                pColumns: datatableColumnsDeskList,
+                pUrl: pvvUrlDeskList,
+                pUrlParams: {
+                    genericSearch: $('#DeskListSearch').val() ? $('#DeskListSearch').val() : null,
+                    areaId: $('#AreaId').val() ? $('#AreaId').val() : null,
+                    office: $('#Office').val() ? $('#Office').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+            });
+        }
+
+        function loadEmpBookedDeskListDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbEmpBookedDeskList",
+                pColumns: datatableColumnsEmpBookedDeskList,
+                pUrl: pvvUrlEmpBookedDeskList,
+                pUrlParams: {
+                    genericSearch: $('#EmpBookedDeskListSearch').val() ? $('#EmpBookedDeskListSearch').val() : null,
+                    areaId: $('#AreaId').val() ? $('#AreaId').val() : null,
+                    office: $('#Office').val() ? $('#Office').val() : null,
+                    bookingDate: $('#BookingDate').val() ? $('#BookingDate').val() : null,
+                    costcode: $('#Costcode').val() ? $('#Costcode').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+            });
+        }
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableColumnsDeskList = [
+                    { 'data': "deskid" },
+                    { 'data': "floor" },
+                    { 'data': "wing" },
+
+                ];
+
+            let datatableColumnsEmpBookedDeskList = [
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return data.empno + " - " + data.name
+                    }
+                },
+                { data: "deskid" },
+                { data: "office" },
+
+            ];
+            </text>
+        }
+
+            function genericSearchKeypress(fnName) {
+                if (this.event.keyCode === 13) {
+                    if (this.length) {
+                        if (fnName == "DeskListSearch") {
+                            loadDeskListDataTable();
+                        }
+                        if (fnName == "DeptEmpListSearch") {
+                            loadEmployeeListDataTable();
+                        }
+                        if (fnName == "EmpBookedDeskListSearch") {
+                            loadEmpBookedDeskListDataTable();
+                        }
+                    }
+                }
+            }
+        function genericSearchOnClick(fnName) {
+            if (this.length) {
+                if (fnName == "DeskListSearch") {
+                    loadDeskListDataTable();
+                }
+                if (fnName == "DeptEmpListSearch") {
+                    loadEmployeeListDataTable();
+                }
+                if (fnName == "EmpBookedDeskListSearch") {
+                    loadEmpBookedDeskListDataTable();
+                }
+            }
+        }
+    </script>
+}

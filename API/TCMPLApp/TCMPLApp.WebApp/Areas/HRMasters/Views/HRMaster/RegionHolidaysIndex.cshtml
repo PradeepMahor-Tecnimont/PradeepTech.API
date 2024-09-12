@@ -1,0 +1,275 @@
+﻿@model TCMPLApp.WebApp.Models.HolidaysViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Holidays";
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="HRMasters">HR Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Holidays</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.RegionCode" value="@(string.Join(",", (Model.FilterDataModel.RegionCode?? Array.Empty<string>())))" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.IsYes" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.Year" />
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Holidays</p>
+    </div>
+    <div class="d-flex flex-row">
+        @* @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.ActionHRMISTransfersUpdate))
+        { *@
+        <a title="New Holiday" class="btn btn-outline-primary btn-sm border border-white" href="#"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("HolidaysCreate", "HRMaster", new { Area = "HRMasters" })'
+           data-statichtmlsourcedivid=""
+           data-modaltitle="New Holidays"
+           data-modalheader="New Holidays">
+            <i class="fas fa-plus"></i> Create
+        </a>
+        <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("HolidaysFilterGet", "HRMaster", new { Area = "HRMasters" })'
+           data-modaltitle="Filters - Holidays"
+           data-modalheader="Filters - Holidays">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="RegionHolidaysIndex"
+           data-url='@Url.Action("ResetFilter", "HRMaster", new { Area = "HRMasters" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+        @* } *@
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("HolidaysExcelDownload", "HRMaster", new { Area = "HRMasters" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <table id="tbHolidays" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@Html.DisplayNameFor(m => m.Holiday)</th>
+                    <th>@Html.DisplayNameFor(m => m.RegionName)</th>
+                    <th>@Html.DisplayNameFor(m => m.Yyyymm)</th>
+                    <th>@Html.DisplayNameFor(m => m.Weekday)</th>
+                    <th>@Html.DisplayNameFor(m => m.Description)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+        $(document).ready(function () {
+            loadHolidaysDataTable();
+
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+        };
+
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                nowButton: true
+            });
+
+            $('#holiday').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#Holiday").val(date.format('DD-MMM-YYYY'));
+
+                var selectedDate = new Date(date);
+                var year = selectedDate.getFullYear();
+                var month = selectedDate.getMonth() +01;
+                if (month < 10)
+                    month = '0' + month;
+                var yearMonth = year.toString() + month.toString();
+
+                var weekday = selectedDate.toLocaleDateString('en-US', { weekday: 'short' });
+
+                $("#Yyyymm").val(yearMonth);
+                $("#Weekday").val(weekday);
+            });
+
+            $('#formHolidaysFilterSet #Year').datepicker({
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years",
+                autoclose: true
+            });
+
+
+        }
+        let vVUloadHolidaysList = "@Url.Action("GetListRegionHolidays", "HRMaster", "HRMasters")";
+
+        function loadHolidaysDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbHolidays",
+                pColumns: datatableColumns,
+                pUrl: vVUloadHolidaysList,
+                PStateSave: false,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    regionCode: $('#FilterDataModel_RegionCode').val() ? $('#FilterDataModel_RegionCode').val() : null,
+                    year: $('#FilterDataModel_Year').val() ? $('#FilterDataModel_Year').val() : null,
+                    isYes: $('#FilterDataModel_IsYes').val() ? $('#FilterDataModel_IsYes').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+
+                let datatableColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("HolidaysDetail", "HRMaster", new { Area = "HRMasters" })"' +
+                                ' data-modalpopupwidth="rightw35" ' +
+                                ' data-id="' + data.regionCode + '"' +
+                                ' data-holiday="' + data.holiday + '"' +
+                                ' data-modaltitle="Holidays Detail" ' +
+                                ' data-modalheader="Holidays Detail" ' +
+                                ' > ' +
+                                ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon",
+                    },
+                    {
+                        data: "holiday",
+                        width: '10.0rem',
+                        render: function (data, type, row) {
+                            if (data)
+                                return moment(data).format("DD-MMM-YYYY");
+                            else
+                                return '';
+                        }
+                    },
+                    { data: "regionName" },
+                    { data: "yyyymm" },
+                    { data: "weekday" },
+                    { data: "description" },
+
+                    {
+                        'data': null,
+                        render: function (data, type, row) {
+
+                            return '<button title="Delete" class="btn btn-outline-danger btn-sm border-none " ' +
+                                ' onclick = "showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-jqueryselector = "showconfirmationmodal" ' +
+                                ' data-url="@Url.Action("HolidaysDelete", "HRMaster", new { Area = "HRMasters" })"' +
+                                ' data-id="' + data.regionCode + '"' +
+                                ' data-holiday="' + data.holiday + '"' +
+                                ' data-PostDeleteReLoadDataTables="OK" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Do you want to delete Holidays ' + data.regionName + ' " ' +
+                                ' data-confirmationtype="warning" ' +
+                                ' title="Delete Holidays" ' +
+                                ' data-confirmbuttontext="Delete Holidays" > ' +
+                                ' <i class="fas fa-trash" aria-hidden="true"></i> ' +
+                                ' </button>';
+
+                        },
+                        'className': "td-icon text-center  align-middle",
+                    }
+                ];
+            </text>
+        }
+
+            $("#GenericSearch").keypress(function (event) {
+                if (event.keyCode === 13) {
+                    if ($("#GenericSearch").length) {
+                        loadHolidaysDataTable();
+                    }
+                }
+            });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadHolidaysDataTable();
+            }
+        });
+
+        function Reload(data) {
+            if (data.messageType == "OK")
+                window.location.reload();
+        }
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadHolidaysDataTable();
+                notify('success', data.response, 'Success');
+            }
+        };
+
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadHolidaysDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+
+            $("#FilterDataModel_RegionCode").val(data.regionCode);
+
+            loadHolidaysDataTable();
+            hideLoader();
+        }
+    </script>
+}

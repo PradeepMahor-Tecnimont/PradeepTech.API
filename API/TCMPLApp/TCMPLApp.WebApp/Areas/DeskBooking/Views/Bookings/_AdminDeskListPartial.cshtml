@@ -1,0 +1,30 @@
+﻿@model TCMPLApp.WebApp.Models.DeskListViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="bg-gray-active rounded ">
+    <div class="input-group pt-1 pl-1 pr-1 ">
+        <input type="text" class="form-control form-control-sm border" id="AdminDeskListSearch" name="GenericSearch"
+               onkeypress="genericSearchKeypress('AdminDeskListSearch')" placeholder="Search...">
+        <div class="input-group-append">
+            <button class="btn btn-sm btn-outline-info" type="button" id="buttonAdminDeskList" onclick="genericSearchOnClick('AdminDeskListSearch')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-table">
+        <div class="table-responsive">
+            <table id="tbAdminDeskList" class="table table-striped table-bordered table-responsive-lg">
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Deskid)</th>
+                            <th>@Html.DisplayNameFor(model => model.Floor)</th>
+                            <th>@Html.DisplayNameFor(model => model.Wing)</th>
+                        </tr>
+                    </thead>
+                }
+            </table>
+        </div>
+    </div>
+</div>

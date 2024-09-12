@@ -1,0 +1,278 @@
+﻿@{
+    ViewData["Title"] = "Off-Boarding details";
+
+    Html.AntiForgeryToken();
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="OffBoarding">Off-Boarding</a></li>
+        <li class="breadcrumb-item active" aria-current="page">OffBoarding Details</li>
+    </ol>
+}
+
+
+<div class="container-fluid border rounded shadow m-auto py-2 col-xl-9">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Employee Off-Boarding Details</p>
+    </div>
+    <div class=" border rounded ">
+        <input type="hidden" name="Empno" id="Empno" value="@ViewBag.Empno" />
+        <!-- Nav tabs -->
+        @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.CommonActionPrintExitForm))
+        {
+            <div id="idPrintExitForm" class="d-flex flex-row align-items-end">
+                <button class="ml-auto  btn btn-primary">Print</button>
+            </div>
+        }
+        <ul class="nav nav-tabs" id="ofbTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="true">Details</a>
+            </li>
+            @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.CommonActionViewApprovals))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="approvals-tab" data-toggle="tab" href="#approvals" role="tab" aria-controls="approvals" aria-selected="false">Approvals</a>
+                </li>
+            }
+            else if (CurrentUserIdentity.ProfileActions.Any(pa => pa.RoleId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.RoleCheckerApprover))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="group-approvals-tab" data-toggle="tab" href="#group-approvals" role="tab" aria-controls="approvals" aria-selected="false">Approvals</a>
+                </li>
+            }
+
+            @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.CommonActionViewFiles))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="files-tab" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
+                </li>
+            }
+
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane bg-white p-2 active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                <div class="childcontent-div" id="div-exitdetails">
+                    <div id="pv-exitdetails">
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane bg-white p-2 " id="approvals" role="tabpanel" aria-labelledby="approvals-tab">
+                <div class="childcontent-div" id="div-exitapprovals">
+                    <div id="pv-exitapprovals">
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane bg-white p-2 " id="group-approvals" role="tabpanel" aria-labelledby="group-approvals-tab">
+                <div class="childcontent-div" id="div-exitgroupapprovals">
+                    <div id="pv-exitgroupapprovals">
+
+                    </div>
+                </div>
+            </div>
+            @if (CurrentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.CommonActionViewFiles))
+            {
+                <div class="tab-pane bg-white p-2 " id="files" role="tabpanel" aria-labelledby="files-tab">
+                    <div class="childcontent-div" id="div-exitfiles">
+                        <div id="pv-exitfiles">
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            loadEmployeeDetails();
+            initOnClickTabs();
+        });
+        function localScript() {
+            id = $('#ofbTab a.active').attr("id");
+            loadData(id);
+        }
+
+        $("#idPrintExitForm").off("click").on("click", function () {
+            var empno = $("#Empno").val();
+            window.open('@Url.Action("PrintForm", "Exits",new {Area = "OffBoarding", Empno= ViewBag.Empno })', '_blank');
+        });
+
+        function initOnClickTabs() {
+            $('#ofbTab a').on('click', function (event) {
+                 event.preventDefault();
+                $(this).tab('show');
+                var id = $(this).attr('id');
+                loadData(id);
+            });
+        }
+        function loadData(tabId) {
+             if (tabId == "details-tab")
+                loadEmployeeDetails();
+            else if (tabId == "approvals-tab")
+                loadExitApprovals();
+            else if (tabId == "group-approvals-tab")
+                loadExitGroupApprovals();
+            else if (tabId == "files-tab")
+                loadFilesList();
+        }
+
+        function loadExitGroupApprovals() {
+ 
+            var divid = $("#pv-exitgroupapprovals");
+
+            var empno = $("#Empno").val();
+
+
+            if (empno == '') {
+                divid.empty();
+                $("#div-exitgroupapprovals").removeClass("active");
+                return;
+            }
+            else
+                $("#div-exitgroupapprovals").addClass("active");
+
+            $.ajax({
+                url: '@Url.Action("GetGroupApprovals", "Exits",new {Area = "OffBoarding"})',
+                data: {
+                    'offboardingEmpno': empno,
+                    'dialogview': false
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divid.html(data);
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+        }
+
+        function loadExitApprovals() {
+            var divid = $("#pv-exitapprovals");
+
+            var empno = $("#Empno").val();
+
+
+            if (empno == '') {
+                divid.empty();
+                $("#div-exitdetails").removeClass("active");
+                return;
+            }
+            else
+                $("#div-exitapprovals").addClass("active");
+
+            $.ajax({
+                url: '@Url.Action("GetAllApprovals", "Exits",new {Area = "OffBoarding"})',
+                data: {
+                    'offboardingempno': empno,
+                    'dialogview': false
+                },
+                type: 'GET',
+                beforeSend: function () {
+                        showLoader();
+                    },
+                success: function (data) {
+                        divid.html(data);
+                        hideLoader();
+                    },
+                error: function (result) {
+                        hideLoader();
+                        errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                        notify("error", errorText, 'Error');
+                    }
+                });
+        }
+
+        function loadEmployeeDetails() {
+            var divid = $("#pv-exitdetails");
+
+            var empno = $("#Empno").val();
+
+
+            if (empno == '') {
+                divid.empty();
+                $("#div-exitdetails").removeClass("active");
+                return;
+            }
+            else
+                $("#div-exitdetails").addClass("active");
+
+            $.ajax({
+                url: '@Url.Action("GetEmpExitDetails", "Exits",new {Area = "OffBoarding"})',
+                data: {
+                        'empno': empno
+                },
+                type: 'GET',
+                beforeSend: function () {
+                        showLoader();
+                    },
+                success: function (data) {
+                        divid.html(data);
+                        hideLoader();
+                    },
+                error: function (result) {
+                        hideLoader();
+                        errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                        notify("error", errorText, 'Error');
+                    }
+                });
+        }
+
+        function loadFilesList() {
+            var divid = $("#pv-exitfiles");
+
+            var empno = $("#Empno").val();
+
+
+            if (empno == '') {
+                divid.empty();
+                $("#div-exitfiles").removeClass("active");
+                return;
+            }
+            else
+                $("#div-exitfiles").addClass("active");
+
+            $.ajax({
+                url: '@Url.Action("GetFilesUploadedList", "Exits",new {Area = "OffBoarding"})',
+                data: {
+                    'empno': empno,
+                    'readonly': true
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (data) {
+                    divid.html(data);
+                    hideLoader();
+                },
+                error: function (result) {
+                    hideLoader();
+                    errorText = result.responseText.indexOf("divErrorMessage") == -1 ? result.responseText : ($(result.responseText).find("div[id*=divErrorMessage]").text()).replace("text-danger", "text-white");
+                    notify("error", errorText, 'Error');
+                }
+            });
+        }
+
+    </script>
+}
+

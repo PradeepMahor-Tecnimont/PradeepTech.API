@@ -1,0 +1,13 @@
+﻿using System.Threading.Tasks;
+using TCMPLApp.DataAccess.Models;
+using TCMPLApp.Domain.Models.Common;
+using TCMPLApp.Domain.Models.Timesheet;
+
+namespace TCMPLApp.DataAccess.Repositories.Timesheet
+{
+    public interface ITimesheetDepartmentRepository
+    {
+        public Task<DBProcMessageOutput> DepartmentBulkActionAsync(BaseSpTcmPL baseSpTcmPL, ParameterSpTcmPL parameterSpTcmPL);
+
+    }
+}

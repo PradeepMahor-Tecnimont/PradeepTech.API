@@ -1,0 +1,59 @@
+﻿@model TCMPLApp.Domain.Models.HRMasters.View.CostCenterMasterAFC
+
+@{
+    ViewData["Title"] = "Cost center detail";
+}
+
+<div class="card shadow col-md-12 col-xl-12">
+    <div class="card-block">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.RoleAFCAdmin))
+        {
+            <div class="row">
+                <a title="Edit cost center cost control" class="btn btn-outline-primary btn-sm border-none" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw50"
+                   data-url='@Url.Action("AFCTabEdit", "CostCenter", new { Area = "HRMasters" })'
+                   data-statichtmlsourcedivid=""
+                   data-modaltitle="Edit cost center"
+                   data-modalheader="Edit cost center"
+                   data-id="@Model.CostCodeId">
+                    <i class="fas fa-edit"></i>
+                    Edit
+                </a>
+            </div>
+        }
+    </div>
+    @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.HRMasters.HRMastersHelper.RoleAFCAdmin))
+    {
+        <hr />
+    }
+    <div class="row">
+        <div class="form-group col-md-6">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.TcmCostCode)</div>
+            <div class="dd-met">@Html.DisplayFor(model => model.TcmCostCode) - @Html.DisplayFor(model => model.TcmCostCodeName)</div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.TcmActPh)</div>
+            <div class="dd-met">@Html.DisplayFor(model => model.TcmActPh) - @Html.DisplayFor(model => model.TcmActPhName)</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.TcmPasPh)</div>
+            <div class="dd-met">@Html.DisplayFor(model => model.TcmPasPh) - @Html.DisplayFor(model => model.TcmPasPhName)</div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="dt-met">@Html.DisplayNameFor(model => model.PO)</div>
+            @if (String.IsNullOrEmpty(Model.PO))
+            {
+                <div class="dd-met">-</div>
+            }
+            else
+            {
+                <div class="dd-met">@Html.DisplayFor(model => model.PO)</div>
+            }
+        </div>
+    </div>
+</div>
+

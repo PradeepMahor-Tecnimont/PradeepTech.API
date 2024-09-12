@@ -1,0 +1,62 @@
+﻿@model TCMPLApp.WebApp.Models.BulkActionEditViewModel
+
+@Html.AntiForgeryToken()
+
+<div class="row">
+    <div class="col-xl-12 col-md-12">
+        <div class="form-group">
+            <div class="checkbox">
+
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="checkBox-Blue" id="LockedAll" name="" value="">
+                    <label for="LockedAll">
+                        <span>Select All </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="locked checkBox-Blue" asp-for="LockPrimary" value="1" />
+                    <label for="LockPrimary">
+                        <span>Lock Primary </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="locked checkBox-Blue" asp-for="LockSecondary" value="1" />
+                    <label for="LockSecondary">
+                        <span>Lock Secondary </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="locked checkBox-Blue" asp-for="LockNomination" value="1" />
+                    <label for="LockNomination">
+                        <span>Lock Nomination </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="locked checkBox-Blue" asp-for="LockMediclaim" value="1" />
+                    <label for="LockMediclaim">
+                        <span>Lock Mediclaim </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="locked checkBox-Blue" asp-for="LockAdhaar" value="1" />
+                    <label for="LockAdhaar">
+                        <span>Lock Adhaar </span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="locked checkBox-Blue" asp-for="LockPassport" value="1" />
+                    <label for="LockPassport">
+                        <span>Lock Passport</span>
+                    </label>
+                </div>
+                <div class="checkboxlabel">
+                    <input type="checkbox" class="locked checkBox-Blue" asp-for="LockGTLI" value="1" />
+                    <label for="LockGTLI"><span>Lock GTLI</span></label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

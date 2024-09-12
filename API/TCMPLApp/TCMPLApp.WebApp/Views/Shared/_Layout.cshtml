@@ -1,0 +1,402 @@
+﻿@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TCMPLApp</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="~/lib/datatables.net-bs4/css/dataTables.bootstrap4.css" asp-append-version="true" rel="stylesheet" />
+    @* <link href="~/lib/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" asp-append-version="true" /> *@
+    <link href="~/lib/Select2/select2.min.css" rel="stylesheet" asp-append-version="true" />
+
+    @* <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" asp-append-version="true" /> *@
+
+    <link href="~/lib/bootstrap-sweetalert/sweetalert.min.css" rel="stylesheet" asp-append-version="true" />
+
+    <link href="~/lib/font-awesome/css/solid.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/font-awesome/css/regular.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/font-awesome/css/brands.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/font-awesome/css/fontawesome.min.css" rel="stylesheet" asp-append-version="true" />
+
+    <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" asp-append-version="true" />
+
+    <link href="~/css/app-menu.css" rel="stylesheet" asp-append-version="true" />
+    <link type="image/png" href="~/img/tcmpl-favicon.png" rel="icon" asp-append-version="true" />
+
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" asp-append-version="true" />
+
+    <link href="~/lib/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css" rel="stylesheet" asp-append-version="true" />
+
+    <link href="~/material-design-icons-iconfont/material-design-icons.css" rel="stylesheet" asp-append-version="true" />
+
+    <!--Render Styles-->
+    @await RenderSectionAsync("Styles", required: false)
+    <!--Render Styles-->
+</head>
+<body style="background-color:  #e7e7e7">
+    <div class="load-bar d-none">
+        <div class="loader-bg" id="main-loader">
+            <div class="loader-track">
+                <div class="loader-fill"></div>
+            </div>
+        </div>
+    </div>
+    <header>
+        <!--Slide bar-->
+        <nav class="app-navbar app-navbar-collapsed" style="z-index:1000;">
+            <div class="app-navbar-brand">
+                <div class="logo-sm ">
+                    <img src="~/img/tcmpl-logo-sm.png?tcmpl" title="Tecnimont Private Limited" />
+                </div>
+                <a href="javascript:void(0);" class="mobile-menu" id="idDeskTopMenuButton">
+                    <span></span>
+                </a>
+            </div>
+            <div class="app-navbar-menu scroll-menu">
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul>
+                    <li>
+                        <label class="app-menu-label menu-item-text">Menu</label>
+                    </li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-university" aria-hidden="true"></i><span class="menu-item-text">Home</span></a></li>
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "SWPVaccine".ToUpper()))
+                    {
+                        <li><a asp-area="SWPVaccine" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Vaccination/SWP Policy</span></a></li>
+                    }
+
+                    <li><a asp-area="SelfService" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">SelfService</span></a></li>
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "DIGIFORM"))
+                    {
+                        <li><a asp-area="DigiForm" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Digi forms</span></a></li>
+                    }
+                    @if (currentUserIdentity.Modules.Any(m => m == "SWP"))
+                    {
+                        <li><a asp-area="SWP" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Smart work planning</span></a></li>
+                    }
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "DMS"))
+                    {
+                        <li><a asp-area="DMS" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Desk Management</span></a></li>
+                    }
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "RAPREPORTING"))
+                    {
+                        <li><a asp-area="RapReporting" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Rap Reporting</span></a></li>
+                    }
+                    <environment include="Development">
+                        @if (currentUserIdentity.Modules.Any(m => m == "RAPREPORTING"))
+                        {
+                            <li><a asp-area="RapReporting" asp-controller="Home" asp-action="NavIndex"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Rap Reporting NavIndex</span></a></li>
+                        }
+                    </environment>
+                    @if (currentUserIdentity.Modules.Any(m => m == "TIMESHEET"))
+                    {
+                        <li><a asp-area="Timesheet" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Timesheet</span></a></li>
+                    }
+
+                    <environment include="Development,Staging">
+                        @if (currentUserIdentity.Modules.Any(m => m == "LC"))
+                        {
+                            <li><a asp-area="LC" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Letter of credit</span></a></li>
+                        }
+                        @if (currentUserIdentity.Modules.Any(m => m == "BG"))
+                        {
+                            <li><a asp-area="BG" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Bank guarantee</span></a></li>
+                        }
+                    </environment>
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "HSE"))
+                    {
+                        <li><a asp-area="HSE" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">HSE</span></a></li>
+                    }
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "JOB"))
+                    {
+                        <li><a asp-area="JOB" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Job Form</span></a></li>
+                    }
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "ERS"))
+                    {
+                        <li><a asp-area="ERS" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Employee Referral Program</span></a></li>
+                    }
+
+                    <environment exclude="Staging,Production,Development">
+                        @if (currentUserIdentity.Modules.Any(m => m == "OFFBOARDING"))
+                        {
+                            <li><a asp-area="OffBoarding" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Employee Off-Boarding</span></a></li>
+                        }
+                    </environment>
+
+                    <environment include="Development,Staging,Production">
+                        @if (currentUserIdentity.Modules.Any(m => m == "OFFBOARDING"))
+                        {
+                            <li><a asp-area="OffBoarding" asp-controller="Home" asp-action="OFBIndex"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Employee Off-Boarding</span></a></li>
+                        }
+                    </environment>
+                        @if (currentUserIdentity.Modules.Any(m => m == "DESKBOOKING"))
+                        {
+                            <li><a asp-area="DeskBooking" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Flexi Desk Booking</span></a></li>
+                        }
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "HRMASTERS"))
+                    {
+                        <li><a asp-area="HRMasters" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">HR Masters</span></a></li>
+                    }
+
+                    @if (currentUserIdentity.Modules.Any(m => m == "EMPGENINFO"))
+                    {
+                        <li><a asp-area="EmpGenInfo" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">Employee general info</span></a></li>
+                    }
+                    @if (currentUserIdentity.Modules.Any(m => m == "CORESETTINGS"))
+                    {
+                        <li><a asp-area="CoreSettings" asp-controller="Home" asp-action="Index"> <i class="menu-item-icon fas fa-flag" aria-hidden="true"></i><span class="menu-item-text">CoreSettings</span></a></li>
+
+                    }
+                    <!--Core Settings-->
+                    @* @if (currentUserIdentity.Modules.Any(m => m == "CORESETTINGS"))
+                    {
+                    <li>
+                    <a class="has-sub-menu" href="javascript:void(0);"> <i class="menu-item-icon far fa-flag" aria-hidden="true"></i><span class="menu-item-text">Core Settings</span></a>
+                    <ul class="sub-menu">
+                    @if (CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.ConstantsHelper.RoleLogs))
+                    {
+                    <li><a asp-area="CoreSettings" asp-controller="Home" asp-action="Index"> <span class="menu-item-text">Logs</span></a></li>
+                    <li><a asp-area="CoreSettings" asp-controller="Home" asp-action="Index"> <span class="menu-item-text">Logs</span></a></li>
+                    }
+                    @if (currentUserIdentity.Modules.Any(m => m == "LOGS"))
+                    {
+                    <li><a asp-area="CoreSettings" asp-controller="Home" asp-action="Index"> <span class="menu-item-text">Logs</span></a></li>
+                    }
+                    <li><a asp-area="CoreSettings" asp-controller="UserAccess" asp-action="Index">  <span class="menu-item-text">User Access</span></a></li>
+
+                    </ul>
+                    </li>
+
+                    }*@
+                    <!--Utilities-->
+                    <li>
+                        <a class="has-sub-menu" href="javascript:void(0);"> <i class="menu-item-icon far fa-flag" aria-hidden="true"></i><span class="menu-item-text">Utilities</span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a asp-area="" asp-controller="EmployeeDetails" asp-action="Index"><span class="menu-item-text">Employee Details</span></a>
+                            </li>
+                            <li>
+                                <a asp-area="" asp-controller="CostcodeList" asp-action="Index"><span class="menu-item-text">Costcode List</span></a>
+                            </li>
+                            @* <environment exclude="Production" >
+                            <li>
+                            <a asp-area="" asp-controller="EmployeeDetails" asp-action="EmployeeWorkspaceDetails"><span class="menu-item-text">Employee workspace details</span></a>
+                            </li>
+                            </environment>*@
+                            <li>
+                                <a asp-area="" asp-controller="EmployeeDetails" asp-action="ChangePassword"><span class="menu-item-text">Change Timesheet pwd</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--Slide bar-->
+        <!--Top Bar-->
+        <nav class="app-header navbar-expand-lg navbar-toggleable-sm navbar-light ">
+            <div class="mobile-header">
+                <div class="mobile-menu-appname">
+                    <environment include="Development">
+                        <h5 class="text-danger  m-0">Dev TCMPL App</h5>
+                    </environment>
+                    <environment include="Staging">
+                        <h5 class="text-danger  m-0">TEST TCMPL App</h5>
+                    </environment>
+                    <environment exclude="Development,Staging">
+                        <h5 class="text-white  m-0">TCMPL App</h5>
+                    </environment>
+                </div>
+                <div class="mobile-menu">
+                    <img class="logo-main" src="~/img/tcmpl-logo.png?tcmpl" />
+                    <div style="margin:3rem">
+                        <a href="javascript:void(0);" class="mobile-menu" id="idMobileMenuButton">
+                            <span></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav mr-auto pl-3">
+                    <environment include="Development">
+                        <li class="app-name"><h5 class="text-danger">Development TCMPL App</h5></li>
+                    </environment>
+                    <environment include="Staging">
+                        <h5 class="text-warning  m-0">TEST TCMPL App</h5>
+                    </environment>
+                    <environment exclude="Development,Staging">
+                        <h5 class="text-white  m-0">TCMPL App</h5>
+                    </environment>
+                </ul>
+                <ul class="navbar-nav ml-auto pr-2">
+                    <li><img class="logo-main " src="~/img/tcmpl-logo.png?tcmpl" title="Tecnimont Private Limited" /></li>
+                    <li style="padding: 12px">
+                        <div class="dropdown">
+                            <a href="javascript:void(0);" style="text-decoration:none" class=" dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class=" fas fa-user"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right border border-light border-3" aria-labelledby="dropdownMenu2" style="padding:10px; width:max-content">
+                                <span>Hello, @User.Identity.Name! <br /> @currentUserIdentity.Name</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--Top Bar-->
+    </header>
+    <div class="body-content  ">
+        <nav aria-label="breadcrumb">
+            @await RenderSectionAsync("BreadCrumbs", required: false)
+        </nav>
+        <main role="main" class="pb-3 ml-2 mr-2">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - TCMPL : TCMPL App
+        </div>
+    </footer>
+
+    <!-- Modal popup Starts -->
+    <div class="modal fade right" id="modalcontainer" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <!-- [ Pre-loader ] start -->
+            <div class="load-bar-modal d-none">
+                <div class="loader-bg" id="modal-loader">
+                    <div class="loader-track">
+                        <div class="loader-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ Pre-loader ] End -->
+            <div class="modal-content" id="modal-content">
+            </div>
+        </div>
+    </div>
+    <!-- Modal popup Ends -->
+    <!-- Modal read only popup Starts -->
+    <div class="modal fade right" id="modalreadonlycontainer" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <!-- [ Pre-loader ] start -->
+            <div class="loader-bg" id="modalreadonly-loader" style="display: none;">
+                <div class="loader-track">
+                    <div class="loader-fill"></div>
+                </div>
+            </div>
+            <!-- [ Pre-loader ] End -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modaltitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card bg-light border-0">
+                        <div class="card-header app-h4 app-card-header">
+                            <p id="modalheader"></p>
+                        </div>
+                        <div class="card-block">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div id="modal-content">
+                                        <!-- Modal content here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal read only popup Ends -->
+    <!-- Modal iFrame popup Starts -->
+    <div class="bg-light modal fade right " id="modaliframecontainer" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <!-- [ Pre-loader ] start -->
+            <div class="loader-bg" id="modaliframe-loader" style="display: none;">
+                <div class="loader-track">
+                    <div class="loader-fill"></div>
+                </div>
+            </div>
+            <!-- [ Pre-loader ] End -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modaltitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card  ">
+                        <div class="card-header">
+                            <h5 id="modalheader"></h5>
+                        </div>
+                        <div class="card-block">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- Modal content here -->
+                                    <iframe id="modal-iframe" class="modal-iframe" frameborder="0" scrolling="no"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal iframe popup Ends -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+
+    <script src="~/lib/datatables.net/js/dataTables.min.js" asp-append-version="true"></script>
+    @* <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script> *@
+    <script src="~/lib/datatables.net-bs4/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @*<script src="~/js/site-rap.js" asp-append-version="true"></script>*@
+
+    <script src="~/lib/Select2/select2.min.js" asp-append-version="true"></script>
+
+    @*<script src="~/lib/jqueryui/jquery-ui.min.js" asp-append-version="true"></script>*@
+
+    <script src="~/lib/jquery.serializeJSON/jquery.serializejson.min.js" asp-append-version="true"></script>
+
+    <script src="~/lib/bootstrap-sweetalert/sweetalert.min.js" asp-append-version="true"></script>
+
+    <script src="~/lib/toastr.js/toastr.min.js" asp-append-version="true"></script>
+
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+    <script src="~/lib/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js"></script>
+
+    @await Html.PartialAsync("_notificationPartial")
+
+    @await Html.PartialAsync("_RestrictIEScriptPartial")
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

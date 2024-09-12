@@ -1,0 +1,304 @@
+﻿@model TCMPLApp.WebApp.Models.PrintLogsViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CorePrintLogCreateEditDeleteId = 173;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SelfService">SelfService</a></li>
+        <li class="breadcrumb-item active">Print logs</li>
+    </ol>
+}
+
+@section styles
+{
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/lib/dropzone/dropzone.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/dropzone/basic.css" rel="stylesheet" asp-append-version="true" />
+
+}
+
+@{
+    ViewData["Title"] = "Print logs";
+
+}
+<div style="display:none">
+    @Html.TextBoxFor(model => model.FilterDataModel.StartDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    @Html.TextBoxFor(model => model.FilterDataModel.EndDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Empno" />
+</div>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Print logs</p>
+    </div>
+    <div class="d-flex flex-row">
+        <button type="button" class="btn btn-outline-primary btn-sm border-white"
+                data-jqueryselector="openmodal"
+                data-modalcontainer="modalcontainer"
+                data-modalpopupwidth="rightw35"
+                data-url='@Url.Action("PrintLogFilterGet", "Attendance", new { Area = "SelfService" })'
+                data-modaltitle="Filters - PrintLog"
+                data-modalheader="Filters - PrintLog">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </button>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="PrintLogIndex"
+           data-url='@Url.Action("ResetFilter", "Attendance", new { Area = "SelfService" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        @*<div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>*@
+        <table id="tbGrid" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+
+                    <th>@Html.DisplayNameFor(model => model.PrintDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.PrintTime)</th>
+                    <th>@Html.DisplayNameFor(model => model.QueName)</th>
+                    <th>@Html.DisplayNameFor(model => model.FileName)</th>
+                    <th>@Html.DisplayNameFor(model => model.PageCount)</th>
+                    <th>@Html.DisplayNameFor(model => model.Color)</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/dropzone/dropzone.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        function localScript() {
+
+            initSelect2();
+
+            initFilter();
+            initDatePicker();
+        }
+
+        function initDatePicker() {
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true,
+                clearButton: true
+            });
+
+            $("#endDate").on("change", function (event, date) {
+                    $("#EndDate").val($(this).val());
+            });
+            $("#startDate").on("change", function (event, date) {
+
+                $("#StartDate").val($(this).val());
+                if ($("#endDate").val()) {
+                    let startDate = moment($(this).val(), "DD-MMM-YYYY");
+                    let endDate = moment($("#endDate").val(), "DD-MMM-YYYY");
+                    if (endDate < startDate) {
+                        $("#endDate").val('');
+                        $('#endDate').val(moment(startDate).format("DD-MMM-YYYY"));
+                    }
+                }
+                else {
+                    $("#endDate").val($(this).val());
+                }
+
+                $("#endDate").bootstrapMaterialDatePicker('setDate', $(this).val());
+                $("#endDate").trigger('change');
+            });
+            $('#startDate').val($('#StartDate').val());
+            $('#endDate').val($('#EndDate').val());
+        }
+
+        function initFilter() {
+
+            var currYear = moment().year();
+            var curYearLastDate = new Date(currYear, 11, 31);
+            var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+            $('.datepickerFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                time: false,
+                useCurrent: false
+            });
+
+            $('#startDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                time: false
+            }).on('change', function (e, date) {
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMinDate', date);
+                $('#endDateFilter').bootstrapMaterialDatePicker('setMaxDate', curYearLastDate);
+
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+
+            });
+
+            $('#endDateFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                minDate: curYearMinDate,
+                maxDate: curYearLastDate,
+                time: false
+            }).on('change', function (e, date) {
+                $("#EndDate").val(date.format('DD-MMM-YYYY'));
+            });
+
+            if ($('#StartDate').val()) {
+                $('#startDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#StartDate").val()));
+            }
+            if ($('#EndDate').val())
+                $('#endDateFilter').bootstrapMaterialDatePicker('setDate', new Date($("#EndDate").val()));
+
+
+        }
+
+
+        $(document).ready(function () {
+            localLoadDataTable();
+
+        });
+
+        function localLoadDataTable() {
+            $('#tbGrid').DataTable().destroy();
+
+            $('#tbGrid tbody').empty();
+
+            let isHRAdmin = "@(CurrentUserIdentity.ProfileActions.Any(p => p.RoleId == TCMPLApp.Domain.Models.SelfService.SelfServiceHelper.RoleAttendanceAdmin))";
+
+            var table = $('#tbGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                aaSorting: [[1, 'asc']],
+                ordering: false,
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                  @if ((bool)@Context.Items["isMobile"] == false)
+                  {
+                        <text>
+                ordering: false,
+                //order: [1, "asc"],
+                columns: [
+
+                    { data: "printDate" },
+                    { data: "printTime" },
+                    { data: "queName" },
+                    { data: "fileName" },
+                    { data: "pageCount" },
+                    { data: "color" }
+                ],
+                        </text>
+                  }
+                  else
+                  {
+                        <text>
+                ordering: false,
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.PrintDate)' + '</dt><dd class="col-lg-8">' + moment(data.printDate).format('L') + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.PrintTime)' + '</dt><dd class="col-lg-8">' + data.printTime + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.QueName)' + '</dt><dd class="col-lg-8">' + data.queName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.FileName)' + '</dt><dd class="col-lg-8">' + data.fileName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.PageCount)' + '</dt><dd class="col-lg-8">' + data.pageCount + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Color)' + '</dt><dd class="col-lg-8">' + data.color + '</dd></dl>';
+
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+                        </text>
+                      }
+                  ajax: {
+                      headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    url: '@Url.Action("GetListsPrintLogs", "Attendance")',
+                    type: 'GET',
+                    cache: true,
+                    dataType: "json",
+                    data: function (d) {
+                              d.columns = null;
+                              d.order = null;
+                              d.search = null;
+                              d.genericSearch = null; // $('#FilterDataModel_GenericSearch').val();
+                              d.businessEntityId = null; // $('#FilterDataModel_BusinessEntityId').val();
+                              d.startDateTime = null; // $('#FilterDataModel_StartDateTime').val();
+                              d.endDateTime = null; // $('#FilterDataModel_EndDateTime').val();
+                              d.statusTypeId = null; // $('#FilterDataModel_StatusTypeId').val();
+                              d.startDate = ($('#FilterDataModel_StartDate').val());
+                              d.endDate = ($('#FilterDataModel_EndDate').val());
+                              d.empno = ($('#FilterDataModel_Empno').val());
+                          },
+                    error: function (request, status, error) {
+                              notify('error', request.responseText, 'danger');
+                          }
+                      }
+                  });
+
+            //dataTableSearch();
+
+        }
+
+        function PostFilterReLoadDataTable(data) {
+            $("#modalcontainer").modal('hide');
+
+            $("#FilterDataModel_StartDate").val(data.startDate);
+            $("#FilterDataModel_EndDate").val(data.endDate);
+             $("#FilterDataModel_Empno").val(data.empno);
+
+            localLoadDataTable();
+
+        }
+
+        function PostSaveReLoadDataTable(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                loadHeader();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+    </script>
+}  

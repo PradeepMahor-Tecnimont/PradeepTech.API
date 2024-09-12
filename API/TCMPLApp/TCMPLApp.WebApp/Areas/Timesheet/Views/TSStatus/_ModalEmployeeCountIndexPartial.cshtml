@@ -1,0 +1,83 @@
+﻿@model TCMPLApp.WebApp.Models.TimesheetEmployeeCountIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    var paramId = @Model.FilterDataModel.Yyyymm + @Html.Raw("!-!") + @ViewBag.Costcode;
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@localizer["Employee count breakup"] @ViewBag.Costcode</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["Employee count breakup"] @ViewBag.Costcode </h5>
+        </div>
+        <div class="card-block">
+            <div id="idFilledIndex" class="table-responsive p-r-10">
+                <div style="float:left" class="p-l-10">
+                    <label class="control-label f-w-700">Actual working hours: </label> <span class="text-dark-green f-w-700">@ViewBag.ActualHours</span>
+                </div>
+                @* <div id="filledButtons" class="text-right hidden">
+                    <div style="float:left" class="p-l-10">                        
+                        <label class="control-label">Actual working hours: @ViewBag.ActualHours</label>                       
+                    </div>
+                    <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+                       id="xlsFilledPartialStatus"
+                       href="#"
+                       data-jqueryselector="binarydownload"
+                       data-url="@(Url.Action("TimesheetDepartmentDownload", "TSStatus", new { Area = "Timesheet" }))"
+                       data-id="@Model.FilterDataModel.Yyyymm@Html.Raw("!-!")@ViewBag.Costcode@Html.Raw("!-!Filled!-!")">
+                        <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+                    </a>                    
+                </div>*@
+                <div class="m-3"></div> 
+                <div class="input-group pt-1 pl-1 pr-1 ">
+                    <input type="text" class="form-control form-control-sm border" id="EmployeeCountPartialSearch" name="EmployeeCountPartialSearch"
+                           onkeypress="genericSearchKeypress('EmployeeCountPartialSearch')" placeholder="Search...">
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-outline-info" type="button" id="buttonEmployeeCountPartialSearch" onclick="genericSearchOnClick('EmployeeCountPartialSearch')">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="m-2"></div>
+                <table id="tbEmployeeCountPartialGrid" class="table table-striped table-bordered table-responsive-lg">
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Empno)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Empname)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Emptype)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Parent)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Assign)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.TimesheetType)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.StatusName)]</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+</div>
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+@* <script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            var tabLock = $('#tbFilledPartialGrid').dataTable();
+
+            if (tabLock.fnGetData().length > 0)
+                $('#filledButtons').removeClass("hidden");
+
+        }, 1000);
+    });
+</script> *@

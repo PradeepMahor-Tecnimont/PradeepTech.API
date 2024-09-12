@@ -1,0 +1,295 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAreaDepartmentMapViewModel
+
+@{
+    ViewData["Title"] = "Desk Area Department Mapping";
+}
+
+@Html.AntiForgeryToken()
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Masters" asp-area="DMS">Masters</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Desk Area Department Mapping</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+@Html.HiddenFor(m => m.FilterDataModel.IsActive)
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.AreaId" />
+<input readonly type="hidden" asp-for="@Model.FilterDataModel.CostCode" />
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>Desk Area Department Mapping</p>
+    </div>
+    <div class="d-flex flex-row">
+        @* @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.DMS.DMSHelper.ActionITAdm))
+        {
+        <a title="New Desk Area Department Mapping" class="btn btn-outline-primary btn-sm border border-white" href="#"
+        data-jqueryselector="openmodal"
+        data-modalcontainer="modalcontainer"
+        data-modalpopupwidth="rightw35"
+        data-url='@Url.Action("DeskAreaDepartmentMapCreate", "Masters", new { Area = "DMS" })'
+        data-statichtmlsourcedivid=""
+        data-modaltitle="New Desk Area Department Map"
+        data-modalheader="New Desk Area Department Map">
+        <i class="fas fa-plus"></i> Create
+        </a>
+        } *@
+        @* <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+           data-jqueryselector="openmodal"
+           data-modalcontainer="modalcontainer"
+           data-modalpopupwidth="rightw35"
+           data-url='@Url.Action("DeskAreaDepartmentMapFilterGet", "Masters", new { Area = "DMS" })'
+           data-modaltitle="Filters - Desk Area Department Mapping"
+           data-modalheader="Filters - Desk Area Department Mapping">
+            <i class="fas fa-filter"></i>&nbsp;Filters
+        </a>
+        <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+           data-actionid="DeskAreaDepartmentMapIndex"
+           data-url='@Url.Action("ResetFilter", "Masters", new { Area = "DMS" })'
+           href="#"
+           onclick="resetFilter(event, this);"
+           style="display: none;">
+            <i class="fas fa-filter"></i> Reset
+        </a> *@
+        <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+           href="#"
+           data-jqueryselector="binarydownload"
+           data-url="@(Url.Action("DeskAreaDepartmentMapExcelDownload", "Masters", new { Area = "DMS" }))">
+            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+        </a>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbDeskAreaDepartmentMap" class="table table-striped table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@Html.DisplayNameFor(model => model.AreaId)</th>
+                    <th>@Html.DisplayNameFor(model => model.IsRestrictedText)</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div id="result"></div>
+    </div>
+</div>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadDeskAreaDepartmentMapDataTable();
+        });
+
+        function localScript() {
+            initSelect2();
+            loadDepartmentDetailsList();
+            loadDeskAreaDepartmentMapDataTable();
+            loadDeptDetailsList();
+
+        }
+
+        let vVUloadDeskAreaDepartmentMapList = "@Url.Action("GetListsDeskAreaDepartmentMap", "Masters")";
+        let vVUloadDepartmentList = "@Url.Action("GetListsDepartmentDetailsList", "Masters")";
+
+        function loadDeskAreaDepartmentMapDataTable() {
+            genericLoadDataTable({
+                pDataTableId: "#tbDeskAreaDepartmentMap",
+                pColumns: datatableDeskAreaDepartmentMapColumns,
+                pUrl: vVUloadDeskAreaDepartmentMapList,
+                pUrlParams: {
+                    genericSearch: $('#GenericSearch').val() ? $('#GenericSearch').val() : null,
+                    areaId: $('#FilterDataModel_AreaId').val() ? $('#FilterDataModel_AreaId').val() : null,
+                    costCode: $('#FilterDataModel_CostCode').val() ? $('#FilterDataModel_CostCode').val() : null,
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        function loadDepartmentDetailsList() {
+            genericLoadDataTable({
+                pDataTableId: "#tblDepartmentDetails",
+                pColumns: datatableColumnsDepartmentDetails,
+                pUrl: vVUloadDepartmentList,
+                pUrlParams: {
+                    areaId: $('#formDepartmentDetailIndex #AreaId').val() ? $('#formDepartmentDetailIndex #AreaId').val() : null
+
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+        function loadDeptDetailsList() {
+            genericLoadDataTable({
+                pDataTableId: "#tblDeptDetails",
+                pColumns: datatableColumnsDeptDetails,
+                pUrl: vVUloadDepartmentList,
+                pUrlParams: {
+                    areaId: $('#formDepartmentDetailIndex #AreaId').val() ? $('#formDepartmentDetailIndex #AreaId').val() : null
+
+                },
+                pRequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+            });
+        };
+
+
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                let datatableDeskAreaDepartmentMapColumns = [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("DeskAreaDepartmentMapDetails", "Masters", new { Area = "DMS" })"' +
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-id="' + data.areaId + '"' +
+                                // ' data-callback="loadDepartmentDetailsList" ' +
+                                ' data-modaltitle="Desk Area Department Map Detail" ' +
+                                ' data-modalheader="Desk Area Department Map Detail" ' +
+                                ' > ' +
+                                ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                ' </button>'
+                        },
+                        'className': "td-icon",
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return data.areaId + " - " + data.areaDesc + " (" + data.detpCount + ")"
+                        },
+                    },
+                    { data: "isRestrictedText" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+
+                            return '<button title="Edit" class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("DeskAreaDepartmentMapList", "Masters", new { Area = "DMS" })" ' +
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-id="' + data.areaId + '"' +
+                                // ' data-callback="loadDepartmentDetailsList" ' +
+                                ' data-modaltitle="Edit Desk Area Department Details" ' +
+                                ' data-modalheader="Edit Desk Area Department Details"> ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>';
+                        },
+                        className: "td-icon",
+                    },
+                    
+                ];
+
+            let datatableColumnsDepartmentDetails = [
+
+                { data: "areaId" },
+                { data: "costCode" },
+                { data: "costCodeName" },
+                { data: "modifiedBy", width: "13.0rem" },
+                {
+                    width: '6.0rem',
+                    data: "modifiedOn",
+                    render: function (data, type, row) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return ' <button class="btn btn-outline-danger btn-sm border-none"  ' +
+                            ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                            ' data-url="@Url.Action("DeskAreaDepartmentMapDelete", "Masters", new { Area = "DMS" })" ' +
+                            ' data-redirecturl="" ' +
+                            ' data-PostDeleteReLoadDataTable="OK" ' +
+                            ' data-id="' + data.keyId + '" ' +
+                            ' data-modaltitle="Please Confirm!" ' +
+                            ' data-confirmationtext="Delete department ' + data.costCodeName + ' ?" ' +
+                            ' data-confirmationtype="warning" data-confirmbuttontext="Delete department"> ' +
+                            ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                            ' </button> ';
+
+                    },
+                    'className': "td-icon",
+                }
+            ];
+            let datatableColumnsDeptDetails = [
+
+                { data: "areaId" },
+                { data: "costCode" },
+                { data: "costCodeName" },
+                { data: "modifiedBy", width: "13.0rem" },
+                {
+                    width: '6.0rem',
+                    data: "modifiedOn",
+                    render: function (data, type, row) {
+                        return moment(data).format("DD-MMM-YYYY");
+                    }
+                },
+                
+            ];
+            </text>
+        }
+            function PostSave(data) {
+                if (data.success) {
+                    $("#modalcontainer").modal('hide');
+                    hideLoader();
+                    loadDeskAreaDepartmentMapDataTable();
+                    loadDepartmentDetailsList();
+                    loadDeptDetailsList();
+                    notify('success', data.response, 'Success');
+                }
+            }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                if ($("#GenericSearch").length) {
+                    loadDeskAreaDepartmentMapDataTable();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+
+            if ($("#GenericSearch").length) {
+                loadDeskAreaDepartmentMapDataTable();
+            }
+        });
+        function PostDeleteReLoadDataTables(data) {
+            if (data.success) {
+                loadDeskAreaDepartmentMapDataTable();
+                hideLoader();
+                notify('success', data.message, 'Success');
+            }
+        }
+        function PostFilterReLoadDataTable(data) {
+
+            $("#modalcontainer").modal('hide');
+            $("#FilterDataModel_AreaId").val(data.areaId);
+            $("#FilterDataModel_CostCode").val(data.costCode);
+            loadDeskAreaDepartmentMapDataTable();
+            hideLoader();
+        }
+    </script>
+}

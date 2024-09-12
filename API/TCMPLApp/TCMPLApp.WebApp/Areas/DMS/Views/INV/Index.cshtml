@@ -1,0 +1,455 @@
+﻿@{
+    ViewData["Title"] = "Inventory";
+
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="DMS">Desk management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Inventory</li>
+    </ol>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-sm-12">
+    <div class="row">
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Item category's</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvItemCategoryIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify item category</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-location-arrow f-20 text-white theme-capri"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Item assignment types </h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvItemAsgmtTypesIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify item assignment types</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-tags f-20 text-white theme-blue"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Item types</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvItemTypesIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify item types</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Item type - AMS SubType mapping</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvItemAMSAssetMappingIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Item type - AMS SubType mapping</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-tag f-20 text-white theme-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Addons - Container mapping</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvAddOnContainerIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Addons - Container mapping</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-tag f-20 text-white theme-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @* <environment include="Development,Staging"> *@
+    <hr />
+    <div class="row">
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Transactions - Issued to employee</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvTransactionIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Transactions</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Transactions - Reserved for employee</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvReserveItemIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <div class="row align-items-center justify-content-center stretched-link">
+
+                                    <div class="col-12 text-black " style="font-size:1.2rem">Reserve Items : @ViewBag.ReturnItemCount</div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-md-4 col-xl-3">
+        <div class="card card-tpl">
+        <div class="card-header">
+        <h5>Transactions - Employee wise</h5>
+        </div>
+        <div class="card-block card-tile">
+        <a href="@Url.Action("InvEmployeeTransactionIndex", "INV", new { Area = "DMS" })">
+        <div class="row align-items-center justify-content-center stretched-link">
+        <div class="col">
+        <h7 class="mb-2 f-w-300">Transactions - Employee wise</h7>
+        </div>
+        <div class="col-auto">
+        <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+        </div>
+        </div>
+        </a>
+        </div>
+        </div>
+        </div>*@
+        <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Employee Inventory</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw25"
+                       data-url="@Url.Action("SelectEmployee", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Transactions - Employee wise</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Transactions - item addons</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvItemAddOnIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Transactions</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Consumables</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvConsumablesIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Consumables</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Assets/Item Grouping</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvItemGroupIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Assets/Item Grouping</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Laptop Lot wise</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("LaptopLotWiseIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Laptop Lot wise List</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-blue"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Item - Not In Service</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("InvItemNotInServiceIndex", "INV", new { Area = "DMS" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Item Not In Service</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-alt f-20 text-white theme-red"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+    @* </environment> *@
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-costcenter.js"></script>
+    <script>
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+        };
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: true,
+                startDate: new Date(),
+                nowButton: true
+            });
+
+            $('#formInvQkTransactionCreate input[id=TransDate]').val(moment(new Date(), "DD-MMM-YYYY").format('DD-MMM-YYYY'));
+            $('#formInvQkTransactionCreate input[id=transDate]').val(moment(new Date(), "DD-MMM-YYYY").format('DD-MMM-YYYY'));
+
+            $("#transDate").on("change", function (event, date) {
+                $("#TransDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+        }
+
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadModuleDataTable();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function ItemTypeCodeChange() {
+            $('#ItemTypeCode').on('change', function (e) {
+                var itemTypeCode = $('#ItemTypeCode').val();
+                var itemId = $('#ItemId').val();
+
+                if (itemTypeCode != null && itemTypeCode != '') {
+                    $.ajax({
+                        url: "@Url.Action("GetItem", "INV", new { Area = "DMS" })",
+                        data: {
+                            'id': itemTypeCode
+                        },
+                        type: 'GET',
+                        beforeSend: function () {
+                            showModalLoader();
+
+                        },
+                        success: function (data) {
+                            let dropdown = $('#ItemId');
+                            dropdown.empty();
+                            var flag = false;
+                            var options = '';
+
+                            $(data).each(function () {
+                                if (this.dataValueField == itemId) {
+                                    flag = true;
+                                    options += '<option selected="selected" value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                }
+                                else {
+                                    options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                }
+                            });
+                            dropdown.html(options);
+
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideModalLoader();
+                        },
+                        error: function (result) {
+                            hideModalLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+            });
+        }
+
+        function EmpnoChange() {
+            $('#Empno').on('change', function (e) {
+                var empno = $('#Empno').val();
+                var itemId = $('#ItemId').val();
+
+                if (empno != null && empno != '') {
+                    $.ajax({
+                        url: "@Url.Action("GetReturnItem", "INV", new { Area = "DMS" })",
+                        data: {
+                            'id': empno
+                        },
+                        type: 'GET',
+                        beforeSend: function () {
+                            showLoader();
+                        },
+                        success: function (data) {
+                            let dropdown = $('#ItemId');
+                            dropdown.empty();
+                            var flag = false;
+                            var options = '';
+
+                            $(data).each(function () {
+                                if (this.dataValueField == itemId) {
+                                    flag = true;
+                                    options += '<option selected="selected" value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                }
+                                else {
+                                    options += '<option value="' + this.dataValueField + '">' + this.dataTextField + '</option>';
+                                }
+                            });
+                            dropdown.html(options);
+
+                            if (flag == false) {
+                                phase = null;
+                            }
+
+                            dropdown.val(phase);
+                            hideLoader();
+                        },
+                        error: function (result) {
+                            hideLoader();
+                            notify($.i18n('Error'), result.responseText, 'danger');
+                        }
+                    });
+                }
+            });
+        }
+
+            </script>
+}
+

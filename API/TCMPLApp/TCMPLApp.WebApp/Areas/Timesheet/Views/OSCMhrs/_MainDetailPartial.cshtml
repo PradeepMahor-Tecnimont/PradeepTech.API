@@ -1,0 +1,39 @@
+﻿@model TCMPLApp.WebApp.Models.OSCMhrsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="bg-gray-active rounded ">    
+    <div class="input-group pt-1 pl-1 pr-1 ">
+        <input type="text" class="form-control form-control-sm border" id="OSCMhrsDetailsSearch" name="GenericSearch"
+               onkeypress="genericSearchKeypress('OSCMhrsDetailsSearch')" placeholder="Search...">
+        <div class="input-group-append">
+            <button class="btn btn-sm btn-outline-info" type="button" id="buttonOSCMhrsDetails" onclick="genericSearchOnClick('OSCMhrsDetailsSearch')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-table">
+
+        <div class="table-responsive">
+            <table id="tbOSCMhrsDetails" class="table table-striped table-bordered table-responsive-lg">
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Empno)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.EmpName)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Projno)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.ProjnoName)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Wpcode)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.WpcodeName)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Activity)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.ActivityName)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Hours)]</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                }
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,770 @@
+﻿@model TCMPLApp.WebApp.Models.PrimaryWorkSpaceViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="SWP">Smart work planning</a></li>
+        <li class="breadcrumb-item active">Primary workspace - current status</li>
+    </ol>
+}
+
+@section styles
+    {
+
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Primary workspace - current status";
+
+}
+<div style="display:none">
+
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Empno" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.Assign" />
+
+    <input type="hidden" id="FilterDataModel_EmployeeTypeList" name="FilterDataModel_EmployeeTypeList" value='@String.Join(",", (Model.FilterDataModel.EmployeeTypeList != null) ? Model.FilterDataModel.EmployeeTypeList: new string[] { })' />
+    <input type="hidden" id="FilterDataModel_GradeList" name="FilterDataModel_GradeList" value='@String.Join(",", (Model.FilterDataModel.GradeList != null) ? Model.FilterDataModel.GradeList: new string[] { })' />
+    <input type="hidden" id="FilterDataModel_PrimaryWorkspaceList" name="FilterDataModel_PrimaryWorkspaceList" value='@String.Join(",", (Model.FilterDataModel.PrimaryWorkspaceList != null) ? Model.FilterDataModel.PrimaryWorkspaceList: new string[] { })' />
+
+
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.LaptopUser" />
+    <input readonly type="hidden" asp-for="@Model.FilterDataModel.EligibleForSWP" />
+
+</div>
+
+<div class="container-fluid bg-white border rounded shadow m-auto col-xl-11 p-2 ">
+    <div class="app-h4 app-card-header mb-2">
+        <p>
+            Primary workspace planning - <span style="color:#ff5722;">Current</span> week
+            <span class="" style="float: right;">
+                @(ViewBag.WeekDetails.PCurrStartDate.ToString("dd-MMM-yyyy") + " to " + ViewBag.WeekDetails.PCurrEndDate.ToString("dd-MMM-yyyy"))
+            </span>
+        </p>
+    </div>
+    <div class="card-toolbar">
+        <div role="toolbar">
+            <a class="btn btn-outline-primary btn-sm filteredmarker-border border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("AdminPWSFilterGet", "SWP", new { Area = "SWP" })'
+               data-modaltitle="Filters - Assign work space"
+               data-modalheader="Filters - Assign work space">
+                <i class="fas fa-filter"></i>&nbsp;Filters
+            </a>
+            <a class="btn btn-outline-danger btn-sm border-white filteredmarker-visibility m-l-5"
+               data-actionid="AdminPWSPlanning"
+               data-url='@Url.Action("ResetFilter", "SWP", new { Area = "SWP" })'
+               href="#"
+               onclick="resetFilter(event, this);"
+               style="display: none;">
+                <i class="fas fa-filter"></i> Reset
+            </a>
+            @if (Model.PlanningExists == "OK")
+            {
+                <a name="Planning" id="Planning" class="btn btn-outline-primary btn-sm border-white m-l-5 "
+               asp-action="AdminPWSPlanningIndex" asp-controller="SWP" asp-area="SWP">
+                    <i class="fas fa-users"></i>  @localizer[" Goto planning"]
+                </a>
+            }
+            <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+               href='@Url.Action("ExcelDownloadAdminPWSCurrent", "SWP", new { Area = "SWP" })'>
+                <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+            </a>
+
+
+        </div>
+    </div>
+    <div class="m-1"></div>
+    <div class="bg-gray-active rounded ">
+        <div class="headerstatus pl-1 pr-1 hidden">
+            <div class="row">
+
+                <div class="col-6 col-6 col-md-3 col-sm-4 col-lg-2 col-xl-2 mt-2 mt-2">
+                    <div class="card card-tile ">
+                        <div class="card-block border  rounded-sm  theme-light-cyan" style=" padding: 5px 10px 5px 10px;">
+                            <div class="row align-items-center">
+
+                                <div class="col "> <h6 class="mb-2 f-w-300"> Total </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;"> <span style="float: left;" class="h6"> &nbsp; </span> <span id="totalEmpCount" style="float: right; "></span> </h4> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-2 mt-2">
+                    <div class="card card-tile ">
+
+                        <div class="card-block  border  rounded-sm  theme-light-orange" style=" padding: 5px 10px 5px 10px;">
+                            <div class="row align-items-center">
+                                <div class="col "> <h6 class="mb-2 f-w-300"> Office workspace </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;"> <span id="empPercentageOfficeWorkspace" style="float: left;" class="h6"></span><span id="empCountOfficeWorkspace" style="float: right; "></span> </h4> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-2 mt-2">
+                    <div class="card card-tile ">
+                        <div class="card-block border  rounded-sm  theme-light-green" style=" padding: 5px 10px 5px 10px;">
+                            <div class="row align-items-center">
+                                <div class="col "> <h6 class="mb-2 f-w-300">  Smart workspace </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;"><span id="empPercentageSmartWorkspace" style="float: left;" class="h6"></span><span id="empCountSmartWorkspace" style="float: right; "></span> </h4> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" col-6 col-md-3 col-sm-4 col-lg-2 col-xl-2 mt-2">
+                    <div class="card card-tile ">
+                        <div class="card-block border  rounded-sm  theme-light-yellow" style=" padding: 5px 10px 5px 10px;">
+                            <div class="row align-items-center">
+                                <div class="col "> <h6 class="mb-2 f-w-300"> OnDeputation </h6> <h4 class="text-muted mb-0 text-right font-weight-bold" style=" margin-top: 20px;"> <span style="float: left;" class="h6"> &nbsp; </span> <span id="empCountNotInHo" style="float: right; "></span> </h4> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="GenericSearch" name="GenericSearch" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonSearch"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <table id="tbDataGrid" class="table table-bordered table-responsive-lg ">
+            <thead class="bg-info text-white">
+                <tr role="row">
+                    <th colspan="1" rowspan="2">&nbsp;</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.Empno)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.EmployeeName)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.Emptype)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.EmpGrade)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.IsSwpEligibleDesc)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.IsLaptopUserText)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.IsDualMonitorUserText)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.WorkArea)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.OfficeLocationDesc)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.Parent)</th>
+                    <th rowspan="2">@Html.DisplayNameFor(model => model.Assign)</th>
+                    <th colspan="3" class="text-center">
+                        Select primary workspace
+                    </th>
+                    <th colspan="1" rowspan="2">&nbsp;</th>
+                </tr>
+                <tr>
+                    <th class="text-center align-middle">
+                        @Html.DisplayNameFor(model => model.Office)
+
+                    </th>
+                    <th class="text-center align-middle">
+                        @Html.DisplayNameFor(model => model.SmartWorkspace)
+
+                    </th>
+                    <th class="text-center align-middle">
+                        @Html.DisplayNameFor(model => model.NotInMumbaiOffice)
+
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+
+        var mDate = moment().isoWeekday(1);
+        var currentDateTime = new Date();
+        var curWeekMondayDate = mDate.isoWeekday(1).format('DD-MMM-YYYY');
+        var nextWeekMondayDate = mDate.add(7, 'day').isoWeekday(1).format('DD-MMM-YYYY');
+
+
+        function localScript() {
+
+            initSelect2();
+
+            $('#btnexportplanning').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+                exportPWSCurrent();
+            });
+
+            localLoadDataTableForEmpPwsList();
+
+            localLoadDataTableForEmpPwsPreviousList();
+
+            /* Start - For date select */
+            var vdate = '@ViewBag.WeekDetails.PCurrStartDate.ToString("dd-MMM-yyyy")';
+
+            var currYear = moment().year();
+            var curYearLastDate = new Date(currYear, 11, 31);
+            //var curYearMinDate = new Date((currYear - 1), 0, 1);
+
+            $('.datepickerFilter').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                //minDate: vdate,
+                maxDate: currentDateTime,
+                useCurrent: false
+            });
+
+            $('#startDate').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false
+            }).on('change', function (e, date) {
+                $("#StartDate").val(date.format('DD-MMM-YYYY'));
+            });
+            /* End - For date select */
+
+
+            $('button[id=btnBackToPwsPlanningList]').off('click').on('click', function () {
+                event.preventDefault();
+                event.stopPropagation();
+
+                //var vempno = $(this).data('empno');
+                //alert(vempno);
+                //return;
+
+                var vUrl = "@Url.Action("AdminPWSEmpPlanningList", "SWP")"
+                $('#adminPWSEmpPlanningAssign').attr('action', vUrl).submit();
+
+            });
+        }
+
+        function localLoadDataTable() {
+
+
+            $('#tbDataGrid').DataTable().destroy();
+
+            $('#tbDataGrid tbody').empty();
+            var canEdit = @(currentUserIdentity.ProfileActions.Any(pa => pa.ActionId == TCMPLApp.Domain.Models.SWP.SWPHelper.ActionPrimaryWsAdminEdit) ? "true" : "false")
+                                var table = $('#tbDataGrid').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                },
+                order: [[2, "asc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: false,
+                info: false,
+                filter: false,
+                //layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+                columnDefs: [
+                    //{ orderable: false, targets: [0,1,2,3,4,5,6,7,8,9,10,11] }
+                    { orderable: false, targets: '_all' }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            if (canEdit == true) {
+                                return '<button class="btn btn-outline-info btn-sm border-none  " ' +
+                                    ' data-jqueryselector="openmodal" ' +
+                                    ' data-modalcontainer="modalcontainer" ' +
+                                    ' data-url="@Url.Action("PWSEmpPlanningPreviousList", "SWP", new { Area = "SWP" })"' +
+                                    ' data-modalpopupwidth="rightw50" ' +
+                                    ' data-empno="' + data.empno + '"' +
+                                    ' data-modaltitle="Primary workspace planning previous list" ' +
+                                    ' data-modalheader="Primary workspace planning previous list" ' +
+                                    ' > ' +
+                                    ' <i class="far fa-eye" aria-hidden="true"></i> ' +
+                                    ' </button>'
+                            }
+                            else
+                                return '';
+                        },
+                        'className': "td-icon",
+                    },
+                    { data: "empno", width: '3.0rem' },
+                    { data: "employeeName", width: '10.0rem' },
+                    { data: "emptype", width: '1.0rem' },
+                    { data: "empGrade", width: '3.0rem' },
+                    { data: "isSwpEligibleDesc", width: '3.0rem' },
+                    { data: "isLaptopUserText", width: '3.0rem' },
+                    { data: "isDualMonitorUserText", width: '3.0rem' },
+                    { data: "workArea", width: '3.0rem' },
+                    { data: "officeLocationDesc", width: '3.0rem' },
+                    { data: "parent", width: '3.0rem' },
+                    { data: "assign", width: '3.0rem' },
+                    {
+                        data: null,
+                        width: '3.0rem',
+                        render: function (data, type, row) {
+                            if (data.primaryWorkspace == 1) {
+                                return ' <i class="	fas fa-user-check f-20 deepskyblueColor "   aria-hidden="true"></i> ';
+                            } else {
+                                return ' <i class="	fas fa-user-times f-20 grayColor "  aria-hidden="true"></i> ';
+                            }
+                        },
+                        class: ' text-center  align-middle'
+
+                    },
+                    {
+                        data: null,
+                        width: '3.0rem',
+                        render: function (data, type, row) {
+
+                            if (data.primaryWorkspace == 2) {
+                                return ' <i class="	fas fa-user-check f-20 deepskyblueColor "   aria-hidden="true"></i> ';
+                            } else {
+                                return ' <i class="	fas fa-user-times f-20 grayColor "  aria-hidden="true"></i> ';
+                            }
+                        },
+                        class: ' text-center  align-middle'
+                    },
+                    {
+                        data: null,
+                        width: '3.0rem',
+                        render: function (data, type, row) {
+
+                            if (data.primaryWorkspace == 3) {
+                                return ' <i class="	fas fa-user-check f-20 deepskyblueColor "   aria-hidden="true"></i> ';
+                            } else {
+                                return ' <i class="	fas fa-user-times f-20 grayColor "  aria-hidden="true"></i> ';
+                            }
+                        },
+                        class: ' text-center  align-middle'
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+
+                            return '<button class="btn btn-outline-primary btn-sm border-none" ' +
+                                ' data-jqueryselector="openmodal" ' +
+                                ' data-modalcontainer="modalcontainer" ' +
+                                ' data-url="@Url.Action("AdminPWSEmpPlanningList", "SWP", new { Area = "SWP" })"' +
+                                ' data-modalpopupwidth="rightw50" ' +
+                                ' data-empno="' + data.empno + '"' +
+                                ' data-modaltitle="Reassign Primary workspace" ' +
+                                ' data-modalheader="Reassign Primary workspace" ' +
+                                ' > ' +
+                                ' <i class="fas fa-edit" aria-hidden="true"></i> ' +
+                                ' </button>'
+
+                        },
+                        'className': "td-icon",
+                    }
+
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card">';
+                            item += '<div class="card-mobiledatatable">';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Office)' + '</dt><dd class="col-lg-8">' + data.approveYes + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.SmartWorkspace)' + '</dt><dd class="col-lg-8">' + data.approveNo + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Pending)' + '</dt><dd class="col-lg-8">' + data.approvePending + '</dd></dl>';
+                            item += '</div></div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListAdminEmployeePWSCurrent", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.genericSearch = $('#GenericSearch').val();
+                    d.empno = ($('#FilterDataModel_Empno').val());
+                    d.assign = ($('#FilterDataModel_Assign').val());
+                    d.grade = $("#FilterDataModel_GradeList").val();
+                    d.employeeType = $("#FilterDataModel_EmployeeTypeList").val();
+                    d.laptopUser = $("#FilterDataModel_LaptopUser").val();
+                    d.eligibleForSWP = $("#FilterDataModel_EligibleForSWP").val();
+                    d.primaryWorkspaceList = $("#FilterDataModel_PrimaryWorkspaceList").val();
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                });
+
+                            }
+
+        $(document).ready(function () {
+            localLoadDataTable();
+            localLoadDataTableForEmpPwsList();
+            //loadPrimaryWorkSpaceHeaderStatus();
+
+        });
+
+
+        function PostFilterReLoadDataTable(data) {
+            console.log(data);
+            $("#modalcontainer").modal('hide');
+
+            $("#FilterDataModel_Empno").val(data.empno);
+            $("#FilterDataModel_Assign").val(data.assign);
+
+            $("#FilterDataModel_GradeList").val(data.gradeList);
+            $("#FilterDataModel_EmployeeTypeList").val(data.employeeTypeList);
+            $("#FilterDataModel_LaptopUser").val(data.laptopUser);
+            $("#FilterDataModel_EligibleForSWP").val(data.eligibleForSWP);
+            $("#FilterDataModel_PrimaryWorkspaceList").val(data.primaryWorkspaceList);
+
+            localLoadDataTable();
+            loadPrimaryWorkSpaceHeaderStatus();
+            hideLoader();
+        }
+
+        function PostSaveReLoadDataTable(data) {
+
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                localLoadDataTable();
+                loadPrimaryWorkSpaceHeaderStatus();
+                localLoadDataTableForEmpPwsList();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+
+
+        function loadPrimaryWorkSpaceHeaderStatus() {
+            $.ajax({
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("HeaderStatusForPrimaryWorkSpace", "SWP",new { Area = "SWP" })',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                beforeSend: function () {
+                    showLoader();
+                },
+                data: {
+                    assign: ($('#FilterDataModel_Assign').val())
+                },
+                success: function (data) {
+                    if (data.error) {
+                    }
+                    else {
+                        $("#totalEmpCount").text(data.totalEmpCount);
+                        $("#empPercentageOfficeWorkspace").text(data.empPercentageOfficeWorkspace + '%');
+                        $("#empPercentageSmartWorkspace").text(data.empPercentageSmartWorkspace + '%');
+                        $("#empCountNotInHo").text(data.empCountNotInHo);
+                        $("#empCountOfficeWorkspace").text(data.empCountOfficeWorkspace);
+                        $("#empCountSmartWorkspace").text(data.empCountSmartWorkspace);
+                    }
+                    hideLoader();
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                    hideLoader();
+                }
+            });
+        }
+
+        function exportPWSCurrent() {
+            let assignCodes = $("#excelDownloadPrimaryWorkspaceSet select[id=Assign]").val();
+            $.ajax({
+                headers: { "RequestVerificationToken": $('#excelDownloadPrimaryWorkspaceSet input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("ExcelDownloadPrimaryWorkspaceCurrent", "SWP", new {Area = "SWP" })',
+                type: "POST",
+                data: {
+                    assign: assignCodes
+                },
+                cache: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (blob, status, xhr) {
+
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    hideLoader();
+                    toastr.success("File downloaded successfully.");
+                },
+                error: function (xhr) {
+                    showError(xhr);
+                    hideLoader();
+                }
+            });
+        }
+
+        $("#GenericSearch").keypress(function (event) {
+            if (event.keyCode === 13) {
+                var dataTable = $('#tbDataGrid').DataTable();
+                if ($("#GenericSearch").length) {
+                    dataTable
+                        .search($('#GenericSearch').val())
+                        .draw();
+                } else {
+                    dataTable
+                        .search($('#genericSearch').val())
+                        .draw();
+                }
+            }
+        });
+
+        $('#buttonSearch').on('click', function () {
+            var dataTable = $('#tbDataGrid').DataTable();
+            if ($("#GenericSearch").length) {
+                dataTable
+                    .search($('#GenericSearch').val())
+                    .draw();
+            } else {
+                dataTable
+                    .search($('#genericSearch').val())
+                    .draw();
+            }
+        });
+
+        function PostDeleteReLoadDataTable(data) {
+            if (data.success) {
+                localLoadDataTableForEmpPwsList();
+                hideLoader();
+                notify('success', data.response, 'Success');
+            }
+        }
+
+        function localLoadDataTableForEmpPwsPreviousList() {
+
+            $('#tbDataGridPreviousModel').DataTable().destroy();
+
+            $('#tbDataGridPreviousModel tbody').empty();
+            var table = $('#tbDataGridPreviousModel').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                    //initWorkAreaListners();
+                },
+                //ordering: false,
+                order: [[3, "desc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "startDate", width: "5.0rem" },
+                    { data: "primaryWorkspaceText" },
+                    { data: "modifiedBy", width: "10.0rem" },
+                    { data: "modifiedOnDate" }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card"> ';
+                            item += '<div class="card-mobiledatatable"> ';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                            item += ' </div> </div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListPWSEmpPlanningPreviousList", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.empno = $("#pwsEmpPlanningPreviousList input[id=Empno]").val();;
+                    d.startDate = null;
+                    d.assign = null;
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                      });
+                                  }
+
+        function localLoadDataTableForEmpPwsList() {
+
+            $('#tbDataGridModel').DataTable().destroy();
+
+            $('#tbDataGridModel tbody').empty();
+            var table = $('#tbDataGridModel').DataTable({
+                drawCallback: function (settings) {
+                    loadScript();
+                    //initWorkAreaListners();
+                },
+                //ordering: false,
+                order: [[3, "desc"]],
+                responsive: true,
+                autoWidth: false,
+                pageLength: 25,
+                lengthMenu: [25, 50, 100, 200],
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                info: false,
+                filter: false,
+                layout: {topStart: null,bottomStart: 'pageLength',bottomEnd: 'paging'},
+
+                columnDefs: [
+                    { orderable: false, targets: 0 }
+                ],
+        @if ((bool)@Context.Items["isMobile"] == false)
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    { data: "startDate", width: "5.0rem" },
+                    { data: "primaryWorkspaceText" },
+                    { data: "modifiedBy", width: "10.0rem" },
+                    { data: "modifiedOnDate" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return ' <button class="btn btn-outline-danger btn-sm border-none"  ' +
+                                ' onclick="showDeleteConfirmationPopup(event,this);" ' +
+                                ' data-url="@Url.Action("AdminPWSEmpPlanningDelete", "SWP", new { Area = "SWP" })" ' +
+                                ' data-redirecturl="" ' +
+                                ' data-PostDeleteReLoadDataTable="OK" ' +
+                                ' data-id="' + data.keyId + '" ' +
+                                ' data-stratDate="' + data.startDate + '" ' +
+                                ' data-modaltitle="Please Confirm!" ' +
+                                ' data-confirmationtext="Delete employee primary workspace planning for date ' + data.startDate + ' ?" ' +
+                                ' data-confirmationtype="warning" data-confirmbuttontext="Delete planning"> ' +
+                                ' <i class="fa fa-trash" aria-hidden="true"></i> ' +
+                                ' </button> ';
+
+                        },
+                        'className': "td-icon",
+                    }
+                ],
+            </text>
+        }
+        else
+        {
+            <text>
+                    ordering: false,
+                    columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var item = '<div class="card"> ';
+                            item += '<div class="card-mobiledatatable"> ';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.EmployeeName)' + '</dt><dd class="col-lg-8">' + data.empName + '</dd></dl>';
+                            item += '<dl class="row margin-bottom-0"><dt class="col-lg-4">' + '@Html.DisplayNameFor(model => model.Parent)' + '</dt><dd class="col-lg-8">' + data.parent + '</dd></dl>';
+                            item += ' </div> </div>';
+                            return item
+                        },
+                        sortable: false,
+                        searchable: false,
+                        className: "datatable-td-mobile"
+                    }
+                ],
+            </text>
+        }
+                ajax: {
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                url: '@Url.Action("GetListAdminEmpPWSPlanningForEdit", "SWP")',
+                type: 'GET',
+                cache: true,
+                dataType: "json",
+                data: function (d) {
+                    d.columns = null;
+                    d.order = null;
+                    d.search = null;
+                    d.empno = $("#adminPWSEmpPlanningList input[id=Empno]").val();;
+                    d.startDate = null;
+                    d.assign = null;
+                },
+                error: function (request, status, error) {
+                    notify('error', request.responseText, 'danger');
+                }
+            }
+                                      });
+                                  }
+
+    </script>
+}

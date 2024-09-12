@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName></SccProjectName>
+    <SccProvider></SccProvider>
+    <SccAuxPath></SccAuxPath>
+    <SccLocalPath></SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>$(VersionPrefix)1.0.16</Version>
+    <PackageId>$(AssemblyName)</PackageId>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\BG\**" />
+    <Compile Remove="Models\DMS\Exec\Desk\**" />
+    <Compile Remove="Models\LC\**" />
+    <EmbeddedResource Remove="Models\BG\**" />
+    <EmbeddedResource Remove="Models\DMS\Exec\Desk\**" />
+    <EmbeddedResource Remove="Models\LC\**" />
+    <None Remove="Models\BG\**" />
+    <None Remove="Models\DMS\Exec\Desk\**" />
+    <None Remove="Models\LC\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.143" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.50" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\MailQueue\Exec\" />
+    <Folder Include="Models\WinService\" />
+    <Folder Include="Models\RapReporting\Exec\Reports\" />
+  </ItemGroup>
+
+</Project>

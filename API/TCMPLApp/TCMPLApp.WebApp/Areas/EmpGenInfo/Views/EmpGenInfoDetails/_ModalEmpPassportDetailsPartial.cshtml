@@ -1,0 +1,132 @@
+﻿@model TCMPLApp.WebApp.Models.PassportDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlPassportDetailsEdit = isOnBehalf == IsOk ? ("OnBehalfPassportDetailsEdit") : ("EmpPassportDetailsEdit");
+    string urlFileUpload = isOnBehalf == IsOk ? Url.Action("OnBehalfFileUploadEdit", "EmpGenInfoDetails") : Url.Action("FileUploadEdit", "EmpGenInfoDetails");
+
+
+}
+<div class="card-deck" style="margin-top: 10px; margin-left:5px; min-height: 300px;">
+    <div class="card shadow col-md-12 col-xl-6">
+
+        <div class="app-h4 app-card-header p-2">
+            @if (isOnBehalf == IsOk)
+            {
+                @localizer["Passport Details (On BeHalf)"]
+            }
+            else
+            {
+                @localizer["Passport Details"]
+            }
+        </div>
+
+        <span id="spnIdHasScanFile" class="m-0 alert alert-success @(string.IsNullOrEmpty(ViewBag.PassportUploadedMsg) ? "hidden" : "")"
+              style="text-align: left;">
+            @localizer["Passport scan file uploaded"]
+        </span>
+@*        <span id="spnIdHasScanFile" class="alert alert-danger
+                    @(string.IsNullOrEmpty(Model.HasScanFilePassport) ? "" : "hidden")
+                    @(Model.HasPassport == IsOk ? "" : "hidden")"
+              style="text-align: left;">
+            @localizer["Passport scan file not uploaded"]
+        </span>
+
+        *@        <div class="card-body">
+            <span id="spanDescriptionPpAaStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+            <br />
+            @if (@Model.LockStatusDetailViewModel.IsPassportOpen == IsOk)
+            {
+                <a title="Edit passport details" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                   data-jqueryselector="openmodal"
+                   data-modalcontainer="modalcontainer"
+                   data-modalpopupwidth="rightw35"
+                   data-url="@urlPassportDetailsEdit"
+                   data-statichtmlsourcedivid=""
+                   data-id="@Model.Empno"
+                   data-modaltitle="Passport details"
+                   data-modalheader="Passport details">
+                    <i class="fas fa-plus"></i> Edit
+                </a>
+
+                <br />
+            }
+            <div class="row p-2">
+                <div class="col-xl-4 col-md-6">
+                    <div class="form-group">
+                        <div class="dt-met">@Html.DisplayNameFor(model => model.HasPassport)</div>
+                        <div class="dd-met">@ViewBag.HasPassport</div>
+                    </div>
+                </div>
+                @if (Model.HasPassport?.ToString() == IsOk)
+                {
+                    <div class="col-xl-4 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Surname)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Surname)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.GivenName)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.GivenName)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.PassportNo)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.PassportNo)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.IssuedAt)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.IssuedAt)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.IssueDate)</div>
+                            <div class="dd-met">@Html.ValueFor(model => model.IssueDate,"{0:dd/MMM/yyyy}")</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.ExpiryDate)</div>
+                            <div class="dd-met">@Html.ValueFor(model => model.ExpiryDate,"{0:dd/MMM/yyyy}")</div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            @if (@Model.LockStatusDetailViewModel.IsPassportOpen == IsOk)
+            {
+                @if (Model.HasPassport?.ToString() == IsOk)
+                {
+                    <a title="" class="btn btn-outline-primary btn-sm border-none " href="#"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw30"
+                       data-id="@Model.Empno"
+                       data-url=@urlFileUpload
+                       data-url='@Url.Action("FileUploadEdit", "EmpGenInfoDetails", new { Area = "EmpGenInfo" })'
+                       data-statichtmlsourcedivid=""
+                       data-fileType="PP"
+                       data-refNumber="@Model.PassportNo"
+                       data-modaltitle="File upload"
+                       data-modalheader="File upload">
+                        <i class="fas fa-edit"></i> Upload Passport copy
+                    </a>
+                }
+            }
+        </div>
+
+    </div>
+</div>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

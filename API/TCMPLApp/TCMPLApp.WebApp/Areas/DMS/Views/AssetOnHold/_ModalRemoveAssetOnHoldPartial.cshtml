@@ -1,0 +1,98 @@
+﻿@model TCMPLApp.WebApp.Models.RemoveAssetOnHoldViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="AssetOnHold"
+      asp-action="RemoveAssetOnHold"
+      id="formRemoveAssetOnHold"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="Unqid" />
+    <input type="hidden" asp-for="Empno" />
+    <input type="hidden" asp-for="AssetId" />
+    <input type="hidden" asp-for="DeskId" />
+    <input type="hidden" asp-for="ActionType" />
+    <input type="hidden" asp-for="AssignCode" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Return asset on hold "]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Return asset on hold </h5>
+            </div>
+            <div class="card-block">
+                <div class="row">
+
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="AssetId" class="control-label"></label>
+                            <input asp-for="AssetId" class="form-control" required disabled />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="AssetDesc" class="control-label"></label>
+                            <input asp-for="AssetDesc" class="form-control" required disabled />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Empno" class="control-label"></label>
+                            <input asp-for="Empno" class="form-control" value="@Model.Empno : @Model.Empname" disabled />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="DeskId" class="control-label"></label>
+                            <input asp-for="DeskId" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="AssignCode" class="control-label"></label>
+                            <input asp-for="AssignCode" class="form-control" required disabled />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ActionType" class="control-label"></label>
+                            <select asp-for="ActionType" class="form-control Select2" asp-items="ViewBag.ActionTypeList"
+                                    data-placeholder="Please select..." disabled  required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ActionType" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

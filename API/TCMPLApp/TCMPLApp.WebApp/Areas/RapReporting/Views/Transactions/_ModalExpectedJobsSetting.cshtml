@@ -1,0 +1,114 @@
+﻿@model TCMPLApp.WebApp.Models.ExpectedJobsSettingViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Transactions"
+      asp-action="ExpectedJobsSetting"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-success="PostSaveReLoadDataTable(data)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.ProjectNo" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Manage Expected Project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Manage Expected Project"] - @Model.ProjectNo</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row  m-1 p-1 rounded border theme-light-grey ">
+                        <div class="col-md-12 m-1 ">
+                            <label asp-for="NoOfMonths" class="control-label"></label>
+                            <input id="NoOfMonths" class="form-control bg-white numbers" maxlength="3" />
+
+                        </div>
+                        <div class="col-md-12 m-2 ">
+                            <button class="btn btn-sm btn-primary float-right" type="button" id="btnNoOfMonths"
+                                    data-url="@Url.Action("MoveProjectionByMonths", "Transactions", new {Area = "RapReporting"})"
+                                    data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                    data-text="@localizer["Move Projection By Months"]">
+                                @localizer["Move Projection By Months"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row  m-1 p-1 rounded border theme-light-grey ">
+                        <div class="col-md-12 m-1">
+                            <label asp-for="RealProjectNo" class="control-label"></label>
+                            <input id="RealProjectNo" class="form-control bg-white" maxlength="7" />
+
+                        </div>
+                        <div class="col-md-12 m-2 ">
+                            <button class="btn btn-sm btn-primary float-right" type="button" id="btnRealProjectNo"
+                                    data-url="@Url.Action("MoveToFinalRealProject", "Transactions", new {Area = "RapReporting"})"
+                                    data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                    data-text="@localizer["Move To Final (Real) Project"]">
+                                @localizer["Move To Final (Real) Project"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row  m-1 p-1 rounded border theme-light-grey ">
+                        <div class="col-md-12  m-1">
+                            <label asp-for="ExpectedProjectNo" class="control-label"></label>
+                            <input id="ExpectedProjectNo" class="form-control bg-white" maxlength="7" />
+                        </div>
+                        <div class="col-md-12 m-2 ">
+                            <button class="btn btn-sm btn-primary float-right" type="button" id="btnExpectedProjectNo"
+                                    data-url="@Url.Action("MoveToFinalExpectedProject", "Transactions", new {Area = "RapReporting"})"
+                                    data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                    data-text="@localizer["Move To Final (Expected) Project"]">
+                                @localizer["Move To Final (Expected) Project"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row  m-1 p-1 rounded border theme-light-grey ">
+                        <div class="col-md-12  m-1">
+                            <label asp-for="NewProjectNo" class="control-label"></label>
+                            <input id="NewProjectNo" class="form-control bg-white" maxlength="7" />
+                        </div>
+                        <div class="col-md-12 m-1 ">
+                            <label asp-for="CostCode" class="control-label"></label> 
+                            <input id="costCode" class="form-control bg-white numbers" maxlength="4" />
+
+                        </div>
+                        <div class="col-md-12 m-2 ">
+                            <button class="btn btn-sm btn-primary float-right"
+                                    type="button" id="btnNewProjCost"
+                                    data-url="@Url.Action("MoveToFinalRealCostCodeNewProject", "Transactions", new {Area = "RapReporting"})"
+                                    data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                    data-text="@localizer["Move To Final (Real) CostCode"]">
+                                @localizer["Move To Final (Real) CostCode"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        @*<button class="btn btn-primary" type="submit" id="btnconfirm"
+            data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+            data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+            </button>*@
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

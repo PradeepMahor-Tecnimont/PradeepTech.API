@@ -1,0 +1,109 @@
+﻿@model TCMPLApp.WebApp.Models.WorkAreaCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    //const int CoreOnDutyCreateEditDeleteId = 174;
+
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<form asp-controller="SWP"
+      asp-action="SmartWorkAreasPostDesk"
+      id="formSmartWorkSpaceWorkAreaDesks"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success=""
+      data-ajax-failure="onError;localLoadDataTableForWorkAreasDesk()"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.EmployeeName" />
+    <input type="hidden" asp-for="@Model.Emptype" />
+    <input type="hidden" asp-for="@Model.EmpGrade" />
+    <input type="hidden" asp-for="@Model.Parent" />
+    <input type="hidden" asp-for="@Model.StartDate" />
+    <input type="hidden" asp-for="@Model.WorkArea" />
+    <input type="hidden" asp-for="@Model.AreaCategory" />
+    <input type="hidden" asp-for="@Model.Office" />
+    <input type="hidden" asp-for="@Model.Floor" />
+    <input type="hidden" asp-for="@Model.WorkAreaDesc" />
+    <input type="hidden" asp-for="@Model.Wing" />
+    <input type="hidden" asp-for="@Model.Deskid" />
+    <input type="hidden" asp-for="@Model.AreaType" />
+
+    <div class="modal-header">
+        <h5 class="modal-title"> @localizer["Desks "] </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Html.Raw(" " + Model.WorkAreaDesc + "  ") @localizer[" "]   </h5>
+            </div>
+            <div class="card-block ">
+                <div class="form-group">
+                    <div class="row  p-2">
+                        <div class="col-md-6 ">
+                            <div class="dd-met">
+                                @Html.Raw("[ " + Model.Empno + " ] " + Model.EmployeeName)
+                            </div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <div class="dd-met">@localizer["Employee type : "] @Model.Emptype</div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <div class="dd-met">@localizer["Grade : "] @Model.EmpGrade</div>
+                        </div>
+                    </div>
+                    <div class="row  p-2">
+
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="dd-met">
+                                @localizer["Parent : "] @Html.Raw("[ " + Model.Parent + " ] " + Model.ParentDesc)
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="dd-met">@localizer["Assign : "] @Html.Raw("[ " + Model.Assign + " ] " + Model.AssignDesc)</div>
+                        </div>
+                    </div>
+                    <div class="row  p-2">
+
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="dd-met">@localizer["Date : "] @Html.Raw("[ " + Model.StartDate + " ] ")</div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="dd-met">@localizer["Employee work area : "] @Html.Raw(" " + Model.EmpWorkArea + "  ")</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div style="overflow:auto">
+                    <table id="tbDataGridDeskModel" class="table table-hover  w-100 " style="width:100%!important">
+                        <thead class="bg-info text-white">
+                            <tr class="font-weight-bold">
+                                @*  <td> @localizer["Desk id"] </td>*@
+                                <td> @localizer["Office"] </td>
+                                <td> @localizer["Floor"] </td>
+                                <td> @localizer["Seat no"] </td>
+                                <td> @localizer["Wing"] </td>
+                                <td> @localizer["Asset code"] </td>
+                                <td> @localizer["Bay"] </td>
+                                <td> @localizer[" "] </td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" id="btnbacktoworkareas" data-text="@localizer[" Back"]">
+            @localizer["Back"]
+        </button>&nbsp;&nbsp;&nbsp;
+
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

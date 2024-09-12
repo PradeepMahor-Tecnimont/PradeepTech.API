@@ -1,0 +1,92 @@
+﻿@model TCMPLApp.WebApp.Areas.ERS.HRVacancyDetailViewModel;
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<div id="divModalHRVacancyDetailPartial">
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Vacancy detail"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Html.DisplayNameFor(model => model.JobReferenceCode) : @Html.DisplayFor(model => model.JobReferenceCode)</h5>
+            </div>
+            <div class="card-block">                
+                <div class="row">                
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.JobOpenDate)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.JobOpenDate)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.JobCloseDate)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.JobCloseDate)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.Costcode)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.Costcode) - @Html.DisplayFor(model => model.CostcodeName)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.JobType)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.JobType)</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.JobLocation)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.JobLocation)</div>
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.ShortDesc)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.ShortDesc)</div>
+                        </div>
+                    </div>                              
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.JobDesc01)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.JobDesc01)</div>
+                        </div>
+                    </div>                              
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.JobDesc02)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.JobDesc02)</div>
+                        </div>
+                    </div>                              
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.JobDesc03)</div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.JobDesc03)</div>
+                        </div>
+                    </div>                              
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">    
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</div>

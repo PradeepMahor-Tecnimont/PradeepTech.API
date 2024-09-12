@@ -1,0 +1,31 @@
+﻿@model TCMPLApp.WebApp.Models.OFBApprovalDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="card-table">
+
+    <div class="table-responsive">
+        <table id="tbOFBApprovalDetails" class="table table-striped table-bordered table-responsive-lg">
+            @if ((bool)@Context.Items["isMobile"] == false)
+            {
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>@localizer[Html.DisplayNameFor(model => model.ActionDesc)]</th>
+                        <th>@localizer[Html.DisplayNameFor(model => model.Remarks)]</th>
+                        <th>@localizer[Html.DisplayNameFor(model => model.ApprovalStatus)]</th>
+                        <th>@localizer[Html.DisplayNameFor(model => model.ApprovalDate)]</th>
+                        <th>@localizer[Html.DisplayNameFor(model => model.ApproverName)]</th>
+                        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.OffBoarding.OffBoardingHelper.ActionResetApprovals))
+                        {
+                            @if (Model.ViewName == "HistoryIndex")
+                            {
+                                <th>&nbsp;</th>
+                            }
+                        }
+
+                    </tr>
+                </thead>
+            }
+        </table>
+    </div>
+</div>
+

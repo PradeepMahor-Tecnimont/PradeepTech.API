@@ -1,0 +1,90 @@
+﻿@model TCMPLApp.WebApp.Models.LcAmountEditViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form id="lcAmountEdit"
+      asp-controller="LetterOfCredit"
+      asp-action="LcAmountEdit"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onSuccessTab('lcamountDetail');intDataTableLcAmount(null);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div style="display:none">
+        @Html.HiddenFor(m => m.ApplicationId)
+        @Html.HiddenFor(m => m.LcKeyId)
+        @Html.HiddenFor(m => m.AmountInInr)
+        @Html.TextBoxFor(model => model.ExchageRateDate, "{0:dd-MMM-yyyy}", htmlAttributes: new { @type = "hidden" })
+
+    </div>
+    <div class="modal-header">
+        <h5 class="modal-title">LC Amount </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Edit LC Amount"]</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="Currency" class="control-label"></label>
+                            <select asp-for="Currency" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.Currencies" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="Currency" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="ExchageRateDate" class="control-label"></label>
+                            <input id="exchageRateDate" class="form-control datepicker" placeholder="@localizer["Exchange rate  date"]" value="" required />
+                            <span asp-validation-for="ExchageRateDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="ExchangeRate" class="control-label"></label>
+                            <input asp-for="ExchangeRate" class="form-control" type="number" placeholder="" required />
+                            <span asp-validation-for="ExchangeRate" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label asp-for="LcAmount" class="control-label"></label>
+                            <input asp-for="LcAmount" class="form-control" type="number" placeholder="" required />
+                            <span asp-validation-for="LcAmount" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label asp-for="AmountInInr" class="control-label"></label>
+                            <input id="amountInInr" class="form-control" readonly  type="number" value="0" required />
+                            <span asp-validation-for="AmountInInr" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

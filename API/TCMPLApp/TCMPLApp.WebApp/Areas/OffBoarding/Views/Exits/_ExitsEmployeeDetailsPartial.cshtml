@@ -1,0 +1,61 @@
+﻿@model TCMPLApp.Domain.Models.SWPVaccine.EmployeeDetails
+
+@if (Model != null)
+{
+
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.Name)
+                    <label id="empno" class="form-control readonly">@(Model.Empno + " - " + Model.Name)</label>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.PersonId)
+                    <label id="empno" class="form-control readonly">@(Model.PersonId)</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xl-2 col-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.Grade)
+                    <label id="grade" class="form-control readonly">@(Model.Grade)</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-2 col-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.EmpType)
+                    <label class="form-control readonly">@(Model.EmpType)  </label>
+                </div>
+            </div>
+            <div class="col-xl-2">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.Doj)
+                    <label class="form-control readonly">@(Model.Doj.ToString("dd-MMM-yyyy"))  </label>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.DesgCode)
+                    <label class="form-control readonly">@(Model.DesgCode + " - " + Model.DesgName)</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.CostName)
+                    <label id="empno" class="form-control readonly">@(Model.Parent + " - " + Model.CostName)</label>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="form-group">
+                    @Html.DisplayNameFor(m => m.HoD)
+                    <label id="empno" class="form-control readonly">@(Model.HoD + " - " + Model.HoDName)</label>
+                </div>
+            </div>
+        </div>
+
+}

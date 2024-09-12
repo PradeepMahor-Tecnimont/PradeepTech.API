@@ -1,0 +1,90 @@
+﻿@model TCMPLApp.WebApp.Models.OscHoursViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form id="formOscHoursIndex"
+      name="formOscHoursIndex"
+      asp-controller=""
+      asp-action=""
+      data-ajax="true"
+      data-ajax-update=""
+      accept-charset="UTF-8">
+
+    <input type="hidden" id="poVendor" asp-for="@ViewData["PoVendor"]" />
+    <input type="hidden" id="costcode" asp-for="@ViewData["Costcode"]" />
+    <input type="hidden" asp-for="@Model.OscdId" />
+    <input type="hidden" id="actionSubcontractPrengAdmin" value="@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin).ToString()"/>
+    <input type="hidden" id="actionSubcontractDeptMono" value="@CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractDeptMono).ToString()"/>
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">Monthwise est hours</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h6>Project / PO / Vendor : @ViewData["Projno5PoVendor"]</h6>
+                <h6>Cost code : @ViewData["Costcode"]</h6>
+            </div>
+            <div class="card-toolbar">
+                <div role="toolbar">
+                    @if ((Model.OscmType == "MONO" &&
+                    (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin) ||
+                    CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractDeptMono))) ||
+                    (Model.OscmType == "MULTI" && CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.RapReporting.RapReportingHelper.ActionSubcontractPrengAdmin))
+                    )
+                    {
+                        @if(Model.LockOrigBudgetDesc == "Open")
+                        {
+                            <a title="Create" class="btn btn-outline-primary btn-sm border-none" href="#"
+                                data-jqueryselector="openmodal"
+                                data-modalcontainer="modalcontainer"
+                                data-modalpopupwidth="rightw40"
+                                data-url='@Url.Action("OscHoursOrigCreate", "Transactions", new { Area = "RapReporting" })'
+                                data-modaltitle="Create"
+                                data-modalheader="Create"
+                                data-id = "@Model.OscdId">
+                                &nbsp;&nbsp;<i class="fas fa-plus"></i> Create
+                            </a>
+                        }
+                        else
+                        {
+                            <a title="Create" class="btn btn-outline-primary btn-sm border-none" href="#"
+                               data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw40"
+                               data-url='@Url.Action("OscHoursCurCreate", "Transactions", new { Area = "RapReporting" })'
+                               data-modaltitle="Create"
+                               data-modalheader="Create"
+                               data-id = "@Model.OscdId">
+                                &nbsp;&nbsp;<i class="fas fa-plus"></i> Create
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="bg-gray-active rounded ">
+                    <table id="tbHoursGrid" class="table table-striped table-bordered table-responsive-lg ">
+                        <thead class="bg-info text-white">
+                            <tr>
+                                <th></th>
+                                <th>Year month</th>
+                                <th>Original est hours</th>
+                                <th>Current est hours</th>                                
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <div id="result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

@@ -1,0 +1,64 @@
+﻿@model TCMPLApp.WebApp.Models.OffBoardingInitReportFilter;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form id="initiatorExcelDownload"
+      asp-area="OffBoarding"
+      asp-controller="Exits"
+      asp-action="InitiatorExcelDownloadSet"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);"
+      data-ajax-success="SendExcelToClient1(data,status,xhr);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Filter"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="load-bar load-bar-modal d-none">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="card bg-light border-0">
+            <div class="card-header app-h4 app-card-header">
+                <p id="modalheader">Excel Download</p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="StartDate" class="control-label"></label>
+                            <input class="form-control" type="date" asp-for="StartDate" required />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="EndDate" class="control-label"></label>
+                            <input class="form-control" type="date" asp-for="EndDate" required />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" id="getexcel"
+                        data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                        data-text="@localizer["Confirm"]">
+                    @localizer["Confirm"]
+                </button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+            </div>
+        </div>
+    </div>
+</form>

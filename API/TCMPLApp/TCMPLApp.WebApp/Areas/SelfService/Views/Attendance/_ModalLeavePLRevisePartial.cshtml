@@ -1,0 +1,226 @@
+﻿@model TCMPLApp.WebApp.Models.LeavePLReviseDetailCombineViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Attendance"
+      asp-action="LeavePLReviseReview"
+      id="formLeavePLRevise"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin($('btneditleave'))"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="loadScript();"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    @Html.HiddenFor(m => m.LeavePLReviseViewModel.RevisedHalfDayDay)
+
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.Address" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.ApplicationId" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.CareTaker" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.Discrepancies" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.EmpName" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.EndDate" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.LastReporting" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.LeadName" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.LeavePeriod" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.LeaveType" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.MedCertFileNm" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.PhoneNumber" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.POffice" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.Project" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.Reason" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.ResumingDuty" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.StartDate" />
+    <input type="hidden" asp-for="@Model.LeaveDetailsViewModel.StdNumber" />
+    
+
+    <input type="hidden" asp-for="@Model.LeavePLReviseViewModel.RevisedStartDate" />
+    <input type="hidden" asp-for="@Model.LeavePLReviseViewModel.RevisedEndDate" />
+    <input type="hidden" asp-for="@Model.LeavePLReviseViewModel.ApplicationId" />
+    <input type="hidden" asp-for="@Model.LeavePLReviseViewModel.LeaveType" />
+    <input type="hidden" asp-for="@Model.LeavePLReviseViewModel.RevisedHalfDayDay" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Leave application"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Application Id <b>@Html.DisplayFor(model => model.LeaveDetailsViewModel.ApplicationId)</b></h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">Entry type </div>
+                            <div class="dd-met">@(Model.LeaveDetailsViewModel.FlagIsAdj =="OK"?"Leave adjustment":"Leave application")</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.ApplicationDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.ApplicationDate)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.POffice) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.POffice)</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.Project) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.Project)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.LeadName) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.LeadName)</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.CareTaker) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.CareTaker)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.LeaveType) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.LeaveType)</div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.LeavePeriod) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.LeavePeriod)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.StartDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.StartDate)</div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.EndDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.EndDate)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.Reason) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.Reason)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.LastReporting) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.LastReporting)</div>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.ResumingDuty) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.ResumingDuty)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.PhoneNumber) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.PhoneNumber)</div>
+                        </div>
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.StdNumber) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.StdNumber)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.LeaveDetailsViewModel.Address) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.LeaveDetailsViewModel.Address)</div>
+                        </div>
+                    </div>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.LeaveDetailsViewModel.Discrepancies))
+                {
+                    <div class="form-group mb-2">
+                        <div class="row">
+                            <div class="col">
+                                <div class="dt-met">Your application contains following discrepancies</div>
+                                <div class="dd-met">@(Model.LeaveDetailsViewModel.Discrepancies)</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <label asp-for="LeavePLReviseViewModel.RevisedAppover" class="control-label"></label>
+                            <select asp-for="LeavePLReviseViewModel.RevisedAppover" class="form-control chosen-select" data-placeholder="Please select..." asp-items="ViewBag.Approvers" required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="LeavePLReviseViewModel.RevisedAppover" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-mb-6 col-xl-6">
+                            <label asp-for="LeavePLReviseViewModel.RevisedLeavePeriod" class="control-label"></label>
+                            <input asp-for="LeavePLReviseViewModel.RevisedLeavePeriod" class="form-control" placeholder="Leave period" required />
+                            <span asp-validation-for="LeavePLReviseViewModel.RevisedLeavePeriod" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col">
+                            <div id="divHalfDay">
+                                <label asp-for="LeavePLReviseViewModel.RevisedHalfDayDay" class="control-label"></label>
+                                <select id="revisedHalfDayDay" class="form-control chosen-select " data-placeholder="Please select..." asp-items="ViewBag.HalfDayDay">
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="LeavePLReviseViewModel.RevisedHalfDayDay" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="row">
+                        <div class="col-mb-6 col-xl-6">
+                            <label asp-for="LeavePLReviseViewModel.RevisedStartDate" class="control-label"></label>
+                            <input id="revisedStartDate" class="form-control datepicker" placeholder="@localizer["Start date"]" value="" required />
+                            <span asp-validation-for="LeavePLReviseViewModel.RevisedStartDate" class="text-danger"></span>
+                        </div>
+                        <div class="col-mb-6 col-xl-6">
+                            <label asp-for="LeavePLReviseViewModel.RevisedEndDate" class="control-label"></label>
+                            <input id="revisedEndDate" class="form-control datepicker" placeholder="@localizer["End date"]" value="" required />
+                            <span asp-validation-for="LeavePLReviseViewModel.RevisedEndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

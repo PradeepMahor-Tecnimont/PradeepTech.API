@@ -1,0 +1,148 @@
+﻿@model TCMPLApp.WebApp.Models.EmpOfficeLocationEditViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="EmpOfficeLocation"
+      asp-action="EmpOfficeLocationCreate"
+      id="formEmpOfficeLocationCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.Empno" />
+    <input type="hidden" asp-for="@Model.StartDate" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">Employee Office Location</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Employee Office Loaction"]</h5>
+            </div>
+            <div class="card-toolbar">
+                <div role="toolbar">
+                    <button class="btn btn-outline-primary btn-sm border-none" type="button" id="btnBackToEmpOfficeLocationDetails"
+                            data-empno="@Model.Empno" data-text="Back">
+                        &nbsp;&nbsp;<i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-8 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Empno + " - " + Model.Name)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Assign)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Assign)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Parent)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Parent)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Emptype)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Emptype)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Grade)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Grade)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-mb-4 col-xl-4">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmpOfficeLocation)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmpOfficeLocation)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="EmpOfficeLocation" class="control-label"></label>
+                                <select asp-for="EmpOfficeLocation" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.OfficeList" required>
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="EmpOfficeLocation" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="StartDate" class="control-label"></label>
+                                <input id="startDate" class="form-control datepicker" placeholder="@localizer["dd-MM-yyyy"]" value="@Model.StartDate?.ToString("dd/MMM/yyyy")" required />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["waiting..."]'
+                data-text="@localizer["confirm"]">
+            @localizer["confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

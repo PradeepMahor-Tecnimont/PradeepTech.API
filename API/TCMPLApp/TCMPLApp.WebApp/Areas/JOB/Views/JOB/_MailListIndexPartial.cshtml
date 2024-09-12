@@ -1,0 +1,41 @@
+﻿@model TCMPLApp.WebApp.Models.JobMailListIndexViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<div class="card">
+    <div class="card-toolbar">
+        <div role="toolbar">
+            @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobUpdateMailList)
+            && Model.ProjectActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.JOB.JOBHelper.ActionJobUpdateMailList))
+            {
+
+                <a class="btn btn-outline-primary btn-sm border-white"
+               data-jqueryselector="openmodal"
+               data-modalcontainer="modalcontainer"
+               data-modalpopupwidth="rightw35"
+               data-url='@Url.Action("MailListCreate", "JOB", new { Area = "JOB" })'
+               data-projno="@ViewBag.Projno"
+               data-modaltitle="Add to mail list"
+               data-modalheader="Add to mail list">
+                    <i class="fas fa-plus"></i>&nbsp;@localizer["Add to mail list"]
+                </a>
+            }
+        </div>
+    </div>
+    <div class="card-table">
+        <div class="table-responsive">
+            <table id="dataTableMailList" class="table table-striped table-bordered table-responsive-lg">
+                @if ((bool)@Context.Items["isMobile"] == false)
+                {
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th>@localizer[Html.DisplayNameFor(model => model.CostName)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.EmployeeName)]</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                }
+            </table>
+        </div>
+    </div>
+</div>

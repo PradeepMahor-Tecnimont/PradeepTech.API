@@ -1,0 +1,70 @@
+﻿@model TCMPLApp.WebApp.Models.ShiftingManhoursViewModel;
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form id="frmTSShiftProjectManhours"
+      asp-area="RapReporting"
+      asp-controller="Transactions"
+      asp-action="TSShiftProjectManhours"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript();"
+      data-ajax-success="PostSaveReLoadDataTable(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div style="display:none">
+        <input id="Yyyy" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyy" />
+        <input id="Yyyymm" readonly type="hidden" asp-for="@Model.FilterDataModel.Yyyymm" />
+        <input id="YearMode" readonly type="hidden" asp-for="@Model.FilterDataModel.YearMode" />
+    </div>
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Shift project manhours"]</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>@localizer["Shift project manhours"]</h5>
+            </div>
+            <div class="card-toolbar-modal">
+            </div>
+            <div class="card-block">
+
+                <div class="form-group">
+                    <label asp-for="YearMonth" class="control-label"></label>
+                    <select asp-for="YearMonth" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.Yyyymms" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="YearMonth" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FromProject" class="control-label"></label>
+                    <select asp-for="FromProject" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.FromProject" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="FromProject" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ToProject" class="control-label"></label>
+                    <select asp-for="ToProject" class="form-control Select2" data-placeholder="Please select..." asp-items="ViewBag.ToProject" required>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="ToProject" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

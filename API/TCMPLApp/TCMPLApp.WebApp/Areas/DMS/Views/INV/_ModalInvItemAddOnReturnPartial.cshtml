@@ -1,0 +1,111 @@
+﻿@model TCMPLApp.WebApp.Models.InvItemAddOnReturnViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+<form asp-controller="INV"
+      asp-action="InvItemAddOnReturnAdd"
+      id="formInvItemAddOnReturnAdd"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update="#modal-content"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="PostSave(data);"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <input type="hidden" asp-for="@Model.TransId" />
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Return Addon item"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Transaction return - @Model.TransId</h5>
+            </div>
+            <div class="card-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.TransId) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.TransId)</div>
+                        </div>
+
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.TransDate) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.TransDate)</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.ContainerItemId) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.ContainerItemId)</div>
+                        </div>
+
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.AddonItemId) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.AddonItemId)</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.ContainerItemDesc) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.ContainerItemDesc)</div>
+                        </div>
+
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.AddonItemDesc) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.AddonItemDesc)</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-6">
+                            <div class="dt-met">@Html.DisplayNameFor(model => model.MfgId) </div>
+                            <div class="dd-met">@Html.DisplayFor(model => model.MfgId)</div>
+                        </div>
+                        <div class="col-md-6 col-xl-6">
+                            <label asp-for="ItemUsable" class="control-label"></label>
+                            <select asp-for="ItemUsable" class="form-control Select2" asp-items="ViewBag.ItemUsableTypesList" data-placeholder="Please select..." required>
+                                <option selected></option>
+                            </select>
+                            <span asp-validation-for="ItemUsable" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ReturnRemarks" class="control-label"></label>
+                                <textarea asp-for="ReturnRemarks" class="form-control" rows="3" required></textarea>
+                                <span asp-validation-for="ReturnRemarks" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnConfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="diagram"></span>@localizer["Waiting..."]'
+                data-text="@localizer["Confirm"]">
+            @localizer["Confirm"]
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>
+

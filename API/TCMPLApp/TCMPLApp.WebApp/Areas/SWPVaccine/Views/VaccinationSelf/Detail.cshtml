@@ -1,0 +1,103 @@
+﻿@model TCMPLApp.WebApp.Models.VaccinationSelfCreateViewModel
+@{
+
+    ViewData["Title"] = "Vaccine Jab Date";
+}
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+    @section BreadCrumbs
+    {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Vaccine details</li>
+    </ol>
+}
+
+    <div class=" col-md-6 col-sm-12">
+        <div class="card bg-gray-active border rounded shadow m-auto ">
+            <div class="card-header ">
+                <h5>Vaccine Jab Dates - Details</h5>
+            </div>
+            <div class="card-deck">
+                <div class="card shadow">
+                    <div class="card-block">
+                        @if (Model.BoosterJab.HasValue.ToString() == "False")
+                    {
+                        <div class="row pl-2 ">
+
+                            <a class="btn btn-sm btn-outline-primary border-0 " asp-action="Edit" asp-controller="VaccinationSelf" asp-area="SWPVaccine">
+                                <i class="fas fa-edit"></i>
+                                Update Jab Details
+                            </a>
+                        </div>
+                        <hr />
+                    }
+
+                    <div class="row p-1">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.VaccineType)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.VaccineType)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.FirstJab)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.FirstJab?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row p-1">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.SecondJab)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.SecondJab?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.BoosterJab)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.BoosterJab?.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function goToUpdate() {
+
+        }
+    </script>
+    }

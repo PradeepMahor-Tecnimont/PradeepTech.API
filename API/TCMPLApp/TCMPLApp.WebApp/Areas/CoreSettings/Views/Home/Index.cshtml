@@ -1,0 +1,156 @@
+﻿@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    ViewData["Title"] = "Core Settings";
+    var status = ViewBag.EmailProcessStatus;
+}
+
+@section BreadCrumbs
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Core Settings</li>
+    </ol>
+}
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="col-sm-12">
+    <div class="row">
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.Logs.LogsHelper.ActionViewLogs))
+        {
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>Logs</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/CoreSettings/Logs/Index">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-server f-20 text-white theme-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (CurrentUserIdentity.ProfileActions.Any(p => p.ActionId == TCMPLApp.Domain.Models.CoreSettings.CoreSettingsHelper.ActionViewUserAccess))
+        {
+            <div class="col-md-3 col-xl-3">
+                <div class="card card-tpl">
+                    <div class="card-header">
+                        <h5>User Access</h5>
+                    </div>
+                    <div class="card-block card-tile">
+                        <a href="~/CoreSettings/UserAccess/Index">
+                            <div class="row align-items-center justify-content-center stretched-link">
+                                <div class="col">
+                                    <h3 class="mb-2 f-w-300"></h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="	fas fa-user-shield	f-20 text-white  theme-dark-green"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>
+                        Email process status :
+                        @if (status == "OFF")
+                        {
+                            <label class="text-red f-w-700"> @status</label>
+                        }
+                        else
+                        {
+                            <label class="text-green f-w-700"> @status</label>
+                        }
+                    </h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="~/CoreSettings/Home/ProcessMailStatusLogIndex"
+                       class="btn btn-outline-primary border-none f-right text-nowrap"
+                       title="@localizer["Show Log"]">
+                        @localizer["Show Log"]
+                    </a>
+                    <a class="btn btn-outline-primary border-none text-nowrap f-left"
+                       data-jqueryselector="openmodal"
+                       data-modalcontainer="modalcontainer"
+                       data-modalpopupwidth="rightw25"
+                       data-url="@Url.Action("ChangeProcessmailStatus", "Home", new { Area = "CoreSettings" })"
+                       title="@localizer["Change Status"]">
+                        @localizer["Change Status"]
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>User Master</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("UserMasterIndex", "Home", new { Area = "CoreSettings" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 class="mb-2 f-w-300">Add / modify App User Details</h7>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fa fa-cog f-20 text-white theme-teal"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/site-costcenter.js"></script>
+    <script>
+        $(document).ready(function () {
+            localScript();
+        });
+
+        function localScript() {
+            initSelect2();
+
+            let hasvalue = $("#ProcessMailStatus").val();
+            if (hasvalue == "") {
+                $("#btnConfirm").show();
+            }
+            let selectedvalue;
+            $("#ProcessMailStatus").change(function () {
+                selectedvalue = $("#ProcessMailStatus").val();
+
+                if (selectedvalue != hasvalue) {
+                    $("#btnConfirm").show();
+                }
+                else {
+                    $("#btnConfirm").hide();
+                }
+            });
+        };
+
+        function PostSave(data) {
+            if (data.success) {
+                notify('success', data.response, 'Success');
+            }
+        }
+    </script>
+}

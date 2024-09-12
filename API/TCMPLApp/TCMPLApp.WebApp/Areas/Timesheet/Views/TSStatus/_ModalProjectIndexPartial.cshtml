@@ -1,0 +1,39 @@
+﻿@model TCMPLApp.WebApp.Models.TimesheetProjectIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<div style="display:none">    
+    <input id="Yymm" readonly type="hidden" asp-for="Yymm" />
+    <input id="Costcode" readonly type="hidden" value="@ViewBag.Costcode" />
+    <input id="Projno" readonly type="hidden" asp-for="Projno" />
+</div>
+
+<div class="card">
+    <div class="vertical-space-5"></div>    
+    <div id="idIndex" class="table-responsive p-r-10">
+        <div class="input-group pt-1 pl-1 pr-1 ">
+            <input type="text" class="form-control form-control-sm border" id="TimesheetProjectSearch" name="GenericSearch"
+                   onkeypress="genericSearchKeypress('TimesheetProjectSearch')" placeholder="Search...">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-info" type="button" id="buttonTimesheetProjectSearch" onclick="genericSearchOnClick('TimesheetProjectSearch')">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <table id="tbTimesheetProjectGrid" class="table table-striped table-bordered table-responsive-lg">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Empno)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Empname)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Parent)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Assign)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.Hours)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.OtHours)]</th>
+                    <th>@localizer[Html.DisplayNameFor(model => model.TotHours)]</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

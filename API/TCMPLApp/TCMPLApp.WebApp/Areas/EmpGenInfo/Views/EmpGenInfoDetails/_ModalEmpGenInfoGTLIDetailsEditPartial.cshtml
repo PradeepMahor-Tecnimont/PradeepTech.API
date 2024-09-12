@@ -1,0 +1,245 @@
+﻿@model TCMPLApp.WebApp.Models.EmpGenInfoGTLIDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+@{
+    string isOnBehalf = ViewBag.isOnBehalf ?? NotOk;
+    string urlGTLIAdd = isOnBehalf == IsOk ? Url.Action("OnBehalfGTLIDetailsAdd", "EmpGenInfoDetails") : Url.Action("GTLIDetailsAdd", "EmpGenInfoDetails");
+    string urlFileUpload = isOnBehalf == IsOk ? Url.Action("OnBehalfFileUploadEdit", "EmpGenInfoDetails") : Url.Action("FileUploadEdit", "EmpGenInfoDetails");
+}
+@Html.AntiForgeryToken()
+
+<input type="hidden" asp-for="@Model.Empno" />
+<input type="hidden" asp-for="@Model.NoDadHusbInName" />
+<input type="hidden" asp-for="@Model.HasScanFileGTLI" />
+
+
+<div class="col-sm-12">
+    <div class="card bg-gray-active border rounded shadow m-auto ">
+        <div class="card-body" style="min-height: 450px;">
+
+            <div class="app-h4 app-card-header p-2">
+                @if (isOnBehalf == IsOk)
+                {
+                    @localizer["Employee Details (On BeHalf)"]
+                }
+                else
+                {
+                    @localizer["Employee Details"]
+                }
+
+            </div>
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-6">
+                    <div class="card-body">
+                        <div class="col-xl-12 col-md-6 m-0 p-0">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    <div class="checkboxlabel">
+                                        <input type="checkbox" class="locked checkBox-Blue" id="check" disabled asp-for="NoDadHusbInName"
+                                               checked="@Model.NoDadHusbInName" style="cursor:not-allowed" />
+                                        <label for="check" style="cursor:not-allowed">
+                                            <span>@Html.DisplayNameFor(model => model.NoDadHusbInName)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="form-group dd-met col-mb-6 col-xl-12">
+                                Employee Name as it would appear on Nomination Form
+                            </div>
+                            @if (Model.NoDadHusbInName == true)
+                            {
+                                <div class="col-mb-6 col-xl-12 form-group ">
+                                    @Html.DisplayNameFor(model=> model.FirstName) +
+                                    @Html.DisplayNameFor(model=> model.Surname)
+                                </div>
+                                <div class="form-group dd-met col-mb-6 col-xl-12">
+                                    @($@"{Model.FirstName} {Model.Surname}")
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-mb-6 col-xl-12 form-group ">
+                                    @Html.DisplayNameFor(model=> model.FirstName) +
+                                    @Html.DisplayNameFor(model=> model.FatherName) +
+                                    @Html.DisplayNameFor(model=> model.Surname)
+                                </div>
+                                <div class="form-group dd-met col-mb-6 col-xl-12">
+                                    @($@"{Model.FirstName} {Model.FatherName} {Model.Surname}")
+
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow col-md-12 col-xl-6">
+                    <div class="card-body">
+                        <div class="row p-2">
+
+                            <div class="form-group dd-met col-mb-6 col-xl-12">
+                                Address as it would appear on Nomination Form
+                            </div>
+                            <div class="col-xl-12 col-md-6">
+                                <div class="form-group">
+                                    <div class="dt-met">
+                                        (Permanent Address: Address + PinCode)
+
+                                    </div>
+                                    <div class="dd-met">
+                                        @Html.DisplayFor(model => model.Address)
+                                        @Html.DisplayFor(model => model.Pincode)
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-deck" style="margin-top: 20px">
+                <div class="card shadow col-md-12 col-xl-12">
+                    <div class="app-h4 app-card-header p-2">
+                        @if (isOnBehalf == IsOk)
+                        {
+                            @localizer["Group Term Life Insurance (On BeHalf)"]
+                        }
+                        else
+                        {
+                            @localizer["Group Term Life Insurance"]
+                        }
+                    </div>
+                    <span id="spnIdHasScanFile" class="alert alert-success @(string.IsNullOrEmpty(Model.HasScanFileGTLI) ? "hidden" : "")"
+                          style="text-align: left;">
+                        @localizer["GTLI scan file uploaded"]
+                    </span>
+
+                    <div class="card-body">
+                        <span id="spanDescriptionGtliStatus" class="f-12 badge badge-danger" style="text-align: left"></span>
+                        <div class="d-flex flex-row">
+                            @if (@Model.LockStatusDetailViewModel.IsGtliOpen == IsOk)
+                            {
+                                <a title="New GTLI Details" class="btn btn-outline-primary btn-sm border border-white" href="#"
+                                   data-jqueryselector="openmodal"
+                                   data-modalcontainer="modalcontainer"
+                                   data-modalpopupwidth="rightw35"
+                                   data-url=@urlGTLIAdd
+                                   data-statichtmlsourcedivid=""
+                                   data-id="@Model.Empno"
+                                   data-modaltitle="New GTLI Details"
+                                   data-modalheader="New GTLI Details">
+                                    <i class="fas fa-plus"></i> Add
+                                </a>
+                            }
+                        </div>
+                        <table id="tbGTLIGrid" class="table table-striped table-bordered table-responsive-lg ">
+                            <thead class="bg-info text-white">
+                                <tr>
+
+                                    <th>Nominee Name</th>
+                                    <th>Relation</th>
+                                    <th>Birth Date</th>
+                                    <th>Share (%)</th>
+                                    <th>Guardian Name</th>
+                                    <th>Relation with Minor</th>
+                                    @if (@Model.LockStatusDetailViewModel.IsGtliOpen == "OK")
+                                    {
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                    }
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.DescripancyDetailViewModel.CanPrintGTLI == IsOk)
+            {
+                <div class="card-deck float-right" style="margin-top: 20px; margin-right: 20px">
+                    <div class="form-group">
+                        @if (@Model.LockStatusDetailViewModel.IsGtliOpen == IsOk)
+                        {
+                            <a title="" class="btn btn-outline-primary btn-sm border-none ml-2 mr-2" href="#"
+                               data-jqueryselector="openmodal"
+                               data-modalcontainer="modalcontainer"
+                               data-modalpopupwidth="rightw30"
+                               data-url=@urlFileUpload
+                               data-statichtmlsourcedivid=""
+                               data-id="@Model.Empno"
+                               data-fileType="GT"
+                               data-refNumber="GT-Ref"
+                               data-modaltitle="File upload"
+                               data-modalheader="File upload">
+                                <i class="fas fa-edit"></i> @localizer["Upload Nomination"]
+                            </a>
+                        }
+
+                    </div>
+                    <div class="form-group" style=" margin-left: 20px">
+                        <a class="btn btn-success f-right"
+                           href='@Url.Action("DownloadGTLI", "Report", new { Area = "EmpGenInfo", id = Model.Empno })'>
+                            @localizer["Print"]
+                        </a>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            loadDataTable();
+        });
+        function initDatePicker() {
+
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'DD-MMM-YYYY',
+                weekStart: 0,
+                time: false,
+                useCurrent: false,
+                nowButton: true
+            });
+
+            $("#nomineeBirthDate").on("change", function (event, date) {
+                $("#NomineeBirthDate").val(date.format("DD-MMM-YYYY"));
+            });
+
+            if ($('#NomineeBirthDate').val()) {
+                $('#nomineeBirthDate').bootstrapMaterialDatePicker('setDate', new Date($("PoDate").val()));
+            }
+
+            if ($("#NomineeBirthDate").val()) {
+                $('#nomineeBirthDate').val(moment($("#NomineeBirthDate").val(), "DD-MMM-YYYY").format('DD-MMM-YYYY'));
+            }
+
+        }
+
+        function localScript() {
+            initSelect2();
+            initDatePicker();
+
+        }
+        function PostSave(data) {
+            if (data.success) {
+                $("#modalcontainer").modal('hide');
+                hideLoader();
+                loadDataTable();
+                notify('success', data.response, 'Success');
+            }
+        }
+    </script>
+}

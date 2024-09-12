@@ -1,0 +1,65 @@
+﻿@model TCMPLApp.WebApp.Models.TimesheetStatusPartialIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<div style="display:none">   
+    <input id="Projno" name="Projno" type="hidden" value="@ViewBag.Projno" />
+</div>
+
+
+<div class="modal-header">
+    <h5 class="modal-title">@localizer["Timesheet details for project "] "@ViewBag.Projno" and costcode "@ViewBag.Costcode"</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <h5>@localizer["Timesheet details for project "] "@ViewBag.Projno" and costcode "@ViewBag.Costcode" </h5>
+        </div>
+        <div class="card-block">
+            <div id="idLockedIndex" class="table-responsive p-r-10">                
+                <div id="lockedButtons">
+                    <b>Actual working hours: @ViewBag.WrkHours</b>
+                    <a style="float:right" class="btn btn-outline-success btn-sm border border-white mx-2 ml-auto"
+                        id="xlsProjectDeatilPartialStatus"
+                        href="#"
+                        data-jqueryselector="binarydownload"
+                        data-url="@(Url.Action("TimesheetProjectDetailsDownload", "TSStatus", new { Area = "Timesheet" }))"
+                        data-id="@Model.FilterDataModel.Yyyymm@Html.Raw("!-!")@ViewBag.Projno@Html.Raw("!-!")@ViewBag.Costcode@Html.Raw("!-!")">
+                            <i class="fas fa-file-excel green-color"></i>&nbsp;Export
+                    </a>             
+                </div>
+                <div class="m-3"></div>
+                <div class="input-group pt-1 pl-1 pr-1 ">
+                    <input type="text" class="form-control form-control-sm border" id="TimesheetProjectDetailPartialSearch" name="GenericSearch"
+                           onkeypress="genericSearchKeypress('TimesheetProjectDetailPartialSearch')" placeholder="Search...">
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-outline-info" type="button" id="buttonTimesheetProjectDetailPartialSearch" onclick="genericSearchOnClick('TimesheetProjectDetailPartialSearch')">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="m-2"></div>
+                <table id="tbTimesheetProjectPartialGrid" class="table table-striped table-bordered table-responsive-lg">
+                    <thead class="bg-info text-white">
+                        <tr>                            
+                            <th>@localizer[Html.DisplayNameFor(model => model.Empno)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Empname)]</th>  
+                            <th>@localizer[Html.DisplayNameFor(model => model.Parent)]</th>  
+                            <th>@localizer[Html.DisplayNameFor(model => model.Assign)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.Hours)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.OtHours)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.CcHours)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.CcOtHours)]</th>
+                            <th>@localizer[Html.DisplayNameFor(model => model.IsStatusTrue)]</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">    
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+</div>

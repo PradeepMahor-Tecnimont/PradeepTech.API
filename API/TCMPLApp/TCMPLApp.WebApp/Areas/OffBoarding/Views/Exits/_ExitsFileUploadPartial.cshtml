@@ -1,0 +1,37 @@
+﻿@model TCMPLApp.WebApp.Models.OffBoardingFileUploadViewModel
+@Html.AntiForgeryToken()
+<form asp-action="FileUpload"
+      asp-controller="Exits"
+      asp-area="OffBoarding"
+      method="post"
+      accept-charset="UTF-8"
+      id="first-approval">
+
+    <div class="modal-header">
+        <h5 class="modal-title">File Upload</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card-header app-h4 app-card-header">
+            <p id="modalheader" class="mb-1">File Upload</p>
+        </div>
+        <div class="modal-body">
+            @Html.HiddenFor(m => m.OfbEmpno)
+            @Html.HiddenFor(m => m.UploadByEmpno)
+            @Html.HiddenFor(m => m.UploadByGroup)
+            <div id="iddropzone2" class="dropzone dropzone-design mb-10">
+                <div class="dz-details">
+                    <div class="dz-filename"><span data-dz-name></span></div>
+                    <div class="dz-size" data-dz-size></div>
+                    <img data-dz-thumbnail />
+                    <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                </div>
+                <div class="dz-default dz-message" data=""><span>Drop files here to upload</span></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" onclick="UploadFiles();" >Upload</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</form>

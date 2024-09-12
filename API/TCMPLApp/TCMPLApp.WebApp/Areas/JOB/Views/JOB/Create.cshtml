@@ -1,0 +1,293 @@
+﻿@model TCMPLApp.WebApp.Models.JobCreateViewModel
+
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    Html.AntiForgeryToken();
+    ViewData["Title"] = "New job";
+}
+
+@section styles
+    {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@section BreadCrumbs
+{    
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="JOB">Job form</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="JOB" asp-area="JOB">Jobs list</a></li>        
+        <li class="breadcrumb-item active" aria-current="page">New job</li>
+    </ol>
+}
+
+<form asp-action="Create"
+      asp-controller="JOB"
+      asp-area="JOB"
+      id="idCreatejob"
+      method="post"
+      accept-charset="UTF-8">
+    
+    <input type="hidden" asp-for="@Model.FormDate" />
+    <input type="hidden" asp-for="@Model.StartDate" />
+    <input type="hidden" asp-for="@Model.ContractDate" />
+    <input type="hidden" asp-for="@Model.RevCloseDate" />
+    <input type="hidden" asp-for="@Model.ExpCloseDate" />
+    <input type="hidden" asp-for="@Model.ActualCloseDate" />
+    <input type="hidden" asp-for="@Model.InitiateApproval" />
+    <input type="hidden" id="statesurl" name="statesurl" />
+    <input type="hidden" asp-for="@Model.IsOnBehalf" />
+    
+    <div class="col-xl-12">
+        <div class="card">          
+            <div class="card-body">
+                @if (Model.IsOnBehalf == true)
+                {
+                    <div class="card shadow col-md-12 col-xl-12" id="div-client">
+                        <h4>@localizer["ERP Project manager"]</h4>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-mb-6 col-xl-3">
+                                <label asp-for="PMEmpno" class="control-label"></label>
+                                <select asp-for="PMEmpno" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.ERPPMList" required>
+                                        <option selected></option>
+                                    </select>
+                                <span asp-validation-for="PMEmpno" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="card-deck">                   
+                    <div class="card shadow col-md-12 col-xl-5" id="div-job">
+                        <h4>@localizer["Job attributes"]</h4>
+                        <div class="card-body">                            
+                            <div class="row">
+                                <div class="form-group col-mb-6 col-xl-6">
+                                    <label asp-for="Projno" class="control-label"></label>
+                                    <input asp-for="Projno" class="form-control" maxlength="5" required />
+                                    <span asp-validation-for="Projno" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-6">
+                                    <label asp-for="FormDate" class="control-label"></label>
+                                    <input id="formDate" class="form-control datepicker" placeholder="@localizer["dd-MMM-yyyy"]" value="" required />
+                                    <span asp-validation-for="FormDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-6">
+                                    <label asp-for="Company" class="control-label"></label>
+                                    <select asp-for="Company" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.COList" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="Company" class="text-danger"></span>
+                                </div>                            
+                                <div class="form-group col-md-6 col-xl-6">
+                                    <label asp-for="JobType" class="control-label"></label>
+                                    <select asp-for="JobType" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.JobTypesList" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="JobType" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-6">
+                                    <label asp-for="IsConsortium" class="control-label"></label>
+                                    <select asp-for="IsConsortium" class="form-control chosen-select" data-placeholder="Please select..." required>
+                                        <option selected></option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                    <span asp-validation-for="IsConsortium" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6 col-xl-6">
+                                    <label asp-for="Tcmno" class="control-label"></label>
+                                    <input asp-for="Tcmno" class="form-control" maxlength="6"  />
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>               
+                    <div class="card shadow col-md-12 col-xl-7" id="div-project">
+                        <h4>@localizer["Project title"]</h4>
+                        <div class="card-body">                            
+                            <div class="row">
+                                <div class="form-group col-mb-6 col-xl-4">
+                                    <label asp-for="PlantProgressNo" class="control-label"></label>
+                                    <input asp-for="PlantProgressNo" class="form-control text-uppercase" maxlength="35" placeholder="" required  />
+                                    <span asp-validation-for="PlantProgressNo" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-4">
+                                    <label asp-for="Place" class="control-label"></label>
+                                    <input asp-for="Place" class="form-control text-uppercase" maxlength="35" placeholder="" required />
+                                    <span asp-validation-for="Place" class="text-danger"></span>                                    
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-4">
+                                    <label asp-for="Country" class="control-label"></label>
+                                    <select asp-for="Country" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.CountriesList" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="Country" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-mb-6 col-xl-6">
+                                    <label asp-for="ScopeOfWork" class="control-label"></label>
+                                    <select asp-for="ScopeOfWork" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.ScopeOfWorksList" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="ScopeOfWork" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-6">
+                                    <label asp-for="State" class="control-label"></label>
+                                    <select asp-for="State" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.States">
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="State" class="text-danger"></span>
+                                </div>                         
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-mb-6 col-xl-12">
+                                    <label class="control-label">@localizer["Displayed as"] ( e.g. HDPE EPCC 1, BATINDA (IN), EPC )</label>
+                                    <input id="projectTitle" name="projectTitle" class="form-control" readonly disabled/>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-deck" style="margin-top: 10px">
+                    <div class="card shadow col-md-12 col-xl-7" id="div-plant">
+                        <h4>@localizer["Plant details"]</h4>
+                        <div class="card-body">                            
+                            <div class="row">
+                                <div class="form-group col-mb-6 col-xl-5">
+                                    <label asp-for="PlantType" class="control-label"></label>
+                                    <select asp-for="PlantType" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.PlantTypesList" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="PlantType" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-3">
+                                    <label asp-for="BusinessLine" class="control-label"></label>
+                                    <select asp-for="BusinessLine" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.BusinessLinesList" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="BusinessLine" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-4">
+                                    <label asp-for="SubBusinessLine" class="control-label"></label>
+                                    <select asp-for="SubBusinessLine" class="form-control chosen-select" data-placeholder=" Please select..." asp-items="ViewBag.SubBusinessLinesList" required>
+                                        <option selected></option>
+                                    </select>
+                                    <span asp-validation-for="SubBusinessLine" class="text-danger"></span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="card shadow col-md-12 col-xl-5" id="div-afc">
+                        <h4>@localizer["AFC input"]</h4>
+                        <div class="card-body">                            
+                            <div class="row">
+                                <div class="form-group col-mb-6 col-xl-7">
+                                    <label asp-for="ProjectType" class="control-label"></label>
+                                    <input asp-for="ProjectType" class="form-control" placeholder="@localizer["Proposals"]" readonly disabled />                                   
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-5">
+                                    <label asp-for="InvoiceToGrpCompany" class="control-label"></label>
+                                    <input asp-for="InvoiceToGrpCompany" class="form-control" readonly disabled />                                    
+                                </div>
+                                <div class="form-group col-mb-6 col-xl-6">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="card-deck" style="margin-top: 10px">
+                <div class="card shadow col-md-12 col-xl-12" id="div-client">
+                    <h4>@localizer["Client details"]</h4>
+                    <div class="card-body">                        
+                        <div class="row">
+                            <div class="form-group col-mb-6 col-xl-6">
+                                <label asp-for="ClientName" class="control-label"></label>
+                                <input asp-for="ClientName" class="form-control" maxlength="35" required />
+                                <span asp-validation-for="ClientName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <label asp-for="StartDate" class="control-label"></label>
+                                    <input id="startDate" class="form-control datepicker" placeholder="@localizer["dd-MMM-yyyy"]" value="" required />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                             <div class="form-group col-mb-6 col-xl-3">
+                                <label asp-for="ExpCloseDate" class="control-label"></label>
+                                <input id="expCloseDate" class="form-control datepicker" placeholder="@localizer["dd-MMM-yyyy"]" value="" required />
+                                <span asp-validation-for="ExpCloseDate" class="text-danger"></span>
+                            </div> 
+                        </div>
+                        <div class="row">                                                          
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <label asp-for="ContractNumber" class="control-label"></label>
+                                <input asp-for="ContractNumber" class="form-control" maxlength="15"  />                                
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-3">
+                                <label asp-for="ContractDate" class="control-label"></label>
+                                    <input id="contractDate" class="form-control datepicker" placeholder="@localizer["dd-MMM-yyyy"]" value="" />                                
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-3 hidden">
+                                <label asp-for="RevCloseDate" class="control-label"></label>
+                                <input id="revCloseDate" class="form-control datepicker" placeholder="@localizer["dd-MMM-yyyy"]" value="" readonly disabled />
+                            </div>
+                            <div class="form-group col-mb-6 col-xl-3 hidden">
+                                <label asp-for="ActualCloseDate" class="control-label"></label>
+                                <input id="actualCloseDate" class="form-control datepicker" placeholder="@localizer["dd-MMM-yyyy"]" value="" readonly disabled />                               
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+                <div class="card-deck float-right" style="margin-top: 20px; margin-right: 20px">
+                    <div class="form-group">
+                        <a class="btn btn-secondary f-right" asp-controller="JOB" asp-action="Index" title="@localizer["Cancel"]">
+                            @localizer["Cancel"]
+                        </a> 
+                        <span class="f-right">&nbsp; &nbsp;</span>
+                        <button class="btn btn-primary f-right" type="submit" id="btnconfirm"
+                                data-loading-text='<span class="spinner-border spinner-border-sm" role=""></span>@localizer["Waiting..."]'
+                                data-text="@localizer["Save"]">
+                            @localizer["Save"]
+                        </button>
+                    </div>
+                </div>                
+            </div>
+        </div>
+     </div>
+    
+</form>
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/moment.js/moment.js" asp-append-version="true"></script>
+    <script src="~/js/JobFormDetail.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            localScript();
+
+            $("#statesurl").val("@Url.Action("GetStateList", "JOB")");
+
+            if ($('#Country').val().trim() == 'IN') {
+                $("#State").attr("required", "required");
+            }
+            else {
+                $("#State").removeAttr("required");
+            }
+
+            CraftProjectTitle();
+
+            $("#Projno").focus();
+        });
+
+        function localScript() {
+            initSelect2();
+        }        
+    </script>
+}
+
+

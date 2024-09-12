@@ -1,0 +1,60 @@
+﻿@model TCMPLApp.WebApp.Models.VaccinationSelfCreateViewModel
+@{
+
+    ViewData["Title"] = "Vaccine Jab Date";
+
+    Html.AntiForgeryToken();
+
+}
+<div class="container col-lg-4 col-md-6 col-sm-12">
+    <div class="card bg-light mb-3 shadow-3">
+        <div class="card-header app-h4 app-card-header">
+            Vaccine Jab Dates - New
+        </div>
+        <div class="card-body">
+            <form asp-action="UpdateVaccineType" method="post">
+                <div class="form-group required">
+                    <label class="control-label" asp-for="VaccineType"></label>
+                    <select asp-for="VaccineType" id="vaccineType" required class="Select2 form-control" asp-items="ViewBag.VaccineTypes">
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="VaccineType" class="text-danger"></span>
+                </div>
+                <div class="form-group ">
+                    <label class="control-label" asp-for="FirstJab"></label>
+                    <label class="form-control readonly" readonly>@(((DateTime)Model.FirstJab).ToString("dd-MM-yyyy") )</label>
+
+                    @Html.HiddenFor(m => m.FirstJab)
+                </div>
+                <div class="form-group">
+                    @Html.HiddenFor(m => m.IsSecondJabNull)
+
+                    @if ((bool)Model.IsSecondJabNull)
+                    {
+                        @Html.DisplayNameFor(model => model.SecondJab)
+                        <input type="date" data-date-format="dd-M-yyyy" class="form-control " id="secondJabDate" asp-for="SecondJab">
+                        <span asp-validation-for="SecondJab" class="text-danger"></span>
+                    }
+                    else
+                    {
+                        <label class="control-label" asp-for="SecondJab"></label>
+                        <label class="form-control readonly" readonly>@(((DateTime)Model.SecondJab).ToString("dd-MM-yyyy")) </label>
+                        @Html.HiddenFor(m => m.SecondJab)
+                    }
+                </div>
+                <button type="button" id="btnReset" class="btn btn-sm btn-secondary">Reset</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary btn-sm">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $("#btnReset").click(function () {
+            $("#vaccineType").val("").trigger('change');
+            $("#secondJabDate").val("");
+        });
+    </script>
+}

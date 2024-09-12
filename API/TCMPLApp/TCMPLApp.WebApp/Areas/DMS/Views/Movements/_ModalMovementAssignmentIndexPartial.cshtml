@@ -1,0 +1,133 @@
+﻿@model TCMPLApp.WebApp.Models.MovementAssignmentIndexViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    ViewData["Title"] = "Movement assignment list";
+}
+
+@Html.AntiForgeryToken()
+
+@section Styles {
+    <link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="m-1"></div>
+<div class="bg-gray-active rounded ">
+    
+    <hr style="margin-top:-15px">
+    <div style="max-height:445px; overflow: auto">
+        <table id="tbMovementAssignment" class="table table-hover table-bordered source-desk-table border">
+            <thead class="bg-info text-white">
+                <tr>                    
+                    <th class="col-md-1">@Html.DisplayNameFor(model =>  model.MovementsAssignmentsDataTableLists.FirstOrDefault().CurrDeskid)</th>
+                    <th class="col-md-1">@Html.DisplayNameFor(model =>  model.MovementsAssignmentsDataTableLists.FirstOrDefault().Deskid)</th>
+                    <th class="col-md-1">@Html.DisplayNameFor(model =>  model.MovementsAssignmentsDataTableLists.FirstOrDefault().Empno)</th>
+                    <th>@Html.DisplayNameFor(model =>  model.MovementsAssignmentsDataTableLists.FirstOrDefault().Empname)</th>
+                    <th class="col-md-1 text-a-c">@Html.DisplayNameFor(model =>  model.MovementsAssignmentsDataTableLists.FirstOrDefault().IsAsset)</th>
+                    <th class="col-md-1 text-a-c">@Html.DisplayNameFor(model =>  model.MovementsAssignmentsDataTableLists.FirstOrDefault().IsEmployee)</th>
+                    <th class="col-md-1 text-a-c">@localizer["Delete"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model.MovementsAssignmentsDataTableLists.Any())
+                {
+                    @foreach (var movements in Model.MovementsAssignmentsDataTableLists)
+                    {
+                        <tr>                            
+                            <td>
+                                <a title="Current desk" href="#"
+                                    data-jqueryselector="openmodal"
+                                    data-modalcontainer="modalcontainer"
+                                    data-modalpopupwidth="rightw35"
+                                    data-url='@Url.Action("DeskAssetDetail", "Movements", new { Area = "DMS" })'
+                                    data-sid="@movements.Sid"
+                                    data-deskid="@movements.CurrDeskid"
+                                    data-category="C"
+                                    data-assetflag="@movements.IsAsset"
+                                    data-statichtmlsourcedivid=""
+                                    data-modaltitle="Current desk detail"
+                                    data-modalheader="Current desk detail">
+                                    @movements.CurrDeskid
+                                </a>                                                               
+                            </td>
+                            <td>
+                                <a title="Target desk" href="#"
+                                    data-jqueryselector="openmodal"
+                                    data-modalcontainer="modalcontainer"
+                                    data-modalpopupwidth="rightw35"
+                                    data-url='@Url.Action("DeskAssetDetail", "Movements", new { Area = "DMS" })'
+                                    data-sid="@movements.Sid"
+                                    data-deskid="@movements.Deskid"
+                                    data-category="T"
+                                    data-assetflag="@movements.IsAsset"
+                                    data-statichtmlsourcedivid=""
+                                    data-modaltitle="Target desk detail"
+                                    data-modalheader="Target desk detail">
+                                    @movements.Deskid
+                                </a>                                
+                            </td>
+                            <td>@movements.Empno</td>
+                            <td>@movements.Empname</td>
+                            <td class="text-a-c">
+                                @if(movements.IsAsset == 1)
+                                {
+                                    <i class="fa fa-check text-dark-green" aria-hidden="true"></i>
+                                }
+                                else
+                                {
+                                    <span>&nbsp;</span>
+                                }
+                                @*<input type="checkbox" @if (movements.IsAsset == 1) { @Html.Raw("checked") } readonly/>
+                                <label class="cr" style="top: 0px;"></label>*@
+                            </td>
+                            <td class="text-a-c">
+                                @if (movements.IsEmployee == 1)
+                                {
+                                    <i class="fa fa-check text-dark-green" aria-hidden="true"></i>
+                                }
+                                else
+                                {
+                                    <span>&nbsp;</span>
+                                }
+                                @*<input type="checkbox" @if (movements.IsEmployee == 1) { @Html.Raw("checked") } readonly  disabled/>*@
+                            </td>
+                            <td class="text-a-c">
+                                <button class="btn btn-outline-danger btn-sm border-none"
+                                    onclick="showDeleteConfirmationPopup(event,this);"
+                                    data-jqueryselector="showconfirmationmodal"
+                                    data-url="@Url.Action("MovementAssignmentDelete", "Movements", new { Area = "DMS" })"
+                                    data-callback="initDataTableMovementAssignment"
+                                    data-actionmode=""                                    
+                                    data-id="@movements.Sid @Html.Raw("!-!") @movements.CurrDeskid @Html.Raw("!-!") @movements.Deskid"
+                                    data-PostSave="PostSave(true)"
+                                    data-modaltitle="Please Confirm!"
+                                    data-confirmationtext="@("Do you want to delete assignment " + movements.CurrDeskid + " => " + movements.Deskid + " ?")"
+                                    data-confirmationtype="warning"
+                                    data-confirmbuttontext="Delete desk assignment"
+                                    title="Delete desk assignment">
+                                    <i class="fas fa-trash" aria-hidden="true"></i>
+                                </button>
+
+                            </td>                           
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7">No data found</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+        <div id="result"></div>
+    </div>
+</div>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

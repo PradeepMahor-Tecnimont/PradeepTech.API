@@ -1,0 +1,99 @@
+﻿@model TCMPLApp.WebApp.Models.DeskAreaUserMapHodDetailsViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@Html.AntiForgeryToken()
+
+<form asp-controller="Bookings"
+      asp-action=""
+      id="DeskAreaUserMapHodDetails"
+      data-ajax="true"
+      data-ajax-update="#modal-content"
+      data-ajax-method="post"
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null);localScript()"
+      data-ajax-success="PostSave(data)"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">@localizer["Desk Area User Map Details"]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <h5>Desk Area User Map Details</h5>
+            </div>
+            <div class="card-block p-4">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.EmpName)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.EmpNo + " - " + Model.EmpName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.Office)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.Office)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-1">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.AreaCatgDesc)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.AreaCatgCode + " - " + Model.AreaCatgDesc)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.AreaDesc)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.AreaId + " - " + Model.AreaDesc)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ModifiedBy)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ModifiedBy)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-12">
+                            <div class="form-group">
+                                <div class="dt-met">
+                                    @Html.DisplayNameFor(model => model.ModifiedOn)
+                                </div>
+                                <div class="dd-met">
+                                    @Html.Raw(Model.ModifiedOn.Value.ToString("dd-MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">@localizer["Cancel"]</button>
+    </div>
+</form>

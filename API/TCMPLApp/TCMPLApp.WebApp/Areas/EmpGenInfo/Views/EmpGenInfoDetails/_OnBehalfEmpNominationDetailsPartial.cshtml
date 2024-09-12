@@ -1,0 +1,177 @@
+﻿@model TCMPLApp.WebApp.Models.EmpGenInfoGratuityViewModel
+@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+<input type="hidden" asp-for="@Model.Empno" />
+@Html.AntiForgeryToken()
+
+<div>
+    <div class="card-deck" style="margin-top: 5px">
+        <div class="card  col-md-12 col-xl-6">
+            <div class="card-body">
+                <div class="col-xl-12 col-md-6 p-0 m-0">
+                    <div class="form-group">
+                        <div class="dt-met">
+                            <div class="checkboxlabel">
+                                <input type="checkbox" class="locked checkBox-Blue" id="check" disabled asp-for="NoDadHusbInName"
+                                       checked="@Model.NoDadHusbInName" style="cursor:not-allowed" />
+                                <label for="check" style="cursor:not-allowed">
+                                    <span>@Html.DisplayNameFor(model => model.NoDadHusbInName)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="form-group dd-met col-mb-6 col-xl-12">
+                        Employee Name as it would appear on Nomination Form
+                    </div>
+                    @if (Model.NoDadHusbInName == true)
+                    {
+                        <div class="col-mb-6 col-xl-12 form-group ">
+                            @Html.DisplayNameFor(model=> model.FirstName) +
+
+                            @Html.DisplayNameFor(model=> model.Surname)
+                        </div>
+                        <div class="form-group dd-met col-mb-6 col-xl-12">
+                            @($@"{Model.FirstName} {Model.Surname}")
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-mb-6 col-xl-12 form-group ">
+                            @Html.DisplayNameFor(model=> model.FirstName) +
+                            @Html.DisplayNameFor(model=> model.FatherName) +
+                            @Html.DisplayNameFor(model=> model.Surname)
+                        </div>
+                        <div class="form-group dd-met col-mb-6 col-xl-12">
+                            @($@"{Model.FirstName} {Model.FatherName} {Model.Surname}")
+
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card  col-md-12 col-xl-6">
+            <div class="card-body">
+                <div class="row p-2">
+
+                    <div class="form-group dd-met col-mb-6 col-xl-12">
+                        Address as it would appear on Nomination Form
+                    </div>
+                    <div class="col-xl-12 col-md-6">
+                        <div class="form-group">
+                            <div class="dt-met">
+                                (Permanent Address: Address + PinCode)
+                            </div>
+                            <div class="dd-met">
+                                @Html.DisplayFor(model => model.Address)
+                                @Html.DisplayFor(model => model.Pincode)
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link" id="tabs-GratuityIndex-tab" data-toggle="pill" href="#tabs-GratuityIndex" role="tab" aria-controls="tabs-GratuityIndex" aria-selected="false"
+           data-url="@Url.Action("OnBehalfGratuityIndex",  "EmpGenInfoDetails", new { id = Model.Empno })"
+           data-divid="pw-Gratuity"
+           data-id="@Model.Empno"
+           data-area="EmpGenInfo"
+           data-callback="loadGratuityListDataTable();"
+           data-controller="EmpGenInfoDetails"
+           data-action="GratuityIndex">
+            @localizer["Gratuity"]
+            <i id="imgDescriptionGratuityStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tabs-Superannuation-tab" data-toggle="pill" href="#tabs-Superannuation" role="tab" aria-controls="tabs-Superannuation" aria-selected="false"
+           data-url="@Url.Action("OnBehalfSuperannuationIndex",  "EmpGenInfoDetails", new { id = Model.Empno })"
+           data-divid="pw-Superannuation"
+           data-id="@Model.Empno"
+           data-area="EmpGenInfo"
+           data-callback="loadSuperannuationListDataTable();"
+           data-controller="EmpGenInfoDetails"
+           data-action="SuperannuationIndex">
+            @localizer["Superannuation"]
+            <i id="imgDescriptionSupStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" id="tabs-EmpProFund-tab" data-toggle="pill" href="#tabs-EmpProFund" role="tab" aria-controls="tabs-EmpProFund" aria-selected="false"
+           data-url="@Url.Action("OnBehalfEmpProFundIndex", "EmpGenInfoDetails", new { id = Model.Empno })"
+           data-divid="pw-EmpProFund"
+           data-area="EmpGenInfo"
+           data-id="@Model.Empno"
+           data-controller="EmpGenInfoDetails"
+           data-callback="loadEmpProFundListDataTable();"
+           data-action="EmpProFundIndex">
+            @localizer["Employee Provident Fund"]
+            <i id="imgDescriptionEpfStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tabs-EmpPensionFund-tab" data-toggle="pill" href="#tabs-EmpPensionFund" role="tab" aria-controls="tabs-EmpPensionFund" aria-selected="false"
+           data-url="@Url.Action("OnBehalfEmpPensionFundIndex", "EmpGenInfoDetails", new { id = Model.Empno })"
+           data-divid="pw-EmpPensionFund"
+           data-area="EmpGenInfo"
+           data-id="@Model.Empno"
+           data-controller="EmpGenInfoDetails"
+           data-callback="loadEmpPensionFundListDataTable();"
+           data-action="EmpPensionFundIndex">
+            @localizer["Employee Pension Fund"]
+            <i id="imgDescriptionEpsaStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tabs-EmpPensionFundM-tab" data-toggle="pill" href="#tabs-EmpPensionFundM" role="tab" aria-controls="tabs-EmpPensionFundM" aria-selected="false"
+           data-url="@Url.Action("OnBehalfEmpPensionFundMarriedIndex", "EmpGenInfoDetails", new { id = Model.Empno })"
+           data-divid="pw-EmpPensionFundM"
+           data-area="EmpGenInfo"
+           data-id="@Model.Empno"
+           data-controller="EmpGenInfoDetails"
+           data-callback="loadEmpPensionFundMarriedListDataTable();"
+           data-action="EmpPensionFundMarriedIndex">
+            @localizer["Employee Pension Fund (Married)"]
+            <i id="imgDescriptionEpsaStatus" class="fas fa-info-circle text-danger" style="display:none"></i>
+        </a>
+    </li>
+
+</ul>
+<div class="tab-content">
+    @await Html.PartialAsync("_LoaderPartial")
+    <hr class="p-0 m-0" />
+    <div class="tab-pane fade" id="tabs-GratuityIndex" role="tabpanel" aria-labelledby="tabs-GratuityIndex-tab">
+        <div id="pw-Gratuity">
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tabs-EmpProFund" role="tabpanel" aria-labelledby="tabs-EmpProFund-tab">
+        <div id="pw-EmpProFund">
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tabs-Superannuation" role="tabpanel" aria-labelledby="tabs-Superannuation-tab">
+        <div id="pw-Superannuation">
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tabs-EmpPensionFundM" role="tabpanel" aria-labelledby="tabs-EmpPensionFundM-tab">
+        <div id="pw-EmpPensionFundM">
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tabs-EmpPensionFund" role="tabpanel" aria-labelledby="tabs-EmpPensionFund-tab">
+        <div id="pw-EmpPensionFund">
+        </div>
+    </div>
+
+</div>

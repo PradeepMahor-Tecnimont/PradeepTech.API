@@ -1,0 +1,162 @@
+﻿@inject TCMPLApp.WebApp.Services.SharedViewLocalizer localizer
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+@section BreadCrumbs
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item "><a asp-action="Index" asp-controller="Home" asp-area="RapReporting">Rap Reporting</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Reports</li>
+</ol>
+}
+
+@section Styles {
+<link href="@Url.Content("~/css/drome-style.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+<style>
+    #tbGrid.table td, #tbGrid.table th {
+        padding: 0.2rem !important;
+    }
+</style>
+}
+
+<input type="text" value="202002" id="yymm" class="hidden" />
+<input type="text" value="0210" id="assign" class="hidden" />
+<div class="col-sm-12">
+    <div class="row">
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Auditor report</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a href="@Url.Action("AuditorRptDownload", "Reports", new { Area = "RapReporting" })">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h3 class="mb-2 f-w-300"> </h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clinic-medical f-20 text-white theme-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Auditor  report - Ajax</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a id="lAuditorReport" href="#"
+                       data-inprogress="0"
+                       data-jqueryselector="generatereport"
+                       data-url="@Url.Action("Auditor", "Reports",new {Area ="RapReporting"})">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 id="lAuditorReport_Text" class="mb-2 f-w-300"> Leave  report. </h7>
+                                <div class="text-center">
+                                    <div id="lAuditorReport_Loader" class="spinner-border text-info text-center hidden "
+                                         style="width: 2.5rem; height: 2.5rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="lAuditorReport_Icon" class="col-auto">
+                                <i class="fas fa-user-clock f-20 text-white theme-dark-green"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>Leave  report - Ajax</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a id="lLeaveReport" href="#"
+                       data-inprogress="0"
+                       data-jqueryselector="generatereport"
+                       data-url="@Url.Action("Leave", "Reports",new {Area ="RapReporting"})">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 id="lLeaveReport_Text" class="mb-2 f-w-300"> Leave  report. </h7>
+                                <div class="text-center">
+                                    <div id="lLeaveReport_Loader" class="spinner-border text-info text-center hidden "
+                                         style="width: 2.5rem; height: 2.5rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="lLeaveReport_Icon" class="col-auto">
+                                <i class="fas fa-share-square f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card card-tpl">
+                <div class="card-header">
+                    <h5>OddTimesheet  report - Ajax</h5>
+                </div>
+                <div class="card-block card-tile">
+                    <a id="lOddTimesheetReport" href="#"
+                       data-inprogress="0"
+                       data-jqueryselector="generatereport"
+                       data-url="@Url.Action("OddTimesheet", "Reports",new {Area ="RapReporting"})">
+                        <div class="row align-items-center justify-content-center stretched-link">
+                            <div class="col">
+                                <h7 id="lOddTimesheetReport_Text" class="mb-2 f-w-300"> OddTimesheet  report. </h7>
+                                <div class="text-center">
+                                    <div id="lOddTimesheetReport_Loader" class="spinner-border text-info text-center hidden "
+                                         style="width: 2.5rem; height: 2.5rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="lOddTimesheetReport_Icon" class="col-auto">
+                                <i class="fas fa-share-square f-20 text-white theme-brown"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script>
+    
+
+    $(document).ready(function () {
+
+        });
+
+
+</script>
+}

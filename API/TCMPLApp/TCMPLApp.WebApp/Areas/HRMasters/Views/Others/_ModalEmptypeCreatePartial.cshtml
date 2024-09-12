@@ -1,0 +1,89 @@
+﻿@model TCMPLApp.WebApp.Areas.HRMasters.Models.EmptypeCreateViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    UserIdentity currentUserIdentity = CurrentUserIdentity;
+}
+
+<form asp-controller="Others"
+      asp-action="EmptypeCreate"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-update=""
+      data-ajax-begin="onBegin(null)"
+      data-ajax-complete="onComplete(null)"
+      data-ajax-success="onDataTableReloadSuccess"
+      data-ajax-failure="onError"
+      accept-charset="UTF-8">
+
+    <div class="modal-header">
+        <h5 class="modal-title">New employee type</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Emptype" class="control-label"></label>
+                    <input asp-for="Emptype" class="form-control" placeholder="Employee type" required />
+                    <span asp-validation-for="Emptype" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Empdesc" class="control-label"></label>
+                    <input asp-for="Empdesc" class="form-control" placeholder="Description" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Empremarks" class="control-label"></label>
+                    <input asp-for="Empremarks" class="form-control" placeholder="Remarks" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Tm" class="control-label"></label>
+                    <input asp-for="Tm" type="number" class="form-control" placeholder="TM" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Printlogo" class="control-label"></label>
+                    <input asp-for="Printlogo" type="number" class="form-control" placeholder="Print logo" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="form-group">
+                    <label asp-for="Sortorder" class="control-label"></label>
+                    <input asp-for="Sortorder" class="form-control" placeholder="Sort order" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" id="btnconfirm"
+                data-loading-text='<span class="spinner-border spinner-border-sm" role="status"></span>"Waiting..."'
+                data-text="Confirm">
+            Confirm
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
